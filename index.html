@@ -250,38 +250,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
 .footer-bottom p{font-size:12.5px;color:var(--muted);}
 .footer-bottom span{color:var(--orange);}
 
-/* ─── QUICK OPTIONS ─── */
-.quick-options{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:20px;}
-.quick-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;position:relative;overflow:hidden;transition:all 0.3s;}
-.quick-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
-.whatsapp-card::before{background:linear-gradient(90deg,#25d366,#128c7e);}
-.google-card::before{background:linear-gradient(90deg,#4285f4,#ea4335);}
-.email-card::before{background:linear-gradient(90deg,var(--orange),var(--orange2));}
-.quick-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,0.3);}
-.quick-icon{font-size:40px;margin-bottom:8px;}
-.quick-num{position:absolute;top:16px;right:20px;font-family:var(--font-head);font-size:40px;font-weight:800;color:rgba(255,255,255,0.04);}
-.quick-card h3{font-family:var(--font-head);font-size:18px;font-weight:800;margin-bottom:10px;}
-.quick-card p{color:var(--light);font-size:13px;line-height:1.6;margin-bottom:16px;}
-.quick-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:18px;}
-.whatsapp-card .quick-badge{background:rgba(37,211,102,0.12);color:#25d366;}
-.google-card .quick-badge{background:rgba(66,133,244,0.12);color:#4285f4;}
-.email-card .quick-badge{background:rgba(255,107,43,0.12);color:var(--orange);}
-.quick-btn{display:block;padding:13px 20px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;transition:all 0.2s;margin-bottom:10px;}
-.wa-btn{background:#25d366;color:#fff;}
-.wa-btn:hover{background:#1db954;transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,211,102,0.3);}
-.gf-btn{background:linear-gradient(135deg,#4285f4,#3367d6);color:#fff;}
-.gf-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(66,133,244,0.3);}
-.em-btn{background:var(--orange);color:#fff;}
-.em-btn:hover{background:#ff8c54;transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,107,43,0.3);}
-.quick-note{font-size:11px;color:var(--muted);}
-.enquiry-check-box{background:rgba(255,107,43,0.05);border:1px solid rgba(255,107,43,0.2);border-radius:16px;padding:22px;margin-top:28px;}
-.enquiry-check-box h4{font-family:var(--font-head);font-size:15px;font-weight:800;margin-bottom:16px;color:var(--orange);}
-.check-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;font-size:13px;color:var(--light);line-height:1.6;}
-.check-item:last-child{margin-bottom:0;}
-.check-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
-.check-item strong{color:var(--text);}
 .error-msg{display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;padding:14px;border-radius:10px;text-align:center;margin-top:14px;font-size:14px;font-weight:600;}
-@media(max-width:768px){.quick-options{grid-template-columns:1fr;}}
 
 /* ─── WHATSAPP FLOAT ─── */
 .wa-float{position:fixed;bottom:28px;right:28px;z-index:500;background:#25d366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,0.4);transition:0.2s;animation:wabounce 2s infinite;}
@@ -932,72 +901,19 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
 
 <!-- ═══ CONTACT ═══ -->
 <section id="contact">
-
-  <!-- 3 Quick Contact Options -->
-  <div class="section-header fade-in" style="margin-bottom:40px;">
-    <div class="section-tag">Get In Touch</div>
-    <h2 class="section-title">3 Easy Ways to <span>Enquire Now</span></h2>
-    <p class="section-sub">Choose the most convenient way to reach us — we respond within 2 hours!</p>
-  </div>
-
-  <!-- Quick Options Row -->
-  <div class="quick-options fade-in">
-
-    <!-- Option 1: WhatsApp -->
-    <div class="quick-card whatsapp-card">
-      <div class="quick-icon">💬</div>
-      <div class="quick-num">01</div>
-      <h3>WhatsApp Enquiry</h3>
-      <p>Click the button below — it opens WhatsApp with a pre-filled message. Just hit Send!</p>
-      <div class="quick-badge">⚡ Instant Reply</div>
-      <a class="quick-btn wa-btn" href="https://wa.me/918700350994?text=Hi%20Mr.%20Khan%20Sir!%20%F0%9F%91%8B%0AI%20am%20interested%20in%20joining%20Next%20Gen%20QA%20IT%20Coaching%20Classes.%0A%0APlease%20share%20more%20details%20about%3A%0A%E2%9C%85%20Course%3A%20%0A%E2%9C%85%20Name%3A%20%0A%E2%9C%85%20Mode%20(Online%2FOffline)%3A%20%0A%0ALooking%20forward%20to%20hearing%20from%20you!" target="_blank">
-        💬 Chat on WhatsApp Now
-      </a>
-      <div class="quick-note">Opens WhatsApp with message ready!</div>
-    </div>
-
-    <!-- Option 2: Google Form -->
-    <div class="quick-card google-card">
-      <div class="quick-icon">📋</div>
-      <div class="quick-num">02</div>
-      <h3>Google Form Enquiry</h3>
-      <p>Fill our detailed enquiry form. All responses are saved in a spreadsheet and you get an email alert!</p>
-      <div class="quick-badge">📊 Saved in Spreadsheet</div>
-      <a class="quick-btn gf-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeQqPMpt6i1vVUWRYgX4CGCuBD4u0Q4kZARHqMxjTkybuw_MQ/viewform" target="_blank" id="googleFormBtn">
-        📋 Fill Google Form
-      </a>
-      <div class="quick-note">Responses saved automatically!</div>
-    </div>
-
-    <!-- Option 3: Direct Email Form -->
-    <div class="quick-card email-card">
-      <div class="quick-icon">📧</div>
-      <div class="quick-num">03</div>
-      <h3>Email Enquiry Form</h3>
-      <p>Fill the form below and the enquiry will be sent directly to your email via Formspree!</p>
-      <div class="quick-badge">📬 Sent to Your Email</div>
-      <a class="quick-btn em-btn" href="#enquiry-form">
-        📧 Fill Email Form ↓
-      </a>
-      <div class="quick-note">Delivered to your inbox!</div>
-    </div>
-
-  </div>
-
-  <!-- Main Contact Section -->
-  <div class="contact-wrap" style="margin-top:60px;">
+  <div class="contact-wrap">
     <div class="contact-info fade-in">
-      <div class="section-tag">Contact Details</div>
-      <h2>Reach Us <span style="color:var(--orange)">Directly</span></h2>
-      <p>Join hundreds of students who have already transformed their careers. Contact us to enroll or book a FREE demo class. We respond within 2 hours!</p>
+      <div class="section-tag">Get In Touch</div>
+      <h2>Start Your <span style="color:var(--orange)">QA Journey</span> Today!</h2>
+      <p>Join hundreds of students who have already transformed their careers. Contact us to enroll or book a FREE demo class. We will respond within 2 hours!</p>
       <div class="contact-cards">
         <div class="ccard">
           <div class="ccard-icon orange">📞</div>
-          <div class="ccard-text"><div class="label">Call Us</div><div class="value"><a href="tel:8700350994" style="color:var(--text);text-decoration:none;">8700350994</a></div></div>
+          <div class="ccard-text"><div class="label">Call / WhatsApp</div><div class="value">8700350994</div></div>
         </div>
         <div class="ccard">
-          <div class="ccard-icon green">💬</div>
-          <div class="ccard-text"><div class="label">WhatsApp</div><div class="value"><a href="https://wa.me/918700350994" style="color:var(--text);text-decoration:none;">8700350994</a></div></div>
+          <div class="ccard-icon green">👨‍🏫</div>
+          <div class="ccard-text"><div class="label">Trainer</div><div class="value">Mr. Khan Sir</div></div>
         </div>
         <div class="ccard">
           <div class="ccard-icon blue">🌐</div>
@@ -1008,34 +924,20 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
           <div class="ccard-text"><div class="label">For Students</div><div class="value">B.Tech, BCA, MCA, CBSE, ICSE, Polytechnic</div></div>
         </div>
       </div>
-
-      <!-- How to Check Enquiries Box -->
-      <div class="enquiry-check-box">
-        <h4>📥 How to Check Your Enquiries</h4>
-        <div class="check-item">
-          <span class="check-icon">💬</span>
-          <div><strong>WhatsApp</strong> — Enquiries come directly to your phone on 8700350994</div>
-        </div>
-        <div class="check-item">
-          <span class="check-icon">📊</span>
-          <div><strong>Google Form</strong> — Go to <strong>forms.google.com</strong> → Open your form → Click <strong>"Responses"</strong> tab</div>
-        </div>
-        <div class="check-item">
-          <span class="check-icon">📧</span>
-          <div><strong>Email Form</strong> — Check your Gmail inbox. Every submission sends you an email alert instantly!</div>
-        </div>
-      </div>
-
     </div>
+    <div class="form-card fade-in">
+      <h3>Enquire Now</h3>
+      <p>Fill the form and we will call you back within 2 hours!</p>
 
-    <!-- Formspree Email Form -->
-    <div class="form-card fade-in" id="enquiry-form">
-      <h3>📧 Email Enquiry Form</h3>
-      <p>Fill this form — enquiry goes directly to your email inbox!</p>
+      <!-- 3 Quick Buttons -->
+      <div style="display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap;">
+        <a href="https://wa.me/918700350994?text=Hi%20Mr.%20Khan%20Sir!%20%F0%9F%91%8B%0AI%20am%20interested%20in%20joining%20Next%20Gen%20QA%20IT%20Coaching%20Classes.%0A%0AName%3A%20%0ACourse%3A%20%0AMode%20(Online%2FOffline)%3A%20" target="_blank" style="flex:1;min-width:120px;background:#25d366;color:#fff;padding:10px 12px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:700;text-align:center;transition:0.2s;">💬 WhatsApp</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQqPMpt6i1vVUWRYgX4CGCuBD4u0Q4kZARHqMxjTkybuw_MQ/viewform" target="_blank" style="flex:1;min-width:120px;background:linear-gradient(135deg,#4285f4,#3367d6);color:#fff;padding:10px 12px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:700;text-align:center;transition:0.2s;">📋 Google Form</a>
+      </div>
+      <div style="text-align:center;color:var(--muted);font-size:11px;margin-bottom:18px;letter-spacing:0.5px;">— OR FILL THE FORM BELOW —</div>
 
-      <!-- FORMSPREE FORM — action will be updated after setup -->
+      <!-- Formspree Form -->
       <form id="contactForm" action="https://formspree.io/f/mjgedjog" method="POST" onsubmit="handleSubmit(event)">
-
         <div class="form-row">
           <div class="form-group">
             <label>Full Name *</label>
@@ -1077,15 +979,12 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
           <label>Your Message</label>
           <textarea name="Message" placeholder="Any questions or specific requirements..."></textarea>
         </div>
-        <!-- Hidden fields for better tracking -->
         <input type="hidden" name="_subject" value="New Enquiry — Next Gen QA IT Coaching!">
-        <input type="hidden" name="_replyto" value="nextgenqa@gmail.com">
         <input type="text" name="_gotcha" style="display:none">
-
-        <button type="submit" class="submit-btn">🚀 Send Enquiry — Get Free Demo</button>
+        <button type="submit" class="submit-btn" id="submitBtn">🚀 Send Enquiry — Get Free Demo</button>
       </form>
       <div class="success-msg" id="successMsg">✅ Enquiry sent! We will contact you within 2 hours. 🎉</div>
-      <div class="error-msg" id="errorMsg">❌ Something went wrong. Please WhatsApp us directly on 8700350994</div>
+      <div class="error-msg" id="errorMsg">❌ Something went wrong. Please WhatsApp us on 8700350994</div>
     </div>
   </div>
 </section>
@@ -1186,7 +1085,7 @@ function filterQA(cat){
 async function handleSubmit(event) {
   event.preventDefault();
   const form = document.getElementById('contactForm');
-  const btn = form.querySelector('.submit-btn');
+  const btn = document.getElementById('submitBtn');
   const successMsg = document.getElementById('successMsg');
   const errorMsg = document.getElementById('errorMsg');
   btn.textContent = '⏳ Sending...';
@@ -1207,9 +1106,7 @@ async function handleSubmit(event) {
         btn.textContent = '🚀 Send Enquiry — Get Free Demo';
         btn.disabled = false;
       }, 5000);
-    } else {
-      throw new Error('Failed');
-    }
+    } else { throw new Error('Failed'); }
   } catch(e) {
     errorMsg.style.display = 'block';
     successMsg.style.display = 'none';
