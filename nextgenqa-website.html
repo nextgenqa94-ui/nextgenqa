@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Next Gen QA IT Coaching Classes | Software Testing Training</title>
+<meta name="description" content="Next Gen QA IT Coaching Classes - Complete Software Testing training Online & Offline. Manual Testing, Automation, Playwright, Selenium. Call Mr. Khan Sir: 8700350994">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060a10;
+  --surface: #0d1520;
+  --card: #111d2e;
+  --border: #1a2d45;
+  --orange: #ff6b2b;
+  --orange2: #ff9a5c;
+  --blue: #2dd4ff;
+  --green: #22d3a0;
+  --yellow: #fbbf24;
+  --text: #e8edf5;
+  --muted: #64748b;
+  --light: #94a3b8;
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflow-x:hidden;}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--orange);border-radius:10px;}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(6,10,16,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 5%;}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:70px;}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--orange),#ff3d00);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:14px;color:#fff;letter-spacing:-0.5px;}
+.nav-logo-text{font-family:var(--font-head);font-weight:800;font-size:16px;color:#fff;}
+.nav-logo-text span{color:var(--orange);}
+.nav-links{display:flex;align-items:center;gap:6px;}
+.nav-links a{color:var(--light);text-decoration:none;font-size:13px;font-weight:500;padding:7px 12px;border-radius:8px;transition:all 0.2s;}
+.nav-links a:hover{color:#fff;background:rgba(255,107,43,0.12);}
+.nav-cta{background:var(--orange);color:#fff!important;padding:8px 18px!important;border-radius:8px!important;font-weight:600!important;}
+.nav-cta:hover{background:#ff8c54!important;transform:translateY(-1px);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;}
+.hamburger span{width:24px;height:2px;background:var(--text);border-radius:2px;transition:0.3s;}
+.mobile-menu{display:none;position:fixed;top:70px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:20px 5%;z-index:999;}
+.mobile-menu a{display:block;color:var(--light);text-decoration:none;padding:12px 0;font-size:15px;border-bottom:1px solid var(--border);}
+.mobile-menu a:last-child{border-bottom:none;}
+
+/* ─── HERO ─── */
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 5% 60px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 80% 50%,rgba(255,107,43,0.08) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 20% 80%,rgba(45,212,255,0.05) 0%,transparent 60%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(26,45,69,0.3) 1px,transparent 1px),linear-gradient(90deg,rgba(26,45,69,0.3) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);}
+.hero-content{position:relative;max-width:700px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,43,0.1);border:1px solid rgba(255,107,43,0.3);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;color:var(--orange);letter-spacing:1px;text-transform:uppercase;margin-bottom:24px;}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--orange);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.hero h1{font-family:var(--font-head);font-size:clamp(36px,5vw,64px);font-weight:800;line-height:1.1;margin-bottom:20px;}
+.hero h1 .highlight{color:var(--orange);position:relative;}
+.hero h1 .highlight::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:3px;background:var(--orange);border-radius:2px;opacity:0.5;}
+.hero p{font-size:17px;color:var(--light);line-height:1.7;margin-bottom:32px;max-width:560px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-primary{background:var(--orange);color:#fff;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-primary:hover{background:#ff8c54;transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,107,43,0.35);}
+.btn-secondary{background:transparent;color:#fff;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px;border:1px solid var(--border);transition:all 0.2s;}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange);}
+.hero-stats{display:flex;gap:40px;margin-top:48px;padding-top:48px;border-top:1px solid var(--border);flex-wrap:wrap;}
+.stat-item{text-align:center;}
+.stat-num{font-family:var(--font-head);font-size:32px;font-weight:800;color:var(--orange);}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:0.5px;}
+.hero-float{position:absolute;right:5%;top:50%;transform:translateY(-50%);display:grid;grid-template-columns:1fr 1fr;gap:16px;opacity:0.8;}
+.float-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;min-width:130px;}
+.float-icon{font-size:28px;margin-bottom:8px;}
+.float-label{font-size:11px;color:var(--muted);font-weight:500;}
+.float-val{font-size:13px;color:var(--text);font-weight:600;margin-top:2px;}
+
+/* ─── SECTION BASE ─── */
+section{padding:80px 5%;}
+.section-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,43,0.08);border:1px solid rgba(255,107,43,0.2);padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;color:var(--orange);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;}
+.section-title{font-family:var(--font-head);font-size:clamp(28px,4vw,42px);font-weight:800;margin-bottom:12px;line-height:1.2;}
+.section-title span{color:var(--orange);}
+.section-sub{color:var(--light);font-size:16px;max-width:580px;line-height:1.6;margin-bottom:48px;}
+.section-header{text-align:center;}
+.section-header .section-sub{margin-left:auto;margin-right:auto;}
+
+/* ─── ABOUT ─── */
+.about{background:var(--surface);}
+.about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:60px;align-items:center;}
+.about-photo-wrap{position:relative;}
+.about-photo{width:100%;max-width:380px;aspect-ratio:4/5;background:linear-gradient(135deg,var(--card),var(--border));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:80px;border:1px solid var(--border);position:relative;overflow:hidden;}
+.about-photo::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,107,43,0.1),transparent);}
+.about-photo-badge{position:absolute;bottom:-16px;right:-16px;background:var(--orange);color:#fff;padding:14px 18px;border-radius:14px;font-family:var(--font-head);font-weight:800;}
+.about-photo-badge .num{font-size:28px;display:block;line-height:1;}
+.about-photo-badge .lbl{font-size:11px;opacity:0.9;}
+.about-content h2{font-family:var(--font-head);font-size:clamp(24px,3vw,38px);font-weight:800;margin-bottom:8px;}
+.about-content h2 span{color:var(--orange);}
+.about-name{color:var(--orange);font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;}
+.about-content p{color:var(--light);line-height:1.8;margin-bottom:16px;font-size:15px;}
+.about-skills{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+.skill-tag{background:rgba(255,107,43,0.08);border:1px solid rgba(255,107,43,0.2);color:var(--orange2);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;}
+.skill-tag.blue{background:rgba(45,212,255,0.08);border-color:rgba(45,212,255,0.2);color:var(--blue);}
+.skill-tag.green{background:rgba(34,211,160,0.08);border-color:rgba(34,211,160,0.2);color:var(--green);}
+.contact-strip{display:flex;gap:20px;margin-top:28px;flex-wrap:wrap;}
+.contact-item{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);padding:12px 18px;border-radius:12px;}
+.contact-item .icon{font-size:20px;}
+.contact-item .info{font-size:13px;}
+.contact-item .info span{display:block;color:var(--muted);font-size:11px;}
+.contact-item .info strong{color:var(--text);}
+
+/* ─── COURSES ─── */
+.courses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;}
+.course-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all 0.3s;position:relative;overflow:hidden;}
+.course-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--orange2));transform:scaleX(0);transition:0.3s;}
+.course-card:hover{border-color:rgba(255,107,43,0.4);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.3);}
+.course-card:hover::before{transform:scaleX(1);}
+.course-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:18px;}
+.course-icon.orange{background:rgba(255,107,43,0.12);}
+.course-icon.blue{background:rgba(45,212,255,0.1);}
+.course-icon.green{background:rgba(34,211,160,0.1);}
+.course-icon.yellow{background:rgba(251,191,36,0.1);}
+.course-card h3{font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:10px;}
+.course-card p{color:var(--light);font-size:13.5px;line-height:1.7;margin-bottom:18px;}
+.course-meta{display:flex;gap:12px;flex-wrap:wrap;}
+.meta-tag{font-size:11px;padding:4px 10px;border-radius:6px;font-weight:600;}
+.meta-tag.free{background:rgba(34,211,160,0.1);color:var(--green);}
+.meta-tag.level{background:rgba(255,107,43,0.1);color:var(--orange);}
+.meta-tag.mode{background:rgba(45,212,255,0.1);color:var(--blue);}
+.course-syllabus{margin-top:18px;padding-top:18px;border-top:1px solid var(--border);}
+.course-syllabus h4{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px;}
+.syllabus-list{list-style:none;}
+.syllabus-list li{font-size:12.5px;color:var(--light);padding:3px 0;padding-left:16px;position:relative;}
+.syllabus-list li::before{content:'→';position:absolute;left:0;color:var(--orange);font-size:10px;}
+
+/* ─── VIDEO LECTURES ─── */
+.videos{background:var(--surface);}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.video-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all 0.3s;cursor:pointer;}
+.video-card:hover{transform:translateY(-3px);border-color:rgba(255,107,43,0.4);}
+.video-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0d1520,#1a2d45);display:flex;align-items:center;justify-content:center;position:relative;}
+.video-thumb-icon{width:56px;height:56px;background:rgba(255,107,43,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;transition:0.2s;}
+.video-card:hover .video-thumb-icon{transform:scale(1.1);background:var(--orange);}
+.video-duration{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.8);color:#fff;font-size:11px;padding:3px 8px;border-radius:5px;font-family:monospace;}
+.video-topic{position:absolute;top:8px;left:8px;background:rgba(255,107,43,0.9);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;text-transform:uppercase;}
+.video-info{padding:16px;}
+.video-info h4{font-family:var(--font-head);font-size:14px;font-weight:700;margin-bottom:6px;line-height:1.4;}
+.video-info p{font-size:12px;color:var(--muted);}
+.video-info .video-meta{display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--muted);}
+.yt-note{background:rgba(255,107,43,0.06);border:1px solid rgba(255,107,43,0.15);border-radius:12px;padding:20px 24px;margin-bottom:40px;display:flex;align-items:center;gap:14px;font-size:14px;color:var(--light);}
+.yt-note strong{color:var(--orange);}
+
+/* ─── NOTES / CHEAT SHEETS ─── */
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;}
+.note-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;transition:all 0.3s;display:flex;flex-direction:column;}
+.note-card:hover{border-color:rgba(45,212,255,0.4);transform:translateY(-3px);}
+.note-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.note-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.note-icon.pdf{background:rgba(239,68,68,0.1);}
+.note-icon.doc{background:rgba(45,212,255,0.1);}
+.note-icon.sheet{background:rgba(34,211,160,0.1);}
+.note-title{font-family:var(--font-head);font-size:14px;font-weight:700;line-height:1.3;}
+.note-desc{font-size:12.5px;color:var(--light);line-height:1.6;flex:1;margin-bottom:14px;}
+.note-footer{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--border);}
+.note-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
+.note-type.free{color:var(--green);}
+.note-btn{font-size:12px;color:var(--blue);font-weight:600;cursor:pointer;text-decoration:none;}
+
+/* ─── BLOG ─── */
+.blog{background:var(--surface);}
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;}
+.blog-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all 0.3s;}
+.blog-card:hover{transform:translateY(-4px);border-color:rgba(255,107,43,0.3);}
+.blog-img{height:160px;background:linear-gradient(135deg,var(--surface),var(--border));display:flex;align-items:center;justify-content:center;font-size:50px;position:relative;}
+.blog-cat{position:absolute;top:12px;left:12px;background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;text-transform:uppercase;}
+.blog-body{padding:20px;}
+.blog-body h3{font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:8px;line-height:1.4;}
+.blog-body p{font-size:13px;color:var(--light);line-height:1.6;margin-bottom:14px;}
+.blog-meta{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);}
+.blog-read{color:var(--orange);font-weight:600;font-size:12px;text-decoration:none;}
+.blog-read:hover{color:var(--orange2);}
+
+/* ─── INTERVIEW Q ─── */
+.interview-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px;}
+.tab-btn{padding:9px 20px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--light);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);}
+.tab-btn.active, .tab-btn:hover{background:var(--orange);border-color:var(--orange);color:#fff;}
+.qa-list{display:flex;flex-direction:column;gap:12px;}
+.qa-item{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.qa-question{padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:0.2s;}
+.qa-question:hover{background:rgba(255,107,43,0.04);}
+.qa-q-text{font-size:14px;font-weight:600;flex:1;}
+.qa-num{font-size:11px;color:var(--orange);font-weight:700;font-family:monospace;flex-shrink:0;}
+.qa-arrow{color:var(--muted);font-size:12px;transition:0.2s;flex-shrink:0;}
+.qa-item.open .qa-arrow{transform:rotate(180deg);color:var(--orange);}
+.qa-answer{display:none;padding:0 20px 16px;color:var(--light);font-size:13.5px;line-height:1.7;border-top:1px solid var(--border);}
+.qa-item.open .qa-answer{display:block;}
+
+/* ─── TESTIMONIALS ─── */
+.testi{background:var(--surface);}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;}
+.testi-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px;position:relative;}
+.testi-card::before{content:'\201C';position:absolute;top:16px;right:20px;font-size:60px;color:rgba(255,107,43,0.15);font-family:Georgia,serif;line-height:1;}
+.stars{color:var(--yellow);font-size:14px;margin-bottom:14px;}
+.testi-text{color:var(--light);font-size:14px;line-height:1.7;margin-bottom:20px;}
+.testi-author{display:flex;align-items:center;gap:12px;}
+.testi-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#ff3d00);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:16px;color:#fff;flex-shrink:0;}
+.testi-name{font-weight:700;font-size:14px;}
+.testi-role{font-size:12px;color:var(--muted);}
+
+/* ─── CONTACT ─── */
+.contact-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:start;}
+.contact-info h2{font-family:var(--font-head);font-size:32px;font-weight:800;margin-bottom:12px;}
+.contact-info p{color:var(--light);font-size:15px;line-height:1.7;margin-bottom:32px;}
+.contact-cards{display:flex;flex-direction:column;gap:16px;}
+.ccard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;align-items:center;gap:16px;}
+.ccard-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.ccard-icon.orange{background:rgba(255,107,43,0.12);}
+.ccard-icon.green{background:rgba(34,211,160,0.1);}
+.ccard-icon.blue{background:rgba(45,212,255,0.1);}
+.ccard-text .label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+.ccard-text .value{font-size:15px;font-weight:700;margin-top:2px;}
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;}
+.form-card h3{font-family:var(--font-head);font-size:22px;font-weight:800;margin-bottom:6px;}
+.form-card p{color:var(--muted);font-size:13px;margin-bottom:28px;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--light);margin-bottom:7px;letter-spacing:0.3px;}
+.form-group input, .form-group select, .form-group textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;font-family:var(--font-body);transition:0.2s;outline:none;}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,107,43,0.1);}
+.form-group select option{background:var(--surface);}
+.form-group textarea{height:110px;resize:vertical;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.submit-btn{width:100%;background:var(--orange);color:#fff;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font-body);transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.submit-btn:hover{background:#ff8c54;transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,107,43,0.3);}
+.success-msg{display:none;background:rgba(34,211,160,0.1);border:1px solid rgba(34,211,160,0.3);color:var(--green);padding:14px;border-radius:10px;text-align:center;margin-top:14px;font-size:14px;font-weight:600;}
+
+/* ─── FOOTER ─── */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:60px 5% 30px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.footer-brand p{color:var(--light);font-size:14px;line-height:1.7;margin:16px 0;}
+.footer-social{display:flex;gap:10px;margin-top:20px;}
+.social-btn{width:38px;height:38px;background:var(--card);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:0.2s;text-decoration:none;}
+.social-btn:hover{border-color:var(--orange);background:rgba(255,107,43,0.1);}
+.footer-col h4{font-family:var(--font-head);font-size:14px;font-weight:700;margin-bottom:18px;color:#fff;}
+.footer-col ul{list-style:none;}
+.footer-col ul li{margin-bottom:10px;}
+.footer-col ul li a{color:var(--muted);text-decoration:none;font-size:13.5px;transition:0.2s;}
+.footer-col ul li a:hover{color:var(--orange);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;}
+.footer-bottom p{font-size:12.5px;color:var(--muted);}
+.footer-bottom span{color:var(--orange);}
+
+/* ─── WHATSAPP FLOAT ─── */
+.wa-float{position:fixed;bottom:28px;right:28px;z-index:500;background:#25d366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,0.4);transition:0.2s;animation:wabounce 2s infinite;}
+.wa-float:hover{transform:scale(1.1);}
+@keyframes wabounce{0%,100%{box-shadow:0 6px 20px rgba(37,211,102,0.4);}50%{box-shadow:0 6px 30px rgba(37,211,102,0.7);}}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1024px){
+  .hero-float{display:none;}
+  .about-grid{grid-template-columns:1fr;}
+  .contact-wrap{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .hero h1{font-size:32px;}
+  .hero-stats{gap:24px;}
+  .footer-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+}
+
+/* ─── ANIMATIONS ─── */
+.fade-in{opacity:0;transform:translateY(20px);transition:all 0.6s ease;}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo">
+      <div class="nav-logo-icon">NQ</div>
+      <div class="nav-logo-text">Next Gen <span>QA</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#courses">Courses</a>
+      <a href="#videos">Videos</a>
+      <a href="#notes">Notes</a>
+      <a href="#blog">Blog</a>
+      <a href="#interview">Interview Q</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#contact" class="nav-cta">📞 Enroll Now</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="toggleMenu()">About Us</a>
+  <a href="#courses" onclick="toggleMenu()">Courses</a>
+  <a href="#videos" onclick="toggleMenu()">Video Lectures</a>
+  <a href="#notes" onclick="toggleMenu()">Free Notes</a>
+  <a href="#blog" onclick="toggleMenu()">Blog</a>
+  <a href="#interview" onclick="toggleMenu()">Interview Questions</a>
+  <a href="#testimonials" onclick="toggleMenu()">Student Reviews</a>
+  <a href="#contact" onclick="toggleMenu()">Contact Us</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content fade-in">
+    <div class="hero-badge">🎓 Next Gen QA IT Coaching Classes</div>
+    <h1>Master <span class="highlight">Software Testing</span> With an Expert Trainer</h1>
+    <p>Complete Software Testing syllabus — Manual Testing, Automation, Playwright, Selenium, API Testing & more. Online & Offline classes for B.Tech, BCA, MCA, CBSE, ICSE & Polytechnic students.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">🚀 Enroll Now — Free Demo</a>
+      <a href="#courses" class="btn-secondary">📚 View Courses</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Students Trained</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Job Assistance</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">Online</div>
+        <div class="stat-label">& Offline Both</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-float">
+    <div class="float-card"><div class="float-icon">🧪</div><div class="float-label">Manual Testing</div><div class="float-val">Complete Course</div></div>
+    <div class="float-card"><div class="float-icon">🤖</div><div class="float-label">Automation</div><div class="float-val">Playwright & Selenium</div></div>
+    <div class="float-card"><div class="float-icon">🔗</div><div class="float-label">API Testing</div><div class="float-val">Postman & REST</div></div>
+    <div class="float-card"><div class="float-icon">🏆</div><div class="float-label">Certification</div><div class="float-val">After Completion</div></div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-photo-wrap fade-in">
+      <div class="about-photo">👨‍💻
+        <div class="about-photo-badge">
+          <span class="num">10+</span>
+          <span class="lbl">Years Exp</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-content fade-in">
+      <div class="section-tag">About The Trainer</div>
+      <div class="about-name">Mr. Khan Sir</div>
+      <h2>Experienced <span>QA Professional</span> & Dedicated Trainer</h2>
+      <p>With over 10 years of hands-on industry experience in Software Testing and Quality Assurance, Mr. Khan Sir brings real-world knowledge directly into the classroom. He has trained hundreds of students who are now working in top IT companies.</p>
+      <p>His teaching methodology focuses on practical, industry-relevant skills — not just theory. Every student gets personal attention and complete guidance from enrollment to placement.</p>
+      <div class="about-skills">
+        <span class="skill-tag">Manual Testing</span>
+        <span class="skill-tag">Selenium WebDriver</span>
+        <span class="skill-tag blue">Playwright</span>
+        <span class="skill-tag blue">API Testing</span>
+        <span class="skill-tag green">JIRA</span>
+        <span class="skill-tag green">Agile / Scrum</span>
+        <span class="skill-tag">TestNG / JUnit</span>
+        <span class="skill-tag blue">Postman</span>
+      </div>
+      <div class="contact-strip">
+        <div class="contact-item">
+          <div class="icon">📞</div>
+          <div class="info"><span>Call / WhatsApp</span><strong>8700350994</strong></div>
+        </div>
+        <div class="contact-item">
+          <div class="icon">🌐</div>
+          <div class="info"><span>Classes Available</span><strong>Online & Offline</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COURSES ═══ -->
+<section id="courses">
+  <div class="section-header fade-in">
+    <div class="section-tag">What We Teach</div>
+    <h2 class="section-title">Our <span>Courses</span> & Syllabus</h2>
+    <p class="section-sub">Industry-aligned curriculum designed to get you job-ready. Complete syllabus with practical projects and real-world examples.</p>
+  </div>
+  <div class="courses-grid">
+    <div class="course-card fade-in">
+      <div class="course-icon orange">🧪</div>
+      <h3>Manual Testing</h3>
+      <p>Complete foundation of Software Testing — SDLC, STLC, Test Case design, Bug life cycle, and testing techniques.</p>
+      <div class="course-meta">
+        <span class="meta-tag free">Beginner</span>
+        <span class="meta-tag mode">Online & Offline</span>
+      </div>
+      <div class="course-syllabus">
+        <h4>Topics Covered</h4>
+        <ul class="syllabus-list">
+          <li>SDLC & STLC concepts</li>
+          <li>Types of Testing (Functional, Non-Functional)</li>
+          <li>Test Case & Test Plan writing</li>
+          <li>Bug Reporting with JIRA</li>
+          <li>Agile & Scrum methodology</li>
+        </ul>
+      </div>
+    </div>
+    <div class="course-card fade-in">
+      <div class="course-icon blue">🤖</div>
+      <h3>Selenium WebDriver</h3>
+      <p>Learn browser automation with Selenium WebDriver using Java — from basics to advanced framework design.</p>
+      <div class="course-meta">
+        <span class="meta-tag level">Intermediate</span>
+        <span class="meta-tag mode">Online & Offline</span>
+      </div>
+      <div class="course-syllabus">
+        <h4>Topics Covered</h4>
+        <ul class="syllabus-list">
+          <li>Selenium Setup & Configuration</li>
+          <li>Locators — XPath, CSS Selector</li>
+          <li>TestNG Framework</li>
+          <li>Page Object Model (POM)</li>
+          <li>Selenium Grid & Cross browser testing</li>
+        </ul>
+      </div>
+    </div>
+    <div class="course-card fade-in">
+      <div class="course-icon green">🎭</div>
+      <h3>Playwright Testing</h3>
+      <p>Modern browser automation with Playwright — fast, reliable, and powerful. JavaScript/TypeScript based automation.</p>
+      <div class="course-meta">
+        <span class="meta-tag level">Intermediate</span>
+        <span class="meta-tag mode">Online & Offline</span>
+      </div>
+      <div class="course-syllabus">
+        <h4>Topics Covered</h4>
+        <ul class="syllabus-list">
+          <li>Playwright Setup & Browser Launch</li>
+          <li>Element Selection & Interactions</li>
+          <li>Assertions & Waiting Strategies</li>
+          <li>API Testing with Playwright</li>
+          <li>Playwright Reports & CI/CD</li>
+        </ul>
+      </div>
+    </div>
+    <div class="course-card fade-in">
+      <div class="course-icon yellow">🔗</div>
+      <h3>API Testing</h3>
+      <p>Complete API Testing using Postman and REST Assured. Understand REST APIs, JSON, authentication and automation.</p>
+      <div class="course-meta">
+        <span class="meta-tag level">Intermediate</span>
+        <span class="meta-tag mode">Online & Offline</span>
+      </div>
+      <div class="course-syllabus">
+        <h4>Topics Covered</h4>
+        <ul class="syllabus-list">
+          <li>REST API concepts & HTTP methods</li>
+          <li>Postman — Collections & Environments</li>
+          <li>REST Assured with Java</li>
+          <li>JSON Schema Validation</li>
+          <li>API Automation Framework</li>
+        </ul>
+      </div>
+    </div>
+    <div class="course-card fade-in">
+      <div class="course-icon orange">☁️</div>
+      <h3>Performance Testing</h3>
+      <p>Load and performance testing using JMeter. Identify bottlenecks and ensure your application handles real traffic.</p>
+      <div class="course-meta">
+        <span class="meta-tag level">Advanced</span>
+        <span class="meta-tag mode">Online & Offline</span>
+      </div>
+      <div class="course-syllabus">
+        <h4>Topics Covered</h4>
+        <ul class="syllabus-list">
+          <li>JMeter setup & test plans</li>
+          <li>Load, Stress & Spike testing</li>
+          <li>Thread groups & listeners</li>
+          <li>Analyzing performance reports</li>
+          <li>BlazeMeter & cloud testing</li>
+        </ul>
+      </div>
+    </div>
+    <div class="course-card fade-in">
+      <div class="course-icon blue">🗄️</div>
+      <h3>Database & SQL Testing</h3>
+      <p>SQL for testers — learn to write queries and validate data directly in the database to ensure data integrity.</p>
+      <div class="course-meta">
+        <span class="meta-tag free">Beginner</span>
+        <span class="meta-tag mode">Online & Offline</span>
+      </div>
+      <div class="course-syllabus">
+        <h4>Topics Covered</h4>
+        <ul class="syllabus-list">
+          <li>SQL basics — SELECT, INSERT, UPDATE</li>
+          <li>Joins, Subqueries & Aggregations</li>
+          <li>Database Testing concepts</li>
+          <li>MySQL Workbench hands-on</li>
+          <li>Data Validation techniques</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VIDEO LECTURES ═══ -->
+<section class="videos" id="videos">
+  <div class="section-header fade-in">
+    <div class="section-tag">Watch & Learn</div>
+    <h2 class="section-title">Free <span>Video Lectures</span></h2>
+    <p class="section-sub">Watch our free video tutorials to get started. Subscribe to our YouTube channel for the latest content.</p>
+  </div>
+  <div class="yt-note fade-in">
+    <span style="font-size:28px;">▶️</span>
+    <div><strong>Subscribe to our YouTube Channel</strong> for free video lectures, live sessions, and QA interview tips. New videos every week! 🔔</div>
+  </div>
+  <div class="video-grid">
+    <div class="video-card fade-in">
+      <div class="video-thumb">
+        <span class="video-topic">Playwright</span>
+        <div class="video-thumb-icon">▶</div>
+        <span class="video-duration">25:14</span>
+      </div>
+      <div class="video-info">
+        <h4>Playwright Complete Cheat Sheet Explained</h4>
+        <p>All Playwright commands covered with live demo</p>
+        <div class="video-meta"><span>🎓 Beginner Friendly</span><span>👁 Free</span></div>
+      </div>
+    </div>
+    <div class="video-card fade-in">
+      <div class="video-thumb" style="background:linear-gradient(135deg,#0d2035,#1a3a55);">
+        <span class="video-topic">Selenium</span>
+        <div class="video-thumb-icon">▶</div>
+        <span class="video-duration">32:45</span>
+      </div>
+      <div class="video-info">
+        <h4>Selenium WebDriver Setup from Scratch</h4>
+        <p>Install Java, Selenium & write your first test</p>
+        <div class="video-meta"><span>🎓 Beginner</span><span>👁 Free</span></div>
+      </div>
+    </div>
+    <div class="video-card fade-in">
+      <div class="video-thumb" style="background:linear-gradient(135deg,#0d2020,#1a3535);">
+        <span class="video-topic">API Testing</span>
+        <div class="video-thumb-icon">▶</div>
+        <span class="video-duration">28:10</span>
+      </div>
+      <div class="video-info">
+        <h4>Postman API Testing — Complete Tutorial</h4>
+        <p>Collections, environments, and test scripts</p>
+        <div class="video-meta"><span>🎓 Intermediate</span><span>👁 Free</span></div>
+      </div>
+    </div>
+    <div class="video-card fade-in">
+      <div class="video-thumb" style="background:linear-gradient(135deg,#20150d,#3a2b1a);">
+        <span class="video-topic">Interview Prep</span>
+        <div class="video-thumb-icon">▶</div>
+        <span class="video-duration">45:00</span>
+      </div>
+      <div class="video-info">
+        <h4>Top 50 QA Interview Questions & Answers</h4>
+        <p>Most asked questions with detailed explanations</p>
+        <div class="video-meta"><span>🎓 All Levels</span><span>👁 Free</span></div>
+      </div>
+    </div>
+    <div class="video-card fade-in">
+      <div class="video-thumb" style="background:linear-gradient(135deg,#150d20,#2b1a3a);">
+        <span class="video-topic">Manual Testing</span>
+        <div class="video-thumb-icon">▶</div>
+        <span class="video-duration">38:22</span>
+      </div>
+      <div class="video-info">
+        <h4>SDLC & STLC Explained in Detail</h4>
+        <p>Software Development & Testing life cycles</p>
+        <div class="video-meta"><span>🎓 Beginner</span><span>👁 Free</span></div>
+      </div>
+    </div>
+    <div class="video-card fade-in">
+      <div class="video-thumb" style="background:linear-gradient(135deg,#0d2015,#1a3525);">
+        <span class="video-topic">Live Class</span>
+        <div class="video-thumb-icon">▶</div>
+        <span class="video-duration">1:12:05</span>
+      </div>
+      <div class="video-info">
+        <h4>Writing Test Cases Like a Pro — Live Session</h4>
+        <p>Real project test case writing with templates</p>
+        <div class="video-meta"><span>🎓 Intermediate</span><span>👁 Free</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NOTES ═══ -->
+<section id="notes">
+  <div class="section-header fade-in">
+    <div class="section-tag">Free Resources</div>
+    <h2 class="section-title">Notes & <span>Cheat Sheets</span></h2>
+    <p class="section-sub">Download free study materials, cheat sheets, and notes to support your learning journey.</p>
+  </div>
+  <div class="notes-grid">
+    <div class="note-card fade-in">
+      <div class="note-header">
+        <div class="note-icon pdf">📄</div>
+        <div class="note-title">Playwright Complete Cheat Sheet</div>
+      </div>
+      <div class="note-desc">All Playwright commands in one professional sheet — Browser, Elements, Assertions, Forms, Mouse, Keyboard & more.</div>
+      <div class="note-footer">
+        <span class="note-type free">FREE PDF</span>
+        <a href="#contact" class="note-btn">Download →</a>
+      </div>
+    </div>
+    <div class="note-card fade-in">
+      <div class="note-header">
+        <div class="note-icon doc">📝</div>
+        <div class="note-title">Manual Testing Complete Notes</div>
+      </div>
+      <div class="note-desc">Comprehensive notes covering SDLC, STLC, Test Case writing, Bug life cycle, testing types and techniques.</div>
+      <div class="note-footer">
+        <span class="note-type free">FREE DOC</span>
+        <a href="#contact" class="note-btn">Download →</a>
+      </div>
+    </div>
+    <div class="note-card fade-in">
+      <div class="note-header">
+        <div class="note-icon sheet">📊</div>
+        <div class="note-title">Selenium XPath Cheat Sheet</div>
+      </div>
+      <div class="note-desc">All XPath expressions, CSS selectors and Selenium locator strategies in one handy reference sheet.</div>
+      <div class="note-footer">
+        <span class="note-type free">FREE PDF</span>
+        <a href="#contact" class="note-btn">Download →</a>
+      </div>
+    </div>
+    <div class="note-card fade-in">
+      <div class="note-header">
+        <div class="note-icon pdf">🔗</div>
+        <div class="note-title">API Testing with Postman Guide</div>
+      </div>
+      <div class="note-desc">Step-by-step guide to API testing using Postman — GET, POST, PUT, DELETE with real examples.</div>
+      <div class="note-footer">
+        <span class="note-type free">FREE PDF</span>
+        <a href="#contact" class="note-btn">Download →</a>
+      </div>
+    </div>
+    <div class="note-card fade-in">
+      <div class="note-header">
+        <div class="note-icon doc">🐛</div>
+        <div class="note-title">Bug Report Template (JIRA)</div>
+      </div>
+      <div class="note-desc">Professional bug report template with all required fields — perfect for freshers starting their first QA job.</div>
+      <div class="note-footer">
+        <span class="note-type free">FREE DOC</span>
+        <a href="#contact" class="note-btn">Download →</a>
+      </div>
+    </div>
+    <div class="note-card fade-in">
+      <div class="note-header">
+        <div class="note-icon sheet">📋</div>
+        <div class="note-title">QA Interview Questions PDF</div>
+      </div>
+      <div class="note-desc">Top 100 Software Testing interview questions with answers — freshers to experienced level coverage.</div>
+      <div class="note-footer">
+        <span class="note-type free">FREE PDF</span>
+        <a href="#contact" class="note-btn">Download →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BLOG ═══ -->
+<section class="blog" id="blog">
+  <div class="section-header fade-in">
+    <div class="section-tag">Knowledge Hub</div>
+    <h2 class="section-title">Latest <span>Blog Articles</span></h2>
+    <p class="section-sub">Stay updated with the latest trends, tutorials and tips in Software Testing and QA.</p>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-card fade-in">
+      <div class="blog-img">🎭<span class="blog-cat">Playwright</span></div>
+      <div class="blog-body">
+        <h3>Playwright vs Selenium — Which is Better in 2025?</h3>
+        <p>A detailed comparison of Playwright and Selenium — speed, ease of use, features and which one you should learn first.</p>
+        <div class="blog-meta"><span>📅 Jan 2025 · 5 min read</span><a href="#contact" class="blog-read">Read More →</a></div>
+      </div>
+    </div>
+    <div class="blog-card fade-in">
+      <div class="blog-img">🧪<span class="blog-cat">Manual Testing</span></div>
+      <div class="blog-body">
+        <h3>How to Write Perfect Test Cases — A Complete Guide</h3>
+        <p>Learn the art of writing clear, concise and comprehensive test cases with real-world examples and templates.</p>
+        <div class="blog-meta"><span>📅 Feb 2025 · 7 min read</span><a href="#contact" class="blog-read">Read More →</a></div>
+      </div>
+    </div>
+    <div class="blog-card fade-in">
+      <div class="blog-img">🎯<span class="blog-cat">Career</span></div>
+      <div class="blog-body">
+        <h3>How to Get Your First QA Job as a Fresher in India</h3>
+        <p>A step-by-step roadmap for freshers to land their first Software Testing job — resume tips, skills needed and more.</p>
+        <div class="blog-meta"><span>📅 Mar 2025 · 6 min read</span><a href="#contact" class="blog-read">Read More →</a></div>
+      </div>
+    </div>
+    <div class="blog-card fade-in">
+      <div class="blog-img">🔗<span class="blog-cat">API Testing</span></div>
+      <div class="blog-body">
+        <h3>REST API Testing with Postman — Beginners Guide</h3>
+        <p>Everything you need to know about testing REST APIs using Postman — from basics to creating automated test collections.</p>
+        <div class="blog-meta"><span>📅 Mar 2025 · 8 min read</span><a href="#contact" class="blog-read">Read More →</a></div>
+      </div>
+    </div>
+    <div class="blog-card fade-in">
+      <div class="blog-img">🤖<span class="blog-cat">Automation</span></div>
+      <div class="blog-body">
+        <h3>Top 10 Selenium Interview Questions for Freshers</h3>
+        <p>Most commonly asked Selenium WebDriver interview questions with detailed answers to help you crack your next interview.</p>
+        <div class="blog-meta"><span>📅 Feb 2025 · 4 min read</span><a href="#contact" class="blog-read">Read More →</a></div>
+      </div>
+    </div>
+    <div class="blog-card fade-in">
+      <div class="blog-img">📊<span class="blog-cat">JIRA</span></div>
+      <div class="blog-body">
+        <h3>How to Report Bugs Like a Pro Using JIRA</h3>
+        <p>Learn how to write effective bug reports in JIRA — severity, priority, steps to reproduce and what makes a good bug report.</p>
+        <div class="blog-meta"><span>📅 Jan 2025 · 5 min read</span><a href="#contact" class="blog-read">Read More →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ INTERVIEW Q ═══ -->
+<section id="interview">
+  <div class="section-header fade-in">
+    <div class="section-tag">Interview Prep</div>
+    <h2 class="section-title">Software Testing <span>Interview Questions</span></h2>
+    <p class="section-sub">Practice the most commonly asked interview questions to crack your QA job interview with confidence.</p>
+  </div>
+  <div class="interview-tabs fade-in">
+    <button class="tab-btn active" onclick="filterQA('all')">All Questions</button>
+    <button class="tab-btn" onclick="filterQA('manual')">Manual Testing</button>
+    <button class="tab-btn" onclick="filterQA('selenium')">Selenium</button>
+    <button class="tab-btn" onclick="filterQA('playwright')">Playwright</button>
+    <button class="tab-btn" onclick="filterQA('api')">API Testing</button>
+  </div>
+  <div class="qa-list fade-in" id="qaList">
+    <div class="qa-item" data-cat="manual">
+      <div class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-num">Q01</span>
+        <span class="qa-q-text">What is the difference between Verification and Validation in Software Testing?</span>
+        <span class="qa-arrow">▼</span>
+      </div>
+      <div class="qa-answer">Verification checks whether we are building the product right (process-oriented) — it involves reviews, walkthroughs, and inspections without executing code. Validation checks whether we are building the right product (product-oriented) — it involves actual testing by executing the software to ensure it meets the user requirements.</div>
+    </div>
+    <div class="qa-item" data-cat="manual">
+      <div class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-num">Q02</span>
+        <span class="qa-q-text">What is the difference between Severity and Priority in bug reporting?</span>
+        <span class="qa-arrow">▼</span>
+      </div>
+      <div class="qa-answer">Severity is the impact of a bug on the application functionality — how badly the bug affects the system. Priority is the order in which a bug should be fixed — based on business needs. A bug can have high severity but low priority (e.g., spelling mistake on the home page) or low severity but high priority (e.g., logo not displaying on the landing page).</div>
+    </div>
+    <div class="qa-item" data-cat="manual">
+      <div class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-num">Q03</span>
+        <span class="qa-q-text">What is Regression Testing and when do we perform it?</span>
+        <span class="qa-arrow">▼</span>
+      </div>
+      <div class="qa-answer">Regression Testing is re-testing the application after a bug fix or new feature is added to ensure that existing functionality has not been broken. We perform regression testing whenever there is a code change, bug fix, or new feature addition in the application.</div>
+    </div>
+    <div class="qa-item" data-cat="selenium">
+      <div class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-num">Q04</span>
+        <span class="qa-q-text">What is the difference between findElement() and findElements() in Selenium?</span>
+        <span class="qa-arrow">▼</span>
+      </div>
+      <div class="qa-answer">findElement() returns a single WebElement — the first matching element on the page. If no element is found, it throws a NoSuchElementException. findElements() returns a List of WebElements matching the locator. If no elements are found, it returns an empty list (no exception thrown). Use findElements() when you expect multiple elements or want to check if an element exists.</div>
+    </div>
+    <div class="qa-item" data-cat="selenium">
+      <div class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-num">Q05</span>
+        <span class="qa-q-text">What is XPath and what are the different types of XPath?</span>
+        <span class="qa-arrow">▼</span>
+      </div>
+      <div class="qa-answer">XPath (XML Path Language) is a syntax used to locate elements in an HTML/XML document. Types: (1) Absolute XPath — starts from the root element using / and follows the entire path. It is brittle and not recommended. (2) Relative XPath — starts from anywhere in the document using // and is more flexible and commonly used in Selenium testing.</div>
+    </div>
+    <div class="qa-item" data-cat="playwright">
+      <div class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-num">Q06</span>
+        <span class="qa-q-text">What are the advantages of Playwright over Selenium?</span>
+        <span class="qa-arrow">▼</span>
+      </div>
+      <div class="qa-answer">Playwright advantages over Selenium: (1) Auto-wait — Playwright automatically waits for elements to be ready before performing actions. (2) Cross-browser — supports Chromium, Firefox and WebKit out of the box. (3) Faster execution. (4) Built-in support for multiple tabs, iframes and shadow DOM. (5) Network interception and mocking. (6) Better debugging with trace viewer. (7) Supports multiple languages — JS, Python, Java, C#.</div>
+    </div>
+    <div class="qa-item" data-cat="playwright">
+      <div class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-num">Q07</span>
+        <span class="qa-q-text">How do you handle a new tab or popup in Playwright?</span>
+        <span class="qa-arrow">▼</span>
+      </div>
+      <div class="qa-answer">In Playwright, you handle a new tab by listening to the 'page' event on the context before the action that opens the tab: const newPagePromise = context.waitForEvent('page'); await page.locator('a[target="_blank"]').click(); const newPage = await newPagePromise; await newPage.waitForLoadState(); — then you can interact with newPage like any other page object.</div>
+    </div>
+    <div class="qa-item" data-cat="api">
+      <div class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-num">Q08</span>
+        <span class="qa-q-text">What is the difference between GET and POST HTTP methods?</span>
+        <span class="qa-arrow">▼</span>
+      </div>
+      <div class="qa-answer">GET is used to retrieve data from the server. Parameters are sent in the URL. It is idempotent (same request gives same result) and can be cached. POST is used to send/create data on the server. Parameters are sent in the request body. It is not idempotent and is used for creating or updating resources. GET has URL length limitations while POST can send large amounts of data.</div>
+    </div>
+    <div class="qa-item" data-cat="api">
+      <div class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-num">Q09</span>
+        <span class="qa-q-text">What are common HTTP status codes a tester should know?</span>
+        <span class="qa-arrow">▼</span>
+      </div>
+      <div class="qa-answer">Common HTTP status codes: 200 OK (success), 201 Created (resource created), 204 No Content (success with no body), 400 Bad Request (invalid request), 401 Unauthorized (authentication required), 403 Forbidden (no permission), 404 Not Found (resource doesn't exist), 405 Method Not Allowed, 500 Internal Server Error (server-side error), 503 Service Unavailable.</div>
+    </div>
+    <div class="qa-item" data-cat="manual">
+      <div class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-num">Q10</span>
+        <span class="qa-q-text">What is Boundary Value Analysis (BVA) and Equivalence Partitioning (EP)?</span>
+        <span class="qa-arrow">▼</span>
+      </div>
+      <div class="qa-answer">Equivalence Partitioning divides input data into partitions where all values in a partition are expected to behave the same way. You test one value from each partition. Boundary Value Analysis tests the boundary values of partitions — the values at the edges (minimum, maximum, just above minimum, just below maximum). BVA is often used together with EP to achieve maximum coverage with minimum test cases.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="testi" id="testimonials">
+  <div class="section-header fade-in">
+    <div class="section-tag">Student Success</div>
+    <h2 class="section-title">What Our <span>Students Say</span></h2>
+    <p class="section-sub">Real reviews from real students who transformed their careers with Next Gen QA IT Coaching Classes.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card fade-in">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Mr. Khan Sir explains every concept with real examples. I was a complete beginner and after 3 months of training I got placed in a QA role. Best investment of my career!"</p>
+      <div class="testi-author">
+        <div class="testi-avatar">A</div>
+        <div><div class="testi-name">Aditya Sharma</div><div class="testi-role">QA Engineer — Placed in IT Company</div></div>
+      </div>
+    </div>
+    <div class="testi-card fade-in">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"The Playwright and Selenium course content is industry-relevant and practical. Khan Sir's teaching style is very clear and he personally helps with doubts even after class hours."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#22d3a0,#059669);">P</div>
+        <div><div class="testi-name">Priya Verma</div><div class="testi-role">Automation Tester — MCA Graduate</div></div>
+      </div>
+    </div>
+    <div class="testi-card fade-in">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"I tried many online courses but nothing matched the quality of Next Gen QA. The live classes, notes, interview prep — everything is top class. Highly recommend to all B.Tech students!"</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#2dd4ff,#0284c7);">R</div>
+        <div><div class="testi-name">Rahul Gupta</div><div class="testi-role">SDET — B.Tech CSE Graduate</div></div>
+      </div>
+    </div>
+    <div class="testi-card fade-in">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"The free cheat sheets and interview questions provided by Next Gen QA are amazing resources. I cracked 3 QA interviews using the material from this coaching. Thank you Khan Sir!"</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#fbbf24,#d97706);">S</div>
+        <div><div class="testi-name">Sneha Mishra</div><div class="testi-role">QA Analyst — Polytechnic Student</div></div>
+      </div>
+    </div>
+    <div class="testi-card fade-in">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Online classes were very smooth and interactive. Khan Sir makes sure every student understands before moving to the next topic. The batch timing is flexible which helped me study while working."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#c084fc,#7c3aed);">M</div>
+        <div><div class="testi-name">Mohammad Irfan</div><div class="testi-role">QA Engineer — BCA Graduate</div></div>
+      </div>
+    </div>
+    <div class="testi-card fade-in">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"I was struggling to understand API Testing but Khan Sir's Postman sessions were so clear and detailed. Got my first QA job within 2 months of completing the course. Excellent coaching!"</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#f87171,#dc2626);">N</div>
+        <div><div class="testi-name">Nisha Singh</div><div class="testi-role">QA Tester — ICSE Graduate</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="contact-info fade-in">
+      <div class="section-tag">Get In Touch</div>
+      <h2>Start Your <span style="color:var(--orange)">QA Journey</span> Today!</h2>
+      <p>Join hundreds of students who have already transformed their careers. Contact us to enroll or book a FREE demo class. We will respond within 2 hours!</p>
+      <div class="contact-cards">
+        <div class="ccard">
+          <div class="ccard-icon orange">📞</div>
+          <div class="ccard-text"><div class="label">Call / WhatsApp</div><div class="value">8700350994</div></div>
+        </div>
+        <div class="ccard">
+          <div class="ccard-icon green">👨‍🏫</div>
+          <div class="ccard-text"><div class="label">Trainer</div><div class="value">Mr. Khan Sir</div></div>
+        </div>
+        <div class="ccard">
+          <div class="ccard-icon blue">🌐</div>
+          <div class="ccard-text"><div class="label">Class Mode</div><div class="value">Online & Offline Both</div></div>
+        </div>
+        <div class="ccard">
+          <div class="ccard-icon orange">🎓</div>
+          <div class="ccard-text"><div class="label">For Students</div><div class="value">B.Tech, BCA, MCA, CBSE, ICSE, Polytechnic</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-card fade-in">
+      <h3>Enquire Now</h3>
+      <p>Fill the form and we will call you back within 2 hours!</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="fname" placeholder="Your full name">
+        </div>
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" id="fphone" placeholder="Your phone number">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="femail" placeholder="your@email.com">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Course Interested In *</label>
+          <select id="fcourse">
+            <option value="">Select a course</option>
+            <option>Manual Testing</option>
+            <option>Selenium WebDriver</option>
+            <option>Playwright Testing</option>
+            <option>API Testing</option>
+            <option>Performance Testing</option>
+            <option>Complete QA Package</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Preferred Mode *</label>
+          <select id="fmode">
+            <option value="">Select mode</option>
+            <option>Online</option>
+            <option>Offline</option>
+            <option>Both</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Your Message</label>
+        <textarea id="fmsg" placeholder="Any questions or specific requirements..."></textarea>
+      </div>
+      <button class="submit-btn" onclick="submitForm()">🚀 Send Enquiry — Get Free Demo</button>
+      <div class="success-msg" id="successMsg">✅ Thank you! We will contact you within 2 hours. 🎉</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="display:flex;align-items:center;gap:12px;margin-bottom:0;text-decoration:none;">
+        <div class="nav-logo-icon">NQ</div>
+        <div class="nav-logo-text" style="font-family:var(--font-head);font-weight:800;font-size:16px;color:#fff;">Next Gen <span style="color:var(--orange);">QA</span></div>
+      </div>
+      <p>Complete Software Testing training for students and freshers. Build a strong career in QA with expert guidance from Mr. Khan Sir.</p>
+      <div class="footer-social">
+        <a class="social-btn" href="#" title="Facebook">📘</a>
+        <a class="social-btn" href="#" title="LinkedIn">💼</a>
+        <a class="social-btn" href="#" title="YouTube">▶️</a>
+        <a class="social-btn" href="#" title="Instagram">📸</a>
+        <a class="social-btn" href="https://wa.me/918700350994" title="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Courses</h4>
+      <ul>
+        <li><a href="#courses">Manual Testing</a></li>
+        <li><a href="#courses">Selenium WebDriver</a></li>
+        <li><a href="#courses">Playwright Testing</a></li>
+        <li><a href="#courses">API Testing</a></li>
+        <li><a href="#courses">Performance Testing</a></li>
+        <li><a href="#courses">SQL for Testers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#notes">Free Cheat Sheets</a></li>
+        <li><a href="#notes">Study Notes</a></li>
+        <li><a href="#videos">Video Lectures</a></li>
+        <li><a href="#blog">Blog Articles</a></li>
+        <li><a href="#interview">Interview Questions</a></li>
+        <li><a href="#contact">Free Demo Class</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact Us</h4>
+      <ul>
+        <li><a href="tel:8700350994">📞 8700350994</a></li>
+        <li><a href="https://wa.me/918700350994">💬 WhatsApp Us</a></li>
+        <li><a href="#contact">📧 Send Enquiry</a></li>
+        <li><a href="#about">👨‍🏫 About Mr. Khan Sir</a></li>
+        <li><a href="#testimonials">⭐ Student Reviews</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 <span>Next Gen QA IT Coaching Classes</span>. All rights reserved. | Mr. Khan Sir — 8700350994</p>
+    <p>Made with ❤️ for <span>Software Testing Students</span></p>
+  </div>
+</footer>
+
+<!-- WhatsApp Float Button -->
+<a href="https://wa.me/918700350994" class="wa-float" title="Chat on WhatsApp">💬</a>
+
+<script>
+// ─── MOBILE MENU ───
+function toggleMenu(){
+  const m = document.getElementById('mobileMenu');
+  m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+  m.style.flexDirection = 'column';
+}
+
+// ─── SCROLL ANIMATIONS ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ─── QA ACCORDION ───
+function toggleQA(el){
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+
+// ─── INTERVIEW FILTER ───
+function filterQA(cat){
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.qa-item').forEach(item => {
+    if(cat === 'all' || item.dataset.cat === cat){
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// ─── FORM SUBMIT ───
+function submitForm(){
+  const name = document.getElementById('fname').value;
+  const phone = document.getElementById('fphone').value;
+  if(!name || !phone){
+    alert('Please enter your Name and Phone Number!');
+    return;
+  }
+  document.getElementById('successMsg').style.display = 'block';
+  document.getElementById('fname').value = '';
+  document.getElementById('fphone').value = '';
+  document.getElementById('femail').value = '';
+  document.getElementById('fcourse').value = '';
+  document.getElementById('fmode').value = '';
+  document.getElementById('fmsg').value = '';
+  setTimeout(() => { document.getElementById('successMsg').style.display = 'none'; }, 5000);
+}
+
+// ─── ACTIVE NAV ON SCROLL ───
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  nav.style.background = window.scrollY > 50 ? 'rgba(6,10,16,0.98)' : 'rgba(6,10,16,0.92)';
+});
+</script>
+</body>
+</html>
