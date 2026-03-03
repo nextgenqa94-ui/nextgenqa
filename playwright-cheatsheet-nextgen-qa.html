@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playwright Cheat Sheet – Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #161d2e;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --code-bg: #0d1117;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #0d1b35 0%, #111827 50%, #0a1628 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 20px 32px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0,212,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .logo-area { display: flex; align-items: center; gap: 16px; }
+  .logo-icon {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    color: #fff; letter-spacing: -1px;
+    box-shadow: 0 0 20px rgba(0,212,255,0.3);
+    flex-shrink: 0;
+  }
+  .title-block h1 {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #fff 0%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .title-block h1 span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+  .title-block p { color: var(--muted); font-size: 11px; margin-top: 2px; letter-spacing: 0.5px; }
+  .coaching-info {
+    text-align: right; font-size: 11.5px;
+  }
+  .coaching-info .name { font-size: 14px; font-weight: 700; color: var(--accent3); }
+  .coaching-info .phone {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 3px; color: var(--green); font-weight: 600; font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .coaching-info .tags { margin-top: 5px; display: flex; gap: 5px; justify-content: flex-end; flex-wrap: wrap; }
+  .tag {
+    background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4);
+    color: #a78bfa; padding: 1px 7px; border-radius: 20px; font-size: 9.5px; font-weight: 600;
+  }
+  .tag.blue { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); color: var(--accent); }
+  .tag.amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: var(--accent3); }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 9px; letter-spacing: 2px; font-weight: 700;
+    text-transform: uppercase; color: var(--muted);
+    padding: 8px 32px 4px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-left: 1px solid var(--border);
+  }
+
+  .col { border-right: 1px solid var(--border); }
+
+  /* ── CARD ── */
+  .card {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 12px;
+  }
+  .card-title {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.4px;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 7px; padding-bottom: 5px;
+    border-bottom: 1px solid rgba(0,212,255,0.15);
+  }
+  .card-title .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+    box-shadow: 0 0 6px var(--accent);
+  }
+  .card-title.purple .dot { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; }
+  .card-title.purple { color: #a78bfa; border-bottom-color: rgba(167,139,250,0.15); }
+  .card-title.green .dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .card-title.green { color: var(--green); border-bottom-color: rgba(16,185,129,0.15); }
+  .card-title.amber .dot { background: var(--accent3); box-shadow: 0 0 6px var(--accent3); }
+  .card-title.amber { color: var(--accent3); border-bottom-color: rgba(245,158,11,0.15); }
+  .card-title.red .dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .card-title.red { color: #fb7185; border-bottom-color: rgba(239,68,68,0.15); }
+
+  .item { margin-bottom: 6px; }
+  .item:last-child { margin-bottom: 0; }
+  .item-desc {
+    font-size: 10.5px; color: #94a3b8; margin-bottom: 3px; font-weight: 400;
+  }
+  code {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 2px solid rgba(0,212,255,0.4);
+    color: #7dd3fc;
+    padding: 4px 7px;
+    border-radius: 4px;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.6;
+  }
+  code .kw { color: #c792ea; }
+  code .fn { color: #82aaff; }
+  code .str { color: #c3e88d; }
+  code .cm { color: #546e7a; font-style: italic; }
+  code .num { color: #f78c6c; }
+  code .op { color: #89ddff; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: linear-gradient(90deg, #0d1b35, #111827);
+    border-top: 2px solid var(--accent2);
+    padding: 10px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer .left { font-size: 10px; color: var(--muted); }
+  .footer .left span { color: var(--accent); font-weight: 700; }
+  .footer .right { font-size: 10px; color: var(--muted); text-align: right; }
+  .footer .right strong { color: var(--accent3); }
+
+  /* Spanning cols */
+  .span2 { grid-column: span 2; }
+  .span3 { grid-column: span 3; }
+  .span4 { grid-column: span 4; }
+
+  @media print {
+    body { font-size: 11px; }
+    .grid { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ HEADER ═══════════════════════ -->
+<div class="header">
+  <div class="logo-area">
+    <div class="logo-icon">PW</div>
+    <div class="title-block">
+      <h1>Playwright <span>Cheat Sheet</span></h1>
+      <p>BROWSER AUTOMATION &amp; TESTING · QUICK REFERENCE GUIDE</p>
+    </div>
+  </div>
+  <div class="coaching-info">
+    <div class="name">🎓 Next Gen QA IT Coaching Classes</div>
+    <div class="phone">📞 Mr. Khan Sir &nbsp;|&nbsp; 8700350994</div>
+    <div class="tags" style="margin-top:5px;">
+      <span class="tag blue">CBSE/ICSE</span>
+      <span class="tag amber">B.Tech / BCA / MCA</span>
+      <span class="tag">Polytechnic</span>
+      <span class="tag blue">Online &amp; Offline</span>
+      <span class="tag amber">Software Testing</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ ROW 1 – Browser, Context, Page, Navigation ════════ -->
+<div class="section-label">Browser Management · Context · Page/Tab · Navigation · Page Info</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Browser Start &amp; Close</div>
+      <div class="item"><div class="item-desc">Launch Chromium</div><code><span class="kw">const</span> { chromium } = <span class="fn">require</span>(<span class="str">'playwright'</span>);
+<span class="kw">const</span> browser = <span class="op">await</span> chromium.<span class="fn">launch</span>();</code></div>
+      <div class="item"><div class="item-desc">Launch Chrome browser</div><code><span class="kw">const</span> browser = <span class="op">await</span> chromium.<span class="fn">launch</span>({ channel: <span class="str">'chrome'</span> });</code></div>
+      <div class="item"><div class="item-desc">Launch Microsoft Edge</div><code><span class="kw">const</span> browser = <span class="op">await</span> chromium.<span class="fn">launch</span>({ channel: <span class="str">'msedge'</span> });</code></div>
+      <div class="item"><div class="item-desc">Launch Firefox</div><code><span class="kw">const</span> { firefox } = <span class="fn">require</span>(<span class="str">'playwright'</span>);
+<span class="kw">const</span> browser = <span class="op">await</span> firefox.<span class="fn">launch</span>();</code></div>
+      <div class="item"><div class="item-desc">Launch WebKit</div><code><span class="kw">const</span> { webkit } = <span class="fn">require</span>(<span class="str">'playwright'</span>);
+<span class="kw">const</span> browser = <span class="op">await</span> webkit.<span class="fn">launch</span>();</code></div>
+      <div class="item"><div class="item-desc">Close browser</div><code><span class="op">await</span> browser.<span class="fn">close</span>();</code></div>
+    </div>
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>Context Management</div>
+      <div class="item"><div class="item-desc">Create new browser context</div><code><span class="kw">const</span> context = <span class="op">await</span> browser.<span class="fn">newContext</span>();</code></div>
+      <div class="item"><div class="item-desc">Close browser context</div><code><span class="op">await</span> context.<span class="fn">close</span>();</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>Page / Tab Management</div>
+      <div class="item"><div class="item-desc">Open a new page / tab</div><code><span class="kw">const</span> page = <span class="op">await</span> context.<span class="fn">newPage</span>();</code></div>
+      <div class="item"><div class="item-desc">Wait for new tab (e.g. target=_blank)</div><code><span class="kw">const</span> newPagePromise = context.<span class="fn">waitForEvent</span>(<span class="str">'page'</span>);
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'a[target="_blank"]'</span>).<span class="fn">click</span>();
+<span class="kw">const</span> newPage = <span class="op">await</span> newPagePromise;</code></div>
+      <div class="item"><div class="item-desc">List all pages</div><code><span class="kw">const</span> pages = context.<span class="fn">pages</span>();</code></div>
+      <div class="item"><div class="item-desc">Bring page to front</div><code><span class="op">await</span> page.<span class="fn">bringToFront</span>();</code></div>
+      <div class="item"><div class="item-desc">Close page / Check closed</div><code><span class="op">await</span> page.<span class="fn">close</span>();
+<span class="kw">const</span> isClosed = page.<span class="fn">isClosed</span>();</code></div>
+    </div>
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>Page Information</div>
+      <div class="item"><div class="item-desc">Get URL &amp; title</div><code><span class="kw">const</span> url = page.<span class="fn">url</span>();
+<span class="kw">const</span> title = <span class="op">await</span> page.<span class="fn">title</span>();</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Navigation</div>
+      <div class="item"><div class="item-desc">Navigate to URL</div><code><span class="op">await</span> page.<span class="fn">goto</span>(<span class="str">'https://example.com'</span>);</code></div>
+      <div class="item"><div class="item-desc">Reload / Back / Forward</div><code><span class="op">await</span> page.<span class="fn">reload</span>();
+<span class="op">await</span> page.<span class="fn">goBack</span>();
+<span class="op">await</span> page.<span class="fn">goForward</span>();</code></div>
+    </div>
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>Page Assertions</div>
+      <div class="item"><div class="item-desc">Assert URL equals value</div><code><span class="op">await</span> <span class="fn">expect</span>(page).<span class="fn">toHaveURL</span>(<span class="str">'https://example.com'</span>);</code></div>
+      <div class="item"><div class="item-desc">Assert URL using function</div><code><span class="op">await</span> <span class="fn">expect</span>(page).<span class="fn">toHaveURL</span>(url =&gt; {
+  <span class="kw">return</span> url.pathname === <span class="str">'/results'</span>
+    &amp;&amp; url.searchParams.<span class="fn">get</span>(<span class="str">'page'</span>) === <span class="str">'1'</span>;
+});</code></div>
+      <div class="item"><div class="item-desc">Assert page title</div><code><span class="op">await</span> <span class="fn">expect</span>(page).<span class="fn">toHaveTitle</span>(<span class="str">'Dashboard'</span>);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>Element Selection</div>
+      <div class="item"><div class="item-desc">CSS selector / Text / Label / Role</div><code>page.<span class="fn">locator</span>(<span class="str">'#element'</span>)
+page.<span class="fn">getByText</span>(<span class="str">'Submit'</span>)
+page.<span class="fn">getByLabel</span>(<span class="str">'Username'</span>)
+page.<span class="fn">getByRole</span>(<span class="str">'button'</span>, { name: <span class="str">'Submit'</span> })</code></div>
+      <div class="item"><div class="item-desc">Placeholder / AltText / Title / TestId</div><code>page.<span class="fn">getByPlaceholder</span>(<span class="str">'Enter email'</span>)
+page.<span class="fn">getByAltText</span>(<span class="str">'Company Logo'</span>)
+page.<span class="fn">getByTitle</span>(<span class="str">'Close'</span>)
+page.<span class="fn">getByTestId</span>(<span class="str">'submit-button'</span>)</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 2 – Wait, Element State, Assertions ════════ -->
+<div class="section-label">Waiting for Elements · Element State · Element Assertions</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>Waiting for Element States</div>
+      <div class="item"><div class="item-desc">Wait: attached / visible / hidden / detached</div><code><span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#menu'</span>).<span class="fn">waitFor</span>({ state: <span class="str">'attached'</span> });
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#menu'</span>).<span class="fn">waitFor</span>({ state: <span class="str">'visible'</span> });
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#menu'</span>).<span class="fn">waitFor</span>({ state: <span class="str">'hidden'</span> });
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#menu'</span>).<span class="fn">waitFor</span>({ state: <span class="str">'detached'</span> });</code></div>
+      <div class="item"><div class="item-desc">Wait with custom timeout (30 min)</div><code><span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#menu'</span>).<span class="fn">waitFor</span>({
+  state: <span class="str">'visible'</span>,
+  timeout: <span class="num">30</span> * <span class="num">60</span> * <span class="num">1000</span>
+});</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Element State</div>
+      <div class="item"><div class="item-desc">Get text / inner text / HTML / attribute / input value</div><code><span class="kw">const</span> text = <span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#el'</span>).<span class="fn">textContent</span>();
+<span class="kw">const</span> text = <span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#el'</span>).<span class="fn">innerText</span>();
+<span class="kw">const</span> html = <span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#el'</span>).<span class="fn">innerHTML</span>();
+<span class="kw">const</span> href = <span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#el'</span>).<span class="fn">getAttribute</span>(<span class="str">'href'</span>);
+<span class="kw">const</span> val  = <span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#input'</span>).<span class="fn">inputValue</span>();</code></div>
+      <div class="item"><div class="item-desc">Bounding box / isVisible / isEnabled / isChecked</div><code><span class="kw">const</span> box       = <span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#el'</span>).<span class="fn">boundingBox</span>();
+<span class="kw">const</span> isVisible = <span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#el'</span>).<span class="fn">isVisible</span>();
+<span class="kw">const</span> isEnabled = <span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#el'</span>).<span class="fn">isEnabled</span>();
+<span class="kw">const</span> isChecked = <span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#cb'</span>).<span class="fn">isChecked</span>();</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>Element Assertions</div>
+      <div class="item"><div class="item-desc">Visibility / text checks</div><code><span class="op">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#el'</span>)).<span class="fn">toBeAttached</span>();
+<span class="op">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#el'</span>)).<span class="fn">toBeVisible</span>();
+<span class="op">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#el'</span>)).<span class="fn">toBeHidden</span>();
+<span class="op">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#el'</span>)).<span class="fn">toContainText</span>(<span class="str">'Welcome'</span>);
+<span class="op">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#el'</span>)).not.<span class="fn">toContainText</span>(<span class="str">'Error'</span>);</code></div>
+      <div class="item"><div class="item-desc">Value / CSS / Attribute / Checked / Enabled</div><code><span class="op">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#input'</span>)).<span class="fn">toHaveValue</span>(<span class="str">'Hello'</span>);
+<span class="op">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#el'</span>)).<span class="fn">toHaveClass</span>(<span class="str">"error"</span>);
+<span class="op">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#el'</span>)).<span class="fn">toHaveCSS</span>(<span class="str">'display'</span>,<span class="str">'block'</span>);
+<span class="op">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#cb'</span>)).<span class="fn">toBeChecked</span>();
+<span class="op">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#el'</span>)).<span class="fn">toBeEnabled</span>();
+<span class="op">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#el'</span>)).<span class="fn">toBeFocused</span>();</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>Element Interactions</div>
+      <div class="item"><div class="item-desc">Click / Right-click / Double-click / Hover</div><code><span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#btn'</span>).<span class="fn">click</span>();
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#btn'</span>).<span class="fn">click</span>({ button: <span class="str">'right'</span> });
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#btn'</span>).<span class="fn">dblclick</span>();
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#btn'</span>).<span class="fn">hover</span>();</code></div>
+      <div class="item"><div class="item-desc">Click with modifier / at position</div><code><span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#btn'</span>).<span class="fn">click</span>({ modifiers: [<span class="str">'Control'</span>] });
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#btn'</span>).<span class="fn">click</span>({ position: { x:<span class="num">10</span>, y:<span class="num">5</span> } });</code></div>
+      <div class="item"><div class="item-desc">Drag and drop / with offset</div><code><span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#src'</span>).<span class="fn">dragTo</span>(page.<span class="fn">locator</span>(<span class="str">'#tgt'</span>));
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#src'</span>).<span class="fn">dragTo</span>(page.<span class="fn">locator</span>(<span class="str">'#tgt'</span>), {
+  sourcePosition: { x:<span class="num">10</span>, y:<span class="num">5</span> },
+  targetPosition: { x:<span class="num">10</span>, y:<span class="num">5</span> }
+});</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 3 – Forms, Keyboard, Mouse, Cookies ════════ -->
+<div class="section-label">Form Input · Keyboard · Mouse · File Upload / Download · Cookies · Viewport</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>Form Input Interactions</div>
+      <div class="item"><div class="item-desc">Fill / Clear / Press / Type with delay</div><code><span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#input'</span>).<span class="fn">fill</span>(<span class="str">'Hello World'</span>);
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#input'</span>).<span class="fn">clear</span>();
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#input'</span>).<span class="fn">press</span>(<span class="str">'Enter'</span>);
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#input'</span>).<span class="fn">pressSequentially</span>(<span class="str">'Hello'</span>, { delay:<span class="num">100</span> });</code></div>
+      <div class="item"><div class="item-desc">Checkbox / Radio / Dropdown / Multi-select</div><code><span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#checkbox'</span>).<span class="fn">check</span>();
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#checkbox'</span>).<span class="fn">uncheck</span>();
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'.select'</span>).<span class="fn">selectOption</span>(<span class="str">'Red'</span>);
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'.select'</span>).<span class="fn">selectOption</span>([<span class="str">'Red'</span>,<span class="str">'Green'</span>]);</code></div>
+      <div class="item"><div class="item-desc">Focus / Blur / Scroll into view</div><code><span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#input'</span>).<span class="fn">focus</span>();
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#input'</span>).<span class="fn">blur</span>();
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#el'</span>).<span class="fn">scrollIntoViewIfNeeded</span>();</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Keyboard</div>
+      <div class="item"><div class="item-desc">Press key / chord / type text / type with delay</div><code><span class="op">await</span> page.keyboard.<span class="fn">press</span>(<span class="str">'Enter'</span>);
+<span class="op">await</span> page.keyboard.<span class="fn">press</span>(<span class="str">'Control+A'</span>);
+<span class="op">await</span> page.keyboard.<span class="fn">type</span>(<span class="str">'Hello World'</span>);
+<span class="op">await</span> page.keyboard.<span class="fn">type</span>(<span class="str">'Hello World'</span>, { delay: <span class="num">100</span> });</code></div>
+      <div class="item"><div class="item-desc">Hold / Release key</div><code><span class="op">await</span> page.keyboard.<span class="fn">down</span>(<span class="str">'Shift'</span>);
+<span class="op">await</span> page.keyboard.<span class="fn">up</span>(<span class="str">'Shift'</span>);</code></div>
+    </div>
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>Mouse</div>
+      <div class="item"><div class="item-desc">Move / Click / Right-click / Double-click / Scroll</div><code><span class="op">await</span> page.mouse.<span class="fn">move</span>(<span class="num">100</span>, <span class="num">200</span>);
+<span class="op">await</span> page.mouse.<span class="fn">click</span>(<span class="num">100</span>, <span class="num">200</span>);
+<span class="op">await</span> page.mouse.<span class="fn">click</span>(<span class="num">100</span>, <span class="num">200</span>, { button: <span class="str">'right'</span> });
+<span class="op">await</span> page.mouse.<span class="fn">dblclick</span>(<span class="num">100</span>, <span class="num">200</span>);
+<span class="op">await</span> page.mouse.<span class="fn">wheel</span>(<span class="num">0</span>, <span class="num">100</span>);</code></div>
+      <div class="item"><div class="item-desc">Press down / Release mouse button</div><code><span class="op">await</span> page.mouse.<span class="fn">down</span>();  <span class="cm">// default: left button</span>
+<span class="op">await</span> page.mouse.<span class="fn">up</span>();
+<span class="op">await</span> page.mouse.<span class="fn">down</span>({ button: <span class="str">'right'</span> });
+<span class="op">await</span> page.mouse.<span class="fn">up</span>({ button: <span class="str">'right'</span> });</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>File Upload &amp; Download</div>
+      <div class="item"><div class="item-desc">Upload single / multiple files</div><code><span class="kw">let</span> el = page.<span class="fn">locator</span>(<span class="str">'input[type="file"]'</span>);
+<span class="op">await</span> el.<span class="fn">setInputFiles</span>(<span class="str">'photos/mountain.png'</span>);
+<span class="op">await</span> el.<span class="fn">setInputFiles</span>([<span class="str">'photos/mountain.png'</span>,<span class="str">'river.png'</span>]);</code></div>
+      <div class="item"><div class="item-desc">Upload file from memory / Clear file input</div><code><span class="op">await</span> el.<span class="fn">setInputFiles</span>([{
+  name: <span class="str">'file1.txt'</span>, mimeType: <span class="str">'text/plain'</span>,
+  buffer: Buffer.<span class="fn">from</span>(<span class="str">'Hello World'</span>)
+}]);
+<span class="op">await</span> el.<span class="fn">setInputFiles</span>([]); <span class="cm">// clear</span></code></div>
+      <div class="item"><div class="item-desc">Download and save file</div><code><span class="kw">const</span> downloadEvent = <span class="op">await</span> page.<span class="fn">waitForEvent</span>(<span class="str">'download'</span>);
+<span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#download-link'</span>).<span class="fn">click</span>();
+<span class="kw">const</span> download = <span class="op">await</span> downloadEvent;
+<span class="op">await</span> download.<span class="fn">saveAs</span>(<span class="str">'report.pdf'</span>);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title red"><div class="dot"></div>Cookies</div>
+      <div class="item"><div class="item-desc">Get / Add / Clear all cookies</div><code><span class="kw">const</span> cookies = <span class="op">await</span> context.<span class="fn">cookies</span>();
+<span class="op">await</span> context.<span class="fn">addCookies</span>([{
+  name:<span class="str">'session-id'</span>, value:<span class="str">'abc123'</span>,
+  domain:<span class="str">'example.com'</span>, path:<span class="str">'/'</span>,
+  httpOnly:<span class="num">true</span>, secure:<span class="num">true</span>, sameSite:<span class="str">'Lax'</span>
+}]);
+<span class="op">await</span> context.<span class="fn">clearCookies</span>();</code></div>
+      <div class="item"><div class="item-desc">Clear by name / domain</div><code><span class="op">await</span> context.<span class="fn">clearCookies</span>({ name: <span class="str">'session-id'</span> });
+<span class="op">await</span> context.<span class="fn">clearCookies</span>({ domain: <span class="str">'example.com'</span> });</code></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Viewport &amp; Screenshots</div>
+      <div class="item"><div class="item-desc">Get / Set viewport size</div><code><span class="kw">const</span> size = page.<span class="fn">viewportSize</span>();
+<span class="op">await</span> page.<span class="fn">setViewportSize</span>({ width:<span class="num">1280</span>, height:<span class="num">720</span> });</code></div>
+      <div class="item"><div class="item-desc">Screenshot: element / viewport / full page</div><code><span class="op">await</span> page.<span class="fn">locator</span>(<span class="str">'#el'</span>).<span class="fn">screenshot</span>({ path:<span class="str">'element.png'</span> });
+<span class="op">await</span> page.<span class="fn">screenshot</span>({ path:<span class="str">'viewport.png'</span> });
+<span class="op">await</span> page.<span class="fn">screenshot</span>({ path:<span class="str">'full.png'</span>, fullPage:<span class="num">true</span> });</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 4 – JS Evaluate, Dialogs ════════ -->
+<div class="section-label">JavaScript Evaluate · Alert / Prompt / Confirmation Dialogs</div>
+<div class="grid">
+
+  <div class="col span2">
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>Evaluate JavaScript</div>
+      <div class="item"><div class="item-desc">Evaluate as string / function / with arguments</div><code><span class="kw">const</span> sum = <span class="op">await</span> page.<span class="fn">evaluate</span>(<span class="str">'1 + 2'</span>);
+<span class="op">await</span> page.<span class="fn">evaluate</span>(() =&gt; <span class="fn">alert</span>(<span class="str">'Hello World'</span>));
+<span class="kw">const</span> sum = <span class="op">await</span> page.<span class="fn">evaluate</span>(([a, b]) =&gt; { <span class="kw">return</span> a + b; }, [<span class="num">1</span>, <span class="num">2</span>]);</code></div>
+    </div>
+  </div>
+
+  <div class="col span2">
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>Alert / Prompt / Confirmation Dialogs</div>
+      <div class="item"><div class="item-desc">Accept / Dismiss / Enter text / Conditional</div><code>page.<span class="fn">on</span>(<span class="str">'dialog'</span>, async dialog =&gt; {
+  <span class="op">await</span> dialog.<span class="fn">accept</span>();                   <span class="cm">// accept alert</span>
+  <span class="op">await</span> dialog.<span class="fn">accept</span>(<span class="str">'Hello World'</span>);      <span class="cm">// prompt with text</span>
+  <span class="op">await</span> dialog.<span class="fn">dismiss</span>();                  <span class="cm">// dismiss confirm</span>
+  <span class="kw">if</span>(dialog.<span class="fn">message</span>() === <span class="str">'Are you sure?'</span>) { <span class="op">await</span> dialog.<span class="fn">accept</span>(); }
+  <span class="kw">else</span> { <span class="op">await</span> dialog.<span class="fn">dismiss</span>(); }
+});</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ FOOTER ════════ -->
+<div class="footer">
+  <div class="left">
+    <span>Playwright</span> Quick Reference · JavaScript (Node.js) · All async/await syntax
+    &nbsp;|&nbsp; Requires: <span>import { expect } from '@playwright/test'</span> for assertions
+  </div>
+  <div class="right">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp;
+    CBSE · ICSE · B.Tech · BCA · MCA · Polytechnic · CS &nbsp;|&nbsp;
+    Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>
