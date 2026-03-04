@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selenium Java Cheat Sheet – Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080c0a;
+  --surface: #0d1410;
+  --card: #111a14;
+  --border: #1a2e1f;
+  --green: #00e676;
+  --green2: #69f0ae;
+  --amber: #ffab40;
+  --amber2: #ffd180;
+  --blue: #40c4ff;
+  --red: #ff5252;
+  --purple: #ea80fc;
+  --text: #e0ede3;
+  --muted: #4a6350;
+  --light: #8aab90;
+  --code-bg: #060a07;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:11px;line-height:1.5;}
+
+/* ── HEADER ── */
+.header{
+  background:linear-gradient(135deg,#060d08 0%,#0d1a10 50%,#060d08 100%);
+  border-bottom:2px solid var(--green);
+  padding:16px 24px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 100% at 70% 50%,rgba(0,230,118,0.06) 0%,transparent 70%);}
+.header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.logo-wrap{display:flex;align-items:center;gap:14px;}
+.logo-box{
+  width:54px;height:54px;
+  background:linear-gradient(135deg,#00c853,#00695c);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;
+  box-shadow:0 0 24px rgba(0,230,118,0.3);flex-shrink:0;letter-spacing:-0.5px;
+}
+.title-block h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#fff;}
+.title-block h1 em{color:var(--green);font-style:normal;}
+.title-block p{color:var(--muted);font-size:9.5px;margin-top:2px;letter-spacing:1px;font-family:'Syne',sans-serif;}
+.coaching-badge{text-align:right;}
+.coaching-badge .name{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--amber);letter-spacing:-0.3px;}
+.coaching-badge .phone{font-size:12px;color:var(--green);font-weight:700;margin-top:3px;}
+.coaching-badge .tags{display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap;margin-top:5px;}
+.tag{padding:2px 8px;border-radius:20px;font-size:8.5px;font-weight:700;letter-spacing:0.3px;font-family:'Syne',sans-serif;}
+.tag.g{background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.25);color:var(--green);}
+.tag.a{background:rgba(255,171,64,0.1);border:1px solid rgba(255,171,64,0.25);color:var(--amber);}
+.tag.b{background:rgba(64,196,255,0.1);border:1px solid rgba(64,196,255,0.25);color:var(--blue);}
+
+/* ── SECTION DIVIDER ── */
+.sec-div{
+  background:rgba(0,230,118,0.04);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:5px 20px;display:flex;align-items:center;gap:10px;
+}
+.sec-div span{font-family:'Syne',sans-serif;font-size:8.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--green);}
+.sec-div::before,.sec-div::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(0,230,118,0.2),transparent);}
+.sec-div::after{background:linear-gradient(270deg,rgba(0,230,118,0.2),transparent);}
+
+/* ── GRID ── */
+.grid{display:grid;gap:0;border-left:1px solid var(--border);}
+.g4{grid-template-columns:repeat(4,1fr);}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g2{grid-template-columns:repeat(2,1fr);}
+.col{border-right:1px solid var(--border);}
+.span2{grid-column:span 2;}
+.span3{grid-column:span 3;}
+
+/* ── CARD ── */
+.card{border-bottom:1px solid var(--border);padding:9px 11px;}
+.ct{
+  display:flex;align-items:center;gap:7px;
+  font-family:'Syne',sans-serif;font-size:9.5px;font-weight:800;
+  letter-spacing:0.8px;text-transform:uppercase;
+  margin-bottom:7px;padding-bottom:5px;
+  border-bottom:1px solid rgba(0,230,118,0.1);
+  color:var(--green);
+}
+.ct .d{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);flex-shrink:0;}
+.ct.amber{color:var(--amber);border-bottom-color:rgba(255,171,64,0.1);}
+.ct.amber .d{background:var(--amber);box-shadow:0 0 6px var(--amber);}
+.ct.blue{color:var(--blue);border-bottom-color:rgba(64,196,255,0.1);}
+.ct.blue .d{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+.ct.red{color:var(--red);border-bottom-color:rgba(255,82,82,0.1);}
+.ct.red .d{background:var(--red);box-shadow:0 0 6px var(--red);}
+.ct.purple{color:var(--purple);border-bottom-color:rgba(234,128,252,0.1);}
+.ct.purple .d{background:var(--purple);box-shadow:0 0 6px var(--purple);}
+
+/* ── ITEM ── */
+.item{margin-bottom:6px;}
+.item:last-child{margin-bottom:0;}
+.desc{font-size:9.5px;color:var(--light);margin-bottom:2px;font-family:'Syne',sans-serif;font-weight:600;}
+code{
+  display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  background:var(--code-bg);border:1px solid var(--border);
+  border-left:2px solid rgba(0,230,118,0.4);
+  color:#a5d6a7;padding:4px 7px;border-radius:4px;
+  white-space:pre;line-height:1.65;overflow-x:auto;
+}
+code .kw{color:#80cbc4;}     /* keywords: WebDriver, By, etc */
+code .tp{color:#ce93d8;}     /* types: String, int, List */
+code .fn{color:#80deea;}     /* method names */
+code .str{color:#c5e1a5;}    /* strings */
+code .cm{color:#37474f;font-style:italic;} /* comments */
+code .an{color:#ffcc80;}     /* annotations */
+code .nm{color:#f48fb1;}     /* numbers */
+code .op{color:#b2ebf2;}     /* operators */
+code .cl{color:#ffe082;}     /* class names */
+
+/* ── FOOTER ── */
+.footer{
+  background:linear-gradient(90deg,#060d08,#0d1a10);
+  border-top:2px solid rgba(0,230,118,0.3);
+  padding:9px 24px;display:flex;justify-content:space-between;align-items:center;
+}
+.footer .l{font-size:9px;color:var(--muted);font-family:'Syne',sans-serif;}
+.footer .l span{color:var(--green);font-weight:700;}
+.footer .r{font-size:9px;color:var(--muted);text-align:right;font-family:'Syne',sans-serif;}
+.footer .r strong{color:var(--amber);}
+
+/* ── SOCIAL ── */
+.social-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px;}
+.slink{font-size:8.5px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:3px;}
+.slink:hover{color:var(--green);}
+</style>
+</head>
+<body>
+
+<!-- ════════ HEADER ════════ -->
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo-box">SE<br>Java</div>
+    <div class="title-block">
+      <h1>Selenium <em>Java</em> Cheat Sheet</h1>
+      <p>COMPLETE REFERENCE · WEBDRIVER · LOCATORS · WAITS · FRAMEWORKS · TESTNG</p>
+    </div>
+  </div>
+  <div class="coaching-badge">
+    <div class="name">🎓 Next Gen QA IT Coaching Classes</div>
+    <div class="phone">📞 Mr. Khan Sir &nbsp;|&nbsp; 8700350994</div>
+    <div class="tags" style="margin-top:5px;">
+      <span class="tag g">Online & Offline</span>
+      <span class="tag a">B.Tech / BCA / MCA</span>
+      <span class="tag b">CBSE · ICSE · Polytechnic</span>
+      <span class="tag g">Software Testing</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ ROW 1: Setup · WebDriver · Browser · Navigation ════════ -->
+<div class="sec-div"><span>Setup &amp; WebDriver Launch · Browser · Navigation · Driver Info</span></div>
+<div class="grid g4">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Maven Dependencies (pom.xml)</div>
+      <div class="item"><div class="desc">Selenium Java dependency</div>
+<code><span class="cm">&lt;!-- pom.xml --&gt;</span>
+<span class="op">&lt;</span>dependency<span class="op">&gt;</span>
+  <span class="op">&lt;</span>groupId<span class="op">&gt;</span>org.seleniumhq.selenium<span class="op">&lt;/</span>groupId<span class="op">&gt;</span>
+  <span class="op">&lt;</span>artifactId<span class="op">&gt;</span>selenium-java<span class="op">&lt;/</span>artifactId<span class="op">&gt;</span>
+  <span class="op">&lt;</span>version<span class="op">&gt;</span>4.18.1<span class="op">&lt;/</span>version<span class="op">&gt;</span>
+<span class="op">&lt;/</span>dependency<span class="op">&gt;</span>
+<span class="cm">&lt;!-- WebDriverManager --&gt;</span>
+<span class="op">&lt;</span>dependency<span class="op">&gt;</span>
+  <span class="op">&lt;</span>groupId<span class="op">&gt;</span>io.github.bonigarcia<span class="op">&lt;/</span>groupId<span class="op">&gt;</span>
+  <span class="op">&lt;</span>artifactId<span class="op">&gt;</span>webdrivermanager<span class="op">&lt;/</span>artifactId<span class="op">&gt;</span>
+  <span class="op">&lt;</span>version<span class="op">&gt;</span>5.8.0<span class="op">&lt;/</span>version<span class="op">&gt;</span>
+<span class="op">&lt;/</span>dependency<span class="op">&gt;</span></code></div>
+      <div class="item"><div class="desc">TestNG dependency</div>
+<code><span class="op">&lt;</span>dependency<span class="op">&gt;</span>
+  <span class="op">&lt;</span>groupId<span class="op">&gt;</span>org.testng<span class="op">&lt;/</span>groupId<span class="op">&gt;</span>
+  <span class="op">&lt;</span>artifactId<span class="op">&gt;</span>testng<span class="op">&lt;/</span>artifactId<span class="op">&gt;</span>
+  <span class="op">&lt;</span>version<span class="op">&gt;</span>7.9.0<span class="op">&lt;/</span>version<span class="op">&gt;</span>
+  <span class="op">&lt;</span>scope<span class="op">&gt;</span>test<span class="op">&lt;/</span>scope<span class="op">&gt;</span>
+<span class="op">&lt;/</span>dependency<span class="op">&gt;</span></code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct amber"><div class="d"></div>Browser Launch — WebDriverManager</div>
+      <div class="item"><div class="desc">Launch Chrome (recommended)</div>
+<code><span class="cm">// Auto manages chromedriver</span>
+<span class="cl">WebDriverManager</span>.<span class="fn">chromedriver</span>().<span class="fn">setup</span>();
+<span class="kw">WebDriver</span> driver = <span class="op">new</span> <span class="cl">ChromeDriver</span>();</code></div>
+      <div class="item"><div class="desc">Launch Chrome with options</div>
+<code><span class="cl">ChromeOptions</span> options = <span class="op">new</span> <span class="cl">ChromeOptions</span>();
+options.<span class="fn">addArguments</span>(<span class="str">"--headless"</span>);
+options.<span class="fn">addArguments</span>(<span class="str">"--maximize"</span>);
+options.<span class="fn">addArguments</span>(<span class="str">"--incognito"</span>);
+<span class="kw">WebDriver</span> driver = <span class="op">new</span> <span class="cl">ChromeDriver</span>(options);</code></div>
+      <div class="item"><div class="desc">Launch Firefox / Edge</div>
+<code><span class="cl">WebDriverManager</span>.<span class="fn">firefoxdriver</span>().<span class="fn">setup</span>();
+<span class="kw">WebDriver</span> driver = <span class="op">new</span> <span class="cl">FirefoxDriver</span>();
+
+<span class="cl">WebDriverManager</span>.<span class="fn">edgedriver</span>().<span class="fn">setup</span>();
+<span class="kw">WebDriver</span> driver = <span class="op">new</span> <span class="cl">EdgeDriver</span>();</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct blue"><div class="d"></div>Navigation Commands</div>
+      <div class="item"><div class="desc">Open URL / back / forward / refresh</div>
+<code>driver.<span class="fn">get</span>(<span class="str">"https://example.com"</span>);
+driver.<span class="fn">navigate</span>().<span class="fn">to</span>(<span class="str">"https://example.com"</span>);
+driver.<span class="fn">navigate</span>().<span class="fn">back</span>();
+driver.<span class="fn">navigate</span>().<span class="fn">forward</span>();
+driver.<span class="fn">navigate</span>().<span class="fn">refresh</span>();</code></div>
+      <div class="item"><div class="desc">Browser window controls</div>
+<code>driver.<span class="fn">manage</span>().<span class="fn">window</span>().<span class="fn">maximize</span>();
+driver.<span class="fn">manage</span>().<span class="fn">window</span>().<span class="fn">minimize</span>();
+driver.<span class="fn">manage</span>().<span class="fn">window</span>().<span class="fn">fullscreen</span>();
+<span class="cm">// Set specific size</span>
+driver.<span class="fn">manage</span>().<span class="fn">window</span>()
+  .<span class="fn">setSize</span>(<span class="op">new</span> <span class="cl">Dimension</span>(<span class="nm">1280</span>, <span class="nm">720</span>));</code></div>
+      <div class="item"><div class="desc">Get browser info</div>
+<code><span class="tp">String</span> url   = driver.<span class="fn">getCurrentUrl</span>();
+<span class="tp">String</span> title = driver.<span class="fn">getTitle</span>();
+<span class="tp">String</span> src   = driver.<span class="fn">getPageSource</span>();</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Close &amp; Quit</div>
+      <div class="item"><div class="desc">Close current window / quit all</div>
+<code><span class="cm">// Close current active window</span>
+driver.<span class="fn">close</span>();
+
+<span class="cm">// Quit — closes ALL windows</span>
+driver.<span class="fn">quit</span>();</code></div>
+      <div class="item"><div class="desc">Implicit wait / Page load timeout</div>
+<code><span class="cm">// Set implicit wait globally</span>
+driver.<span class="fn">manage</span>().<span class="fn">timeouts</span>()
+  .<span class="fn">implicitlyWait</span>(
+    <span class="cl">Duration</span>.<span class="fn">ofSeconds</span>(<span class="nm">10</span>));
+
+<span class="cm">// Page load timeout</span>
+driver.<span class="fn">manage</span>().<span class="fn">timeouts</span>()
+  .<span class="fn">pageLoadTimeout</span>(
+    <span class="cl">Duration</span>.<span class="fn">ofSeconds</span>(<span class="nm">30</span>));
+
+<span class="cm">// Script timeout</span>
+driver.<span class="fn">manage</span>().<span class="fn">timeouts</span>()
+  .<span class="fn">scriptTimeout</span>(
+    <span class="cl">Duration</span>.<span class="fn">ofSeconds</span>(<span class="nm">5</span>));</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 2: Locators · findElement · WebElement ════════ -->
+<div class="sec-div"><span>Locators · findElement / findElements · WebElement Actions</span></div>
+<div class="grid g4">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>All Locator Strategies — By</div>
+      <div class="item"><div class="desc">8 locator types with examples</div>
+<code><span class="cm">// 1. By ID — fastest &amp; most reliable</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"username"</span>));
+
+<span class="cm">// 2. By Name</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">name</span>(<span class="str">"email"</span>));
+
+<span class="cm">// 3. By Class Name</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">className</span>(<span class="str">"btn-primary"</span>));
+
+<span class="cm">// 4. By Tag Name</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">tagName</span>(<span class="str">"input"</span>));
+
+<span class="cm">// 5. By Link Text (exact match)</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">linkText</span>(<span class="str">"Click Here"</span>));
+
+<span class="cm">// 6. By Partial Link Text</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">partialLinkText</span>(<span class="str">"Click"</span>));
+
+<span class="cm">// 7. By CSS Selector</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"#id .class"</span>));
+
+<span class="cm">// 8. By XPath</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">xpath</span>(<span class="str">"//input[@id='user']"</span>));</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct amber"><div class="d"></div>CSS Selector — Complete Guide</div>
+      <div class="item"><div class="desc">All CSS selector patterns</div>
+<code><span class="cm">// By ID</span>
+<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"#username"</span>)
+<span class="cm">// By Class</span>
+<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">".btn-login"</span>)
+<span class="cm">// Tag + ID</span>
+<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"input#email"</span>)
+<span class="cm">// Tag + Class</span>
+<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"button.primary"</span>)
+<span class="cm">// Attribute exact match</span>
+<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"input[type='text']"</span>)
+<span class="cm">// Attribute starts with</span>
+<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"a[href^='https']"</span>)
+<span class="cm">// Attribute ends with</span>
+<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"a[href$='.pdf']"</span>)
+<span class="cm">// Attribute contains</span>
+<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"input[name*='user']"</span>)
+<span class="cm">// Child element</span>
+<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"div &gt; p"</span>)
+<span class="cm">// Descendant element</span>
+<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"div p"</span>)
+<span class="cm">// nth-child</span>
+<span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"tr:nth-child(2)"</span>)</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct blue"><div class="d"></div>XPath — Complete Guide</div>
+      <div class="item"><div class="desc">Absolute vs Relative &amp; all patterns</div>
+<code><span class="cm">// Absolute XPath (not recommended)</span>
+<span class="str">/html/body/div/form/input[1]</span>
+
+<span class="cm">// Relative XPath (recommended)</span>
+<span class="str">//input[@id='username']</span>
+
+<span class="cm">// By attribute</span>
+<span class="str">//input[@type='text']</span>
+<span class="str">//button[@name='login']</span>
+
+<span class="cm">// By text content</span>
+<span class="str">//button[text()='Login']</span>
+<span class="str">//a[text()='Click Here']</span>
+
+<span class="cm">// Contains — partial match</span>
+<span class="str">//input[contains(@id,'user')]</span>
+<span class="str">//div[contains(text(),'Welcome')]</span>
+
+<span class="cm">// Starts-with</span>
+<span class="str">//input[starts-with(@name,'em')]</span>
+
+<span class="cm">// AND / OR conditions</span>
+<span class="str">//input[@type='text' and @name='user']</span>
+<span class="str">//input[@id='u' or @id='un']</span>
+
+<span class="cm">// Parent / Following-sibling</span>
+<span class="str">//label[text()='Email']/following-sibling::input</span>
+<span class="str">//input[@id='user']/parent::div</span>
+
+<span class="cm">// Axes — ancestor / descendant</span>
+<span class="str">//div[@class='form']//input</span>
+<span class="str">//tr[td[text()='Khan']]</span></code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>findElement vs findElements</div>
+      <div class="item"><div class="desc">Single element vs list of elements</div>
+<code><span class="cm">// findElement — returns 1 WebElement</span>
+<span class="cm">// throws NoSuchElementException if not found</span>
+<span class="kw">WebElement</span> el = driver
+  .<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"username"</span>));
+
+<span class="cm">// findElements — returns List&lt;WebElement&gt;</span>
+<span class="cm">// returns empty list if not found</span>
+<span class="cl">List</span><span class="op">&lt;</span><span class="kw">WebElement</span><span class="op">&gt;</span> els = driver
+  .<span class="fn">findElements</span>(<span class="cl">By</span>.<span class="fn">tagName</span>(<span class="str">"a"</span>));
+
+<span class="cm">// Check if element exists</span>
+<span class="tp">boolean</span> exists = driver
+  .<span class="fn">findElements</span>(<span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"msg"</span>)).<span class="fn">size</span>() <span class="op">&gt;</span> <span class="nm">0</span>;
+
+<span class="cm">// Loop through all elements</span>
+<span class="kw">for</span> (<span class="kw">WebElement</span> e : els) {
+  <span class="cl">System</span>.out.<span class="fn">println</span>(e.<span class="fn">getText</span>());
+}</code></div>
+      <div class="item"><div class="desc">Get element properties</div>
+<code>el.<span class="fn">getText</span>()
+el.<span class="fn">getAttribute</span>(<span class="str">"href"</span>)
+el.<span class="fn">getAttribute</span>(<span class="str">"value"</span>)
+el.<span class="fn">getCssValue</span>(<span class="str">"color"</span>)
+el.<span class="fn">getTagName</span>()
+el.<span class="fn">getSize</span>()       <span class="cm">// width &amp; height</span>
+el.<span class="fn">getLocation</span>()   <span class="cm">// x &amp; y on page</span>
+el.<span class="fn">isDisplayed</span>()   <span class="cm">// visible?</span>
+el.<span class="fn">isEnabled</span>()     <span class="cm">// enabled?</span>
+el.<span class="fn">isSelected</span>()    <span class="cm">// checked/selected?</span></code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 3: WebElement Actions · Forms · DropDown ════════ -->
+<div class="sec-div"><span>WebElement Actions · Form Interactions · Dropdowns · Checkboxes · Radio</span></div>
+<div class="grid g4">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Basic WebElement Actions</div>
+      <div class="item"><div class="desc">Click / Type / Clear / Submit</div>
+<code><span class="cm">// Click an element</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"btn"</span>)).<span class="fn">click</span>();
+
+<span class="cm">// Type into input field</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"user"</span>))
+  .<span class="fn">sendKeys</span>(<span class="str">"khanSir@qa.com"</span>);
+
+<span class="cm">// Clear input field</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"user"</span>)).<span class="fn">clear</span>();
+
+<span class="cm">// Clear then type</span>
+<span class="kw">WebElement</span> inp = driver
+  .<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"email"</span>));
+inp.<span class="fn">clear</span>();
+inp.<span class="fn">sendKeys</span>(<span class="str">"test@nextgenqa.com"</span>);
+
+<span class="cm">// Submit a form</span>
+driver.<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"form"</span>))
+  .<span class="fn">submit</span>();
+
+<span class="cm">// Send special keys</span>
+inp.<span class="fn">sendKeys</span>(<span class="cl">Keys</span>.ENTER);
+inp.<span class="fn">sendKeys</span>(<span class="cl">Keys</span>.TAB);
+inp.<span class="fn">sendKeys</span>(<span class="cl">Keys</span>.BACK_SPACE);
+inp.<span class="fn">sendKeys</span>(<span class="cl">Keys</span>.chord(<span class="cl">Keys</span>.CONTROL,<span class="str">"a"</span>));
+inp.<span class="fn">sendKeys</span>(<span class="cl">Keys</span>.chord(<span class="cl">Keys</span>.CONTROL,<span class="str">"c"</span>));</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct amber"><div class="d"></div>Dropdown — Select Class</div>
+      <div class="item"><div class="desc">All Select operations</div>
+<code><span class="cm">// Import: org.openqa.selenium.support.ui.Select</span>
+<span class="kw">WebElement</span> ddEl = driver
+  .<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"course"</span>));
+<span class="cl">Select</span> dd = <span class="op">new</span> <span class="cl">Select</span>(ddEl);
+
+<span class="cm">// Select by visible text</span>
+dd.<span class="fn">selectByVisibleText</span>(<span class="str">"Manual Testing"</span>);
+
+<span class="cm">// Select by value attribute</span>
+dd.<span class="fn">selectByValue</span>(<span class="str">"selenium"</span>);
+
+<span class="cm">// Select by index (0-based)</span>
+dd.<span class="fn">selectByIndex</span>(<span class="nm">2</span>);
+
+<span class="cm">// Get selected option text</span>
+<span class="tp">String</span> selected = dd
+  .<span class="fn">getFirstSelectedOption</span>().<span class="fn">getText</span>();
+
+<span class="cm">// Get all options</span>
+<span class="cl">List</span><span class="op">&lt;</span><span class="kw">WebElement</span><span class="op">&gt;</span> opts = dd.<span class="fn">getOptions</span>();
+
+<span class="cm">// Multi-select — deselect</span>
+dd.<span class="fn">deselectByIndex</span>(<span class="nm">0</span>);
+dd.<span class="fn">deselectAll</span>();
+
+<span class="cm">// Check if multi-select</span>
+<span class="tp">boolean</span> isMulti = dd.<span class="fn">isMultiple</span>();</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct blue"><div class="d"></div>Checkbox &amp; Radio Button</div>
+      <div class="item"><div class="desc">Check / uncheck / verify state</div>
+<code><span class="kw">WebElement</span> chk = driver
+  .<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"agree"</span>));
+
+<span class="cm">// Check if already selected</span>
+<span class="tp">boolean</span> isChecked = chk.<span class="fn">isSelected</span>();
+
+<span class="cm">// Check the checkbox</span>
+<span class="kw">if</span> (!chk.<span class="fn">isSelected</span>()) {
+  chk.<span class="fn">click</span>();
+}
+
+<span class="cm">// Uncheck the checkbox</span>
+<span class="kw">if</span> (chk.<span class="fn">isSelected</span>()) {
+  chk.<span class="fn">click</span>();
+}</code></div>
+      <div class="item"><div class="desc">Radio button selection</div>
+<code><span class="cm">// Select a radio button</span>
+driver.<span class="fn">findElement</span>(
+  <span class="cl">By</span>.<span class="fn">xpath</span>(<span class="str">"//input[@value='online']"</span>)
+).<span class="fn">click</span>();
+
+<span class="cm">// Get all radio buttons in group</span>
+<span class="cl">List</span><span class="op">&lt;</span><span class="kw">WebElement</span><span class="op">&gt;</span> radios = driver
+  .<span class="fn">findElements</span>(
+    <span class="cl">By</span>.<span class="fn">name</span>(<span class="str">"classMode"</span>));
+<span class="kw">for</span> (<span class="kw">WebElement</span> r : radios) {
+  <span class="kw">if</span> (r.<span class="fn">getAttribute</span>(<span class="str">"value"</span>)
+      .<span class="fn">equals</span>(<span class="str">"offline"</span>)) {
+    r.<span class="fn">click</span>(); <span class="kw">break</span>;
+  }
+}</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct purple"><div class="d"></div>Actions Class — Mouse &amp; Keyboard</div>
+      <div class="item"><div class="desc">Complex interactions using Actions</div>
+<code><span class="cm">// Import: org.openqa.selenium.interactions.Actions</span>
+<span class="cl">Actions</span> act = <span class="op">new</span> <span class="cl">Actions</span>(driver);
+
+<span class="cm">// Mouse hover</span>
+act.<span class="fn">moveToElement</span>(element).<span class="fn">perform</span>();
+
+<span class="cm">// Right click (context menu)</span>
+act.<span class="fn">contextClick</span>(element).<span class="fn">perform</span>();
+
+<span class="cm">// Double click</span>
+act.<span class="fn">doubleClick</span>(element).<span class="fn">perform</span>();
+
+<span class="cm">// Drag and drop</span>
+act.<span class="fn">dragAndDrop</span>(source, target)
+   .<span class="fn">perform</span>();
+
+<span class="cm">// Drag by offset</span>
+act.<span class="fn">dragAndDropBy</span>(el, <span class="nm">100</span>, <span class="nm">200</span>)
+   .<span class="fn">perform</span>();
+
+<span class="cm">// Click and hold</span>
+act.<span class="fn">clickAndHold</span>(element).<span class="fn">perform</span>();
+
+<span class="cm">// Key down + click (multi-select)</span>
+act.<span class="fn">keyDown</span>(<span class="cl">Keys</span>.CONTROL)
+   .<span class="fn">click</span>(el1).<span class="fn">click</span>(el2)
+   .<span class="fn">keyUp</span>(<span class="cl">Keys</span>.CONTROL)
+   .<span class="fn">perform</span>();
+
+<span class="cm">// Scroll to element</span>
+act.<span class="fn">scrollToElement</span>(element).<span class="fn">perform</span>();
+
+<span class="cm">// Chain multiple actions</span>
+act.<span class="fn">moveToElement</span>(menu)
+   .<span class="fn">click</span>()
+   .<span class="fn">moveToElement</span>(subMenu)
+   .<span class="fn">click</span>()
+   .<span class="fn">perform</span>();</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 4: Waits · ExpectedConditions ════════ -->
+<div class="sec-div"><span>Explicit Wait · Implicit Wait · Fluent Wait · ExpectedConditions</span></div>
+<div class="grid g4">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Implicit Wait</div>
+      <div class="item"><div class="desc">Global wait — applies to all findElements</div>
+<code><span class="cm">// Set once — applies globally</span>
+<span class="cm">// Waits up to 10s for element to appear</span>
+driver.<span class="fn">manage</span>().<span class="fn">timeouts</span>()
+  .<span class="fn">implicitlyWait</span>(
+    <span class="cl">Duration</span>.<span class="fn">ofSeconds</span>(<span class="nm">10</span>));
+
+<span class="cm">// ⚠️ Do NOT mix implicit + explicit!</span>
+<span class="cm">// Use only one type in your project</span></code></div>
+    </div>
+    <div class="card">
+      <div class="ct amber"><div class="d"></div>Fluent Wait</div>
+      <div class="item"><div class="desc">Poll every N seconds, ignore exceptions</div>
+<code><span class="cl">Wait</span><span class="op">&lt;</span><span class="kw">WebDriver</span><span class="op">&gt;</span> wait =
+  <span class="op">new</span> <span class="cl">FluentWait</span><span class="op">&lt;</span><span class="kw">WebDriver</span><span class="op">&gt;</span>(driver)
+    .<span class="fn">withTimeout</span>(
+      <span class="cl">Duration</span>.<span class="fn">ofSeconds</span>(<span class="nm">30</span>))
+    .<span class="fn">pollingEvery</span>(
+      <span class="cl">Duration</span>.<span class="fn">ofSeconds</span>(<span class="nm">2</span>))
+    .<span class="fn">ignoring</span>(
+      <span class="cl">NoSuchElementException</span>.<span class="op">class</span>);
+
+<span class="kw">WebElement</span> el = wait.<span class="fn">until</span>(d <span class="op">-&gt;</span>
+  d.<span class="fn">findElement</span>(
+    <span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"submitBtn"</span>)));</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct blue"><div class="d"></div>Explicit Wait — WebDriverWait</div>
+      <div class="item"><div class="desc">Wait for specific condition</div>
+<code><span class="cl">WebDriverWait</span> wait =
+  <span class="op">new</span> <span class="cl">WebDriverWait</span>(driver,
+    <span class="cl">Duration</span>.<span class="fn">ofSeconds</span>(<span class="nm">10</span>));
+
+<span class="cm">// Wait until element is visible</span>
+<span class="kw">WebElement</span> el = wait.<span class="fn">until</span>(
+  <span class="cl">ExpectedConditions</span>
+    .<span class="fn">visibilityOfElementLocated</span>(
+      <span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"result"</span>)));
+
+<span class="cm">// Wait until clickable</span>
+wait.<span class="fn">until</span>(
+  <span class="cl">ExpectedConditions</span>
+    .<span class="fn">elementToBeClickable</span>(
+      <span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"submitBtn"</span>)));
+
+<span class="cm">// Wait for URL to contain</span>
+wait.<span class="fn">until</span>(
+  <span class="cl">ExpectedConditions</span>
+    .<span class="fn">urlContains</span>(<span class="str">"dashboard"</span>));
+
+<span class="cm">// Wait for title</span>
+wait.<span class="fn">until</span>(
+  <span class="cl">ExpectedConditions</span>
+    .<span class="fn">titleContains</span>(<span class="str">"Home"</span>));</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct purple"><div class="d"></div>All ExpectedConditions</div>
+      <div class="item"><div class="desc">Complete list of conditions</div>
+<code><span class="cm">// Element presence (in DOM, may not be visible)</span>
+.<span class="fn">presenceOfElementLocated</span>(By)
+
+<span class="cm">// Element visible on page</span>
+.<span class="fn">visibilityOfElementLocated</span>(By)
+
+<span class="cm">// Element invisible / hidden</span>
+.<span class="fn">invisibilityOfElementLocated</span>(By)
+
+<span class="cm">// Element clickable (visible + enabled)</span>
+.<span class="fn">elementToBeClickable</span>(By)
+
+<span class="cm">// Text present in element</span>
+.<span class="fn">textToBePresentInElementLocated</span>(By, <span class="str">"text"</span>)
+
+<span class="cm">// Attribute contains value</span>
+.<span class="fn">attributeContains</span>(By, <span class="str">"class"</span>, <span class="str">"active"</span>)
+
+<span class="cm">// Element selected (checkbox/radio)</span>
+.<span class="fn">elementToBeSelected</span>(element)
+
+<span class="cm">// Alert is present</span>
+.<span class="fn">alertIsPresent</span>()
+
+<span class="cm">// Frame available to switch</span>
+.<span class="fn">frameToBeAvailableAndSwitchToIt</span>(By)
+
+<span class="cm">// Number of windows = N</span>
+.<span class="fn">numberOfWindowsToBe</span>(<span class="nm">2</span>)
+
+<span class="cm">// URL contains / matches</span>
+.<span class="fn">urlContains</span>(<span class="str">"dashboard"</span>)
+.<span class="fn">urlToBe</span>(<span class="str">"https://example.com"</span>)
+
+<span class="cm">// Title contains / equals</span>
+.<span class="fn">titleContains</span>(<span class="str">"Login"</span>)
+.<span class="fn">titleIs</span>(<span class="str">"Home Page"</span>)</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct red"><div class="d"></div>Common Selenium Exceptions</div>
+      <div class="item"><div class="desc">Exceptions &amp; when they occur</div>
+<code><span class="cm">// Element not in DOM</span>
+<span class="cl">NoSuchElementException</span>
+<span class="cm">  → Wrong locator / element not loaded yet</span>
+
+<span class="cm">// Element in DOM but not visible</span>
+<span class="cl">ElementNotVisibleException</span>
+<span class="cm">  → Use explicit wait for visibility</span>
+
+<span class="cm">// Another element is on top</span>
+<span class="cl">ElementClickInterceptedException</span>
+<span class="cm">  → Scroll to element or use JS click</span>
+
+<span class="cm">// Element was found, then DOM changed</span>
+<span class="cl">StaleElementReferenceException</span>
+<span class="cm">  → Re-find element before using it</span>
+
+<span class="cm">// Page took too long to load</span>
+<span class="cl">TimeoutException</span>
+<span class="cm">  → Increase wait timeout</span>
+
+<span class="cm">// WebDriver not found / wrong path</span>
+<span class="cl">WebDriverException</span>
+<span class="cm">  → Use WebDriverManager</span>
+
+<span class="cm">// No alert present</span>
+<span class="cl">NoAlertPresentException</span>
+<span class="cm">  → Wait for alert before switching</span>
+
+<span class="cm">// Window/Frame not available</span>
+<span class="cl">NoSuchWindowException</span>
+<span class="cl">NoSuchFrameException</span></code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 5: Windows · Frames · Alerts · JS ════════ -->
+<div class="sec-div"><span>Window Handling · iFrame · Alert / Popup · JavaScript Executor · Screenshot</span></div>
+<div class="grid g4">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Window / Tab Handling</div>
+      <div class="item"><div class="desc">Switch between multiple windows/tabs</div>
+<code><span class="cm">// Get current window handle</span>
+<span class="tp">String</span> parent = driver.<span class="fn">getWindowHandle</span>();
+
+<span class="cm">// Get all window handles</span>
+<span class="cl">Set</span><span class="op">&lt;</span><span class="tp">String</span><span class="op">&gt;</span> handles =
+  driver.<span class="fn">getWindowHandles</span>();
+
+<span class="cm">// Switch to new window</span>
+<span class="kw">for</span> (<span class="tp">String</span> h : handles) {
+  <span class="kw">if</span> (!h.<span class="fn">equals</span>(parent)) {
+    driver.<span class="fn">switchTo</span>().<span class="fn">window</span>(h);
+    <span class="kw">break</span>;
+  }
+}
+<span class="cm">// Do work in new window...</span>
+
+<span class="cm">// Switch back to parent</span>
+driver.<span class="fn">switchTo</span>().<span class="fn">window</span>(parent);
+
+<span class="cm">// Open new tab (Selenium 4)</span>
+driver.<span class="fn">switchTo</span>().<span class="fn">newWindow</span>(
+  <span class="cl">WindowType</span>.TAB);
+
+<span class="cm">// Open new window (Selenium 4)</span>
+driver.<span class="fn">switchTo</span>().<span class="fn">newWindow</span>(
+  <span class="cl">WindowType</span>.WINDOW);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct amber"><div class="d"></div>iFrame Handling</div>
+      <div class="item"><div class="desc">Switch into and out of iFrames</div>
+<code><span class="cm">// Switch by index (0-based)</span>
+driver.<span class="fn">switchTo</span>().<span class="fn">frame</span>(<span class="nm">0</span>);
+
+<span class="cm">// Switch by name or ID attribute</span>
+driver.<span class="fn">switchTo</span>().<span class="fn">frame</span>(<span class="str">"iframeName"</span>);
+
+<span class="cm">// Switch by WebElement</span>
+<span class="kw">WebElement</span> iframe = driver
+  .<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"myFrame"</span>));
+driver.<span class="fn">switchTo</span>().<span class="fn">frame</span>(iframe);
+
+<span class="cm">// Now interact inside frame</span>
+driver.<span class="fn">findElement</span>(
+  <span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"frameInput"</span>)).<span class="fn">sendKeys</span>(<span class="str">"Hi"</span>);
+
+<span class="cm">// Switch to parent frame</span>
+driver.<span class="fn">switchTo</span>().<span class="fn">parentFrame</span>();
+
+<span class="cm">// Switch back to main content</span>
+driver.<span class="fn">switchTo</span>().<span class="fn">defaultContent</span>();
+
+<span class="cm">// Wait for frame then switch</span>
+wait.<span class="fn">until</span>(<span class="cl">ExpectedConditions</span>
+  .<span class="fn">frameToBeAvailableAndSwitchToIt</span>(
+    <span class="cl">By</span>.<span class="fn">id</span>(<span class="str">"myFrame"</span>)));</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct blue"><div class="d"></div>Alert / Popup Handling</div>
+      <div class="item"><div class="desc">Handle JS alert, confirm, prompt</div>
+<code><span class="cm">// Wait for alert</span>
+wait.<span class="fn">until</span>(<span class="cl">ExpectedConditions</span>
+  .<span class="fn">alertIsPresent</span>());
+
+<span class="cm">// Switch to alert</span>
+<span class="cl">Alert</span> alert = driver.<span class="fn">switchTo</span>().<span class="fn">alert</span>();
+
+<span class="cm">// Get alert text</span>
+<span class="tp">String</span> msg = alert.<span class="fn">getText</span>();
+
+<span class="cm">// Accept (OK button)</span>
+alert.<span class="fn">accept</span>();
+
+<span class="cm">// Dismiss (Cancel button)</span>
+alert.<span class="fn">dismiss</span>();
+
+<span class="cm">// Send text to prompt dialog</span>
+alert.<span class="fn">sendKeys</span>(<span class="str">"Next Gen QA"</span>);
+alert.<span class="fn">accept</span>();
+
+<span class="cm">// Complete flow example</span>
+<span class="kw">try</span> {
+  <span class="cl">Alert</span> a = driver.<span class="fn">switchTo</span>().<span class="fn">alert</span>();
+  <span class="tp">String</span> txt = a.<span class="fn">getText</span>();
+  <span class="cl">System</span>.out.<span class="fn">println</span>(<span class="str">"Alert: "</span>+txt);
+  a.<span class="fn">accept</span>();
+} <span class="kw">catch</span>(<span class="cl">NoAlertPresentException</span> e) {
+  <span class="cl">System</span>.out.<span class="fn">println</span>(<span class="str">"No alert found"</span>);
+}</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct purple"><div class="d"></div>JavascriptExecutor &amp; Screenshot</div>
+      <div class="item"><div class="desc">Execute JS &amp; take screenshots</div>
+<code><span class="cm">// Cast driver to JavascriptExecutor</span>
+<span class="cl">JavascriptExecutor</span> js =
+  (<span class="cl">JavascriptExecutor</span>) driver;
+
+<span class="cm">// Click via JS (bypass intercepted)</span>
+js.<span class="fn">executeScript</span>(
+  <span class="str">"arguments[0].click();"</span>, element);
+
+<span class="cm">// Scroll to element</span>
+js.<span class="fn">executeScript</span>(
+  <span class="str">"arguments[0].scrollIntoView(true);"</span>,
+  element);
+
+<span class="cm">// Scroll to bottom of page</span>
+js.<span class="fn">executeScript</span>(
+  <span class="str">"window.scrollTo(0, document.body.scrollHeight)"</span>);
+
+<span class="cm">// Get element attribute via JS</span>
+<span class="tp">String</span> val = (<span class="tp">String</span>) js.<span class="fn">executeScript</span>(
+  <span class="str">"return arguments[0].value;"</span>, element);
+
+<span class="cm">// Highlight element (for debugging)</span>
+js.<span class="fn">executeScript</span>(
+  <span class="str">"arguments[0].style.border='3px solid red'"</span>,
+  element);
+
+<span class="cm">// Take screenshot</span>
+<span class="cl">File</span> src = ((<span class="cl">TakesScreenshot</span>)driver)
+  .<span class="fn">getScreenshotAs</span>(<span class="cl">OutputType</span>.FILE);
+<span class="cl">FileUtils</span>.<span class="fn">copyFile</span>(src,
+  <span class="op">new</span> <span class="cl">File</span>(<span class="str">"screenshot.png"</span>));
+
+<span class="cm">// Screenshot as Base64</span>
+<span class="tp">String</span> b64 = ((<span class="cl">TakesScreenshot</span>)driver)
+  .<span class="fn">getScreenshotAs</span>(<span class="cl">OutputType</span>.BASE64);</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 6: Cookies · TestNG · POM ════════ -->
+<div class="sec-div"><span>Cookies · TestNG Annotations · Page Object Model (POM) · Assertions</span></div>
+<div class="grid g4">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Cookie Handling</div>
+      <div class="item"><div class="desc">Get / Add / Delete cookies</div>
+<code><span class="cm">// Get all cookies</span>
+<span class="cl">Set</span><span class="op">&lt;</span><span class="cl">Cookie</span><span class="op">&gt;</span> cookies =
+  driver.<span class="fn">manage</span>().<span class="fn">getCookies</span>();
+
+<span class="cm">// Get specific cookie by name</span>
+<span class="cl">Cookie</span> c = driver.<span class="fn">manage</span>()
+  .<span class="fn">getCookieNamed</span>(<span class="str">"sessionId"</span>);
+<span class="tp">String</span> val = c.<span class="fn">getValue</span>();
+
+<span class="cm">// Add a cookie</span>
+<span class="cl">Cookie</span> newCookie =
+  <span class="op">new</span> <span class="cl">Cookie</span>(<span class="str">"token"</span>, <span class="str">"abc123"</span>);
+driver.<span class="fn">manage</span>().<span class="fn">addCookie</span>(newCookie);
+
+<span class="cm">// Delete specific cookie</span>
+driver.<span class="fn">manage</span>()
+  .<span class="fn">deleteCookieNamed</span>(<span class="str">"sessionId"</span>);
+
+<span class="cm">// Delete all cookies</span>
+driver.<span class="fn">manage</span>().<span class="fn">deleteAllCookies</span>();
+
+<span class="cm">// Print all cookie names &amp; values</span>
+<span class="kw">for</span> (<span class="cl">Cookie</span> ck : cookies) {
+  <span class="cl">System</span>.out.<span class="fn">println</span>(
+    ck.<span class="fn">getName</span>() + <span class="str">" = "</span>
+    + ck.<span class="fn">getValue</span>());
+}</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct amber"><div class="d"></div>TestNG Annotations</div>
+      <div class="item"><div class="desc">All TestNG annotations in order</div>
+<code><span class="an">@BeforeSuite</span>    <span class="cm">// Runs once before all tests</span>
+<span class="an">@AfterSuite</span>     <span class="cm">// Runs once after all tests</span>
+<span class="an">@BeforeTest</span>     <span class="cm">// Before each &lt;test&gt; tag in XML</span>
+<span class="an">@AfterTest</span>      <span class="cm">// After each &lt;test&gt; tag</span>
+<span class="an">@BeforeClass</span>    <span class="cm">// Before first method in class</span>
+<span class="an">@AfterClass</span>     <span class="cm">// After last method in class</span>
+<span class="an">@BeforeMethod</span>   <span class="cm">// Before EACH @Test method</span>
+<span class="an">@AfterMethod</span>    <span class="cm">// After EACH @Test method</span>
+<span class="an">@Test</span>           <span class="cm">// Marks a test method</span>
+
+<span class="cm">// @Test parameters</span>
+<span class="an">@Test</span>(priority = <span class="nm">1</span>)
+<span class="an">@Test</span>(enabled = <span class="nm">false</span>)
+<span class="an">@Test</span>(groups = {<span class="str">"smoke"</span>})
+<span class="an">@Test</span>(dependsOnMethods = {<span class="str">"login"</span>})
+<span class="an">@Test</span>(dataProvider = <span class="str">"testData"</span>)
+<span class="an">@Test</span>(expectedExceptions =
+  <span class="cl">ArithmeticException</span>.<span class="op">class</span>)
+<span class="an">@Test</span>(timeOut = <span class="nm">3000</span>) <span class="cm">// ms</span>
+<span class="an">@Test</span>(invocationCount = <span class="nm">3</span>)</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct blue"><div class="d"></div>TestNG DataProvider &amp; Assertions</div>
+      <div class="item"><div class="desc">Data-driven testing &amp; verify results</div>
+<code><span class="cm">// DataProvider method</span>
+<span class="an">@DataProvider</span>(name = <span class="str">"loginData"</span>)
+<span class="kw">public</span> <span class="cl">Object</span>[][] <span class="fn">getData</span>() {
+  <span class="kw">return new</span> <span class="cl">Object</span>[][] {
+    {<span class="str">"admin"</span>, <span class="str">"pass123"</span>},
+    {<span class="str">"user1"</span>, <span class="str">"abc456"</span>}
+  };
+}
+<span class="an">@Test</span>(dataProvider = <span class="str">"loginData"</span>)
+<span class="kw">public void</span> <span class="fn">loginTest</span>(
+    <span class="tp">String</span> u, <span class="tp">String</span> p) {
+  <span class="cm">// use u and p here</span>
+}
+
+<span class="cm">// TestNG Assertions</span>
+<span class="cl">Assert</span>.<span class="fn">assertEquals</span>(actual, expected);
+<span class="cl">Assert</span>.<span class="fn">assertTrue</span>(condition);
+<span class="cl">Assert</span>.<span class="fn">assertFalse</span>(condition);
+<span class="cl">Assert</span>.<span class="fn">assertNull</span>(object);
+<span class="cl">Assert</span>.<span class="fn">assertNotNull</span>(object);
+<span class="cl">Assert</span>.<span class="fn">assertNotEquals</span>(a, b);
+
+<span class="cm">// Soft Assert — don't stop on fail</span>
+<span class="cl">SoftAssert</span> sa = <span class="op">new</span> <span class="cl">SoftAssert</span>();
+sa.<span class="fn">assertEquals</span>(actual, expected);
+sa.<span class="fn">assertTrue</span>(flag);
+sa.<span class="fn">assertAll</span>(); <span class="cm">// throw if any failed</span></code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct purple"><div class="d"></div>Page Object Model (POM)</div>
+      <div class="item"><div class="desc">Standard POM structure with PageFactory</div>
+<code><span class="cm">// LoginPage.java — Page class</span>
+<span class="kw">public class</span> <span class="cl">LoginPage</span> {
+  <span class="kw">WebDriver</span> driver;
+
+  <span class="cm">// @FindBy locators</span>
+  <span class="an">@FindBy</span>(id = <span class="str">"username"</span>)
+  <span class="kw">WebElement</span> userField;
+
+  <span class="an">@FindBy</span>(id = <span class="str">"password"</span>)
+  <span class="kw">WebElement</span> passField;
+
+  <span class="an">@FindBy</span>(id = <span class="str">"loginBtn"</span>)
+  <span class="kw">WebElement</span> loginBtn;
+
+  <span class="cm">// Constructor — init elements</span>
+  <span class="kw">public</span> <span class="fn">LoginPage</span>(<span class="kw">WebDriver</span> d) {
+    <span class="kw">this</span>.driver = d;
+    <span class="cl">PageFactory</span>.<span class="fn">initElements</span>(d, <span class="kw">this</span>);
+  }
+
+  <span class="cm">// Page actions as methods</span>
+  <span class="kw">public void</span> <span class="fn">login</span>(
+      <span class="tp">String</span> u, <span class="tp">String</span> p) {
+    userField.<span class="fn">sendKeys</span>(u);
+    passField.<span class="fn">sendKeys</span>(p);
+    loginBtn.<span class="fn">click</span>();
+  }
+}
+
+<span class="cm">// LoginTest.java — Test class</span>
+<span class="kw">public class</span> <span class="cl">LoginTest</span> {
+  <span class="an">@Test</span>
+  <span class="kw">public void</span> <span class="fn">testLogin</span>() {
+    <span class="cl">LoginPage</span> lp = <span class="op">new</span> <span class="cl">LoginPage</span>(driver);
+    lp.<span class="fn">login</span>(<span class="str">"admin"</span>, <span class="str">"pass123"</span>);
+  }
+}</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 7: testng.xml · File Upload · Scroll · Grid ════════ -->
+<div class="sec-div"><span>testng.xml · File Upload · Scroll · Table Handling · Selenium Grid · Extent Reports</span></div>
+<div class="grid g4">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>testng.xml Configuration</div>
+      <div class="item"><div class="desc">Suite XML file structure</div>
+<code><span class="op">&lt;?</span>xml version=<span class="str">"1.0"</span> encoding=<span class="str">"UTF-8"</span><span class="op">?&gt;</span>
+<span class="op">&lt;!</span>DOCTYPE suite SYSTEM
+  <span class="str">"http://testng.org/testng-1.0.dtd"</span><span class="op">&gt;</span>
+
+<span class="op">&lt;</span>suite name=<span class="str">"NextGenQA Suite"</span>
+       parallel=<span class="str">"methods"</span>
+       thread-count=<span class="str">"3"</span><span class="op">&gt;</span>
+
+  <span class="op">&lt;</span>test name=<span class="str">"Smoke Tests"</span><span class="op">&gt;</span>
+    <span class="op">&lt;</span>groups<span class="op">&gt;</span>
+      <span class="op">&lt;</span>run<span class="op">&gt;</span>
+        <span class="op">&lt;</span>include name=<span class="str">"smoke"</span><span class="op">/&gt;</span>
+      <span class="op">&lt;/</span>run<span class="op">&gt;</span>
+    <span class="op">&lt;/</span>groups<span class="op">&gt;</span>
+    <span class="op">&lt;</span>classes<span class="op">&gt;</span>
+      <span class="op">&lt;</span>class name=<span class="str">"tests.LoginTest"</span><span class="op">/&gt;</span>
+      <span class="op">&lt;</span>class name=<span class="str">"tests.SearchTest"</span><span class="op">/&gt;</span>
+    <span class="op">&lt;/</span>classes<span class="op">&gt;</span>
+  <span class="op">&lt;/</span>test<span class="op">&gt;</span>
+
+  <span class="op">&lt;</span>test name=<span class="str">"Regression"</span><span class="op">&gt;</span>
+    <span class="op">&lt;</span>parameter name=<span class="str">"browser"</span>
+               value=<span class="str">"chrome"</span><span class="op">/&gt;</span>
+    <span class="op">&lt;</span>classes<span class="op">&gt;</span>
+      <span class="op">&lt;</span>class name=<span class="str">"tests.AllTests"</span><span class="op">/&gt;</span>
+    <span class="op">&lt;/</span>classes<span class="op">&gt;</span>
+  <span class="op">&lt;/</span>test<span class="op">&gt;</span>
+
+<span class="op">&lt;/</span>suite<span class="op">&gt;</span></code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct amber"><div class="d"></div>File Upload &amp; Scroll</div>
+      <div class="item"><div class="desc">Upload file using sendKeys</div>
+<code><span class="cm">// File upload via input[type='file']</span>
+<span class="kw">WebElement</span> upload = driver
+  .<span class="fn">findElement</span>(
+    <span class="cl">By</span>.<span class="fn">cssSelector</span>(<span class="str">"input[type='file']"</span>));
+upload.<span class="fn">sendKeys</span>(
+  <span class="str">"C:\\files\\resume.pdf"</span>);</code></div>
+      <div class="item"><div class="desc">Scroll operations</div>
+<code><span class="cm">// Scroll by pixels (x, y)</span>
+js.<span class="fn">executeScript</span>(
+  <span class="str">"window.scrollBy(0, 500)"</span>);
+
+<span class="cm">// Scroll to element</span>
+js.<span class="fn">executeScript</span>(
+  <span class="str">"arguments[0].scrollIntoView()"</span>,
+  element);
+
+<span class="cm">// Scroll to top of page</span>
+js.<span class="fn">executeScript</span>(
+  <span class="str">"window.scrollTo(0, 0)"</span>);
+
+<span class="cm">// Scroll to bottom of page</span>
+js.<span class="fn">executeScript</span>(
+  <span class="str">"window.scrollTo(0,"</span> +
+  <span class="str">"document.body.scrollHeight)"</span>);
+
+<span class="cm">// Scroll using Actions (Selenium 4)</span>
+<span class="op">new</span> <span class="cl">Actions</span>(driver)
+  .<span class="fn">scrollToElement</span>(element)
+  .<span class="fn">perform</span>();</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct blue"><div class="d"></div>Table Handling</div>
+      <div class="item"><div class="desc">Read rows, columns &amp; cells from HTML table</div>
+<code><span class="cm">// Get all rows from table body</span>
+<span class="cl">List</span><span class="op">&lt;</span><span class="kw">WebElement</span><span class="op">&gt;</span> rows = driver
+  .<span class="fn">findElements</span>(
+    <span class="cl">By</span>.<span class="fn">xpath</span>(<span class="str">"//table/tbody/tr"</span>));
+
+<span class="cm">// Get row count</span>
+<span class="tp">int</span> rowCount = rows.<span class="fn">size</span>();
+<span class="cl">System</span>.out.<span class="fn">println</span>(<span class="str">"Rows: "</span>+rowCount);
+
+<span class="cm">// Get column count from row 1</span>
+<span class="cl">List</span><span class="op">&lt;</span><span class="kw">WebElement</span><span class="op">&gt;</span> cols = driver
+  .<span class="fn">findElements</span>(
+    <span class="cl">By</span>.<span class="fn">xpath</span>(<span class="str">"//table/tbody/tr[1]/td"</span>));
+<span class="tp">int</span> colCount = cols.<span class="fn">size</span>();
+
+<span class="cm">// Read all cell data</span>
+<span class="kw">for</span> (<span class="tp">int</span> r=<span class="nm">1</span>; r&lt;=rowCount; r++) {
+  <span class="kw">for</span> (<span class="tp">int</span> c=<span class="nm">1</span>; c&lt;=colCount; c++) {
+    <span class="tp">String</span> cell = driver
+      .<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">xpath</span>(
+        <span class="str">"//table/tbody/tr["</span>+r
+        +<span class="str">"]/td["</span>+c+<span class="str">"]"</span>))
+      .<span class="fn">getText</span>();
+    <span class="cl">System</span>.out.<span class="fn">print</span>(cell+<span class="str">"\t"</span>);
+  }
+  <span class="cl">System</span>.out.<span class="fn">println</span>();
+}
+
+<span class="cm">// Find row by cell value</span>
+<span class="kw">WebElement</span> row = driver
+  .<span class="fn">findElement</span>(<span class="cl">By</span>.<span class="fn">xpath</span>(
+    <span class="str">"//td[text()='Khan Sir']/.."</span>));</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct red"><div class="d"></div>Base Test Class Template</div>
+      <div class="item"><div class="desc">Reusable base class for all tests</div>
+<code><span class="kw">public class</span> <span class="cl">BaseTest</span> {
+  <span class="kw">protected</span> <span class="kw">WebDriver</span> driver;
+  <span class="kw">protected</span> <span class="cl">WebDriverWait</span> wait;
+
+  <span class="an">@BeforeMethod</span>
+  <span class="kw">public void</span> <span class="fn">setUp</span>() {
+    <span class="cl">WebDriverManager</span>
+      .<span class="fn">chromedriver</span>().<span class="fn">setup</span>();
+    driver = <span class="op">new</span> <span class="cl">ChromeDriver</span>();
+    driver.<span class="fn">manage</span>().<span class="fn">window</span>()
+          .<span class="fn">maximize</span>();
+    driver.<span class="fn">manage</span>().<span class="fn">timeouts</span>()
+      .<span class="fn">implicitlyWait</span>(
+        <span class="cl">Duration</span>.<span class="fn">ofSeconds</span>(<span class="nm">10</span>));
+    wait = <span class="op">new</span> <span class="cl">WebDriverWait</span>(driver,
+      <span class="cl">Duration</span>.<span class="fn">ofSeconds</span>(<span class="nm">15</span>));
+    driver.<span class="fn">get</span>(
+      <span class="str">"https://your-app-url.com"</span>);
+  }
+
+  <span class="an">@AfterMethod</span>
+  <span class="kw">public void</span> <span class="fn">tearDown</span>() {
+    <span class="kw">if</span> (driver != <span class="kw">null</span>) {
+      driver.<span class="fn">quit</span>();
+    }
+  }
+
+  <span class="cm">// Utility: Take screenshot on fail</span>
+  <span class="an">@AfterMethod</span>
+  <span class="kw">public void</span> <span class="fn">captureOnFail</span>(
+      <span class="cl">ITestResult</span> result) {
+    <span class="kw">if</span> (result.<span class="fn">getStatus</span>() ==
+        <span class="cl">ITestResult</span>.FAILURE) {
+      <span class="cl">File</span> src = ((<span class="cl">TakesScreenshot</span>)driver)
+        .<span class="fn">getScreenshotAs</span>(
+          <span class="cl">OutputType</span>.FILE);
+      <span class="cl">FileUtils</span>.<span class="fn">copyFile</span>(src,
+        <span class="op">new</span> <span class="cl">File</span>(<span class="str">"screenshots/"</span>
+          + result.<span class="fn">getName</span>()
+          + <span class="str">".png"</span>));
+    }
+  }
+}</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ FOOTER ════════ -->
+<div class="footer">
+  <div class="l">
+    <span>Selenium WebDriver</span> Java Cheat Sheet · Selenium 4.x · Java 11+ · TestNG 7.x · WebDriverManager 5.x
+    &nbsp;|&nbsp; POM · Actions · Waits · Assertions · All Locators
+  </div>
+  <div class="r">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp;
+    🌍 nextgenqa94-ui.github.io/nextgenqa &nbsp;|&nbsp;
+    B.Tech · BCA · MCA · CBSE · ICSE · Polytechnic · Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>
