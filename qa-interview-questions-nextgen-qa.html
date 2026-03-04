@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Interview Questions – Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#030508;--surface:#060a10;--card:#090e18;--border:#111e30;
+  --gold:#ffd600;--gold2:#ffea80;--blue:#29b6f6;--blue2:#81d4fa;
+  --green:#00e676;--green2:#69ff47;--red:#ff5252;--orange:#ff6d00;
+  --orange2:#ffab40;--purple:#ce93d8;--cyan:#18ffff;--pink:#f48fb1;
+  --teal:#1de9b6;--lime:#c6ff00;
+  --text:#e3f2fd;--muted:#1a3050;--light:#90caf9;--code-bg:#020406;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:10.5px;line-height:1.5;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px;}
+
+/* ══ HEADER ══ */
+.header{
+  background:linear-gradient(135deg,#020406 0%,#060a10 60%,#030508 100%);
+  border-bottom:2px solid var(--gold);padding:12px 20px 10px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.header::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 100% at 70% 50%,rgba(255,214,0,0.06) 0%,transparent 70%);pointer-events:none;}
+.logo-wrap{display:flex;align-items:center;gap:12px;}
+.logo-box{width:50px;height:50px;background:linear-gradient(135deg,#e65100,#ffd600);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:11px;color:#020406;
+  box-shadow:0 0 18px rgba(255,214,0,0.4);flex-shrink:0;text-align:center;line-height:1.2;}
+.title-block h1{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;letter-spacing:-0.5px;color:#fff;}
+.title-block h1 span{color:var(--gold);}
+.title-block p{color:var(--muted);font-size:9px;margin-top:2px;letter-spacing:1.5px;font-family:'Syne',sans-serif;}
+.coach-info{text-align:right;}
+.coach-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--gold);}
+.coach-phone{display:flex;align-items:center;gap:6px;justify-content:flex-end;color:var(--blue);font-weight:600;font-size:11px;margin-top:2px;}
+.coach-tags{display:flex;gap:3px;justify-content:flex-end;flex-wrap:wrap;margin-top:4px;}
+.ctag{padding:2px 7px;border-radius:20px;font-size:8.5px;font-weight:700;font-family:'Syne',sans-serif;}
+.ctag.g{background:rgba(255,214,0,0.1);border:1px solid rgba(255,214,0,0.3);color:var(--gold);}
+.ctag.b{background:rgba(41,182,246,0.1);border:1px solid rgba(41,182,246,0.25);color:var(--blue);}
+.ctag.gr{background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);color:var(--green);}
+.social-row{display:flex;gap:7px;justify-content:flex-end;margin-top:5px;flex-wrap:wrap;}
+.slink{font-size:8.5px;color:var(--muted);text-decoration:none;}
+.slink:hover{color:var(--gold);}
+
+/* ══ TOPIC HEADER ══ */
+.topic-hdr{
+  display:flex;align-items:center;gap:10px;padding:5px 16px;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  font-family:'Syne',sans-serif;font-size:9px;font-weight:800;
+  letter-spacing:2px;text-transform:uppercase;
+}
+.topic-hdr .icon{font-size:14px;}
+.topic-hdr .label{flex:1;}
+.topic-hdr .count{font-size:8.5px;padding:2px 8px;border-radius:10px;font-weight:700;}
+
+/* Colors per topic */
+.t-manual{color:#ff80ab;background:linear-gradient(90deg,rgba(244,143,177,0.1),transparent);border-color:rgba(244,143,177,0.2);}
+.t-manual .count{background:rgba(244,143,177,0.12);border:1px solid rgba(244,143,177,0.25);color:#ff80ab;}
+.t-api{color:#40c4ff;background:linear-gradient(90deg,rgba(64,196,255,0.1),transparent);border-color:rgba(64,196,255,0.2);}
+.t-api .count{background:rgba(64,196,255,0.1);border:1px solid rgba(64,196,255,0.25);color:#40c4ff;}
+.t-auto{color:#69ff47;background:linear-gradient(90deg,rgba(105,255,71,0.08),transparent);border-color:rgba(105,255,71,0.18);}
+.t-auto .count{background:rgba(105,255,71,0.08);border:1px solid rgba(105,255,71,0.2);color:#69ff47;}
+.t-sel{color:#ff6b35;background:linear-gradient(90deg,rgba(255,107,53,0.08),transparent);border-color:rgba(255,107,53,0.2);}
+.t-sel .count{background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.25);color:#ff6b35;}
+.t-java{color:#ffd600;background:linear-gradient(90deg,rgba(255,214,0,0.08),transparent);border-color:rgba(255,214,0,0.2);}
+.t-java .count{background:rgba(255,214,0,0.08);border:1px solid rgba(255,214,0,0.2);color:#ffd600;}
+.t-pw{color:#00e676;background:linear-gradient(90deg,rgba(0,230,118,0.08),transparent);border-color:rgba(0,230,118,0.18);}
+.t-pw .count{background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);color:#00e676;}
+.t-appium{color:#ce93d8;background:linear-gradient(90deg,rgba(206,147,216,0.08),transparent);border-color:rgba(206,147,216,0.18);}
+.t-appium .count{background:rgba(206,147,216,0.08);border:1px solid rgba(206,147,216,0.22);color:#ce93d8;}
+.t-postman{color:#ffab40;background:linear-gradient(90deg,rgba(255,171,64,0.08),transparent);border-color:rgba(255,171,64,0.18);}
+.t-postman .count{background:rgba(255,171,64,0.08);border:1px solid rgba(255,171,64,0.22);color:#ffab40;}
+.t-jmeter{color:#18ffff;background:linear-gradient(90deg,rgba(24,255,255,0.07),transparent);border-color:rgba(24,255,255,0.18);}
+.t-jmeter .count{background:rgba(24,255,255,0.07);border:1px solid rgba(24,255,255,0.2);color:#18ffff;}
+.t-sql{color:#1de9b6;background:linear-gradient(90deg,rgba(29,233,182,0.07),transparent);border-color:rgba(29,233,182,0.18);}
+.t-sql .count{background:rgba(29,233,182,0.07);border:1px solid rgba(29,233,182,0.2);color:#1de9b6;}
+.t-agile{color:#c6ff00;background:linear-gradient(90deg,rgba(198,255,0,0.07),transparent);border-color:rgba(198,255,0,0.18);}
+.t-agile .count{background:rgba(198,255,0,0.07);border:1px solid rgba(198,255,0,0.2);color:#c6ff00;}
+.t-ci{color:#ea80fc;background:linear-gradient(90deg,rgba(234,128,252,0.07),transparent);border-color:rgba(234,128,252,0.18);}
+.t-ci .count{background:rgba(234,128,252,0.07);border:1px solid rgba(234,128,252,0.2);color:#ea80fc;}
+
+/* ══ GRID ══ */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--border);}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);border-left:1px solid var(--border);}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);border-left:1px solid var(--border);}
+.col{border-right:1px solid var(--border);}
+
+/* ══ CARD ══ */
+.card{border-bottom:1px solid var(--border);padding:8px 10px;}
+
+/* ══ QA ITEM ══ */
+.qa{margin-bottom:5px;padding:5px 8px;background:var(--code-bg);border:1px solid var(--border);border-radius:4px;}
+.qa:last-child{margin-bottom:0;}
+.qa-q{font-family:'Syne',sans-serif;font-size:9.5px;font-weight:700;margin-bottom:3px;line-height:1.4;}
+.qa-a{font-size:9.5px;color:#546e7a;line-height:1.55;}
+.qa-a span{font-weight:700;}
+
+/* Answer highlight colors */
+.pk{color:#f48fb1;font-weight:700;}
+.bl{color:#29b6f6;font-weight:700;}
+.gn{color:#00e676;font-weight:700;}
+.re{color:#ff5252;font-weight:700;}
+.am{color:#ffab40;font-weight:700;}
+.pu{color:#ce93d8;font-weight:700;}
+.cy{color:#18ffff;font-weight:700;}
+.ye{color:#ffd600;font-weight:700;}
+.te{color:#1de9b6;font-weight:700;}
+.li{color:#c6ff00;font-weight:700;}
+.or{color:#ff6b35;font-weight:700;}
+
+/* ══ FOOTER ══ */
+.footer{background:linear-gradient(90deg,#020305,#060a10);border-top:2px solid rgba(255,214,0,0.4);
+  padding:7px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px;}
+.footer .fl{font-size:9px;color:var(--muted);font-family:'Syne',sans-serif;}
+.footer .fl span{color:var(--gold);font-weight:700;}
+.footer .fr{font-size:9px;color:var(--muted);text-align:right;font-family:'Syne',sans-serif;}
+.footer .fr strong{color:var(--gold2);}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo-box">QA<br>INTVW</div>
+    <div class="title-block">
+      <h1>QA <span>Interview Questions</span> — Complete Guide</h1>
+      <p>MANUAL · API · AUTOMATION · SELENIUM · JAVA · PLAYWRIGHT · APPIUM · POSTMAN · JMETER · SQL · AGILE · CI/CD</p>
+    </div>
+  </div>
+  <div class="coach-info">
+    <div class="coach-name">🎓 Next Gen QA IT Coaching Classes</div>
+    <div class="coach-phone">📞 Mr. Khan Sir &nbsp;|&nbsp; 8700350994</div>
+    <div class="coach-tags">
+      <span class="ctag g">Manual &amp; Automation</span>
+      <span class="ctag b">Selenium · Playwright · Appium</span>
+      <span class="ctag gr">Online &amp; Offline</span>
+      <span class="ctag g">B.Tech / BCA / MCA / CBSE</span>
+    </div>
+    <div class="social-row">
+      <a class="slink" href="https://nextgenqa94-ui.github.io/nextgenqa">🌍 Website</a>
+      <a class="slink" href="https://wa.me/918700350994">💬 WhatsApp</a>
+      <a class="slink" href="https://www.linkedin.com/posts/next-gen-qa-8a48ba336_playwright-softwaretesting-qa-activity-7433836972202221568-4vf8">💼 LinkedIn</a>
+      <a class="slink" href="https://www.facebook.com/share/p/187KVCpEhw/">📘 Facebook</a>
+      <a class="slink" href="https://www.instagram.com/p/DVV2F-rCUZG/">📸 Instagram</a>
+      <a class="slink" href="http://youtube.com/post/UgkxQqIpyhpPA2My0o4Vdb20kxVBv4REJw3S">▶ YouTube</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MANUAL TESTING ══════════ -->
+<div class="topic-hdr t-manual"><div class="icon">🧪</div><div class="label">Manual Testing</div><div class="count">15 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pk">Q1. What is Software Testing?</div><div class="qa-a">Process of evaluating software to find <span class="pk">bugs</span>, verify it meets requirements and works as expected before delivery to end users.</div></div>
+      <div class="qa"><div class="qa-q pk">Q2. What is SDLC? Name all phases.</div><div class="qa-a"><span class="pk">Software Development Life Cycle:</span> 1. Requirement Gathering → 2. System Design → 3. Implementation → 4. Testing → 5. Deployment → 6. Maintenance</div></div>
+      <div class="qa"><div class="qa-q pk">Q3. What is STLC? Name all phases.</div><div class="qa-a"><span class="pk">Software Testing Life Cycle:</span> 1. Requirement Analysis → 2. Test Planning → 3. Test Case Development → 4. Environment Setup → 5. Test Execution → 6. Test Closure</div></div>
+      <div class="qa"><div class="qa-q pk">Q4. What is Verification vs Validation?</div><div class="qa-a"><span class="pk">Verification</span> = "Are we building the product RIGHT?" (static, no execution). <span class="gn">Validation</span> = "Are we building the RIGHT product?" (dynamic, actual testing).</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pk">Q5. What is Smoke vs Sanity vs Regression?</div><div class="qa-a"><span class="pk">Smoke</span> = Wide/shallow build stability check. <span class="am">Sanity</span> = Narrow/deep check after specific bug fix. <span class="gn">Regression</span> = Full re-testing after ANY code change.</div></div>
+      <div class="qa"><div class="qa-q pk">Q6. What is Black Box vs White Box vs Grey Box?</div><div class="qa-a"><span class="pk">Black Box</span> = No code knowledge, test I/O. <span class="bl">White Box</span> = Full code knowledge, structural. <span class="gn">Grey Box</span> = Partial knowledge, mix of both.</div></div>
+      <div class="qa"><div class="qa-q pk">Q7. What is Boundary Value Analysis (BVA)?</div><div class="qa-a">Testing values at the <span class="pk">EDGES</span> of valid/invalid ranges. For age 18-60, test: <span class="re">17</span>, <span class="gn">18</span>, <span class="gn">19</span>, <span class="gn">59</span>, <span class="gn">60</span>, <span class="re">61</span>. Bugs occur most at boundaries.</div></div>
+      <div class="qa"><div class="qa-q pk">Q8. What is Equivalence Partitioning?</div><div class="qa-a">Dividing input data into <span class="pk">valid and invalid partitions</span>. Test ONE value from each partition. For age 18-60: test 10 (invalid), 35 (valid), 70 (invalid).</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pk">Q9. What is Severity vs Priority?</div><div class="qa-a"><span class="pk">Severity</span> = technical impact, set by QA tester. <span class="bl">Priority</span> = business urgency, set by Manager/PO. Logo missing = Minor Severity but High Priority.</div></div>
+      <div class="qa"><div class="qa-q pk">Q10. What is Bug Life Cycle?</div><div class="qa-a">New → Assigned → Open/In Progress → Fixed → Retest → <span class="gn">Closed</span>. Can also go: <span class="re">Reopened</span>, Deferred, Rejected/Not a Bug, Duplicate.</div></div>
+      <div class="qa"><div class="qa-q pk">Q11. What is RTM?</div><div class="qa-a"><span class="pk">Requirement Traceability Matrix</span> — maps each requirement to its test cases. Ensures no requirement is missed. Shows test coverage status.</div></div>
+      <div class="qa"><div class="qa-q pk">Q12. What is Exploratory Testing?</div><div class="qa-a">Simultaneous <span class="pk">learning + designing + executing</span> tests. No predefined scripts. Uses tester's experience and intuition to find bugs creatively.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pk">Q13. What is UAT?</div><div class="qa-a"><span class="pk">User Acceptance Testing</span> — end users test software to verify it meets business requirements. Last phase before go-live. Done at client's location.</div></div>
+      <div class="qa"><div class="qa-q pk">Q14. Difference: Error, Bug, Failure?</div><div class="qa-a"><span class="am">Error</span> = Human mistake in thinking/coding. <span class="pk">Bug/Defect</span> = Result of error in code. <span class="re">Failure</span> = System doesn't work as expected due to bug.</div></div>
+      <div class="qa"><div class="qa-q pk">Q15. What is a Test Plan? Key contents?</div><div class="qa-a">Document describing test <span class="pk">scope, strategy, resources, schedule, risks</span>. Contains: objectives, in-scope/out-scope, environment, entry/exit criteria, deliverables.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ API TESTING ══════════ -->
+<div class="topic-hdr t-api"><div class="icon">🔗</div><div class="label">API Testing</div><div class="count">12 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q bl">Q1. What is API Testing?</div><div class="qa-a">Testing APIs directly at the <span class="bl">business logic layer</span> without UI. Validates functionality, reliability, security, and performance. Faster than UI testing.</div></div>
+      <div class="qa"><div class="qa-q bl">Q2. What is REST API?</div><div class="qa-a"><span class="bl">Representational State Transfer</span> — architectural style using HTTP. Stateless, resource-based URLs, JSON/XML responses. Most popular API type today.</div></div>
+      <div class="qa"><div class="qa-q bl">Q3. GET vs POST vs PUT vs PATCH vs DELETE?</div><div class="qa-a"><span class="gn">GET</span>=Read. <span class="am">POST</span>=Create. <span class="bl">PUT</span>=Full Update. <span class="pu">PATCH</span>=Partial Update. <span class="re">DELETE</span>=Delete. GET has no body. POST/PUT/PATCH have request body.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q bl">Q4. What are HTTP Status Codes?</div><div class="qa-a"><span class="gn">2xx</span>=Success (200 OK, 201 Created, 204 No Content). <span class="bl">3xx</span>=Redirect. <span class="am">4xx</span>=Client Error (400, 401, 403, 404). <span class="re">5xx</span>=Server Error (500, 502, 503).</div></div>
+      <div class="qa"><div class="qa-q bl">Q5. 401 vs 403?</div><div class="qa-a"><span class="am">401 Unauthorized</span> = Not authenticated (no login/token). <span class="re">403 Forbidden</span> = Authenticated but NO permission to access the resource.</div></div>
+      <div class="qa"><div class="qa-q bl">Q6. What is Idempotent?</div><div class="qa-a">Calling same API multiple times gives the <span class="bl">same result</span>. GET, PUT, DELETE are idempotent. <span class="re">POST is NOT</span> idempotent — creates new record each call.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q bl">Q7. What to verify in API response?</div><div class="qa-a"><span class="bl">Status code</span>, response body fields/values, data types, response time, headers (Content-Type), error messages for negative cases.</div></div>
+      <div class="qa"><div class="qa-q bl">Q8. PUT vs PATCH difference?</div><div class="qa-a"><span class="bl">PUT</span> = Replaces ENTIRE resource (all fields required). <span class="pu">PATCH</span> = Updates ONLY specific fields (partial update). PATCH is more efficient for small changes.</div></div>
+      <div class="qa"><div class="qa-q bl">Q9. Path param vs Query param?</div><div class="qa-a"><span class="bl">Path param</span> = part of URL: /users/<span class="gn">123</span>. <span class="am">Query param</span> = after ?: /users?<span class="am">page=1&amp;limit=10</span>. Path = specific resource, Query = filter/sort/paginate.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q bl">Q10. What is JSON? Types?</div><div class="qa-a">JavaScript Object Notation — lightweight data format. Types: <span class="gn">String</span>, <span class="am">Number</span>, <span class="bl">Boolean</span> (true/false), <span class="re">null</span>, <span class="pu">Array</span> [], <span class="cy">Object</span> {}.</div></div>
+      <div class="qa"><div class="qa-q bl">Q11. What is API Authentication types?</div><div class="qa-a"><span class="am">API Key</span> (header/query), <span class="bl">Bearer Token</span> (JWT after login), <span class="gn">Basic Auth</span> (base64 user:pass), <span class="pu">OAuth 2.0</span> (token-based, Google/GitHub style).</div></div>
+      <div class="qa"><div class="qa-q bl">Q12. What is Negative API Testing?</div><div class="qa-a">Testing with <span class="re">invalid inputs</span> — wrong data types, missing required fields, expired token, unauthorized access — to verify proper error handling and messages.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ AUTOMATION TESTING ══════════ -->
+<div class="topic-hdr t-auto"><div class="icon">🤖</div><div class="label">Automation Testing</div><div class="count">10 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q gn">Q1. What is Automation Testing?</div><div class="qa-a">Using tools/scripts to <span class="gn">automatically execute test cases</span> without manual effort. Faster, more reliable, ideal for regression and repetitive tests.</div></div>
+      <div class="qa"><div class="qa-q gn">Q2. When to automate a test case?</div><div class="qa-a">Automate when: <span class="gn">repetitive tests</span>, regression suite, stable features, large data sets, smoke tests, tests needing speed/frequency. Don't automate one-time or exploratory tests.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q gn">Q3. What is Test Automation Framework?</div><div class="qa-a">Structured set of guidelines for automation: <span class="gn">Data-driven</span> (Excel data), <span class="am">Keyword-driven</span> (keywords), <span class="bl">Hybrid</span> (both), <span class="pu">BDD</span> (Gherkin/Cucumber), <span class="cy">POM</span> (Page Object).</div></div>
+      <div class="qa"><div class="qa-q gn">Q4. What is Page Object Model (POM)?</div><div class="qa-a">Design pattern where each <span class="gn">web page = one class</span>. Page elements and actions are defined in page class. Test class calls page methods. Reduces code duplication.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q gn">Q5. What is Data-Driven Testing?</div><div class="qa-a">Running same test with <span class="gn">multiple data sets</span> from external source (Excel, CSV, JSON). In TestNG: <span class="am">@DataProvider</span>. Tests login with 10 different username/password combos.</div></div>
+      <div class="qa"><div class="qa-q gn">Q6. What is BDD? Tools used?</div><div class="qa-a"><span class="gn">Behavior Driven Development</span> — tests written in plain English (Gherkin). Given/When/Then format. Tools: <span class="am">Cucumber</span> (Java), <span class="bl">Behave</span> (Python), <span class="pu">SpecFlow</span> (.NET).</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q gn">Q7. Manual vs Automation Testing?</div><div class="qa-a"><span class="am">Manual</span>: Human executes, flexible, good for exploratory/UI. <span class="gn">Automation</span>: Script executes, faster/reusable, good for regression/load. Both are needed.</div></div>
+      <div class="qa"><div class="qa-q gn">Q8. What is CI/CD in testing?</div><div class="qa-a"><span class="gn">Continuous Integration/Delivery</span> — automation tests run automatically on every code commit. Tools: Jenkins, GitHub Actions, GitLab CI. Fast feedback to devs.</div></div>
+      <div class="qa"><div class="qa-q gn">Q9. What is flaky test?</div><div class="qa-a">Test that <span class="re">passes sometimes and fails sometimes</span> without code change. Causes: timing issues, dynamic data, unstable waits. Fix with explicit waits and stable locators.</div></div>
+      <div class="qa"><div class="qa-q gn">Q10. Name automation tools you know.</div><div class="qa-a"><span class="gn">Selenium</span> (Web-Java), <span class="am">Playwright</span> (Web-JS/Python/Java), <span class="pu">Appium</span> (Mobile), <span class="bl">Postman/RestAssured</span> (API), <span class="cy">JMeter</span> (Performance), <span class="te">Cypress</span> (Web-JS).</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SELENIUM ══════════ -->
+<div class="topic-hdr t-sel"><div class="icon">🌐</div><div class="label">Selenium WebDriver</div><div class="count">15 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q or">Q1. What is Selenium WebDriver?</div><div class="qa-a">Open-source framework for <span class="or">automating web browsers</span>. Supports Chrome, Firefox, Edge, Safari. Works with Java, Python, C#, JS. Uses W3C protocol directly.</div></div>
+      <div class="qa"><div class="qa-q or">Q2. What are Selenium locators?</div><div class="qa-a"><span class="or">ID</span> (fastest), <span class="gn">Name</span>, <span class="bl">ClassName</span>, <span class="pu">TagName</span>, <span class="am">LinkText</span>, <span class="cy">PartialLinkText</span>, <span class="re">XPath</span>, <span class="pk">CSS Selector</span>. Priority: ID &gt; Name &gt; CSS &gt; XPath.</div></div>
+      <div class="qa"><div class="qa-q or">Q3. XPath vs CSS Selector?</div><div class="qa-a"><span class="or">XPath</span>: can navigate UP (parent/sibling), supports text search. <span class="gn">CSS</span>: faster, simpler, goes DOWN only. Use CSS for simple, XPath for complex or text-based locating.</div></div>
+      <div class="qa"><div class="qa-q or">Q4. Implicit vs Explicit Wait?</div><div class="qa-a"><span class="or">Implicit</span>: Global wait for ALL elements (set once). <span class="gn">Explicit</span>: Wait for SPECIFIC condition (elementToBeClickable, visibilityOf). Always prefer Explicit over Implicit.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q or">Q5. What is Fluent Wait?</div><div class="qa-a">Advanced wait with <span class="or">custom polling interval</span> and ignore exceptions. FluentWait with .withTimeout(30s).pollingEvery(2s).ignoring(NoSuchElementException). Best for dynamic elements.</div></div>
+      <div class="qa"><div class="qa-q or">Q6. driver.close() vs driver.quit()?</div><div class="qa-a"><span class="or">driver.close()</span> = Closes CURRENT window only. <span class="re">driver.quit()</span> = Closes ALL windows and ends WebDriver session. Always use quit() in @AfterMethod.</div></div>
+      <div class="qa"><div class="qa-q or">Q7. How to handle dropdowns?</div><div class="qa-a">Use <span class="or">Select class</span>: selectByVisibleText("India"), selectByValue("IN"), selectByIndex(2). For custom dropdowns (non-select tag), use click + XPath/CSS.</div></div>
+      <div class="qa"><div class="qa-q or">Q8. How to handle multiple windows?</div><div class="qa-a">Get all handles: <span class="or">getWindowHandles()</span>. Store parent handle. Loop through handles → switch to new one. Switch back: <span class="gn">driver.switchTo().window(parentHandle)</span>.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q or">Q9. How to handle frames/iFrames?</div><div class="qa-a">Switch in: <span class="or">driver.switchTo().frame("name")</span> or by index or WebElement. Switch out: <span class="gn">driver.switchTo().defaultContent()</span> or <span class="bl">parentFrame()</span> for nested frames.</div></div>
+      <div class="qa"><div class="qa-q or">Q10. How to handle Alerts?</div><div class="qa-a">Switch: <span class="or">driver.switchTo().alert()</span>. Accept: <span class="gn">alert.accept()</span>. Dismiss: <span class="bl">alert.dismiss()</span>. Get text: <span class="am">alert.getText()</span>. Send text (prompt): <span class="pu">alert.sendKeys("text")</span>.</div></div>
+      <div class="qa"><div class="qa-q or">Q11. What is Actions class?</div><div class="qa-a">For advanced interactions: <span class="or">hover</span> (moveToElement), <span class="gn">right-click</span> (contextClick), <span class="bl">double-click</span>, <span class="am">drag &amp; drop</span>, key chords (Ctrl+A). Always call .perform() at end.</div></div>
+      <div class="qa"><div class="qa-q or">Q12. What is JavascriptExecutor?</div><div class="qa-a">Executes JS in browser: <span class="or">js.executeScript("arguments[0].click()",el)</span>. Used for: click hidden elements, scroll, set value, highlight elements, remove readonly.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q or">Q13. What is StaleElementReferenceException?</div><div class="qa-a">Element was found but DOM changed (page refresh/navigation) — reference becomes <span class="re">stale</span>. Fix: Re-find element after page change, or use try-catch with retry logic.</div></div>
+      <div class="qa"><div class="qa-q or">Q14. How to take screenshot in Selenium?</div><div class="qa-a"><span class="or">((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE)</span>. Copy with FileUtils. In Selenium 4, can take element screenshot with <span class="gn">element.getScreenshotAs()</span>.</div></div>
+      <div class="qa"><div class="qa-q or">Q15. What is Page Object Model?</div><div class="qa-a">Design pattern: <span class="or">each page = one class</span>. Use @FindBy for elements, PageFactory.initElements() in constructor. Test class calls page methods. Maintainable, reusable framework.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ JAVA ══════════ -->
+<div class="topic-hdr t-java"><div class="icon">☕</div><div class="label">Java for QA</div><div class="count">10 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q ye">Q1. What are Java OOP concepts?</div><div class="qa-a"><span class="ye">4 Pillars:</span> Encapsulation (hide data), Inheritance (extend class), Polymorphism (many forms), Abstraction (hide complexity). All used in Selenium framework design.</div></div>
+      <div class="qa"><div class="qa-q ye">Q2. What is the difference between == and .equals()?</div><div class="qa-a"><span class="ye">==</span> compares object reference (memory address). <span class="gn">.equals()</span> compares actual content/value. For String comparison always use <span class="gn">.equals()</span>, never ==.</div></div>
+      <div class="qa"><div class="qa-q ye">Q3. What is ArrayList vs Array?</div><div class="qa-a"><span class="ye">Array</span>: Fixed size, faster. <span class="gn">ArrayList</span>: Dynamic size, add/remove elements. In Selenium, findElements() returns <span class="gn">List&lt;WebElement&gt;</span> — ArrayList under the hood.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q ye">Q4. What is try-catch in Java?</div><div class="qa-a">Exception handling: <span class="ye">try</span> block runs code, <span class="re">catch</span> handles exceptions, <span class="gn">finally</span> runs always. Used in Selenium for StaleElement, NoSuchElement exceptions.</div></div>
+      <div class="qa"><div class="qa-q ye">Q5. What is interface vs abstract class?</div><div class="qa-a"><span class="ye">Interface</span>: All methods abstract (Java 8 onwards can have default). <span class="am">Abstract class</span>: Mix of abstract and concrete methods. Class can implement multiple interfaces but extend only one abstract class.</div></div>
+      <div class="qa"><div class="qa-q ye">Q6. What is static keyword?</div><div class="qa-a"><span class="ye">Static</span> members belong to CLASS not instance. Can be called without creating object. Used for: driver instance, utility methods, constants, counter variables.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q ye">Q7. What is String vs StringBuilder?</div><div class="qa-a"><span class="ye">String</span>: Immutable — new object on every change (slow for loops). <span class="gn">StringBuilder</span>: Mutable — modifies same object (fast). Use StringBuilder for building dynamic strings.</div></div>
+      <div class="qa"><div class="qa-q ye">Q8. What are access modifiers?</div><div class="qa-a"><span class="gn">public</span> (everywhere), <span class="ye">protected</span> (same package + subclass), <span class="am">default</span> (same package), <span class="re">private</span> (same class only). Used in POM for encapsulation.</div></div>
+      <div class="qa"><div class="qa-q ye">Q9. What is constructor?</div><div class="qa-a">Special method called when object is created. Same name as class, no return type. In POM, constructor initializes <span class="ye">PageFactory</span> and stores driver reference.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q ye">Q10. What are Collections in Java?</div><div class="qa-a"><span class="ye">List</span> (ordered, duplicates): ArrayList, LinkedList. <span class="gn">Set</span> (unordered, no duplicates): HashSet. <span class="bl">Map</span> (key-value): HashMap. Used in Selenium: <span class="am">Set&lt;String&gt;</span> for window handles.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PLAYWRIGHT ══════════ -->
+<div class="topic-hdr t-pw"><div class="icon">🎭</div><div class="label">Playwright</div><div class="count">12 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q gn">Q1. What is Playwright?</div><div class="qa-a">Modern browser automation framework by <span class="gn">Microsoft</span>. Supports Chromium, Firefox, WebKit. Works with JS, TypeScript, Python, Java, C#. Auto-waits built in — no explicit waits needed.</div></div>
+      <div class="qa"><div class="qa-q gn">Q2. Playwright vs Selenium — key differences?</div><div class="qa-a"><span class="gn">Playwright</span>: Auto-wait, multi-browser in one test, network interception, parallel by default, faster. <span class="or">Selenium</span>: Older, more language support, larger community, Grid for parallel.</div></div>
+      <div class="qa"><div class="qa-q gn">Q3. What is auto-waiting in Playwright?</div><div class="qa-a">Playwright <span class="gn">automatically waits</span> for elements to be visible, stable, and actionable before interacting. No need for Thread.sleep() or explicit waits in most cases.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q gn">Q4. How to locate elements in Playwright?</div><div class="qa-a"><span class="gn">page.locator("css")</span>, <span class="bl">getByText("Login")</span>, <span class="am">getByRole("button")</span>, <span class="pu">getByLabel("Email")</span>, <span class="cy">getByPlaceholder("...")</span>, <span class="pk">getByTestId("id")</span>.</div></div>
+      <div class="qa"><div class="qa-q gn">Q5. How to perform assertions in Playwright?</div><div class="qa-a">Using <span class="gn">expect()</span>: <span class="bl">await expect(locator).toBeVisible()</span>, toHaveText("text"), toBeEnabled(), toHaveValue(), toContainText(), toBeChecked().</div></div>
+      <div class="qa"><div class="qa-q gn">Q6. What is Playwright fixtures?</div><div class="qa-a">Built-in setup/teardown system. <span class="gn">page, browser, context</span> are fixtures. Custom fixtures extend base: <span class="am">test.extend({})</span>. Replaces @BeforeMethod/@AfterMethod of TestNG.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q gn">Q7. What is Browser Context in Playwright?</div><div class="qa-a">Isolated browser session — own cookies, storage, cache. Like <span class="gn">incognito window</span>. Multiple contexts run in parallel. Used for testing multiple users simultaneously.</div></div>
+      <div class="qa"><div class="qa-q gn">Q8. How to handle multiple tabs in Playwright?</div><div class="qa-a">Use <span class="gn">context.waitForEvent("page")</span> to catch new tab. Or <span class="bl">const newPage = await context.newPage()</span>. Each tab is a separate Page object.</div></div>
+      <div class="qa"><div class="qa-q gn">Q9. What is network interception in Playwright?</div><div class="qa-a"><span class="gn">page.route(url, handler)</span> — intercept and mock API calls. Useful for testing offline mode, error scenarios, or speeding up tests by mocking slow APIs.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q gn">Q10. How to take screenshots in Playwright?</div><div class="qa-a"><span class="gn">page.screenshot({path:"shot.png"})</span> for full page. <span class="bl">locator.screenshot()</span> for element. Add <span class="am">fullPage: true</span> for complete scrollable page capture.</div></div>
+      <div class="qa"><div class="qa-q gn">Q11. What is Playwright Test Runner?</div><div class="qa-a">Built-in test framework with <span class="gn">test()</span> and <span class="bl">expect()</span>. Runs tests in parallel by default. Config in <span class="am">playwright.config.ts</span>. Generates HTML reports automatically.</div></div>
+      <div class="qa"><div class="qa-q gn">Q12. What is headless mode?</div><div class="qa-a">Browser runs <span class="gn">without visible UI</span> — faster, used in CI/CD pipelines. Set <span class="am">headless: true</span> in config. Playwright runs headless by default in CI environments.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ APPIUM + MOBILE ══════════ -->
+<div class="topic-hdr t-appium"><div class="icon">📱</div><div class="label">Appium — Mobile Automation Testing</div><div class="count">12 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pu">Q1. What is Appium?</div><div class="qa-a">Open-source framework for <span class="pu">mobile app automation</span>. Supports iOS and Android. Tests native, hybrid, and web apps. Uses WebDriver protocol. No app recompilation needed.</div></div>
+      <div class="qa"><div class="qa-q pu">Q2. Native vs Hybrid vs Web App?</div><div class="qa-a"><span class="pu">Native</span>: Built for one platform (Android/iOS), best performance. <span class="am">Hybrid</span>: Web wrapped in native container (Cordova). <span class="gn">Web App</span>: Mobile browser app, cross-platform.</div></div>
+      <div class="qa"><div class="qa-q pu">Q3. What are Desired Capabilities?</div><div class="qa-a">Key-value pairs telling Appium: <span class="pu">platformName</span> (Android/iOS), <span class="gn">deviceName</span>, <span class="am">app</span> (APK path), <span class="bl">automationName</span> (UiAutomator2/XCUITest), appPackage, appActivity.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pu">Q4. UiAutomator2 vs XCUITest?</div><div class="qa-a"><span class="pu">UiAutomator2</span> = Android automation engine (Google). <span class="gn">XCUITest</span> = iOS automation engine (Apple). Set via <span class="am">automationName</span> capability. Each platform uses its own engine.</div></div>
+      <div class="qa"><div class="qa-q pu">Q5. How to find elements in Appium?</div><div class="qa-a"><span class="pu">By.id</span> (resource-id), <span class="gn">By.xpath</span>, <span class="bl">By.AccessibilityId</span> (content-desc/accessibility), <span class="am">By.className</span> (android.widget.Button), <span class="cy">MobileBy.AndroidUIAutomator</span>.</div></div>
+      <div class="qa"><div class="qa-q pu">Q6. How to perform swipe/scroll in Appium?</div><div class="qa-a">Use <span class="pu">TouchAction</span>: press(x1,y1).waitAction(500).moveTo(x2,y2).release().perform(). Or <span class="gn">Appium Actions API</span>: PointerInput with TOUCH source for swipe gestures.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pu">Q7. What is Appium Inspector?</div><div class="qa-a">GUI tool to <span class="pu">inspect mobile app elements</span> — shows element hierarchy, attributes, XPath. Like browser DevTools for mobile apps. Used to find reliable locators.</div></div>
+      <div class="qa"><div class="qa-q pu">Q8. Real Device vs Emulator vs Simulator?</div><div class="qa-a"><span class="pu">Real Device</span>: Actual phone, most accurate. <span class="am">Emulator</span>: Android virtual device (AVD). <span class="gn">Simulator</span>: iOS virtual device (Xcode). Real device = best results for production testing.</div></div>
+      <div class="qa"><div class="qa-q pu">Q9. How to handle keyboard in Appium?</div><div class="qa-a"><span class="pu">element.sendKeys("text")</span> to type. <span class="gn">driver.hideKeyboard()</span> to dismiss. <span class="bl">driver.isKeyboardShown()</span> to check visibility. Use Keys.ENTER for submit action.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pu">Q10. What is Appium Server?</div><div class="qa-a">Node.js server that <span class="pu">receives WebDriver commands</span> from test script and translates them to platform-specific commands (UIAutomator2 for Android, XCUITest for iOS).</div></div>
+      <div class="qa"><div class="qa-q pu">Q11. How to run tests on BrowserStack/Sauce Labs?</div><div class="qa-a">Use cloud capabilities: <span class="pu">browserstack.user</span>, <span class="gn">browserstack.key</span>, device name, OS version. Connect to remote URL. Run tests on real cloud devices without own device lab.</div></div>
+      <div class="qa"><div class="qa-q pu">Q12. What is appPackage and appActivity?</div><div class="qa-a"><span class="pu">appPackage</span>: Android app's package name (e.g. com.example.app). <span class="gn">appActivity</span>: Screen to launch first (e.g. .MainActivity). Found using <span class="am">adb shell dumpsys</span> command.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ POSTMAN ══════════ -->
+<div class="topic-hdr t-postman"><div class="icon">📮</div><div class="label">Postman</div><div class="count">10 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q am">Q1. What is Postman?</div><div class="qa-a">API testing tool for sending HTTP requests, viewing responses, writing test scripts, managing collections and environments. Used for <span class="am">manual and automated API testing</span>.</div></div>
+      <div class="qa"><div class="qa-q am">Q2. What are Postman Collections?</div><div class="qa-a">Organized folders containing related API requests. Can be <span class="am">exported as JSON</span>, shared with team, and run automatically via Collection Runner or Newman CLI.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q am">Q3. What are Postman Environments?</div><div class="qa-a">Sets of <span class="am">key-value variables</span> for different setups (Dev/QA/Prod). Access with {{variable}}. Switch environments with one click to test same collection in different setups.</div></div>
+      <div class="qa"><div class="qa-q am">Q4. How to write tests in Postman?</div><div class="qa-a">In Tests tab using JavaScript: <span class="am">pm.test("name", ()=&gt; pm.expect(pm.response.code).to.equal(200))</span>. Can assert status, body values, response time, headers.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q am">Q5. How to chain API requests in Postman?</div><div class="qa-a">In Tests tab: <span class="am">const json = pm.response.json()</span>, then <span class="gn">pm.environment.set("token", json.token)</span>. Next request uses <span class="bl">{{token}}</span> in header/URL automatically.</div></div>
+      <div class="qa"><div class="qa-q am">Q6. What is Newman?</div><div class="qa-a">CLI tool to run Postman collections from <span class="am">command line / CI/CD pipeline</span>. Install: npm install -g newman. Run: newman run collection.json -e env.json. Generates reports.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q am">Q7. What are Pre-request Scripts?</div><div class="qa-a">Scripts that run <span class="am">BEFORE</span> the request. Used to: set variables, generate dynamic data (timestamps, random emails), set auth tokens before requests.</div></div>
+      <div class="qa"><div class="qa-q am">Q8. How to handle authentication in Postman?</div><div class="qa-a">Auth tab → Select type: <span class="am">Bearer Token</span> ({{token}}), Basic Auth (user+pass), API Key (header/query). Set at collection level to apply to all requests.</div></div>
+      <div class="qa"><div class="qa-q am">Q9. What is form-data vs raw in Postman body?</div><div class="qa-a"><span class="am">form-data</span>: For file uploads and form fields. <span class="gn">raw JSON</span>: For sending JSON body (most REST APIs). <span class="bl">x-www-form-urlencoded</span>: URL-encoded key-value pairs.</div></div>
+      <div class="qa"><div class="qa-q am">Q10. How to run a collection automatically?</div><div class="qa-a">Use <span class="am">Collection Runner</span> inside Postman (GUI), OR use <span class="gn">Newman</span> from command line for CI/CD integration. Both run all requests in sequence with test reports.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ JMETER ══════════ -->
+<div class="topic-hdr t-jmeter"><div class="icon">⚡</div><div class="label">Performance Testing — JMeter</div><div class="count">10 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q cy">Q1. What is Performance Testing?</div><div class="qa-a">Testing <span class="cy">speed, responsiveness, stability and scalability</span> under various load conditions. Types: Load, Stress, Spike, Endurance, Volume, Scalability testing.</div></div>
+      <div class="qa"><div class="qa-q cy">Q2. What is JMeter?</div><div class="qa-a">Open-source Apache tool for <span class="cy">performance and load testing</span>. Tests web apps, REST APIs, databases. Simulates thousands of virtual users simultaneously. GUI and CLI modes.</div></div>
+      <div class="qa"><div class="qa-q cy">Q3. Load vs Stress vs Spike Testing?</div><div class="qa-a"><span class="cy">Load</span>: Test under expected normal load. <span class="re">Stress</span>: Test beyond capacity to find breaking point. <span class="am">Spike</span>: Sudden large increase in users. <span class="gn">Endurance</span>: Long duration testing.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q cy">Q4. What is Thread Group in JMeter?</div><div class="qa-a">Core element defining <span class="cy">virtual users</span>: Number of Threads (users), Ramp-up period (seconds to start all users), Loop count (how many times). Base of every JMeter test plan.</div></div>
+      <div class="qa"><div class="qa-q cy">Q5. What are JMeter Listeners?</div><div class="qa-a">Components that <span class="cy">display/analyze test results</span>: View Results Tree (debug), Summary Report (overview), Aggregate Report (stats), Response Time Graph, Throughput Graph.</div></div>
+      <div class="qa"><div class="qa-q cy">Q6. What is Throughput in JMeter?</div><div class="qa-a">Number of <span class="cy">requests processed per second</span>. Higher = better. Shows how many users/requests server can handle. Key metric alongside response time and error rate.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q cy">Q7. What is Ramp-up period?</div><div class="qa-a">Time to <span class="cy">gradually start all virtual users</span>. 100 users, 50s ramp-up = 2 users/second. Prevents server shock. Simulates realistic user arrival pattern.</div></div>
+      <div class="qa"><div class="qa-q cy">Q8. What are JMeter Assertions?</div><div class="qa-a"><span class="cy">Response Assertion</span>: Check response text/code. <span class="gn">Duration Assertion</span>: Response under X ms. <span class="am">JSON Assertion</span>: Validate JSON path value. <span class="bl">Size Assertion</span>: Check response size.</div></div>
+      <div class="qa"><div class="qa-q cy">Q9. What is Correlation in JMeter?</div><div class="qa-a">Extracting <span class="cy">dynamic values</span> (session tokens, IDs) from one response to use in next request. Use <span class="am">Regular Expression Extractor</span> or <span class="gn">JSON Extractor</span> to capture values.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q cy">Q10. What is Think Time in JMeter?</div><div class="qa-a">Delay between user actions to simulate <span class="cy">real human behavior</span>. Add using <span class="am">Timer</span> elements (Constant Timer, Gaussian Random Timer). Without it, test is unrealistically aggressive.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SQL + AGILE ══════════ -->
+<div class="topic-hdr t-sql"><div class="icon">🗄️</div><div class="label">SQL for Testers</div><div class="count">8 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q te">Q1. Why do QA testers need SQL?</div><div class="qa-a">To <span class="te">verify data in database</span> after test actions. Validate data is correctly inserted/updated/deleted. Backend validation beyond UI. Query test data setup.</div></div>
+      <div class="qa"><div class="qa-q te">Q2. What are SQL commands (DDL/DML/DCL)?</div><div class="qa-a"><span class="te">DDL</span>: CREATE, ALTER, DROP (structure). <span class="gn">DML</span>: SELECT, INSERT, UPDATE, DELETE (data). <span class="am">DCL</span>: GRANT, REVOKE (permissions). <span class="bl">TCL</span>: COMMIT, ROLLBACK (transactions).</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q te">Q3. What is SELECT query? Common clauses?</div><div class="qa-a"><span class="te">SELECT</span> columns <span class="gn">FROM</span> table <span class="am">WHERE</span> condition <span class="bl">GROUP BY</span> col <span class="pu">HAVING</span> filter <span class="cy">ORDER BY</span> col <span class="re">LIMIT</span> n. Most important query for QA data validation.</div></div>
+      <div class="qa"><div class="qa-q te">Q4. Types of SQL JOINs?</div><div class="qa-a"><span class="te">INNER JOIN</span>: Only matching rows. <span class="gn">LEFT JOIN</span>: All from left + matches. <span class="am">RIGHT JOIN</span>: All from right + matches. <span class="bl">FULL JOIN</span>: All from both tables.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q te">Q5. What is WHERE vs HAVING?</div><div class="qa-a"><span class="te">WHERE</span>: Filters rows BEFORE grouping. <span class="gn">HAVING</span>: Filters groups AFTER GROUP BY. WHERE can't use aggregate functions (COUNT, SUM), HAVING can.</div></div>
+      <div class="qa"><div class="qa-q te">Q6. What SQL queries does QA use most?</div><div class="qa-a">SELECT to read data, <span class="te">COUNT(*)</span> to verify records, <span class="gn">WHERE id=?</span> to check specific record, <span class="am">ORDER BY created_at DESC</span> to get latest, <span class="bl">UPDATE</span> to set test data.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q te">Q7. What is Primary Key vs Foreign Key?</div><div class="qa-a"><span class="te">Primary Key</span>: Unique identifier for each row, NOT NULL. <span class="gn">Foreign Key</span>: References primary key of another table. Maintains referential integrity between tables.</div></div>
+      <div class="qa"><div class="qa-q te">Q8. What is NULL in SQL?</div><div class="qa-a"><span class="te">NULL</span> = missing/unknown value. Can't compare with = or !=. Use <span class="gn">IS NULL</span> or <span class="am">IS NOT NULL</span>. NULL + anything = NULL. COUNT(*) counts NULLs, COUNT(col) does not.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ AGILE + CI/CD ══════════ -->
+<div class="topic-hdr t-agile"><div class="icon">🔄</div><div class="label">Agile / Scrum</div><div class="count">8 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q li">Q1. What is Agile methodology?</div><div class="qa-a">Iterative software development using short <span class="li">sprints</span> (2-4 weeks). Delivers working software each sprint. Welcomes changing requirements. Values collaboration over documentation.</div></div>
+      <div class="qa"><div class="qa-q li">Q2. What is Scrum?</div><div class="qa-a">Agile framework with defined <span class="li">roles</span> (Scrum Master, Product Owner, Dev Team), <span class="gn">ceremonies</span> (Planning, Daily Standup, Review, Retrospective), and <span class="am">artifacts</span> (Backlog, Sprint Backlog).</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q li">Q3. What is a User Story?</div><div class="qa-a"><span class="li">"As a [user], I want [feature] so that [benefit]."</span> Requirements from user's perspective. Has Acceptance Criteria defining when it's "done". Estimated in story points.</div></div>
+      <div class="qa"><div class="qa-q li">Q4. What is Sprint Planning vs Sprint Review?</div><div class="qa-a"><span class="li">Sprint Planning</span>: Team selects stories from backlog, estimates effort. <span class="gn">Sprint Review</span>: Demo of completed work to stakeholders. <span class="am">Sprint Retro</span>: What to improve next sprint.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q li">Q5. What is Definition of Done (DoD)?</div><div class="qa-a">Team agreement on what <span class="li">"complete"</span> means: Code written + Code reviewed + Unit tested + QA tested + Deployed to staging + No open critical bugs.</div></div>
+      <div class="qa"><div class="qa-q li">Q6. What is QA's role in Agile?</div><div class="qa-a">QA participates from <span class="li">day 1</span>: review user stories, write test cases during sprint, execute tests same sprint, report bugs in JIRA, retest fixes, attend all ceremonies.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q li">Q7. Waterfall vs Agile?</div><div class="qa-a"><span class="re">Waterfall</span>: Sequential, testing at end, rigid. <span class="li">Agile</span>: Iterative, testing each sprint, flexible. Agile finds bugs early; Waterfall finds bugs late (costly to fix).</div></div>
+      <div class="qa"><div class="qa-q li">Q8. What is Kanban?</div><div class="qa-a">Agile framework using visual <span class="li">Kanban board</span> with columns: To Do → In Progress → Testing → Done. No fixed sprints. Continuous flow. Work-in-progress limits.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="topic-hdr t-ci"><div class="icon">🚀</div><div class="label">CI/CD · Git · DevOps for QA</div><div class="count">8 Questions</div></div>
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pu">Q1. What is CI/CD?</div><div class="qa-a"><span class="pu">CI</span> (Continuous Integration): Auto-build + auto-test on every code commit. <span class="gn">CD</span> (Continuous Delivery/Deployment): Auto-deploy to environment after tests pass. Tools: Jenkins, GitHub Actions, GitLab CI.</div></div>
+      <div class="qa"><div class="qa-q pu">Q2. What is Jenkins?</div><div class="qa-a">Open-source <span class="pu">automation server</span> for CI/CD. Creates pipelines that auto-run Selenium/Playwright tests on each code push. Sends email alerts on test failures.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pu">Q3. Basic Git commands for QA?</div><div class="qa-a"><span class="pu">git clone</span> (get repo), <span class="gn">git pull</span> (get latest), <span class="am">git add/commit/push</span> (save &amp; upload changes), <span class="bl">git branch</span> (list branches), <span class="cy">git checkout</span> (switch branch).</div></div>
+      <div class="qa"><div class="qa-q pu">Q4. What is Docker in testing?</div><div class="qa-a">Containers for <span class="pu">consistent test environments</span>. "Works on my machine" problem solved. Run Selenium Grid in Docker containers. Same environment across Dev, QA, and CI/CD.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pu">Q5. What is Selenium Grid?</div><div class="qa-a">Runs Selenium tests on <span class="pu">multiple machines/browsers in parallel</span>. Hub distributes tests to Nodes. Reduces total execution time drastically. Supports cross-browser testing.</div></div>
+      <div class="qa"><div class="qa-q pu">Q6. What is TestNG? Key annotations?</div><div class="qa-a">Java testing framework. Annotations: <span class="pu">@Test</span>, <span class="gn">@BeforeMethod/@AfterMethod</span>, <span class="am">@BeforeClass/@AfterClass</span>, <span class="bl">@BeforeSuite/@AfterSuite</span>, <span class="cy">@DataProvider</span>, <span class="pk">@Parameters</span>.</div></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="qa"><div class="qa-q pu">Q7. What is Maven?</div><div class="qa-a">Build and <span class="pu">dependency management tool</span>. pom.xml lists all dependencies (Selenium, TestNG, etc.). Maven downloads them automatically. Also runs tests with mvn test command.</div></div>
+      <div class="qa"><div class="qa-q pu">Q8. What is Allure / Extent Report?</div><div class="qa-a"><span class="pu">Test reporting tools</span>. Generate beautiful HTML reports with screenshots, pass/fail stats, execution timeline. <span class="gn">Allure</span>: open-source, powerful. <span class="am">ExtentReports</span>: popular for Selenium projects.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="footer">
+  <div class="fl">
+    <span>QA Interview Questions</span> · Manual · API · Selenium · Java · Playwright · Appium · Postman · JMeter · SQL · Agile · CI/CD · 120+ Questions
+  </div>
+  <div class="fr">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp;
+    🌍 nextgenqa94-ui.github.io/nextgenqa &nbsp;|&nbsp;
+    B.Tech · BCA · MCA · CBSE · ICSE · Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>

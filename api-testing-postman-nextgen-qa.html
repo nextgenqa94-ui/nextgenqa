@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Testing with Postman – Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0800;--surface:#120f00;--card:#1a1500;--border:#2d2500;
+  --amber:#ffab00;--amber2:#ffd740;--orange:#ff6d00;--orange2:#ff9e40;
+  --green:#76ff03;--green2:#ccff90;--red:#ff3d00;--blue:#40c4ff;
+  --purple:#e040fb;--pink:#f48fb1;--cyan:#18ffff;--white:#fffde7;
+  --text:#fff8e1;--muted:#5d4e00;--light:#ffe082;--code-bg:#060500;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:11px;line-height:1.5;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--amber);border-radius:4px;}
+
+/* ══ HEADER ══ */
+.header{
+  background:linear-gradient(135deg,#060400 0%,#120f00 60%,#0a0800 100%);
+  border-bottom:2px solid var(--amber);padding:14px 24px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.header::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 50% 100% at 75% 50%,rgba(255,171,0,0.08) 0%,transparent 70%);pointer-events:none;}
+.header::after{content:'POSTMAN';position:absolute;right:320px;top:50%;
+  transform:translateY(-50%);font-size:90px;font-weight:800;
+  color:rgba(255,171,0,0.03);letter-spacing:-2px;pointer-events:none;}
+.logo-wrap{display:flex;align-items:center;gap:14px;}
+.logo-box{width:54px;height:54px;background:linear-gradient(135deg,#e65100,#ff6d00);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:#fff8e1;
+  letter-spacing:-0.5px;box-shadow:0 0 20px rgba(255,109,0,0.45);flex-shrink:0;
+  text-align:center;line-height:1.2;}
+.title-block h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#fff;}
+.title-block h1 span{color:var(--amber);}
+.title-block p{color:var(--muted);font-size:9.5px;margin-top:2px;letter-spacing:1px;font-family:'Syne',sans-serif;}
+.coach-info{text-align:right;}
+.coach-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--amber2);}
+.coach-phone{display:flex;align-items:center;gap:6px;justify-content:flex-end;color:var(--orange2);font-weight:600;font-size:12px;margin-top:3px;}
+.coach-tags{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap;margin-top:5px;}
+.ctag{padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;}
+.ctag.a{background:rgba(255,171,0,0.12);border:1px solid rgba(255,171,0,0.3);color:var(--amber);}
+.ctag.o{background:rgba(255,109,0,0.12);border:1px solid rgba(255,109,0,0.3);color:var(--orange2);}
+.ctag.g{background:rgba(118,255,3,0.08);border:1px solid rgba(118,255,3,0.2);color:var(--green);}
+.social-row{display:flex;gap:8px;justify-content:flex-end;margin-top:6px;flex-wrap:wrap;}
+.slink{font-size:9px;color:var(--muted);text-decoration:none;}
+.slink:hover{color:var(--amber);}
+
+/* ══ SECTION DIVIDER ══ */
+.sec-div{
+  background:linear-gradient(90deg,rgba(255,171,0,0.15),rgba(255,171,0,0.05),transparent);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:4px 16px;font-family:'Syne',sans-serif;font-size:8.5px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--amber);
+  display:flex;align-items:center;gap:8px;
+}
+.sec-div::before{content:'▶';font-size:7px;}
+
+/* ══ GRID ══ */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--border);}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);border-left:1px solid var(--border);}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);border-left:1px solid var(--border);}
+.col{border-right:1px solid var(--border);}
+
+/* ══ CARD ══ */
+.card{border-bottom:1px solid var(--border);padding:9px 11px;}
+.ct{display:flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;font-size:9.5px;
+  font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;
+  padding-bottom:5px;border-bottom:1px solid rgba(255,171,0,0.12);color:var(--amber);}
+.ct .d{width:5px;height:5px;border-radius:50%;background:var(--amber);box-shadow:0 0 6px var(--amber);flex-shrink:0;}
+.ct.or{color:var(--orange2);border-bottom-color:rgba(255,109,0,0.12);}
+.ct.or .d{background:var(--orange2);box-shadow:0 0 6px var(--orange2);}
+.ct.gn{color:var(--green);border-bottom-color:rgba(118,255,3,0.12);}
+.ct.gn .d{background:var(--green);box-shadow:0 0 6px var(--green);}
+.ct.re{color:var(--red);border-bottom-color:rgba(255,61,0,0.12);}
+.ct.re .d{background:var(--red);box-shadow:0 0 6px var(--red);}
+.ct.bl{color:var(--blue);border-bottom-color:rgba(64,196,255,0.12);}
+.ct.bl .d{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+.ct.pu{color:var(--purple);border-bottom-color:rgba(224,64,251,0.12);}
+.ct.pu .d{background:var(--purple);box-shadow:0 0 6px var(--purple);}
+.ct.cy{color:var(--cyan);border-bottom-color:rgba(24,255,255,0.12);}
+.ct.cy .d{background:var(--cyan);box-shadow:0 0 6px var(--cyan);}
+.ct.pk{color:var(--pink);border-bottom-color:rgba(244,143,177,0.12);}
+.ct.pk .d{background:var(--pink);box-shadow:0 0 6px var(--pink);}
+
+.desc{font-size:9.5px;color:var(--light);margin-bottom:3px;font-family:'Syne',sans-serif;font-weight:600;}
+.item{margin-bottom:6px;}
+.item:last-child{margin-bottom:0;}
+
+/* ══ CODE ══ */
+code{
+  display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  background:var(--code-bg);border:1px solid var(--border);
+  border-left:2px solid rgba(255,171,0,0.5);
+  color:#ffe082;padding:4px 8px;border-radius:3px;
+  white-space:pre;line-height:1.65;overflow-x:auto;
+}
+code .kw{color:#ff9e40;}
+code .fn{color:#ffab00;}
+code .st{color:#ccff90;}
+code .cm{color:#3d3000;font-style:italic;}
+code .at{color:#40c4ff;}
+code .nu{color:#f48fb1;}
+code .bo{color:#18ffff;}
+code .me{color:#e040fb;}
+code .go{color:#76ff03;}
+code .ba{color:#ff3d00;}
+code .wh{color:#fffde7;}
+
+/* ══ MINI TABLE ══ */
+.mini-table{width:100%;border-collapse:collapse;font-size:9.5px;}
+.mini-table th{background:rgba(255,171,0,0.08);color:var(--amber);font-family:'Syne',sans-serif;
+  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;
+  padding:4px 8px;border:1px solid var(--border);text-align:left;}
+.mini-table td{padding:4px 8px;border:1px solid var(--border);color:#ffe082;vertical-align:top;}
+.mini-table tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+.am{color:var(--amber);font-weight:700;}
+.or{color:var(--orange2);font-weight:700;}
+.gn{color:var(--green);font-weight:700;}
+.re{color:var(--red);font-weight:700;}
+.bl{color:var(--blue);font-weight:700;}
+.pu{color:var(--purple);font-weight:700;}
+.cy{color:var(--cyan);font-weight:700;}
+.pk{color:var(--pink);font-weight:700;}
+.wh{color:#fff;font-weight:700;}
+
+/* ══ DEF LIST ══ */
+.def-list{display:flex;flex-direction:column;gap:4px;}
+.def-item{padding:4px 8px;background:var(--code-bg);border:1px solid var(--border);
+  border-left:2px solid var(--amber);border-radius:3px;font-size:10px;line-height:1.6;}
+.def-item.or{border-left-color:var(--orange2);}
+.def-item.gn{border-left-color:var(--green);}
+.def-item.re{border-left-color:var(--red);}
+.def-item.bl{border-left-color:var(--blue);}
+.def-item.pu{border-left-color:var(--purple);}
+.def-item.cy{border-left-color:var(--cyan);}
+.def-item.pk{border-left-color:var(--pink);}
+.def-key{color:var(--amber);font-weight:700;font-family:'Syne',sans-serif;font-size:9.5px;}
+.def-key.or{color:var(--orange2);}
+.def-key.gn{color:var(--green);}
+.def-key.re{color:var(--red);}
+.def-key.bl{color:var(--blue);}
+.def-key.pu{color:var(--purple);}
+.def-key.cy{color:var(--cyan);}
+.def-key.pk{color:var(--pink);}
+.def-val{color:#a08000;font-size:9.5px;}
+
+/* ══ METHOD BADGE ══ */
+.method{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:800;
+  font-family:'Syne',sans-serif;margin-right:4px;letter-spacing:0.5px;}
+.get{background:rgba(118,255,3,0.12);border:1px solid rgba(118,255,3,0.3);color:var(--green);}
+.post{background:rgba(255,171,0,0.12);border:1px solid rgba(255,171,0,0.3);color:var(--amber);}
+.put{background:rgba(64,196,255,0.1);border:1px solid rgba(64,196,255,0.25);color:var(--blue);}
+.patch{background:rgba(224,64,251,0.1);border:1px solid rgba(224,64,251,0.25);color:var(--purple);}
+.delete{background:rgba(255,61,0,0.1);border:1px solid rgba(255,61,0,0.25);color:var(--red);}
+.head{background:rgba(24,255,255,0.08);border:1px solid rgba(24,255,255,0.2);color:var(--cyan);}
+.options{background:rgba(244,143,177,0.08);border:1px solid rgba(244,143,177,0.2);color:var(--pink);}
+
+/* ══ STATUS CODE BADGE ══ */
+.sc{display:inline-block;padding:1px 7px;border-radius:4px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;}
+.sc2{background:rgba(118,255,3,0.1);border:1px solid rgba(118,255,3,0.2);color:var(--green);}
+.sc3{background:rgba(64,196,255,0.1);border:1px solid rgba(64,196,255,0.2);color:var(--blue);}
+.sc4{background:rgba(255,171,0,0.1);border:1px solid rgba(255,171,0,0.2);color:var(--amber);}
+.sc5{background:rgba(255,61,0,0.1);border:1px solid rgba(255,61,0,0.2);color:var(--red);}
+
+/* ══ FOOTER ══ */
+.footer{background:linear-gradient(90deg,#060400,#120f00);border-top:2px solid rgba(255,171,0,0.4);
+  padding:8px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+.footer .fl{font-size:9.5px;color:var(--muted);font-family:'Syne',sans-serif;}
+.footer .fl span{color:var(--amber);font-weight:700;}
+.footer .fr{font-size:9.5px;color:var(--muted);text-align:right;font-family:'Syne',sans-serif;}
+.footer .fr strong{color:var(--amber2);}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo-box">API<br>TEST</div>
+    <div class="title-block">
+      <h1>API Testing with <span>Postman</span> Guide</h1>
+      <p>REST API · HTTP METHODS · STATUS CODES · COLLECTIONS · ENVIRONMENTS · TESTS · AUTHENTICATION · AUTOMATION</p>
+    </div>
+  </div>
+  <div class="coach-info">
+    <div class="coach-name">🎓 Next Gen QA IT Coaching Classes</div>
+    <div class="coach-phone">📞 Mr. Khan Sir &nbsp;|&nbsp; 8700350994</div>
+    <div class="coach-tags">
+      <span class="ctag a">API Testing</span>
+      <span class="ctag o">Postman &amp; REST Assured</span>
+      <span class="ctag g">Online &amp; Offline</span>
+      <span class="ctag a">B.Tech / BCA / MCA</span>
+      <span class="ctag o">CBSE / ICSE / Polytechnic</span>
+    </div>
+    <div class="social-row">
+      <a class="slink" href="https://nextgenqa94-ui.github.io/nextgenqa">🌍 Website</a>
+      <a class="slink" href="https://www.linkedin.com/posts/next-gen-qa-8a48ba336_playwright-softwaretesting-qa-activity-7433836972202221568-4vf8">💼 LinkedIn</a>
+      <a class="slink" href="https://www.facebook.com/share/p/187KVCpEhw/">📘 Facebook</a>
+      <a class="slink" href="https://www.instagram.com/p/DVV2F-rCUZG/">📸 Instagram</a>
+      <a class="slink" href="http://youtube.com/post/UgkxQqIpyhpPA2My0o4Vdb20kxVBv4REJw3S">▶ YouTube</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ROW 1 — API BASICS ══════════ -->
+<div class="sec-div">API Basics · REST · HTTP Methods · Request Structure · Response Structure</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>What is an API?</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">API</div><div class="def-val">Application Programming Interface — a set of rules that allows one application to communicate with another. Acts as a messenger between client and server.</div></div>
+        <div class="def-item or"><div class="def-key or">REST API</div><div class="def-val">Representational State Transfer. Most popular API architecture. Uses HTTP protocol. Stateless — each request is independent.</div></div>
+        <div class="def-item gn"><div class="def-key gn">API Testing</div><div class="def-val">Directly testing the business logic at the API layer — without UI. Faster, more reliable, finds bugs early.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Endpoint</div><div class="def-val">The URL where the API can be accessed. e.g. https://api.example.com/users</div></div>
+        <div class="def-item pu"><div class="def-key pu">Base URL</div><div class="def-val">Root URL of the API. e.g. https://api.example.com — all endpoints are added after this.</div></div>
+        <div class="def-item cy"><div class="def-key cy">Client</div><div class="def-val">The one who SENDS the request. e.g. Postman, browser, mobile app.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Server</div><div class="def-val">The one who RECEIVES request and SENDS back a response with data.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct or"><div class="d"></div>HTTP Methods</div>
+      <div class="def-list">
+        <div class="def-item gn"><div class="def-key gn"><span class="method get">GET</span> Read Data</div><div class="def-val">Retrieve data from server. No request body. Safe &amp; idempotent. e.g. Get all users, Get user by ID.</div></div>
+        <div class="def-item"><div class="def-key"><span class="method post">POST</span> Create Data</div><div class="def-val">Send data to create a new resource. Has request body (JSON). Not idempotent — creates new record each time.</div></div>
+        <div class="def-item bl"><div class="def-key bl"><span class="method put">PUT</span> Update (Full)</div><div class="def-val">Update entire resource. Replaces ALL fields. If field missing — it gets deleted. Idempotent.</div></div>
+        <div class="def-item pu"><div class="def-key pu"><span class="method patch">PATCH</span> Update (Partial)</div><div class="def-val">Update ONLY specific fields. Other fields stay unchanged. More efficient than PUT.</div></div>
+        <div class="def-item re"><div class="def-key re"><span class="method delete">DELETE</span> Delete Data</div><div class="def-val">Delete a resource from server. Usually no request body. Returns 200 or 204 on success.</div></div>
+        <div class="def-item cy"><div class="def-key cy"><span class="method head">HEAD</span> Headers Only</div><div class="def-val">Same as GET but returns ONLY headers, no body. Check if resource exists without downloading.</div></div>
+        <div class="def-item pk"><div class="def-key pk"><span class="method options">OPTIONS</span> Allowed Methods</div><div class="def-val">Returns allowed HTTP methods for an endpoint. Used in CORS preflight requests.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>HTTP Request Structure</div>
+<code><span class="cm">// Complete HTTP Request Structure</span>
+
+<span class="cm">// 1. REQUEST LINE</span>
+<span class="go">GET</span> /api/users/1 <span class="wh">HTTP/1.1</span>
+
+<span class="cm">// 2. HEADERS</span>
+<span class="at">Host:</span> api.example.com
+<span class="at">Content-Type:</span> application/json
+<span class="at">Authorization:</span> Bearer eyJ...token
+<span class="at">Accept:</span> application/json
+
+<span class="cm">// 3. REQUEST BODY (POST/PUT/PATCH only)</span>
+{
+  <span class="st">"name"</span>: <span class="st">"John Doe"</span>,
+  <span class="st">"email"</span>: <span class="st">"john@example.com"</span>,
+  <span class="st">"age"</span>: <span class="nu">25</span>
+}
+
+<span class="cm">// 4. QUERY PARAMETERS (GET requests)</span>
+<span class="cm">// URL: /api/users?page=1&amp;limit=10</span>
+<span class="at">page</span>=<span class="nu">1</span>
+<span class="at">limit</span>=<span class="nu">10</span>
+<span class="at">sort</span>=<span class="st">name</span></code>
+    </div>
+
+    <div class="card">
+      <div class="ct re"><div class="d"></div>HTTP Response Structure</div>
+<code><span class="cm">// Complete HTTP Response Structure</span>
+
+<span class="cm">// 1. STATUS LINE</span>
+<span class="wh">HTTP/1.1</span> <span class="go">200 OK</span>
+
+<span class="cm">// 2. RESPONSE HEADERS</span>
+<span class="at">Content-Type:</span> application/json
+<span class="at">Content-Length:</span> 245
+<span class="at">X-Request-ID:</span> abc-123
+
+<span class="cm">// 3. RESPONSE BODY (JSON)</span>
+{
+  <span class="st">"id"</span>: <span class="nu">1</span>,
+  <span class="st">"name"</span>: <span class="st">"John Doe"</span>,
+  <span class="st">"email"</span>: <span class="st">"john@test.com"</span>,
+  <span class="st">"status"</span>: <span class="st">"active"</span>,
+  <span class="st">"createdAt"</span>: <span class="st">"2025-01-01"</span>
+}</code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>HTTP Status Codes</div>
+      <div class="item"><div class="desc">2xx — Success</div>
+        <table class="mini-table">
+          <tr><td><span class="sc sc2">200</span></td><td class="gn">OK</td><td>GET/PUT success, data returned</td></tr>
+          <tr><td><span class="sc sc2">201</span></td><td class="gn">Created</td><td>POST success, new resource created</td></tr>
+          <tr><td><span class="sc sc2">202</span></td><td class="gn">Accepted</td><td>Request accepted, processing later</td></tr>
+          <tr><td><span class="sc sc2">204</span></td><td class="gn">No Content</td><td>Success, no body returned (DELETE)</td></tr>
+        </table>
+      </div>
+      <div class="item"><div class="desc">3xx — Redirection</div>
+        <table class="mini-table">
+          <tr><td><span class="sc sc3">301</span></td><td class="bl">Moved</td><td>Resource permanently moved</td></tr>
+          <tr><td><span class="sc sc3">304</span></td><td class="bl">Not Modified</td><td>Cached version is valid</td></tr>
+        </table>
+      </div>
+      <div class="item"><div class="desc">4xx — Client Errors</div>
+        <table class="mini-table">
+          <tr><td><span class="sc sc4">400</span></td><td class="am">Bad Request</td><td>Invalid request data/syntax</td></tr>
+          <tr><td><span class="sc sc4">401</span></td><td class="am">Unauthorized</td><td>Authentication required/failed</td></tr>
+          <tr><td><span class="sc sc4">403</span></td><td class="am">Forbidden</td><td>Authenticated but no permission</td></tr>
+          <tr><td><span class="sc sc4">404</span></td><td class="am">Not Found</td><td>Resource doesn't exist</td></tr>
+          <tr><td><span class="sc sc4">405</span></td><td class="am">Method Not Allowed</td><td>HTTP method not supported</td></tr>
+          <tr><td><span class="sc sc4">409</span></td><td class="am">Conflict</td><td>Duplicate data, state conflict</td></tr>
+          <tr><td><span class="sc sc4">422</span></td><td class="am">Unprocessable</td><td>Validation failed</td></tr>
+          <tr><td><span class="sc sc4">429</span></td><td class="am">Too Many Requests</td><td>Rate limit exceeded</td></tr>
+        </table>
+      </div>
+      <div class="item"><div class="desc">5xx — Server Errors</div>
+        <table class="mini-table">
+          <tr><td><span class="sc sc5">500</span></td><td class="re">Internal Error</td><td>Server crashed/bug</td></tr>
+          <tr><td><span class="sc sc5">502</span></td><td class="re">Bad Gateway</td><td>Invalid response from upstream</td></tr>
+          <tr><td><span class="sc sc5">503</span></td><td class="re">Service Unavailable</td><td>Server down/overloaded</td></tr>
+          <tr><td><span class="sc sc5">504</span></td><td class="re">Gateway Timeout</td><td>Upstream server timeout</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 2 — POSTMAN UI + COLLECTIONS ══════════ -->
+<div class="sec-div">Postman Interface · Collections · Environments · Variables · Request Types</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Postman Interface Overview</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">Collections</div><div class="def-val">Folder to organize related API requests. e.g. "Login API", "User API". Share &amp; run as a suite.</div></div>
+        <div class="def-item or"><div class="def-key or">Workspace</div><div class="def-val">Project area where collections, environments, and APIs are stored. Personal or Team workspace.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Request Tab</div><div class="def-val">Where you build your API request — method, URL, headers, body, params, auth.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Response Panel</div><div class="def-val">Shows server response — status code, time, size, body, headers, cookies.</div></div>
+        <div class="def-item pu"><div class="def-key pu">Environment</div><div class="def-val">Set of variables for different setups — Dev, QA, Staging, Prod. Switch with one click.</div></div>
+        <div class="def-item cy"><div class="def-key cy">Runner</div><div class="def-val">Run entire collection automatically — all requests in sequence with test reports.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Console</div><div class="def-val">View request/response logs and debug scripts. Press Ctrl+Alt+C to open.</div></div>
+      </div>
+      <div style="margin-top:6px;">
+        <div class="desc">Postman Keyboard Shortcuts</div>
+        <table class="mini-table">
+          <tr><td class="am">Ctrl + N</td><td>New request</td></tr>
+          <tr><td class="am">Ctrl + S</td><td>Save request</td></tr>
+          <tr><td class="am">Ctrl + Enter</td><td>Send request</td></tr>
+          <tr><td class="am">Ctrl + Alt + C</td><td>Open Console</td></tr>
+          <tr><td class="am">Ctrl + /</td><td>Search</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct or"><div class="d"></div>Collections — Step by Step</div>
+      <div class="def-list">
+        <div class="def-item or"><div class="def-key or">Create Collection</div><div class="def-val">Left panel → Click + icon → New Collection → Name it → Add Description → Create</div></div>
+        <div class="def-item gn"><div class="def-key gn">Add Request</div><div class="def-val">Right-click Collection → Add Request → Name it → Choose Method → Enter URL → Save</div></div>
+        <div class="def-item bl"><div class="def-key bl">Add Folders</div><div class="def-val">Right-click Collection → Add Folder → Group requests by module (Login, Users, Orders)</div></div>
+        <div class="def-item pu"><div class="def-key pu">Run Collection</div><div class="def-val">Click ▶ Run button → Collection Runner opens → Select collection → Click Run</div></div>
+        <div class="def-item cy"><div class="def-key cy">Export Collection</div><div class="def-val">3 dots ⋯ next to collection → Export → Save as JSON → Share with team</div></div>
+        <div class="def-item pk"><div class="def-key pk">Import Collection</div><div class="def-val">File → Import → Select JSON file or paste URL → Collection appears in sidebar</div></div>
+      </div>
+      <div style="margin-top:6px;">
+        <div class="ct gn" style="margin-bottom:5px;"><div class="d"></div>Collection Structure</div>
+<code><span class="cm">// Recommended collection structure</span>
+📁 <span class="fn">User Management API</span>
+  📁 <span class="at">Auth</span>
+    <span class="go">POST</span> Login
+    <span class="go">POST</span> Logout
+    <span class="go">POST</span> Refresh Token
+  📁 <span class="at">Users</span>
+    <span class="kw">GET</span>  Get All Users
+    <span class="kw">GET</span>  Get User By ID
+    <span class="go">POST</span> Create User
+    <span class="bo">PUT</span>  Update User
+    <span class="ba">DEL</span>  Delete User
+  📁 <span class="at">Negative Tests</span>
+    <span class="kw">GET</span>  Invalid User ID
+    <span class="go">POST</span> Missing Fields</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Environments &amp; Variables</div>
+      <div class="def-list">
+        <div class="def-item gn"><div class="def-key gn">Create Environment</div><div class="def-val">Environments tab → + New → Name it (e.g. "QA Environment") → Add variables</div></div>
+        <div class="def-item or"><div class="def-key or">Environment Variables</div><div class="def-val">Key-value pairs. e.g. base_url = https://qa-api.example.com. Use {{base_url}} in requests.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Variable Types</div><div class="def-val">Global (all collections), Environment (current env), Collection (one collection), Local (one request)</div></div>
+      </div>
+      <div style="margin-top:6px;"><div class="desc">Setting Variables in Scripts</div>
+<code><span class="cm">// Set environment variable</span>
+pm.environment.<span class="fn">set</span>(<span class="st">"token"</span>, value);
+pm.environment.<span class="fn">set</span>(<span class="st">"userId"</span>, <span class="st">"123"</span>);
+
+<span class="cm">// Get environment variable</span>
+<span class="kw">const</span> token = pm.environment.<span class="fn">get</span>(<span class="st">"token"</span>);
+<span class="kw">const</span> url = pm.environment.<span class="fn">get</span>(<span class="st">"base_url"</span>);
+
+<span class="cm">// Set global variable</span>
+pm.globals.<span class="fn">set</span>(<span class="st">"apiKey"</span>, <span class="st">"abc123"</span>);
+<span class="kw">const</span> key = pm.globals.<span class="fn">get</span>(<span class="st">"apiKey"</span>);
+
+<span class="cm">// Set collection variable</span>
+pm.collectionVariables.<span class="fn">set</span>(<span class="st">"key"</span>, <span class="st">"val"</span>);
+
+<span class="cm">// Delete variable</span>
+pm.environment.<span class="fn">unset</span>(<span class="st">"token"</span>);
+
+<span class="cm">// Use in URL — double curly braces</span>
+<span class="cm">// URL: {{base_url}}/api/users/{{userId}}</span></code>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Request — Params, Headers, Body</div>
+      <div class="item"><div class="desc">Query Params Tab</div>
+<code><span class="cm">// Add in Params tab OR directly in URL</span>
+<span class="cm">// URL: /api/users?page=1&amp;limit=10</span>
+
+Key       | Value
+<span class="at">page</span>      | <span class="nu">1</span>
+<span class="at">limit</span>     | <span class="nu">10</span>
+<span class="at">sort</span>      | <span class="st">name</span>
+<span class="at">filter</span>    | <span class="st">active</span></code>
+      </div>
+      <div class="item"><div class="desc">Headers Tab</div>
+<code><span class="cm">// Common headers to add</span>
+<span class="at">Content-Type</span>   | application/json
+<span class="at">Authorization</span>  | Bearer {{token}}
+<span class="at">Accept</span>         | application/json
+<span class="at">X-API-Key</span>      | {{apiKey}}</code>
+      </div>
+      <div class="item"><div class="desc">Body Tab — Raw JSON (POST/PUT/PATCH)</div>
+<code><span class="cm">// Select: Body → raw → JSON</span>
+{
+  <span class="st">"name"</span>: <span class="st">"John Doe"</span>,
+  <span class="st">"email"</span>: <span class="st">"john@example.com"</span>,
+  <span class="st">"phone"</span>: <span class="st">"9876543210"</span>,
+  <span class="st">"role"</span>: <span class="st">"student"</span>,
+  <span class="st">"active"</span>: <span class="bo">true</span>
+}</code>
+      </div>
+      <div class="item"><div class="desc">Body — form-data (file upload)</div>
+<code><span class="cm">// Select: Body → form-data</span>
+Key         | Value   | Type
+<span class="at">username</span>    | john    | Text
+<span class="at">profile_pic</span> | file    | File ← click to upload</code>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 3 — POSTMAN TESTS ══════════ -->
+<div class="sec-div">Postman Tests Scripts · pm.test() · pm.expect() · Pre-request Scripts · Assertions</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Writing Tests — pm.test()</div>
+<code><span class="cm">// Basic test structure</span>
+pm.<span class="fn">test</span>(<span class="st">"Test description"</span>, <span class="kw">function</span>() {
+  pm.<span class="fn">expect</span>(value).<span class="fn">to.equal</span>(expected);
+});
+
+<span class="cm">// ── STATUS CODE TESTS ──</span>
+pm.<span class="fn">test</span>(<span class="st">"Status is 200"</span>, <span class="kw">function</span>() {
+  pm.<span class="fn">expect</span>(pm.response.code).<span class="fn">to.equal</span>(<span class="nu">200</span>);
+});
+
+pm.<span class="fn">test</span>(<span class="st">"Status is 201"</span>, () => {
+  pm.response.<span class="fn">to.have.status</span>(<span class="nu">201</span>);
+});
+
+<span class="cm">// Check status in range</span>
+pm.<span class="fn">test</span>(<span class="st">"Success response"</span>, () => {
+  pm.<span class="fn">expect</span>(pm.response.code)
+    .<span class="fn">to.be.oneOf</span>([<span class="nu">200</span>, <span class="nu">201</span>, <span class="nu">204</span>]);
+});
+
+<span class="cm">// ── RESPONSE TIME TEST ──</span>
+pm.<span class="fn">test</span>(<span class="st">"Response under 2000ms"</span>, () => {
+  pm.<span class="fn">expect</span>(pm.response.responseTime)
+    .<span class="fn">to.be.below</span>(<span class="nu">2000</span>);
+});
+
+<span class="cm">// ── RESPONSE BODY TEXT ──</span>
+pm.<span class="fn">test</span>(<span class="st">"Body has 'success'"</span>, () => {
+  pm.<span class="fn">expect</span>(pm.response.text())
+    .<span class="fn">to.include</span>(<span class="st">"success"</span>);
+});</code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct or"><div class="d"></div>JSON Response Tests</div>
+<code><span class="cm">// Parse JSON body first</span>
+<span class="kw">const</span> json = pm.response.<span class="fn">json</span>();
+
+<span class="cm">// ── VALUE ASSERTIONS ──</span>
+pm.<span class="fn">test</span>(<span class="st">"Name is John"</span>, () => {
+  pm.<span class="fn">expect</span>(json.name).<span class="fn">to.equal</span>(<span class="st">"John"</span>);
+});
+
+pm.<span class="fn">test</span>(<span class="st">"ID is a number"</span>, () => {
+  pm.<span class="fn">expect</span>(json.id).<span class="fn">to.be.a</span>(<span class="st">"number"</span>);
+});
+
+pm.<span class="fn">test</span>(<span class="st">"Email is string"</span>, () => {
+  pm.<span class="fn">expect</span>(json.email).<span class="fn">to.be.a</span>(<span class="st">"string"</span>);
+});
+
+pm.<span class="fn">test</span>(<span class="st">"Active is true"</span>, () => {
+  pm.<span class="fn">expect</span>(json.active).<span class="fn">to.be.true</span>;
+});
+
+<span class="cm">// ── NULL &amp; UNDEFINED ──</span>
+pm.<span class="fn">expect</span>(json.name).<span class="fn">to.not.be.null</span>;
+pm.<span class="fn">expect</span>(json.id).<span class="fn">to.not.be.undefined</span>;
+
+<span class="cm">// ── ARRAY TESTS ──</span>
+pm.<span class="fn">test</span>(<span class="st">"Returns array"</span>, () => {
+  pm.<span class="fn">expect</span>(json.users).<span class="fn">to.be.an</span>(<span class="st">"array"</span>);
+  pm.<span class="fn">expect</span>(json.users.length).<span class="fn">to.be.above</span>(<span class="nu">0</span>);
+  pm.<span class="fn">expect</span>(json.users).to.<span class="fn">have.lengthOf</span>(<span class="nu">10</span>);
+});
+
+<span class="cm">// ── CONTAINS CHECK ──</span>
+pm.<span class="fn">expect</span>(json.message)
+  .<span class="fn">to.include</span>(<span class="st">"created"</span>);
+pm.<span class="fn">expect</span>(json.roles)
+  .<span class="fn">to.include</span>(<span class="st">"admin"</span>);</code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Property &amp; Key Assertions</div>
+<code><span class="kw">const</span> json = pm.response.<span class="fn">json</span>();
+
+<span class="cm">// ── CHECK KEY EXISTS ──</span>
+pm.<span class="fn">test</span>(<span class="st">"Has id field"</span>, () => {
+  pm.<span class="fn">expect</span>(json).to.<span class="fn">have.property</span>(<span class="st">"id"</span>);
+});
+
+pm.<span class="fn">test</span>(<span class="st">"Has email field"</span>, () => {
+  pm.<span class="fn">expect</span>(json).to.<span class="fn">have.property</span>(<span class="st">"email"</span>);
+});
+
+<span class="cm">// ── NESTED PROPERTIES ──</span>
+pm.<span class="fn">expect</span>(json.address)
+  .to.<span class="fn">have.property</span>(<span class="st">"city"</span>);
+pm.<span class="fn">expect</span>(json.address.city)
+  .<span class="fn">to.equal</span>(<span class="st">"Delhi"</span>);
+
+<span class="cm">// ── MULTIPLE KEYS ──</span>
+pm.<span class="fn">expect</span>(json).to.<span class="fn">include.keys</span>(
+  [<span class="st">"id"</span>, <span class="st">"name"</span>, <span class="st">"email"</span>]);
+
+<span class="cm">// ── HEADER ASSERTIONS ──</span>
+pm.<span class="fn">test</span>(<span class="st">"Content-Type is JSON"</span>, () => {
+  pm.<span class="fn">expect</span>(pm.response.headers
+    .<span class="fn">get</span>(<span class="st">"Content-Type"</span>))
+    .<span class="fn">to.include</span>(<span class="st">"application/json"</span>);
+});
+
+<span class="cm">// ── SCHEMA VALIDATION ──</span>
+<span class="kw">const</span> schema = {
+  <span class="st">"type"</span>: <span class="st">"object"</span>,
+  <span class="st">"required"</span>: [<span class="st">"id"</span>, <span class="st">"name"</span>]
+};
+pm.<span class="fn">test</span>(<span class="st">"Schema valid"</span>, () => {
+  pm.<span class="fn">expect</span>(tv4.<span class="fn">validate</span>(json, schema))
+    .<span class="fn">to.be.true</span>;
+});</code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct re"><div class="d"></div>Pre-request Scripts</div>
+<code><span class="cm">// Pre-request runs BEFORE the request</span>
+<span class="cm">// Used to: set variables, generate data</span>
+
+<span class="cm">// ── SET DYNAMIC DATA ──</span>
+<span class="kw">const</span> timestamp = <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">getTime</span>();
+pm.environment.<span class="fn">set</span>(<span class="st">"timestamp"</span>, timestamp);
+
+<span class="cm">// ── GENERATE RANDOM EMAIL ──</span>
+<span class="kw">const</span> random = Math.<span class="fn">floor</span>(Math.<span class="fn">random</span>()*<span class="nu">999</span>);
+pm.environment.<span class="fn">set</span>(<span class="st">"email"</span>,
+  <span class="st">`user${random}@test.com`</span>);
+
+<span class="cm">// ── CHAIN REQUESTS ──</span>
+<span class="cm">// Save response for next request</span>
+<span class="kw">const</span> json = pm.response.<span class="fn">json</span>();
+pm.environment.<span class="fn">set</span>(<span class="st">"userId"</span>, json.id);
+pm.environment.<span class="fn">set</span>(<span class="st">"token"</span>, json.token);
+
+<span class="cm">// ── CONSOLE LOG (debug) ──</span>
+console.<span class="fn">log</span>(<span class="st">"Token:"</span>, token);
+console.<span class="fn">log</span>(<span class="st">"Response:"</span>, json);
+
+<span class="cm">// ── RUN NEXT REQUEST ──</span>
+<span class="cm">// In Tests tab — skip to specific request</span>
+postman.setNextRequest(<span class="st">"Get User by ID"</span>);
+<span class="cm">// Stop execution</span>
+postman.<span class="fn">setNextRequest</span>(<span class="bo">null</span>);</code>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 4 — AUTH + REAL REQUESTS ══════════ -->
+<div class="sec-div">Authentication · Bearer Token · API Key · Basic Auth · CRUD API Examples · JSON</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Authentication Types</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">No Auth</div><div class="def-val">Public APIs — no authentication needed. e.g. weather API, news API.</div></div>
+        <div class="def-item or"><div class="def-key or">API Key</div><div class="def-val">Pass a key in header or query param. e.g. X-API-Key: abc123 OR ?apikey=abc123</div></div>
+        <div class="def-item bl"><div class="def-key bl">Bearer Token</div><div class="def-val">Most common. Header: Authorization: Bearer eyJhbGci... JWT token after login.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Basic Auth</div><div class="def-val">Base64 encoded username:password. Authorization: Basic dXNlcjpwYXNz</div></div>
+        <div class="def-item pu"><div class="def-key pu">OAuth 2.0</div><div class="def-val">Token-based auth. Get token first → use token in subsequent requests. Used by Google, GitHub.</div></div>
+        <div class="def-item cy"><div class="def-key cy">Digest Auth</div><div class="def-val">More secure than Basic Auth. Password hashed with MD5. Not commonly used now.</div></div>
+      </div>
+      <div style="margin-top:6px;"><div class="desc">Auth Tab in Postman</div>
+<code><span class="cm">// Auth Tab → Select Type</span>
+
+<span class="cm">// Bearer Token</span>
+Type: <span class="kw">Bearer Token</span>
+Token: <span class="st">{{token}}</span>
+
+<span class="cm">// Basic Auth</span>
+Type: <span class="kw">Basic Auth</span>
+Username: <span class="st">admin</span>
+Password: <span class="st">admin123</span>
+
+<span class="cm">// API Key</span>
+Type: <span class="kw">API Key</span>
+Key: <span class="at">X-API-Key</span>
+Value: <span class="st">{{apiKey}}</span>
+Add to: <span class="kw">Header</span></code>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct or"><div class="d"></div>Complete CRUD — User API</div>
+<code><span class="cm">// BASE URL: https://api.example.com</span>
+
+<span class="cm">// ── CREATE USER (POST) ──</span>
+<span class="go">POST</span>  /api/users
+Body (JSON):
+{
+  <span class="st">"name"</span>: <span class="st">"Rahul Verma"</span>,
+  <span class="st">"email"</span>: <span class="st">"rahul@qa.com"</span>,
+  <span class="st">"phone"</span>: <span class="st">"9876543210"</span>
+}
+Expected: <span class="go">201 Created</span>
+
+<span class="cm">// ── GET ALL USERS (GET) ──</span>
+<span class="kw">GET</span>   /api/users
+Expected: <span class="go">200 OK</span> + array
+
+<span class="cm">// ── GET USER BY ID (GET) ──</span>
+<span class="kw">GET</span>   /api/users/<span class="nu">{{userId}}</span>
+Expected: <span class="go">200 OK</span> + single user
+
+<span class="cm">// ── UPDATE USER (PUT) ──</span>
+<span class="bo">PUT</span>   /api/users/<span class="nu">{{userId}}</span>
+Body: { <span class="st">"name"</span>: <span class="st">"Rahul K Verma"</span> }
+Expected: <span class="go">200 OK</span>
+
+<span class="cm">// ── PARTIAL UPDATE (PATCH) ──</span>
+<span class="me">PATCH</span> /api/users/<span class="nu">{{userId}}</span>
+Body: { <span class="st">"phone"</span>: <span class="st">"9999999999"</span> }
+Expected: <span class="go">200 OK</span>
+
+<span class="cm">// ── DELETE USER (DELETE) ──</span>
+<span class="ba">DEL</span>   /api/users/<span class="nu">{{userId}}</span>
+Expected: <span class="go">200</span> or <span class="go">204</span></code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>JSON Format — Complete Guide</div>
+<code><span class="cm">// JSON Data Types</span>
+{
+  <span class="st">"string"</span>: <span class="st">"Hello World"</span>,
+  <span class="st">"number"</span>: <span class="nu">42</span>,
+  <span class="st">"decimal"</span>: <span class="nu">3.14</span>,
+  <span class="st">"boolean"</span>: <span class="bo">true</span>,
+  <span class="st">"nullValue"</span>: <span class="bo">null</span>,
+  <span class="st">"array"</span>: [<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>],
+  <span class="st">"nested"</span>: {
+    <span class="st">"city"</span>: <span class="st">"Delhi"</span>,
+    <span class="st">"pin"</span>: <span class="st">"110001"</span>
+  }
+}
+
+<span class="cm">// Real user response JSON</span>
+{
+  <span class="st">"id"</span>: <span class="nu">101</span>,
+  <span class="st">"name"</span>: <span class="st">"Khan Sir"</span>,
+  <span class="st">"email"</span>: <span class="st">"khan@nextgenqa.com"</span>,
+  <span class="st">"role"</span>: <span class="st">"trainer"</span>,
+  <span class="st">"active"</span>: <span class="bo">true</span>,
+  <span class="st">"courses"</span>: [<span class="st">"Selenium"</span>, <span class="st">"Playwright"</span>],
+  <span class="st">"address"</span>: {
+    <span class="st">"city"</span>: <span class="st">"Delhi"</span>,
+    <span class="st">"country"</span>: <span class="st">"India"</span>
+  },
+  <span class="st">"createdAt"</span>: <span class="st">"2025-01-01T10:00:00Z"</span>
+}
+
+<span class="cm">// Array of users</span>
+[
+  { <span class="st">"id"</span>: <span class="nu">1</span>, <span class="st">"name"</span>: <span class="st">"Alice"</span> },
+  { <span class="st">"id"</span>: <span class="nu">2</span>, <span class="st">"name"</span>: <span class="st">"Bob"</span> }
+]</code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Login &amp; Token Chaining</div>
+<code><span class="cm">// STEP 1: Login request</span>
+<span class="go">POST</span> /api/auth/login
+Body:
+{
+  <span class="st">"email"</span>: <span class="st">"admin@test.com"</span>,
+  <span class="st">"password"</span>: <span class="st">"Admin@123"</span>
+}
+
+<span class="cm">// STEP 2: Save token in Tests tab</span>
+<span class="kw">const</span> json = pm.response.<span class="fn">json</span>();
+pm.environment.<span class="fn">set</span>(<span class="st">"token"</span>, json.token);
+pm.environment.<span class="fn">set</span>(<span class="st">"userId"</span>, json.user.id);
+
+<span class="cm">// STEP 3: Use token in next request</span>
+<span class="cm">// Auth Tab → Bearer Token → {{token}}</span>
+<span class="cm">// OR Headers:</span>
+<span class="at">Authorization</span>: Bearer <span class="st">{{token}}</span>
+
+<span class="cm">// STEP 4: Use userId in URL</span>
+<span class="kw">GET</span> /api/users/<span class="st">{{userId}}</span></code>
+      <div style="margin-top:7px;">
+        <div class="ct pu" style="margin-bottom:5px;"><div class="d"></div>Path vs Query Parameters</div>
+<code><span class="cm">// PATH parameter — part of URL</span>
+<span class="kw">GET</span> /api/users/<span class="nu">123</span>
+<span class="cm">// 123 is the path param (user ID)</span>
+
+<span class="cm">// QUERY parameter — after ?</span>
+<span class="kw">GET</span> /api/users?<span class="at">page</span>=<span class="nu">1</span>&amp;<span class="at">limit</span>=<span class="nu">20</span>
+
+<span class="cm">// Both combined</span>
+<span class="kw">GET</span> /api/users/<span class="nu">123</span>/orders?<span class="at">status</span>=<span class="st">paid</span></code>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 5 — NEWMAN + INTERVIEW ══════════ -->
+<div class="sec-div">Newman CLI · Collection Runner · API Testing Checklist · Interview Q&amp;A</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Newman — Run Postman from CLI</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">What is Newman?</div><div class="def-val">Command-line tool to run Postman collections without opening Postman. Used in CI/CD pipelines (Jenkins, GitHub Actions).</div></div>
+      </div>
+<code><span class="cm">// Install Newman</span>
+npm install -g newman
+
+<span class="cm">// Run a collection</span>
+newman run collection.json
+
+<span class="cm">// Run with environment</span>
+newman run collection.json \
+  -e environment.json
+
+<span class="cm">// Run with HTML report</span>
+npm install -g newman-reporter-html
+newman run collection.json \
+  -r html --reporter-html-export report.html
+
+<span class="cm">// Run specific folder</span>
+newman run collection.json \
+  --folder "Login Tests"
+
+<span class="cm">// Set iterations (run N times)</span>
+newman run collection.json -n 3
+
+<span class="cm">// Run with data file (CSV)</span>
+newman run collection.json \
+  -d testdata.csv
+
+<span class="cm">// Run with delay (ms)</span>
+newman run collection.json --delay-request 500</code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct or"><div class="d"></div>API Testing Checklist</div>
+      <div class="def-list">
+        <div class="def-item gn"><div class="def-key gn">✅ Status Code</div><div class="def-val">Verify correct HTTP status code (200, 201, 400, 404, 500 etc.) for each scenario.</div></div>
+        <div class="def-item or"><div class="def-key or">✅ Response Body</div><div class="def-val">Verify all expected fields exist with correct values and data types.</div></div>
+        <div class="def-item bl"><div class="def-key bl">✅ Response Headers</div><div class="def-val">Verify Content-Type, Auth headers, CORS headers are correct.</div></div>
+        <div class="def-item pu"><div class="def-key pu">✅ Response Time</div><div class="def-val">API should respond within acceptable limit (e.g. under 2000ms).</div></div>
+        <div class="def-item cy"><div class="def-key cy">✅ Negative Testing</div><div class="def-val">Test with invalid data, missing fields, wrong data types, unauthorized access.</div></div>
+        <div class="def-item pk"><div class="def-key pk">✅ Authentication</div><div class="def-val">Test with valid token, expired token, no token, wrong token.</div></div>
+        <div class="def-item re"><div class="def-key re">✅ Error Messages</div><div class="def-val">Verify proper error messages for 400/401/403/404/500 errors.</div></div>
+        <div class="def-item"><div class="def-key">✅ Data Validation</div><div class="def-val">Test boundary values, required fields, field length limits, special characters.</div></div>
+        <div class="def-item gn"><div class="def-key gn">✅ CRUD Operations</div><div class="def-val">Verify Create → Read → Update → Delete flow works end to end.</div></div>
+        <div class="def-item or"><div class="def-key or">✅ Idempotency</div><div class="def-val">GET, PUT, DELETE called multiple times should give same result.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Interview Q&amp;A — Part 1</div>
+      <div class="def-list">
+        <div class="def-item gn"><div class="def-key gn">Q: What is API Testing?</div><div class="def-val">Testing APIs directly at the business logic layer without UI. Validates functionality, reliability, performance, and security of APIs.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Q: GET vs POST?</div><div class="def-val">GET retrieves data (no body, idempotent). POST creates new data (has body, not idempotent). GET params in URL, POST params in body.</div></div>
+        <div class="def-item or"><div class="def-key or">Q: PUT vs PATCH?</div><div class="def-val">PUT replaces entire resource (all fields required). PATCH updates only specific fields (partial update). PATCH is more efficient.</div></div>
+        <div class="def-item pu"><div class="def-key pu">Q: What is 401 vs 403?</div><div class="def-val">401 = Not authenticated (no login/token). 403 = Authenticated but no permission (logged in but not authorized to access).</div></div>
+        <div class="def-item cy"><div class="def-key cy">Q: What is idempotent?</div><div class="def-val">Calling the same API multiple times gives the same result. GET, PUT, DELETE are idempotent. POST is NOT idempotent.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Q: What is REST API?</div><div class="def-val">Representational State Transfer — architectural style using HTTP, stateless, resource-based URLs, JSON/XML responses.</div></div>
+        <div class="def-item"><div class="def-key">Q: What to verify in API response?</div><div class="def-val">Status code, response body fields and values, data types, response time, headers, error messages.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Interview Q&amp;A — Part 2</div>
+      <div class="def-list">
+        <div class="def-item bl"><div class="def-key bl">Q: What is Postman Environment?</div><div class="def-val">Set of key-value variables for different setups (Dev/QA/Prod). Switch environments with one click. Access with {{variable}}.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Q: What is Collection Runner?</div><div class="def-val">Postman feature to run entire collection automatically. Executes all requests in sequence and shows pass/fail report.</div></div>
+        <div class="def-item or"><div class="def-key or">Q: What is Newman?</div><div class="def-val">CLI tool to run Postman collections from command line. Used in CI/CD pipelines. npm install -g newman.</div></div>
+        <div class="def-item pu"><div class="def-key pu">Q: How to chain API requests?</div><div class="def-val">In Tests tab of first request, extract value using pm.response.json() and save it using pm.environment.set(). Use {{variable}} in next request URL.</div></div>
+        <div class="def-item cy"><div class="def-key cy">Q: Path param vs Query param?</div><div class="def-val">Path param is part of URL: /users/123. Query param is after ?: /users?page=1. Path for specific resource, Query for filtering/sorting.</div></div>
+        <div class="def-item re"><div class="def-key re">Q: What is negative API testing?</div><div class="def-val">Testing with invalid inputs — wrong data types, missing required fields, expired token, unauthorized access — to verify proper error handling.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Q: What is JSON Schema validation?</div><div class="def-val">Validating API response structure matches expected schema — correct field names, data types, required fields. Done using tv4 or ajv in Postman.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="footer">
+  <div class="fl">
+    <span>API Testing with Postman</span> · REST · HTTP Methods · Status Codes · Collections · Environments · Tests · Newman · CI/CD
+  </div>
+  <div class="fr">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp;
+    🌍 nextgenqa94-ui.github.io/nextgenqa &nbsp;|&nbsp;
+    B.Tech · BCA · MCA · CBSE · ICSE · Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>

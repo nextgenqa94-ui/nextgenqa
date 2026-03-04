@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bug Report Template – JIRA Guide · Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0008;--surface:#160010;--card:#1e0016;--border:#360028;
+  --red:#ff1744;--red2:#ff6b6b;--orange:#ff6d00;--orange2:#ffab40;
+  --green:#00e676;--green2:#69ff47;--blue:#40c4ff;--blue2:#80d8ff;
+  --purple:#ea80fc;--cyan:#18ffff;--yellow:#ffff00;--pink:#ff80ab;
+  --amber:#ffd740;
+  --text:#fce4ec;--muted:#6d2040;--light:#f48fb1;--code-bg:#08000a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:11px;line-height:1.5;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:4px;}
+
+/* ══ HEADER ══ */
+.header{
+  background:linear-gradient(135deg,#080004 0%,#130009 60%,#0d0008 100%);
+  border-bottom:2px solid var(--red);padding:14px 24px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.header::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 50% 100% at 75% 50%,rgba(255,23,68,0.07) 0%,transparent 70%);pointer-events:none;}
+.header::after{content:'BUG REPORT';position:absolute;right:280px;top:50%;
+  transform:translateY(-50%);font-size:70px;font-weight:800;
+  color:rgba(255,23,68,0.03);letter-spacing:-1px;pointer-events:none;}
+.logo-wrap{display:flex;align-items:center;gap:14px;}
+.logo-box{width:54px;height:54px;background:linear-gradient(135deg,#b71c1c,#ff1744);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:#fff;
+  letter-spacing:-0.5px;box-shadow:0 0 20px rgba(255,23,68,0.45);flex-shrink:0;
+  text-align:center;line-height:1.2;}
+.title-block h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#fff;}
+.title-block h1 span{color:var(--red2);}
+.title-block p{color:var(--muted);font-size:9.5px;margin-top:2px;letter-spacing:1px;font-family:'Syne',sans-serif;}
+.coach-info{text-align:right;}
+.coach-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--amber);}
+.coach-phone{display:flex;align-items:center;gap:6px;justify-content:flex-end;color:var(--red2);font-weight:600;font-size:12px;margin-top:3px;}
+.coach-tags{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap;margin-top:5px;}
+.ctag{padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;}
+.ctag.r{background:rgba(255,23,68,0.12);border:1px solid rgba(255,23,68,0.3);color:var(--red2);}
+.ctag.a{background:rgba(255,171,64,0.12);border:1px solid rgba(255,171,64,0.3);color:var(--amber);}
+.ctag.g{background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.2);color:var(--green);}
+.social-row{display:flex;gap:8px;justify-content:flex-end;margin-top:6px;flex-wrap:wrap;}
+.slink{font-size:9px;color:var(--muted);text-decoration:none;}
+.slink:hover{color:var(--red2);}
+
+/* ══ SECTION DIVIDER ══ */
+.sec-div{
+  background:linear-gradient(90deg,rgba(255,23,68,0.15),rgba(255,23,68,0.05),transparent);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:4px 16px;font-family:'Syne',sans-serif;font-size:8.5px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--red2);
+  display:flex;align-items:center;gap:8px;
+}
+.sec-div::before{content:'▶';font-size:7px;}
+
+/* ══ GRID ══ */
+.grid {display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--border);}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);border-left:1px solid var(--border);}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);border-left:1px solid var(--border);}
+.col{border-right:1px solid var(--border);}
+.span2{grid-column:span 2;}
+
+/* ══ CARD ══ */
+.card{border-bottom:1px solid var(--border);padding:9px 11px;}
+.ct{display:flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;font-size:9.5px;
+  font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;
+  padding-bottom:5px;border-bottom:1px solid rgba(255,23,68,0.12);color:var(--red2);}
+.ct .d{width:5px;height:5px;border-radius:50%;background:var(--red2);box-shadow:0 0 6px var(--red2);flex-shrink:0;}
+.ct.or{color:var(--orange2);border-bottom-color:rgba(255,109,0,0.12);}
+.ct.or .d{background:var(--orange2);box-shadow:0 0 6px var(--orange2);}
+.ct.gn{color:var(--green);border-bottom-color:rgba(0,230,118,0.12);}
+.ct.gn .d{background:var(--green);box-shadow:0 0 6px var(--green);}
+.ct.bl{color:var(--blue);border-bottom-color:rgba(64,196,255,0.12);}
+.ct.bl .d{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+.ct.pu{color:var(--purple);border-bottom-color:rgba(234,128,252,0.12);}
+.ct.pu .d{background:var(--purple);box-shadow:0 0 6px var(--purple);}
+.ct.cy{color:var(--cyan);border-bottom-color:rgba(24,255,255,0.12);}
+.ct.cy .d{background:var(--cyan);box-shadow:0 0 6px var(--cyan);}
+.ct.pk{color:var(--pink);border-bottom-color:rgba(255,128,171,0.12);}
+.ct.pk .d{background:var(--pink);box-shadow:0 0 6px var(--pink);}
+.ct.ye{color:var(--yellow);border-bottom-color:rgba(255,255,0,0.12);}
+.ct.ye .d{background:var(--yellow);box-shadow:0 0 6px var(--yellow);}
+.ct.am{color:var(--amber);border-bottom-color:rgba(255,215,64,0.12);}
+.ct.am .d{background:var(--amber);box-shadow:0 0 6px var(--amber);}
+
+.desc{font-size:9.5px;color:var(--light);margin-bottom:4px;font-family:'Syne',sans-serif;font-weight:600;}
+.item{margin-bottom:7px;}
+.item:last-child{margin-bottom:0;}
+
+/* ══ JIRA BUG CARD ══ */
+.jira-card{background:var(--code-bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:6px;}
+.jira-header{background:rgba(255,23,68,0.1);border-bottom:1px solid var(--border);padding:5px 10px;
+  display:flex;align-items:center;justify-content:space-between;}
+.jira-id{font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--blue);}
+.jira-type{font-size:9px;font-weight:700;font-family:'Syne',sans-serif;padding:2px 7px;border-radius:4px;
+  background:rgba(255,23,68,0.15);border:1px solid rgba(255,23,68,0.3);color:var(--red2);}
+.jira-body{padding:8px 10px;}
+.jira-row{display:grid;grid-template-columns:110px 1fr;gap:4px;margin-bottom:4px;font-size:10px;}
+.jira-row:last-child{margin-bottom:0;}
+.jira-label{color:var(--muted);font-family:'Syne',sans-serif;font-weight:700;font-size:9px;text-transform:uppercase;}
+.jira-val{color:#f48fb1;}
+.jira-val.re{color:var(--red2);}
+.jira-val.or{color:var(--orange2);}
+.jira-val.am{color:var(--amber);}
+.jira-val.gn{color:var(--green);}
+.jira-val.bl{color:var(--blue);}
+.jira-val.pu{color:var(--purple);}
+.jira-val.cy{color:var(--cyan);}
+
+/* ══ CODE ══ */
+code{
+  display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  background:var(--code-bg);border:1px solid var(--border);
+  border-left:2px solid rgba(255,23,68,0.5);
+  color:#f48fb1;padding:4px 8px;border-radius:3px;
+  white-space:pre;line-height:1.65;overflow-x:auto;
+}
+code .kw{color:#ff6b6b;}
+code .fn{color:#ff1744;}
+code .st{color:#ccff90;}
+code .cm{color:#3d0020;font-style:italic;}
+code .at{color:#40c4ff;}
+code .nu{color:#ffd740;}
+code .gn{color:#00e676;}
+code .re{color:#ff1744;}
+code .am{color:#ffab40;}
+code .pu{color:#ea80fc;}
+code .cy{color:#18ffff;}
+code .ye{color:#ffff00;}
+
+/* ══ MINI TABLE ══ */
+.mini-table{width:100%;border-collapse:collapse;font-size:9.5px;}
+.mini-table th{background:rgba(255,23,68,0.08);color:var(--red2);font-family:'Syne',sans-serif;
+  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;
+  padding:4px 8px;border:1px solid var(--border);text-align:left;}
+.mini-table td{padding:4px 8px;border:1px solid var(--border);color:#f48fb1;vertical-align:top;}
+.mini-table tr:nth-child(even) td{background:rgba(255,255,255,0.015);}
+.re{color:var(--red2);font-weight:700;}
+.or{color:var(--orange2);font-weight:700;}
+.am{color:var(--amber);font-weight:700;}
+.gn{color:var(--green);font-weight:700;}
+.bl{color:var(--blue);font-weight:700;}
+.pu{color:var(--purple);font-weight:700;}
+.cy{color:var(--cyan);font-weight:700;}
+.pk{color:var(--pink);font-weight:700;}
+.ye{color:var(--yellow);font-weight:700;}
+
+/* ══ DEF LIST ══ */
+.def-list{display:flex;flex-direction:column;gap:4px;}
+.def-item{padding:4px 8px;background:var(--code-bg);border:1px solid var(--border);
+  border-left:2px solid var(--red2);border-radius:3px;font-size:10px;line-height:1.6;}
+.def-item.or{border-left-color:var(--orange2);}
+.def-item.gn{border-left-color:var(--green);}
+.def-item.bl{border-left-color:var(--blue);}
+.def-item.pu{border-left-color:var(--purple);}
+.def-item.cy{border-left-color:var(--cyan);}
+.def-item.pk{border-left-color:var(--pink);}
+.def-item.ye{border-left-color:var(--yellow);}
+.def-item.am{border-left-color:var(--amber);}
+.def-key{color:var(--red2);font-weight:700;font-family:'Syne',sans-serif;font-size:9.5px;}
+.def-key.or{color:var(--orange2);}
+.def-key.gn{color:var(--green);}
+.def-key.bl{color:var(--blue);}
+.def-key.pu{color:var(--purple);}
+.def-key.cy{color:var(--cyan);}
+.def-key.pk{color:var(--pink);}
+.def-key.ye{color:var(--yellow);}
+.def-key.am{color:var(--amber);}
+.def-val{color:#80304a;font-size:9.5px;}
+
+/* ══ SEVERITY / PRIORITY BADGES ══ */
+.sev{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:4px;
+  font-size:10px;font-weight:800;font-family:'Syne',sans-serif;}
+.sev.crit{background:rgba(255,23,68,0.15);border:1px solid rgba(255,23,68,0.4);color:var(--red);}
+.sev.maj{background:rgba(255,109,0,0.12);border:1px solid rgba(255,109,0,0.35);color:var(--orange2);}
+.sev.mod{background:rgba(255,215,64,0.1);border:1px solid rgba(255,215,64,0.3);color:var(--amber);}
+.sev.min{background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.25);color:var(--green);}
+.sev.triv{background:rgba(64,196,255,0.08);border:1px solid rgba(64,196,255,0.2);color:var(--blue);}
+
+/* ══ STATUS BADGE ══ */
+.status{display:inline-block;padding:2px 9px;border-radius:12px;font-size:9px;
+  font-weight:700;font-family:'Syne',sans-serif;}
+.st-new{background:rgba(64,196,255,0.12);border:1px solid rgba(64,196,255,0.3);color:var(--blue);}
+.st-open{background:rgba(255,109,0,0.12);border:1px solid rgba(255,109,0,0.3);color:var(--orange2);}
+.st-prog{background:rgba(234,128,252,0.1);border:1px solid rgba(234,128,252,0.3);color:var(--purple);}
+.st-fix{background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.25);color:var(--green);}
+.st-test{background:rgba(255,215,64,0.1);border:1px solid rgba(255,215,64,0.25);color:var(--amber);}
+.st-close{background:rgba(0,230,118,0.15);border:1px solid rgba(0,230,118,0.35);color:var(--green);}
+.st-reopen{background:rgba(255,23,68,0.12);border:1px solid rgba(255,23,68,0.3);color:var(--red2);}
+.st-defer{background:rgba(255,128,171,0.1);border:1px solid rgba(255,128,171,0.25);color:var(--pink);}
+.st-dup{background:rgba(128,128,128,0.12);border:1px solid rgba(128,128,128,0.25);color:#aaa;}
+.st-notbug{background:rgba(255,255,0,0.08);border:1px solid rgba(255,255,0,0.2);color:var(--yellow);}
+
+/* ══ BUG LIFECYCLE FLOW ══ */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:8px;}
+.flow-box{padding:5px 10px;border-radius:6px;font-size:10px;font-weight:700;
+  font-family:'Syne',sans-serif;text-align:center;flex:1;min-width:70px;}
+.flow-arrow{color:var(--muted);font-size:14px;flex-shrink:0;}
+.fb1{background:rgba(64,196,255,0.1);border:1px solid rgba(64,196,255,0.25);color:var(--blue);}
+.fb2{background:rgba(255,109,0,0.1);border:1px solid rgba(255,109,0,0.25);color:var(--orange2);}
+.fb3{background:rgba(234,128,252,0.1);border:1px solid rgba(234,128,252,0.25);color:var(--purple);}
+.fb4{background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.2);color:var(--green);}
+.fb5{background:rgba(255,215,64,0.1);border:1px solid rgba(255,215,64,0.2);color:var(--amber);}
+.fb6{background:rgba(0,230,118,0.15);border:1px solid rgba(0,230,118,0.35);color:var(--green);}
+.fb7{background:rgba(255,23,68,0.12);border:1px solid rgba(255,23,68,0.3);color:var(--red2);}
+
+/* ══ FOOTER ══ */
+.footer{background:linear-gradient(90deg,#060003,#130009);border-top:2px solid rgba(255,23,68,0.4);
+  padding:8px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+.footer .fl{font-size:9.5px;color:var(--muted);font-family:'Syne',sans-serif;}
+.footer .fl span{color:var(--red2);font-weight:700;}
+.footer .fr{font-size:9.5px;color:var(--muted);text-align:right;font-family:'Syne',sans-serif;}
+.footer .fr strong{color:var(--amber);}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo-box">BUG<br>JIRA</div>
+    <div class="title-block">
+      <h1>Bug Report Template — <span>JIRA Guide</span></h1>
+      <p>BUG REPORT · BUG LIFECYCLE · SEVERITY · PRIORITY · JIRA FIELDS · SAMPLE BUGS · INTERVIEW READY</p>
+    </div>
+  </div>
+  <div class="coach-info">
+    <div class="coach-name">🎓 Next Gen QA IT Coaching Classes</div>
+    <div class="coach-phone">📞 Mr. Khan Sir &nbsp;|&nbsp; 8700350994</div>
+    <div class="coach-tags">
+      <span class="ctag r">Manual Testing</span>
+      <span class="ctag a">JIRA &amp; Bug Tracking</span>
+      <span class="ctag g">Online &amp; Offline</span>
+      <span class="ctag r">B.Tech / BCA / MCA</span>
+      <span class="ctag a">CBSE / ICSE / Polytechnic</span>
+    </div>
+    <div class="social-row">
+      <a class="slink" href="https://nextgenqa94-ui.github.io/nextgenqa">🌍 Website</a>
+      <a class="slink" href="https://www.linkedin.com/posts/next-gen-qa-8a48ba336_playwright-softwaretesting-qa-activity-7433836972202221568-4vf8">💼 LinkedIn</a>
+      <a class="slink" href="https://www.facebook.com/share/p/187KVCpEhw/">📘 Facebook</a>
+      <a class="slink" href="https://www.instagram.com/p/DVV2F-rCUZG/">📸 Instagram</a>
+      <a class="slink" href="http://youtube.com/post/UgkxQqIpyhpPA2My0o4Vdb20kxVBv4REJw3S">▶ YouTube</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ROW 1 — BUG REPORT TEMPLATE + JIRA CARD ══════════ -->
+<div class="sec-div">Bug Report Template · All Fields Explained · Sample JIRA Bug Cards</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Bug Report — All Fields</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">🆔 Bug ID</div><div class="def-val">Unique identifier. e.g. BUG-101, LOGIN-005, PAYMENT-003. Auto-generated in JIRA.</div></div>
+        <div class="def-item or"><div class="def-key or">📌 Bug Title / Summary</div><div class="def-val">Short, clear description. Format: [Module] – What is wrong. e.g. "Login – Valid user gets 'Invalid credentials' error"</div></div>
+        <div class="def-item bl"><div class="def-key bl">📋 Description</div><div class="def-val">Detailed explanation of the bug — what happened, when it happens, how frequently.</div></div>
+        <div class="def-item gn"><div class="def-key gn">🔁 Steps to Reproduce</div><div class="def-val">Numbered step-by-step actions to see the bug. Must be clear so developer can reproduce it exactly.</div></div>
+        <div class="def-item pu"><div class="def-key pu">✅ Expected Result</div><div class="def-val">What SHOULD happen as per requirements or design. Be specific and measurable.</div></div>
+        <div class="def-item re"><div class="def-key re">❌ Actual Result</div><div class="def-val">What ACTUALLY happened — the bug behavior observed. Copy exact error messages if any.</div></div>
+        <div class="def-item am"><div class="def-key am">🔴 Severity</div><div class="def-val">How badly does the bug impact functionality? Critical / Major / Moderate / Minor / Trivial. Set by Tester.</div></div>
+        <div class="def-item cy"><div class="def-key cy">⚡ Priority</div><div class="def-val">How urgently should it be fixed? P1-High / P2-Medium / P3-Low. Set by Product Manager / Team Lead.</div></div>
+        <div class="def-item pk"><div class="def-key pk">🌐 Environment</div><div class="def-val">OS, Browser, Version, Device. e.g. Windows 11, Chrome 120, QA Environment v2.3</div></div>
+        <div class="def-item ye"><div class="def-key ye">📎 Attachments</div><div class="def-val">Screenshot, screen recording, log files, HAR file. Visual proof is essential!</div></div>
+        <div class="def-item"><div class="def-key">📦 Build Version</div><div class="def-val">Version/build where bug was found. e.g. v2.3.1, Build #1045</div></div>
+        <div class="def-item gn"><div class="def-key gn">🏷️ Labels / Tags</div><div class="def-val">Keywords for searching. e.g. login, regression, payment, mobile</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct or"><div class="d"></div>Sample JIRA Bug — Login Issue</div>
+      <div class="jira-card">
+        <div class="jira-header">
+          <span class="jira-id">🐞 BUG-101</span>
+          <span class="jira-type">🔴 Bug</span>
+        </div>
+        <div class="jira-body">
+          <div class="jira-row"><div class="jira-label">Summary</div><div class="jira-val">Login — Valid credentials show "Invalid Password" error</div></div>
+          <div class="jira-row"><div class="jira-label">Module</div><div class="jira-val bl">Authentication / Login</div></div>
+          <div class="jira-row"><div class="jira-label">Environment</div><div class="jira-val cy">Windows 11 · Chrome 120 · QA v2.3.1</div></div>
+          <div class="jira-row"><div class="jira-label">Steps</div><div class="jira-val">1. Open https://app.example.com/login<br>2. Enter Email: admin@test.com<br>3. Enter Password: Admin@123<br>4. Click "Login" button</div></div>
+          <div class="jira-row"><div class="jira-label">Expected</div><div class="jira-val gn">User is redirected to Dashboard page</div></div>
+          <div class="jira-row"><div class="jira-label">Actual</div><div class="jira-val re">Error message shows: "Invalid Password. Please try again."</div></div>
+          <div class="jira-row"><div class="jira-label">Severity</div><div class="jira-val re">🔴 Critical</div></div>
+          <div class="jira-row"><div class="jira-label">Priority</div><div class="jira-val re">⚡ P1 – High</div></div>
+          <div class="jira-row"><div class="jira-label">Status</div><div class="jira-val bl"><span class="status st-new">New</span></div></div>
+          <div class="jira-row"><div class="jira-label">Reported By</div><div class="jira-val">QA Tester – Khan Sir</div></div>
+          <div class="jira-row"><div class="jira-label">Date</div><div class="jira-val">04-Mar-2026</div></div>
+          <div class="jira-row"><div class="jira-label">Attachment</div><div class="jira-val am">📸 login_bug_screenshot.png</div></div>
+          <div class="jira-row"><div class="jira-label">Build</div><div class="jira-val">v2.3.1 · Build #1045</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Sample JIRA Bug — Payment Issue</div>
+      <div class="jira-card">
+        <div class="jira-header">
+          <span class="jira-id">🐞 BUG-102</span>
+          <span class="jira-type">🟠 Bug</span>
+        </div>
+        <div class="jira-body">
+          <div class="jira-row"><div class="jira-label">Summary</div><div class="jira-val">Checkout — Order total shows wrong amount after discount</div></div>
+          <div class="jira-row"><div class="jira-label">Module</div><div class="jira-val bl">Payment / Checkout</div></div>
+          <div class="jira-row"><div class="jira-label">Environment</div><div class="jira-val cy">MacOS 14 · Safari 17 · Staging v3.1</div></div>
+          <div class="jira-row"><div class="jira-label">Steps</div><div class="jira-val">1. Login to account<br>2. Add item worth ₹1000 to cart<br>3. Apply coupon code: SAVE10<br>4. Proceed to checkout<br>5. Check total amount</div></div>
+          <div class="jira-row"><div class="jira-label">Expected</div><div class="jira-val gn">Total should be ₹900 (10% discount applied)</div></div>
+          <div class="jira-row"><div class="jira-label">Actual</div><div class="jira-val re">Total shows ₹1000 — discount not applied</div></div>
+          <div class="jira-row"><div class="jira-label">Severity</div><div class="jira-val or">🟠 Major</div></div>
+          <div class="jira-row"><div class="jira-label">Priority</div><div class="jira-val re">⚡ P1 – High</div></div>
+          <div class="jira-row"><div class="jira-label">Status</div><div class="jira-val or"><span class="status st-open">Assigned</span></div></div>
+          <div class="jira-row"><div class="jira-label">Assigned To</div><div class="jira-val">Dev – Rajesh Kumar</div></div>
+          <div class="jira-row"><div class="jira-label">Attachment</div><div class="jira-val am">🎬 checkout_recording.mp4</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Sample JIRA Bug — UI Issue</div>
+      <div class="jira-card">
+        <div class="jira-header">
+          <span class="jira-id">🐞 BUG-103</span>
+          <span class="jira-type">🟡 Bug</span>
+        </div>
+        <div class="jira-body">
+          <div class="jira-row"><div class="jira-label">Summary</div><div class="jira-val">Homepage — Company logo not displaying on mobile view</div></div>
+          <div class="jira-row"><div class="jira-label">Module</div><div class="jira-val bl">UI / Homepage</div></div>
+          <div class="jira-row"><div class="jira-label">Environment</div><div class="jira-val cy">iPhone 14 · Safari 17 · iOS 17 · QA v2.3.1</div></div>
+          <div class="jira-row"><div class="jira-label">Steps</div><div class="jira-val">1. Open site on iPhone 14<br>2. Navigate to homepage<br>3. Check header section</div></div>
+          <div class="jira-row"><div class="jira-label">Expected</div><div class="jira-val gn">Company logo visible in header</div></div>
+          <div class="jira-row"><div class="jira-label">Actual</div><div class="jira-val re">Logo area shows broken image icon</div></div>
+          <div class="jira-row"><div class="jira-label">Severity</div><div class="jira-val am">🟡 Minor</div></div>
+          <div class="jira-row"><div class="jira-label">Priority</div><div class="jira-val re">⚡ P1 – High (Brand visibility)</div></div>
+          <div class="jira-row"><div class="jira-label">Status</div><div class="jira-val pu"><span class="status st-prog">In Progress</span></div></div>
+          <div class="jira-row"><div class="jira-label">Fix Version</div><div class="jira-val">v2.3.2 – Sprint 14</div></div>
+          <div class="jira-row"><div class="jira-label">Attachment</div><div class="jira-val am">📸 logo_mobile_broken.png</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 2 — SEVERITY + PRIORITY + LIFECYCLE ══════════ -->
+<div class="sec-div">Severity Levels · Priority Levels · Severity vs Priority Matrix · Classic Combinations</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Severity Levels — Set by Tester</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key"><span class="sev crit">🔴 Critical (S1)</span></div><div class="def-val">Application completely crashes or data is lost. No workaround available. Testing must STOP. e.g. Payment fails, app crashes on login, database error.</div></div>
+        <div class="def-item or"><div class="def-key or"><span class="sev maj">🟠 Major (S2)</span></div><div class="def-val">Major feature broken. Workaround exists but is difficult. Core functionality impacted. e.g. Search returns wrong results, user cannot upload files.</div></div>
+        <div class="def-item am"><div class="def-key am"><span class="sev mod">🟡 Moderate (S3)</span></div><div class="def-val">Partial feature failure. Easy workaround available. Some functionality affected. e.g. Filter not working on one page, wrong date format shown.</div></div>
+        <div class="def-item gn"><div class="def-key gn"><span class="sev min">🟢 Minor (S4)</span></div><div class="def-val">Small UI issue or cosmetic problem. Does not affect functionality. e.g. Button color is wrong, text is misaligned, spelling error.</div></div>
+        <div class="def-item bl"><div class="def-key bl"><span class="sev triv">🔵 Trivial (S5)</span></div><div class="def-val">Very minor visual issue. Barely noticeable. e.g. Extra space in footer, tooltip text slightly off-center.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct or"><div class="d"></div>Priority Levels — Set by Manager/PO</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key re">⚡ P1 — Critical / Immediate</div><div class="def-val">Fix NOW. Cannot ship without this fix. Show-stopper bug. Drop everything else. e.g. Production is down, data corruption.</div></div>
+        <div class="def-item or"><div class="def-key or">🔥 P2 — High</div><div class="def-val">Fix in current sprint. Important feature is broken. High business impact. e.g. Registration not working, wrong price displayed.</div></div>
+        <div class="def-item am"><div class="def-key am">📌 P3 — Medium</div><div class="def-val">Fix in next sprint. Feature is degraded but workaround available. e.g. Export CSV has wrong column order.</div></div>
+        <div class="def-item gn"><div class="def-key gn">📋 P4 — Low</div><div class="def-val">Fix when time permits. Minor issue. Does not affect user experience significantly. e.g. Hover animation jerky on old browser.</div></div>
+      </div>
+      <div style="margin-top:8px;">
+        <div class="ct pu" style="margin-bottom:5px;"><div class="d"></div>Severity vs Priority — Key Difference</div>
+        <table class="mini-table">
+          <tr><th>Severity</th><th>Priority</th></tr>
+          <tr><td>Technical impact</td><td>Business importance</td></tr>
+          <tr><td class="re">Set by QA Tester</td><td class="bl">Set by Product Manager</td></tr>
+          <tr><td>How bad is the bug?</td><td>How soon to fix it?</td></tr>
+          <tr><td>Based on functionality</td><td>Based on business need</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Severity vs Priority — All Combinations</div>
+      <table class="mini-table">
+        <tr><th>Scenario</th><th>Severity</th><th>Priority</th><th>Why?</th></tr>
+        <tr>
+          <td>Payment system crash</td>
+          <td><span class="sev crit" style="font-size:9px;padding:1px 5px;">Critical</span></td>
+          <td class="re">P1 High</td>
+          <td>Core business feature</td>
+        </tr>
+        <tr>
+          <td>Homepage logo missing</td>
+          <td><span class="sev min" style="font-size:9px;padding:1px 5px;">Minor</span></td>
+          <td class="re">P1 High</td>
+          <td>Brand image matters</td>
+        </tr>
+        <tr>
+          <td>Crash in rarely-used report</td>
+          <td><span class="sev crit" style="font-size:9px;padding:1px 5px;">Critical</span></td>
+          <td class="gn">P4 Low</td>
+          <td>Feature rarely used</td>
+        </tr>
+        <tr>
+          <td>Footer spelling mistake</td>
+          <td><span class="sev triv" style="font-size:9px;padding:1px 5px;">Trivial</span></td>
+          <td class="gn">P4 Low</td>
+          <td>No user impact</td>
+        </tr>
+        <tr>
+          <td>Wrong price in cart</td>
+          <td><span class="sev maj" style="font-size:9px;padding:1px 5px;">Major</span></td>
+          <td class="re">P1 High</td>
+          <td>Financial impact</td>
+        </tr>
+        <tr>
+          <td>Dark mode color off</td>
+          <td><span class="sev min" style="font-size:9px;padding:1px 5px;">Minor</span></td>
+          <td class="am">P3 Med</td>
+          <td>UX but not breaking</td>
+        </tr>
+        <tr>
+          <td>API crashes under load</td>
+          <td><span class="sev crit" style="font-size:9px;padding:1px 5px;">Critical</span></td>
+          <td class="or">P2 High</td>
+          <td>Affects scalability</td>
+        </tr>
+        <tr>
+          <td>Old browser animation bug</td>
+          <td><span class="sev mod" style="font-size:9px;padding:1px 5px;">Moderate</span></td>
+          <td class="gn">P4 Low</td>
+          <td>Small user base</td>
+        </tr>
+      </table>
+      <div style="margin-top:5px;font-size:9.5px;color:var(--muted);font-style:italic;font-family:'Syne',sans-serif;">
+        ⚠️ High Severity ≠ High Priority always! Business context decides Priority.
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Bug Lifecycle — All States</div>
+      <div class="def-list">
+        <div class="def-item bl"><div class="def-key bl"><span class="status st-new">New</span></div><div class="def-val">Bug discovered and logged by QA tester for first time.</div></div>
+        <div class="def-item or"><div class="def-key or"><span class="status st-open">Assigned</span></div><div class="def-val">Bug reviewed and assigned to developer by Team Lead.</div></div>
+        <div class="def-item pu"><div class="def-key pu"><span class="status st-prog">Open / In Progress</span></div><div class="def-val">Developer is actively working on fixing the bug.</div></div>
+        <div class="def-item gn"><div class="def-key gn"><span class="status st-fix">Fixed / Resolved</span></div><div class="def-val">Developer has fixed the bug and moved it for testing.</div></div>
+        <div class="def-item am"><div class="def-key am"><span class="status st-test">Ready for Retest</span></div><div class="def-val">Fix is deployed to QA environment. Tester must retest.</div></div>
+        <div class="def-item gn"><div class="def-key gn"><span class="status st-close">Verified / Closed</span></div><div class="def-val">Tester confirms fix works. Bug is officially closed.</div></div>
+        <div class="def-item"><div class="def-key re"><span class="status st-reopen">Reopened</span></div><div class="def-val">Bug still exists after fix. Sent back to developer.</div></div>
+        <div class="def-item pk"><div class="def-key pk"><span class="status st-defer">Deferred</span></div><div class="def-val">Valid bug but postponed to next release. Low priority or resource constraint.</div></div>
+        <div class="def-item ye"><div class="def-key ye"><span class="status st-notbug">Not a Bug / Rejected</span></div><div class="def-val">Developer says it works as designed. Discussed with team for final decision.</div></div>
+        <div class="def-item"><div class="def-key"><span class="status st-dup">Duplicate</span></div><div class="def-val">Same bug already reported by another tester. Linked to original bug.</div></div>
+        <div class="def-item bl"><div class="def-key bl"><span class="status st-prog">Cannot Reproduce</span></div><div class="def-val">Developer cannot reproduce the bug. Tester must provide more details / steps.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 3 — FULL BUG LIFECYCLE + JIRA FIELDS ══════════ -->
+<div class="sec-div">Bug Lifecycle Flow · JIRA Issue Fields · Writing Good Bug Titles · Good vs Bad Examples</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Bug Lifecycle — Full Flow</div>
+      <div class="desc">Who does what at each stage</div>
+      <table class="mini-table">
+        <tr><th>Stage</th><th>Status</th><th>Who</th><th>Action</th></tr>
+        <tr><td>1</td><td><span class="status st-new">New</span></td><td class="re">QA Tester</td><td>Reports bug in JIRA</td></tr>
+        <tr><td>2</td><td><span class="status st-open">Assigned</span></td><td class="bl">Team Lead</td><td>Reviews &amp; assigns to Dev</td></tr>
+        <tr><td>3</td><td><span class="status st-prog">In Progress</span></td><td class="pu">Developer</td><td>Analyzes and fixes bug</td></tr>
+        <tr><td>4</td><td><span class="status st-fix">Resolved</span></td><td class="pu">Developer</td><td>Marks fixed, notifies QA</td></tr>
+        <tr><td>5</td><td><span class="status st-test">Ready to Retest</span></td><td class="am">QA Tester</td><td>Retests the fix</td></tr>
+        <tr><td>6a</td><td><span class="status st-close">Verified/Closed</span></td><td class="re">QA Tester</td><td>Fix confirmed ✅</td></tr>
+        <tr><td>6b</td><td><span class="status st-reopen">Reopened</span></td><td class="re">QA Tester</td><td>Bug still exists ❌</td></tr>
+        <tr><td>7</td><td><span class="status st-defer">Deferred</span></td><td class="bl">Manager/PO</td><td>Moved to next release</td></tr>
+      </table>
+      <div style="margin-top:7px;">
+        <div class="desc">Lifecycle Flow Diagram</div>
+        <div class="flow">
+          <div class="flow-box fb1">New</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box fb2">Assigned</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box fb3">In Progress</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box fb4">Fixed</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box fb5">Retest</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box fb6">Closed</div>
+        </div>
+        <div class="flow" style="padding-top:2px;">
+          <div style="font-size:9px;color:var(--muted);width:100%;">↳ If fix fails: Retest → <span class="re" style="font-weight:700;">Reopened</span> → Back to In Progress → Fixed again</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct or"><div class="d"></div>JIRA — All Bug Fields</div>
+      <table class="mini-table">
+        <tr><th>Field</th><th>Description</th><th>Example</th></tr>
+        <tr><td class="re">Issue Type</td><td>Type of issue</td><td>Bug, Story, Task, Epic</td></tr>
+        <tr><td class="or">Summary</td><td>Bug title</td><td>Login – Error on valid cred</td></tr>
+        <tr><td class="am">Description</td><td>Full details</td><td>Steps + Expected + Actual</td></tr>
+        <tr><td class="gn">Assignee</td><td>Who will fix it</td><td>Dev name</td></tr>
+        <tr><td class="bl">Reporter</td><td>Who found it</td><td>QA Tester name</td></tr>
+        <tr><td class="pu">Priority</td><td>How urgent</td><td>P1/P2/P3/P4</td></tr>
+        <tr><td class="cy">Severity</td><td>How critical</td><td>Critical/Major/Minor</td></tr>
+        <tr><td class="re">Status</td><td>Current state</td><td>New/Open/Fixed/Closed</td></tr>
+        <tr><td class="or">Labels</td><td>Tags/keywords</td><td>login, regression, mobile</td></tr>
+        <tr><td class="am">Component</td><td>Module</td><td>Login, Payment, UI</td></tr>
+        <tr><td class="gn">Fix Version</td><td>When to fix</td><td>v2.4, Sprint 15</td></tr>
+        <tr><td class="bl">Affects Version</td><td>Bug found in</td><td>v2.3.1</td></tr>
+        <tr><td class="pu">Sprint</td><td>Current sprint</td><td>Sprint 14 – March 2026</td></tr>
+        <tr><td class="cy">Story Points</td><td>Effort estimate</td><td>1, 2, 3, 5, 8, 13</td></tr>
+        <tr><td class="re">Epic Link</td><td>Parent epic</td><td>User Auth Epic</td></tr>
+        <tr><td class="or">Linked Issues</td><td>Related bugs</td><td>Blocks BUG-98, Clones BUG-80</td></tr>
+        <tr><td class="am">Watcher</td><td>Gets notified</td><td>Team Lead, PO</td></tr>
+        <tr><td class="gn">Due Date</td><td>Fix deadline</td><td>10-Mar-2026</td></tr>
+        <tr><td class="bl">Attachment</td><td>Files/screenshots</td><td>bug.png, video.mp4, log.txt</td></tr>
+        <tr><td class="pu">Environment</td><td>Where found</td><td>QA, Staging, Production</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Writing Good Bug Titles</div>
+      <div class="desc">Format: [Module] – [Action] – [What went wrong]</div>
+      <div class="def-list">
+        <div class="def-item gn"><div class="def-key gn">✅ Good Title Formula</div><div class="def-val">[Module] – [What user does] – [What goes wrong]</div></div>
+      </div>
+      <div style="margin-top:7px;">
+        <table class="mini-table">
+          <tr><th class="re">❌ Bad Title</th><th class="gn">✅ Good Title</th></tr>
+          <tr><td class="re">Login not working</td><td class="gn">Login – Valid user gets 'Invalid credentials' error</td></tr>
+          <tr><td class="re">Button broken</td><td class="gn">Register – 'Submit' button disabled after filling all fields</td></tr>
+          <tr><td class="re">Page crash</td><td class="gn">Dashboard – Page crashes when clicking 'Export' with 0 records</td></tr>
+          <tr><td class="re">Wrong price</td><td class="gn">Cart – Total shows ₹1000 instead of ₹900 after SAVE10 coupon</td></tr>
+          <tr><td class="re">Logo gone</td><td class="gn">Homepage – Company logo not visible on iPhone 14 (Safari 17)</td></tr>
+          <tr><td class="re">Search error</td><td class="gn">Search – Empty results returned for valid keyword "selenium"</td></tr>
+          <tr><td class="re">Email issue</td><td class="gn">Registration – Confirmation email not sent after successful signup</td></tr>
+        </table>
+      </div>
+      <div style="margin-top:6px;">
+        <div class="ct am" style="margin-bottom:5px;"><div class="d"></div>Steps to Reproduce — Tips</div>
+        <div class="def-list">
+          <div class="def-item am"><div class="def-key am">✅ Be Specific</div><div class="def-val">Write exact values used — URL, username, button name, exact input.</div></div>
+          <div class="def-item gn"><div class="def-key gn">✅ Number Every Step</div><div class="def-val">1. Open URL → 2. Enter data → 3. Click button. Each action = one step.</div></div>
+          <div class="def-item bl"><div class="def-key bl">✅ Mention Preconditions</div><div class="def-val">State what needs to be set up first. e.g. "User must be logged in", "Cart must have items".</div></div>
+          <div class="def-item re"><div class="def-key re">❌ Don't Skip Steps</div><div class="def-val">Developer must be able to reproduce EXACTLY what you did. Missing steps = unreproducible bug.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Complete Bug Report — Written Format</div>
+<code><span class="cm">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="ye">BUG REPORT</span>
+<span class="cm">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+
+<span class="at">Bug ID       :</span> <span class="gn">BUG-204</span>
+<span class="at">Project      :</span> E-Commerce App
+<span class="at">Module       :</span> User Registration
+<span class="at">Build        :</span> v3.2.0 · Build #2048
+<span class="at">Date         :</span> 04-Mar-2026
+<span class="at">Reported By  :</span> QA – Khan Sir
+<span class="at">Assigned To  :</span> Dev – Priya Sharma
+<span class="at">Environment  :</span> Windows 11 · Chrome 121 · QA env
+
+<span class="cm">────────────────────────────────────</span>
+<span class="re">SUMMARY</span>
+<span class="cm">────────────────────────────────────</span>
+Register – "Submit" button stays disabled
+even after filling all required fields correctly
+
+<span class="cm">────────────────────────────────────</span>
+<span class="am">PRECONDITIONS</span>
+<span class="cm">────────────────────────────────────</span>
+User is NOT registered. Browser is open.
+
+<span class="cm">────────────────────────────────────</span>
+<span class="pu">STEPS TO REPRODUCE</span>
+<span class="cm">────────────────────────────────────</span>
+<span class="nu">1.</span> Go to https://app.example.com/register
+<span class="nu">2.</span> Enter Name: John Doe
+<span class="nu">3.</span> Enter Email: john@test.com
+<span class="nu">4.</span> Enter Password: Test@1234
+<span class="nu">5.</span> Enter Confirm Password: Test@1234
+<span class="nu">6.</span> Check "I agree to Terms" checkbox
+<span class="nu">7.</span> Observe Submit button
+
+<span class="cm">────────────────────────────────────</span>
+<span class="gn">EXPECTED RESULT</span>
+<span class="cm">────────────────────────────────────</span>
+Submit button becomes clickable (enabled)
+
+<span class="cm">────────────────────────────────────</span>
+<span class="re">ACTUAL RESULT</span>
+<span class="cm">────────────────────────────────────</span>
+Submit button remains DISABLED (greyed out)
+User cannot complete registration
+
+<span class="cm">────────────────────────────────────</span>
+<span class="at">SEVERITY     :</span> <span class="re">Critical (S1)</span>
+<span class="at">PRIORITY     :</span> <span class="re">P1 – High</span>
+<span class="at">STATUS       :</span> <span class="am">New</span>
+<span class="at">ATTACHMENT   :</span> register_bug.png
+<span class="cm">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span></code>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 4 — JIRA NAVIGATION + INTERVIEW Q&A ══════════ -->
+<div class="sec-div">JIRA Navigation · Issue Types · Workflows · Filters · Interview Questions &amp; Answers</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>JIRA Navigation — QA Guide</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">Create Issue (Bug)</div><div class="def-val">Press <span class="bl">C</span> key OR click <span class="bl">+ Create</span> button → Select Issue Type: Bug → Fill fields → Submit</div></div>
+        <div class="def-item or"><div class="def-key or">View My Issues</div><div class="def-val">My Work → Your Issues → Shows all bugs assigned to you</div></div>
+        <div class="def-item gn"><div class="def-key gn">Board View</div><div class="def-val">Project → Board → See all issues in Kanban/Scrum columns: To Do | In Progress | Done</div></div>
+        <div class="def-item bl"><div class="def-key bl">Backlog View</div><div class="def-val">Project → Backlog → All unstarted issues sorted by priority</div></div>
+        <div class="def-item pu"><div class="def-key pu">Filter Issues</div><div class="def-val">Use JQL: <span class="cy">issuetype = Bug AND status = Open AND priority = High</span></div></div>
+        <div class="def-item cy"><div class="def-key cy">Link Issues</div><div class="def-val">Open bug → Link → Choose: Blocks / Clones / Duplicates / Relates to → Enter bug ID</div></div>
+        <div class="def-item pk"><div class="def-key pk">Transition Status</div><div class="def-val">Open bug → Click status button → Move: New → Assigned → In Progress → Resolved</div></div>
+      </div>
+      <div style="margin-top:6px;">
+        <div class="desc">JIRA Keyboard Shortcuts</div>
+        <table class="mini-table">
+          <tr><td class="re">C</td><td>Create new issue</td><td class="re">G + B</td><td>Go to board</td></tr>
+          <tr><td class="or">E</td><td>Edit current issue</td><td class="or">G + I</td><td>Go to backlog</td></tr>
+          <tr><td class="am">L</td><td>Add label</td><td class="am">/ (slash)</td><td>Quick search</td></tr>
+          <tr><td class="gn">A</td><td>Assign to me</td><td class="gn">M</td><td>Add comment</td></tr>
+          <tr><td class="bl">?</td><td>View all shortcuts</td><td class="bl">Z</td><td>Undo last action</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct or"><div class="d"></div>JIRA Issue Types &amp; JQL</div>
+      <div class="item"><div class="desc">Issue Types in JIRA</div>
+        <table class="mini-table">
+          <tr><th>Type</th><th>Icon</th><th>Use For</th></tr>
+          <tr><td class="re">Bug</td><td>🐞</td><td>Defect found during testing</td></tr>
+          <tr><td class="bl">Story</td><td>📖</td><td>User feature/requirement</td></tr>
+          <tr><td class="am">Task</td><td>✅</td><td>Non-feature work item</td></tr>
+          <tr><td class="pu">Epic</td><td>⚡</td><td>Large feature group</td></tr>
+          <tr><td class="gn">Sub-task</td><td>🔹</td><td>Part of a Story/Bug</td></tr>
+          <tr><td class="cy">Improvement</td><td>💡</td><td>Enhancement to existing</td></tr>
+          <tr><td class="pk">Test</td><td>🧪</td><td>Test case (Zephyr/Xray)</td></tr>
+        </table>
+      </div>
+      <div class="item"><div class="desc">JQL — JIRA Query Language</div>
+<code><span class="cm">// All open bugs</span>
+<span class="at">issuetype</span> = Bug <span class="kw">AND</span> <span class="at">status</span> = Open
+
+<span class="cm">// Critical bugs only</span>
+<span class="at">priority</span> = <span class="st">"Critical"</span> <span class="kw">AND</span>
+<span class="at">issuetype</span> = Bug
+
+<span class="cm">// My bugs this sprint</span>
+<span class="at">assignee</span> = currentUser() <span class="kw">AND</span>
+<span class="at">sprint</span> = openSprints()
+
+<span class="cm">// Bugs in Login module</span>
+<span class="at">component</span> = <span class="st">"Login"</span> <span class="kw">AND</span>
+<span class="at">issuetype</span> = Bug
+
+<span class="cm">// Recently updated bugs</span>
+<span class="at">issuetype</span> = Bug <span class="kw">AND</span>
+<span class="at">updated</span> >= -7d
+
+<span class="cm">// Reopened bugs</span>
+<span class="at">issuetype</span> = Bug <span class="kw">AND</span>
+<span class="at">status</span> = Reopened</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Interview Q&amp;A — Part 1</div>
+      <div class="def-list">
+        <div class="def-item gn"><div class="def-key gn">Q: What is a Bug Report?</div><div class="def-val">Document that describes a defect — includes bug ID, title, steps to reproduce, expected result, actual result, severity, priority, environment, and attachments.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Q: What is Bug Life Cycle?</div><div class="def-val">States a bug goes through: New → Assigned → Open → Fixed → Retest → Verified/Closed. Can also go to Reopened, Deferred, Rejected, or Duplicate.</div></div>
+        <div class="def-item or"><div class="def-key or">Q: What is Severity vs Priority?</div><div class="def-val">Severity = technical impact (set by QA). Priority = business urgency (set by Manager). Logo missing is Minor Severity but High Priority — brand image matters.</div></div>
+        <div class="def-item pu"><div class="def-key pu">Q: What is Reopened status?</div><div class="def-val">Bug is marked Reopened when QA verifies the fix but the bug still exists. Sent back to developer for another fix attempt.</div></div>
+        <div class="def-item cy"><div class="def-key cy">Q: What is Deferred status?</div><div class="def-val">Bug is valid but postponed to next release due to time constraints, low priority, or pending dependency. Not rejected — will be fixed later.</div></div>
+        <div class="def-item am"><div class="def-key am">Q: What is a Duplicate Bug?</div><div class="def-val">When the same bug has already been reported by another tester. Mark as Duplicate and link to the original bug ID.</div></div>
+        <div class="def-item re"><div class="def-key re">Q: What is "Cannot Reproduce"?</div><div class="def-val">Developer cannot replicate the bug with given steps. QA must add more details, environment info, or screen recording to help reproduce it.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Interview Q&amp;A — Part 2</div>
+      <div class="def-list">
+        <div class="def-item bl"><div class="def-key bl">Q: What makes a good bug report?</div><div class="def-val">Clear title, exact steps to reproduce, specific expected &amp; actual results, severity/priority set correctly, environment details, screenshot or video attached.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Q: What is JIRA?</div><div class="def-val">Project management and bug tracking tool by Atlassian. Used to create, track, assign, and manage bugs and tasks across sprints and releases.</div></div>
+        <div class="def-item or"><div class="def-key or">Q: What is JQL?</div><div class="def-val">JIRA Query Language — used to search/filter issues. e.g. issuetype = Bug AND priority = Critical AND status = Open</div></div>
+        <div class="def-item pu"><div class="def-key pu">Q: What is a Critical bug example?</div><div class="def-val">App crashes on login, payment fails, data is lost, database error, complete feature not working with no workaround available.</div></div>
+        <div class="def-item cy"><div class="def-key cy">Q: How do you write Steps to Reproduce?</div><div class="def-val">Number each step clearly. Include exact URL, input values, button names, preconditions. Each action = one step. Developer must reproduce exactly.</div></div>
+        <div class="def-item am"><div class="def-key am">Q: What is Defect Leakage?</div><div class="def-val">When a bug escapes testing and is found by end user in production. Indicates missing test coverage. Measured as (bugs in prod / total bugs) × 100%.</div></div>
+        <div class="def-item re"><div class="def-key re">Q: What attachments should a bug have?</div><div class="def-val">Screenshot showing the issue, screen recording of the bug happening, browser console logs, network HAR file for API issues, error log files.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="footer">
+  <div class="fl">
+    <span>Bug Report Template — JIRA Guide</span> · Bug Lifecycle · Severity · Priority · JQL · Sample Reports · Interview Ready
+  </div>
+  <div class="fr">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp;
+    🌍 nextgenqa94-ui.github.io/nextgenqa &nbsp;|&nbsp;
+    B.Tech · BCA · MCA · CBSE · ICSE · Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>
