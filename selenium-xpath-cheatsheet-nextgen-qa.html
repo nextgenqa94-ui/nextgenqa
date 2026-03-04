@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selenium XPath Cheat Sheet – Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080c14;--surface:#0d1320;--card:#101a28;--border:#172540;
+  --cyan:#00e5ff;--cyan2:#80d8ff;--amber:#ffab40;--amber2:#ffd180;
+  --green:#69ff47;--green2:#b9f6ca;--red:#ff5252;--purple:#ea80fc;
+  --blue:#448aff;--pink:#ff80ab;--yellow:#ffff00;
+  --text:#e0f7fa;--muted:#2a4a6a;--light:#80cbc4;--code-bg:#040810;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:11px;line-height:1.5;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:4px;}
+
+/* ══ HEADER ══ */
+.header{
+  background:linear-gradient(135deg,#04080e 0%,#0a1422 60%,#080c14 100%);
+  border-bottom:2px solid var(--cyan);padding:14px 24px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.header::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 50% 100% at 75% 50%,rgba(0,229,255,0.07) 0%,transparent 70%);pointer-events:none;}
+.header::after{content:'XPATH';position:absolute;right:320px;top:50%;
+  transform:translateY(-50%);font-size:90px;font-weight:800;
+  color:rgba(0,229,255,0.03);letter-spacing:-2px;pointer-events:none;}
+.logo-wrap{display:flex;align-items:center;gap:14px;}
+.logo-box{width:54px;height:54px;background:linear-gradient(135deg,#0097a7,#00e5ff);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:#080c14;
+  letter-spacing:-0.5px;box-shadow:0 0 20px rgba(0,229,255,0.4);flex-shrink:0;
+  text-align:center;line-height:1.2;}
+.title-block h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#fff;}
+.title-block h1 span{color:var(--cyan);}
+.title-block p{color:var(--muted);font-size:9.5px;margin-top:2px;letter-spacing:1px;font-family:'Syne',sans-serif;}
+.coach-info{text-align:right;}
+.coach-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--amber);}
+.coach-phone{display:flex;align-items:center;gap:6px;justify-content:flex-end;color:var(--cyan);font-weight:600;font-size:12px;margin-top:3px;}
+.coach-tags{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap;margin-top:5px;}
+.ctag{padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;}
+.ctag.c{background:rgba(0,229,255,0.12);border:1px solid rgba(0,229,255,0.3);color:var(--cyan);}
+.ctag.a{background:rgba(255,171,64,0.12);border:1px solid rgba(255,171,64,0.3);color:var(--amber);}
+.ctag.g{background:rgba(105,255,71,0.1);border:1px solid rgba(105,255,71,0.25);color:var(--green);}
+.social-row{display:flex;gap:8px;justify-content:flex-end;margin-top:6px;flex-wrap:wrap;}
+.slink{font-size:9px;color:var(--muted);text-decoration:none;}
+.slink:hover{color:var(--cyan);}
+
+/* ══ SECTION DIVIDER ══ */
+.sec-div{
+  background:linear-gradient(90deg,rgba(0,229,255,0.15),rgba(0,229,255,0.05),transparent);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:4px 16px;font-family:'Syne',sans-serif;font-size:8.5px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--cyan);
+  display:flex;align-items:center;gap:8px;
+}
+.sec-div::before{content:'▶';font-size:7px;}
+
+/* ══ GRID ══ */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--border);}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);border-left:1px solid var(--border);}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);border-left:1px solid var(--border);}
+.col{border-right:1px solid var(--border);}
+
+/* ══ CARD ══ */
+.card{border-bottom:1px solid var(--border);padding:9px 11px;}
+.ct{display:flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;font-size:9.5px;
+  font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;
+  padding-bottom:5px;border-bottom:1px solid rgba(0,229,255,0.12);color:var(--cyan);}
+.ct .d{width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);flex-shrink:0;}
+.ct.am{color:var(--amber);border-bottom-color:rgba(255,171,64,0.12);}
+.ct.am .d{background:var(--amber);box-shadow:0 0 6px var(--amber);}
+.ct.gn{color:var(--green);border-bottom-color:rgba(105,255,71,0.12);}
+.ct.gn .d{background:var(--green);box-shadow:0 0 6px var(--green);}
+.ct.re{color:var(--red);border-bottom-color:rgba(255,82,82,0.12);}
+.ct.re .d{background:var(--red);box-shadow:0 0 6px var(--red);}
+.ct.pu{color:var(--purple);border-bottom-color:rgba(234,128,252,0.12);}
+.ct.pu .d{background:var(--purple);box-shadow:0 0 6px var(--purple);}
+.ct.bl{color:var(--blue);border-bottom-color:rgba(68,138,255,0.12);}
+.ct.bl .d{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+.ct.pk{color:var(--pink);border-bottom-color:rgba(255,128,171,0.12);}
+.ct.pk .d{background:var(--pink);box-shadow:0 0 6px var(--pink);}
+.ct.ye{color:var(--yellow);border-bottom-color:rgba(255,255,0,0.12);}
+.ct.ye .d{background:var(--yellow);box-shadow:0 0 6px var(--yellow);}
+
+.desc{font-size:9.5px;color:var(--light);margin-bottom:3px;font-family:'Syne',sans-serif;font-weight:600;}
+.item{margin-bottom:6px;}
+.item:last-child{margin-bottom:0;}
+
+/* ══ CODE BLOCK ══ */
+code{
+  display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  background:var(--code-bg);border:1px solid var(--border);
+  border-left:2px solid rgba(0,229,255,0.5);
+  color:#80cbc4;padding:4px 8px;border-radius:3px;
+  white-space:pre;line-height:1.65;overflow-x:auto;
+}
+code .kw{color:#80deea;}
+code .fn{color:#00e5ff;}
+code .st{color:#a5d6a7;}
+code .cm{color:#2a4a5a;font-style:italic;}
+code .at{color:#ffab40;}
+code .tx{color:#fff9c4;}
+code .op{color:#b2dfdb;}
+code .ax{color:#ea80fc;}
+code .nu{color:#f48fb1;}
+code .good{color:#69ff47;}
+code .bad{color:#ff5252;}
+
+/* ══ MINI TABLE ══ */
+.mini-table{width:100%;border-collapse:collapse;font-size:9.5px;}
+.mini-table th{background:rgba(0,229,255,0.08);color:var(--cyan);font-family:'Syne',sans-serif;
+  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;
+  padding:4px 8px;border:1px solid var(--border);text-align:left;}
+.mini-table td{padding:4px 8px;border:1px solid var(--border);color:#b2dfdb;vertical-align:top;}
+.mini-table tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+.cy{color:var(--cyan);font-weight:700;}
+.am{color:var(--amber);font-weight:700;}
+.gn{color:var(--green);font-weight:700;}
+.re{color:var(--red);font-weight:700;}
+.pu{color:var(--purple);font-weight:700;}
+.bl{color:var(--blue);font-weight:700;}
+.pk{color:var(--pink);font-weight:700;}
+.ye{color:var(--yellow);font-weight:700;}
+
+/* ══ DEF LIST ══ */
+.def-list{display:flex;flex-direction:column;gap:4px;}
+.def-item{padding:4px 8px;background:var(--code-bg);border:1px solid var(--border);
+  border-left:2px solid var(--cyan);border-radius:3px;font-size:10px;line-height:1.6;}
+.def-item.am{border-left-color:var(--amber);}
+.def-item.gn{border-left-color:var(--green);}
+.def-item.re{border-left-color:var(--red);}
+.def-item.pu{border-left-color:var(--purple);}
+.def-item.bl{border-left-color:var(--blue);}
+.def-item.pk{border-left-color:var(--pink);}
+.def-item.ye{border-left-color:var(--yellow);}
+.def-key{color:var(--cyan);font-weight:700;font-family:'Syne',sans-serif;font-size:9.5px;}
+.def-key.am{color:var(--amber);}
+.def-key.gn{color:var(--green);}
+.def-key.re{color:var(--red);}
+.def-key.pu{color:var(--purple);}
+.def-key.bl{color:var(--blue);}
+.def-key.pk{color:var(--pink);}
+.def-key.ye{color:var(--yellow);}
+.def-val{color:#90a4ae;font-size:9.5px;}
+
+/* ══ BADGE ══ */
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;
+  font-family:'Syne',sans-serif;margin-right:3px;}
+.badge.cy{background:rgba(0,229,255,0.12);border:1px solid rgba(0,229,255,0.3);color:var(--cyan);}
+.badge.am{background:rgba(255,171,64,0.12);border:1px solid rgba(255,171,64,0.3);color:var(--amber);}
+.badge.gn{background:rgba(105,255,71,0.1);border:1px solid rgba(105,255,71,0.25);color:var(--green);}
+.badge.re{background:rgba(255,82,82,0.1);border:1px solid rgba(255,82,82,0.25);color:var(--red);}
+.badge.pu{background:rgba(234,128,252,0.1);border:1px solid rgba(234,128,252,0.25);color:var(--purple);}
+
+/* ══ FOOTER ══ */
+.footer{background:linear-gradient(90deg,#040810,#0a1422);border-top:2px solid rgba(0,229,255,0.4);
+  padding:8px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+.footer .fl{font-size:9.5px;color:var(--muted);font-family:'Syne',sans-serif;}
+.footer .fl span{color:var(--cyan);font-weight:700;}
+.footer .fr{font-size:9.5px;color:var(--muted);text-align:right;font-family:'Syne',sans-serif;}
+.footer .fr strong{color:var(--amber);}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo-box">SE<br>XPath</div>
+    <div class="title-block">
+      <h1>Selenium <span>XPath</span> Cheat Sheet</h1>
+      <p>ABSOLUTE · RELATIVE · ATTRIBUTES · FUNCTIONS · AXES · CSS SELECTOR · TIPS &amp; TRICKS · INTERVIEW READY</p>
+    </div>
+  </div>
+  <div class="coach-info">
+    <div class="coach-name">🎓 Next Gen QA IT Coaching Classes</div>
+    <div class="coach-phone">📞 Mr. Khan Sir &nbsp;|&nbsp; 8700350994</div>
+    <div class="coach-tags">
+      <span class="ctag c">Selenium &amp; XPath</span>
+      <span class="ctag a">Playwright &amp; API Testing</span>
+      <span class="ctag g">Online &amp; Offline</span>
+      <span class="ctag c">B.Tech / BCA / MCA</span>
+      <span class="ctag a">CBSE / ICSE / Polytechnic</span>
+    </div>
+    <div class="social-row">
+      <a class="slink" href="https://nextgenqa94-ui.github.io/nextgenqa">🌍 Website</a>
+      <a class="slink" href="https://www.linkedin.com/posts/next-gen-qa-8a48ba336_playwright-softwaretesting-qa-activity-7433836972202221568-4vf8">💼 LinkedIn</a>
+      <a class="slink" href="https://www.facebook.com/share/p/187KVCpEhw/">📘 Facebook</a>
+      <a class="slink" href="https://www.instagram.com/p/DVV2F-rCUZG/">📸 Instagram</a>
+      <a class="slink" href="http://youtube.com/post/UgkxQqIpyhpPA2My0o4Vdb20kxVBv4REJw3S">▶ YouTube</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ROW 1 — BASICS ══════════ -->
+<div class="sec-div">XPath Basics · Absolute vs Relative · Syntax · How to Use in Selenium</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>What is XPath?</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">Definition</div><div class="def-val">XPath (XML Path Language) is a syntax to navigate through elements and attributes in an HTML/XML document to locate web elements in Selenium.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Why XPath?</div><div class="def-val">When elements don't have a unique ID, name or class — XPath can locate ANY element using its position, text, attributes or relationships.</div></div>
+        <div class="def-item am"><div class="def-key am">XPath in Selenium</div><div class="def-val">Used inside <span class="cy">By.xpath("...")</span> to find elements. Works with <span class="gn">findElement()</span> and <span class="gn">findElements()</span>.</div></div>
+      </div>
+      <div style="margin-top:7px;">
+        <div class="desc">XPath Syntax Structure</div>
+<code><span class="cm">// XPath Syntax</span>
+<span class="fn">Axis</span>::<span class="at">NodeName</span>[<span class="st">@Attribute='Value'</span>]
+
+<span class="cm">// Examples</span>
+<span class="cm">// 1. Tag + Attribute</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@id='username'</span>]
+
+<span class="cm">// 2. Tag + Text</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="kw">text()</span>=<span class="st">'Login'</span>]
+
+<span class="cm">// 3. Any tag with attribute</span>
+<span class="fn">//*</span>[<span class="st">@placeholder='Enter email'</span>]</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct am"><div class="d"></div>Absolute vs Relative XPath</div>
+      <table class="mini-table">
+        <tr><th></th><th class="re">Absolute XPath</th><th class="gn">Relative XPath</th></tr>
+        <tr><td>Starts with</td><td class="re">/html/body/...</td><td class="gn">//tagname</td></tr>
+        <tr><td>Starting point</td><td>Root of document</td><td>Anywhere in DOM</td></tr>
+        <tr><td>Fragile?</td><td class="re">YES — breaks easily</td><td class="gn">NO — robust</td></tr>
+        <tr><td>Recommended?</td><td class="re">❌ Never use</td><td class="gn">✅ Always use</td></tr>
+        <tr><td>Speed</td><td class="re">Slow</td><td class="gn">Fast</td></tr>
+      </table>
+      <div style="margin-top:7px;">
+        <div class="desc">Examples</div>
+<code><span class="cm">// ❌ Absolute — NEVER USE (brittle!)</span>
+<span class="bad">/html/body/div[1]/form/div/input[2]</span>
+
+<span class="cm">// ✅ Relative — ALWAYS USE</span>
+<span class="good">//input[@id='username']</span>
+<span class="good">//button[@type='submit']</span>
+<span class="good">//div[@class='login-form']//input</span></code>
+      </div>
+      <div style="margin-top:7px;">
+        <div class="desc">How to Use in Selenium</div>
+<code><span class="cm">// Single element</span>
+<span class="op">WebElement</span> el = driver.<span class="fn">findElement</span>(
+  <span class="op">By</span>.<span class="fn">xpath</span>(<span class="st">"//input[@id='username']"</span>));
+
+<span class="cm">// Multiple elements</span>
+<span class="op">List</span>&lt;<span class="op">WebElement</span>&gt; els = driver.<span class="fn">findElements</span>(
+  <span class="op">By</span>.<span class="fn">xpath</span>(<span class="st">"//ul[@class='menu']/li"</span>));</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>XPath by Attributes</div>
+      <div class="item"><div class="desc">All attribute-based XPath patterns</div>
+<code><span class="cm">// By id</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@id='username'</span>]
+
+<span class="cm">// By name</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@name='email'</span>]
+
+<span class="cm">// By class</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="st">@class='btn-primary'</span>]
+
+<span class="cm">// By type</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@type='submit'</span>]
+
+<span class="cm">// By placeholder</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@placeholder='Enter phone'</span>]
+
+<span class="cm">// By href</span>
+<span class="fn">//</span><span class="at">a</span>[<span class="st">@href='https://example.com'</span>]
+
+<span class="cm">// By value</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@value='Submit'</span>]
+
+<span class="cm">// By disabled attribute</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@disabled</span>]
+
+<span class="cm">// By data-* attribute</span>
+<span class="fn">//</span><span class="at">div</span>[<span class="st">@data-id='123'</span>]
+<span class="fn">//</span><span class="at">button</span>[<span class="st">@data-testid='login-btn'</span>]
+
+<span class="cm">// Any tag with attribute</span>
+<span class="fn">//*</span>[<span class="st">@id='submit'</span>]
+<span class="fn">//*</span>[<span class="st">@class='active'</span>]</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>XPath by Text</div>
+      <div class="item"><div class="desc">Locating elements using visible text</div>
+<code><span class="cm">// Exact text match</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="kw">text()</span>=<span class="st">'Login'</span>]
+<span class="fn">//</span><span class="at">a</span>[<span class="kw">text()</span>=<span class="st">'Click Here'</span>]
+<span class="fn">//</span><span class="at">h1</span>[<span class="kw">text()</span>=<span class="st">'Welcome'</span>]
+
+<span class="cm">// Using normalize-space (handles spaces)</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="kw">normalize-space</span>()=<span class="st">'Log In'</span>]
+
+<span class="cm">// Text with contains()</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="kw">contains</span>(<span class="kw">text()</span>,<span class="st">'Log'</span>)]
+<span class="fn">//</span><span class="at">a</span>[<span class="kw">contains</span>(<span class="kw">text()</span>,<span class="st">'Click'</span>)]
+<span class="fn">//*</span>[<span class="kw">contains</span>(<span class="kw">text()</span>,<span class="st">'Submit'</span>)]
+
+<span class="cm">// starts-with text</span>
+<span class="fn">//</span><span class="at">p</span>[<span class="kw">starts-with</span>(<span class="kw">text()</span>,<span class="st">'Welcome'</span>)]
+
+<span class="cm">// Case-sensitive — exact case needed!</span>
+<span class="cm">// 'login' ≠ 'Login' ≠ 'LOGIN'</span>
+
+<span class="cm">// Partial text in any tag</span>
+<span class="fn">//*</span>[<span class="kw">contains</span>(<span class="kw">text()</span>,<span class="st">'error'</span>)]
+
+<span class="cm">// Label text</span>
+<span class="fn">//</span><span class="at">label</span>[<span class="kw">text()</span>=<span class="st">'User Name'</span>]</code>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 2 — FUNCTIONS ══════════ -->
+<div class="sec-div">XPath Functions — contains() · starts-with() · text() · normalize-space() · position() · last() · count()</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>contains() Function</div>
+      <div class="desc">Most important XPath function — partial match</div>
+<code><span class="cm">// Syntax: contains(@attr, 'value')</span>
+<span class="cm">// Syntax: contains(text(), 'value')</span>
+
+<span class="cm">// Attribute contains value</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="kw">contains</span>(<span class="st">@id</span>,<span class="st">'user'</span>)]
+<span class="fn">//</span><span class="at">div</span>[<span class="kw">contains</span>(<span class="st">@class</span>,<span class="st">'active'</span>)]
+<span class="fn">//</span><span class="at">a</span>[<span class="kw">contains</span>(<span class="st">@href</span>,<span class="st">'login'</span>)]
+<span class="fn">//</span><span class="at">input</span>[<span class="kw">contains</span>(<span class="st">@placeholder</span>,<span class="st">'email'</span>)]
+
+<span class="cm">// Text contains value</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="kw">contains</span>(<span class="kw">text()</span>,<span class="st">'Login'</span>)]
+<span class="fn">//</span><span class="at">span</span>[<span class="kw">contains</span>(<span class="kw">text()</span>,<span class="st">'Error'</span>)]
+
+<span class="cm">// Multiple classes (very common!)</span>
+<span class="fn">//</span><span class="at">div</span>[<span class="kw">contains</span>(<span class="st">@class</span>,<span class="st">'btn'</span>) <span class="kw">and</span>
+     <span class="kw">contains</span>(<span class="st">@class</span>,<span class="st">'primary'</span>)]
+
+<span class="cm">// Real world example</span>
+<span class="cm">// Find: &lt;input id="user_name_field"&gt;</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="kw">contains</span>(<span class="st">@id</span>,<span class="st">'user'</span>)]</code>
+    </div>
+
+    <div class="card">
+      <div class="ct am"><div class="d"></div>starts-with() Function</div>
+<code><span class="cm">// Syntax: starts-with(@attr, 'value')</span>
+
+<span class="cm">// ID starts with</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="kw">starts-with</span>(<span class="st">@id</span>,<span class="st">'user'</span>)]
+<span class="fn">//</span><span class="at">div</span>[<span class="kw">starts-with</span>(<span class="st">@class</span>,<span class="st">'btn'</span>)]
+
+<span class="cm">// href starts with</span>
+<span class="fn">//</span><span class="at">a</span>[<span class="kw">starts-with</span>(<span class="st">@href</span>,<span class="st">'https'</span>)]
+
+<span class="cm">// Text starts with</span>
+<span class="fn">//</span><span class="at">p</span>[<span class="kw">starts-with</span>(<span class="kw">text()</span>,<span class="st">'Welcome'</span>)]
+<span class="fn">//</span><span class="at">h2</span>[<span class="kw">starts-with</span>(<span class="kw">text()</span>,<span class="st">'Error'</span>)]
+
+<span class="cm">// Dynamic IDs — very useful!</span>
+<span class="cm">// Find: &lt;td id="row_1_col_3"&gt;</span>
+<span class="fn">//</span><span class="at">td</span>[<span class="kw">starts-with</span>(<span class="st">@id</span>,<span class="st">'row_'</span>)]</code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>AND / OR Conditions</div>
+<code><span class="cm">// AND — both conditions must be true</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@type</span>=<span class="st">'text'</span> <span class="kw">and</span> <span class="st">@name</span>=<span class="st">'q'</span>]
+<span class="fn">//</span><span class="at">button</span>[<span class="st">@type</span>=<span class="st">'submit'</span> <span class="kw">and</span>
+         <span class="kw">contains</span>(<span class="st">@class</span>,<span class="st">'primary'</span>)]
+<span class="fn">//*</span>[<span class="st">@id</span>=<span class="st">'x'</span> <span class="kw">and</span> <span class="kw">contains</span>(<span class="kw">text()</span>,<span class="st">'OK'</span>)]
+
+<span class="cm">// OR — either condition can be true</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@id</span>=<span class="st">'email'</span> <span class="kw">or</span> <span class="st">@id</span>=<span class="st">'phone'</span>]
+<span class="fn">//</span><span class="at">button</span>[<span class="kw">text()</span>=<span class="st">'OK'</span> <span class="kw">or</span>
+         <span class="kw">text()</span>=<span class="st">'Confirm'</span>]
+
+<span class="cm">// NOT — negate a condition</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="kw">not</span>(<span class="st">@disabled</span>)]
+<span class="fn">//</span><span class="at">div</span>[<span class="kw">not</span>(<span class="kw">contains</span>(<span class="st">@class</span>,<span class="st">'hidden'</span>))]
+
+<span class="cm">// Combined AND + OR</span>
+<span class="fn">//</span><span class="at">input</span>[(<span class="st">@type</span>=<span class="st">'text'</span> <span class="kw">or</span> <span class="st">@type</span>=<span class="st">'email'</span>)
+       <span class="kw">and</span> <span class="st">@required</span>]</code>
+    </div>
+
+    <div class="card">
+      <div class="ct re"><div class="d"></div>position() and last() Functions</div>
+<code><span class="cm">// By position — index starts at 1!</span>
+<span class="cm">// Get 2nd row in table</span>
+<span class="fn">//</span><span class="at">table</span>/<span class="at">tbody</span>/<span class="at">tr</span>[<span class="nu">2</span>]
+
+<span class="cm">// Shorthand for position()</span>
+<span class="fn">//</span><span class="at">ul</span>/<span class="at">li</span>[<span class="kw">position()</span>=<span class="nu">1</span>]  <span class="cm">← first item</span>
+<span class="fn">//</span><span class="at">ul</span>/<span class="at">li</span>[<span class="kw">position()</span>=<span class="nu">2</span>]  <span class="cm">← second item</span>
+
+<span class="cm">// last() — get last element</span>
+<span class="fn">//</span><span class="at">ul</span>/<span class="at">li</span>[<span class="kw">last()</span>]
+<span class="fn">//</span><span class="at">tr</span>[<span class="kw">last()</span>]/<span class="at">td</span>[<span class="nu">1</span>]
+
+<span class="cm">// last()-1 = second to last</span>
+<span class="fn">//</span><span class="at">ul</span>/<span class="at">li</span>[<span class="kw">last()</span>-<span class="nu">1</span>]
+
+<span class="cm">// count() — count child elements</span>
+<span class="fn">//</span><span class="at">ul</span>[<span class="kw">count</span>(<span class="at">li</span>)=<span class="nu">5</span>]  <span class="cm">← ul with 5 li items</span>
+
+<span class="cm">// Multiple elements with index</span>
+<span class="cm">// 3rd input on page</span>
+(<span class="fn">//</span><span class="at">input</span>[<span class="st">@type</span>=<span class="st">'text'</span>])[<span class="nu">3</span>]
+(<span class="fn">//</span><span class="at">button</span>)[<span class="nu">1</span>]  <span class="cm">← first button</span>
+(<span class="fn">//</span><span class="at">a</span>)[<span class="kw">last()</span>]  <span class="cm">← last anchor tag</span></code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct pu"><div class="d"></div>normalize-space() &amp; string-length()</div>
+<code><span class="cm">// normalize-space — trims whitespace</span>
+<span class="cm">// Handles: "  Login  " = "Login"</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="kw">normalize-space</span>()=<span class="st">'Login'</span>]
+<span class="fn">//</span><span class="at">td</span>[<span class="kw">normalize-space</span>()=<span class="st">'John Doe'</span>]
+
+<span class="cm">// normalize-space with text()</span>
+<span class="fn">//*</span>[<span class="kw">normalize-space</span>(<span class="kw">text()</span>)=<span class="st">'Submit'</span>]
+
+<span class="cm">// string-length — check text length</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="kw">string-length</span>(<span class="st">@value</span>)&gt;<span class="nu">0</span>]
+<span class="fn">//</span><span class="at">p</span>[<span class="kw">string-length</span>(<span class="kw">text()</span>)&gt;<span class="nu">10</span>]
+
+<span class="cm">// translate() — case-insensitive match</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="kw">translate</span>(<span class="kw">text()</span>,
+  <span class="st">'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</span>,
+  <span class="st">'abcdefghijklmnopqrstuvwxyz'</span>)
+  =<span class="st">'login'</span>]
+
+<span class="cm">// substring() — part of string</span>
+<span class="fn">//*</span>[<span class="kw">substring</span>(<span class="st">@id</span>,<span class="nu">1</span>,<span class="nu">4</span>)=<span class="st">'user'</span>]
+<span class="cm">// Gets first 4 chars of @id</span></code>
+    </div>
+
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>XPath with Multiple Attributes</div>
+<code><span class="cm">// Combine class + type + name</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@type</span>=<span class="st">'text'</span> <span class="kw">and</span>
+       <span class="st">@class</span>=<span class="st">'form-control'</span>]
+
+<span class="cm">// Attribute + text combo</span>
+<span class="fn">//</span><span class="at">a</span>[<span class="st">@class</span>=<span class="st">'nav-link'</span> <span class="kw">and</span>
+   <span class="kw">text()</span>=<span class="st">'Home'</span>]
+
+<span class="cm">// Data attributes</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="st">@data-testid</span>=<span class="st">'submit'</span>]
+<span class="fn">//</span><span class="at">div</span>[<span class="st">@data-role</span>=<span class="st">'dialog'</span>]
+
+<span class="cm">// Aria attributes (accessibility)</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="st">@aria-label</span>=<span class="st">'Close'</span>]
+<span class="fn">//</span><span class="at">div</span>[<span class="st">@role</span>=<span class="st">'alert'</span>]
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@aria-required</span>=<span class="st">'true'</span>]</code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct pk"><div class="d"></div>XPath for Dynamic Elements</div>
+<code><span class="cm">// Dynamic ID patterns</span>
+<span class="cm">// e.g. id="user_1234_field"</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="kw">contains</span>(<span class="st">@id</span>,<span class="st">'user'</span>) <span class="kw">and</span>
+       <span class="kw">contains</span>(<span class="st">@id</span>,<span class="st">'field'</span>)]
+
+<span class="cm">// Auto-generated classes</span>
+<span class="cm">// e.g. class="btn btn-primary btn-lg"</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="kw">contains</span>(<span class="st">@class</span>,<span class="st">'btn-primary'</span>)]
+
+<span class="cm">// Timestamp-based IDs</span>
+<span class="cm">// e.g. id="modal_1709123456"</span>
+<span class="fn">//</span><span class="at">div</span>[<span class="kw">starts-with</span>(<span class="st">@id</span>,<span class="st">'modal_'</span>)]
+
+<span class="cm">// React/Angular generated IDs</span>
+<span class="fn">//*</span>[<span class="kw">contains</span>(<span class="st">@id</span>,<span class="st">'react-select'</span>)]
+<span class="fn">//*</span>[<span class="kw">contains</span>(<span class="st">@class</span>,<span class="st">'ng-'</span>)]
+
+<span class="cm">// Using visible text (most stable)</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="kw">contains</span>(<span class="kw">text()</span>,<span class="st">'Submit'</span>)]
+<span class="fn">//</span><span class="at">td</span>[<span class="kw">contains</span>(<span class="kw">text()</span>,<span class="st">'John'</span>)]</code>
+    </div>
+
+    <div class="card">
+      <div class="ct ye"><div class="d"></div>XPath Operators</div>
+      <table class="mini-table">
+        <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+        <tr><td class="cy">=</td><td>Equal to</td><td class="gn">@id='name'</td></tr>
+        <tr><td class="re">!=</td><td>Not equal</td><td>@type!='hidden'</td></tr>
+        <tr><td class="am">&lt;</td><td>Less than</td><td>@count&lt;5</td></tr>
+        <tr><td class="am">&gt;</td><td>Greater than</td><td>@size&gt;10</td></tr>
+        <tr><td class="gn">and</td><td>Both true</td><td>@a='x' and @b='y'</td></tr>
+        <tr><td class="pu">or</td><td>Either true</td><td>@a='x' or @a='y'</td></tr>
+        <tr><td class="re">not()</td><td>Negate</td><td>not(@disabled)</td></tr>
+        <tr><td class="bl">|</td><td>Union (both)</td><td>//a | //button</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 3 — XPATH AXES ══════════ -->
+<div class="sec-div">XPath Axes — parent · child · following-sibling · preceding-sibling · ancestor · descendant · following · preceding</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>What are XPath Axes?</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">Definition</div><div class="def-val">XPath Axes define the RELATIONSHIP between current node and target node. Used to navigate the DOM tree in any direction.</div></div>
+        <div class="def-item am"><div class="def-key am">Syntax</div><div class="def-val">//currentNode/axis::targetNode[@attribute]</div></div>
+      </div>
+      <div style="margin-top:6px;">
+        <div class="desc">All XPath Axes — Quick Reference</div>
+        <table class="mini-table">
+          <tr><th>Axis</th><th>What it selects</th></tr>
+          <tr><td class="cy">parent</td><td>Direct parent node</td></tr>
+          <tr><td class="gn">child</td><td>Direct children only</td></tr>
+          <tr><td class="am">following-sibling</td><td>Siblings AFTER current node</td></tr>
+          <tr><td class="pu">preceding-sibling</td><td>Siblings BEFORE current node</td></tr>
+          <tr><td class="bl">ancestor</td><td>All ancestors up to root</td></tr>
+          <tr><td class="pk">descendant</td><td>All children, grandchildren</td></tr>
+          <tr><td class="re">following</td><td>All nodes after in document</td></tr>
+          <tr><td class="ye">preceding</td><td>All nodes before in document</td></tr>
+          <tr><td class="cy">self</td><td>Current node itself</td></tr>
+          <tr><td class="gn">ancestor-or-self</td><td>Self + all ancestors</td></tr>
+          <tr><td class="am">descendant-or-self</td><td>Self + all descendants</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct am"><div class="d"></div>parent:: and child:: Axes</div>
+<code><span class="cm">// parent:: — go UP to parent</span>
+<span class="cm">// Find parent div of an input</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@id</span>=<span class="st">'email'</span>]/<span class="ax">parent</span>::<span class="at">div</span>
+
+<span class="cm">// Find label's parent form</span>
+<span class="fn">//</span><span class="at">label</span>[<span class="kw">text()</span>=<span class="st">'Email'</span>]/<span class="ax">parent</span>::<span class="at">form</span>
+
+<span class="cm">// Any parent tag</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@id</span>=<span class="st">'un'</span>]/<span class="ax">parent</span>::<span class="kw">*</span>
+
+<span class="cm">// child:: — go DOWN to children</span>
+<span class="cm">// Find direct li children</span>
+<span class="fn">//</span><span class="at">ul</span>[<span class="st">@class</span>=<span class="st">'menu'</span>]/<span class="ax">child</span>::<span class="at">li</span>
+
+<span class="cm">// Same as / shorthand</span>
+<span class="fn">//</span><span class="at">ul</span>[<span class="st">@class</span>=<span class="st">'menu'</span>]/<span class="at">li</span>   <span class="cm">← same thing</span>
+
+<span class="cm">// Find all child inputs in form</span>
+<span class="fn">//</span><span class="at">form</span>[<span class="st">@id</span>=<span class="st">'login'</span>]/<span class="ax">child</span>::<span class="at">input</span></code>
+    </div>
+
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>ancestor:: Axis</div>
+<code><span class="cm">// ancestor:: — any ancestor going UP</span>
+<span class="cm">// Find table ancestor of a cell</span>
+<span class="fn">//</span><span class="at">td</span>[<span class="kw">text()</span>=<span class="st">'John'</span>]/<span class="ax">ancestor</span>::<span class="at">table</span>
+
+<span class="cm">// Find form ancestor of button</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="st">@type</span>=<span class="st">'submit'</span>]/<span class="ax">ancestor</span>::<span class="at">form</span>
+
+<span class="cm">// ancestor-or-self</span>
+<span class="fn">//</span><span class="at">input</span>/<span class="ax">ancestor-or-self</span>::<span class="at">div</span>
+
+<span class="cm">// Self axis</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@id</span>=<span class="st">'x'</span>]/<span class="ax">self</span>::<span class="at">input</span></code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct pu"><div class="d"></div>following-sibling:: Axis</div>
+      <div class="desc">Most used axis — find next sibling elements</div>
+<code><span class="cm">// following-sibling — after current node</span>
+
+<span class="cm">// MOST COMMON USE CASE:</span>
+<span class="cm">// Find input next to a label</span>
+<span class="cm">// HTML: &lt;label&gt;Email&lt;/label&gt;&lt;input...&gt;</span>
+<span class="fn">//</span><span class="at">label</span>[<span class="kw">text()</span>=<span class="st">'Email'</span>]/
+  <span class="ax">following-sibling</span>::<span class="at">input</span>
+
+<span class="cm">// Find button next to error span</span>
+<span class="fn">//</span><span class="at">span</span>[<span class="kw">text()</span>=<span class="st">'Error'</span>]/
+  <span class="ax">following-sibling</span>::<span class="at">button</span>
+
+<span class="cm">// Find td next to "Name" td</span>
+<span class="fn">//</span><span class="at">td</span>[<span class="kw">text()</span>=<span class="st">'Name'</span>]/
+  <span class="ax">following-sibling</span>::<span class="at">td</span>
+
+<span class="cm">// First following sibling</span>
+<span class="fn">//</span><span class="at">label</span>[<span class="kw">text()</span>=<span class="st">'Phone'</span>]/
+  <span class="ax">following-sibling</span>::<span class="at">input</span>[<span class="nu">1</span>]
+
+<span class="cm">// Any following sibling</span>
+<span class="fn">//</span><span class="at">li</span>[<span class="nu">1</span>]/<span class="ax">following-sibling</span>::<span class="at">li</span></code>
+    </div>
+
+    <div class="card">
+      <div class="ct re"><div class="d"></div>preceding-sibling:: Axis</div>
+<code><span class="cm">// preceding-sibling — before current node</span>
+
+<span class="cm">// Find label before input</span>
+<span class="fn">//</span><span class="at">input</span>[<span class="st">@id</span>=<span class="st">'email'</span>]/
+  <span class="ax">preceding-sibling</span>::<span class="at">label</span>
+
+<span class="cm">// Find td before a specific cell</span>
+<span class="fn">//</span><span class="at">td</span>[<span class="kw">text()</span>=<span class="st">'100'</span>]/
+  <span class="ax">preceding-sibling</span>::<span class="at">td</span>[<span class="nu">1</span>]
+<span class="cm">// Gets the td immediately before</span>
+
+<span class="cm">// Find heading before a list</span>
+<span class="fn">//</span><span class="at">ul</span>[<span class="st">@class</span>=<span class="st">'items'</span>]/
+  <span class="ax">preceding-sibling</span>::<span class="at">h2</span></code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>descendant:: &amp; following:: Axes</div>
+<code><span class="cm">// descendant:: — any level below</span>
+<span class="cm">// All inputs inside a div</span>
+<span class="fn">//</span><span class="at">div</span>[<span class="st">@id</span>=<span class="st">'form'</span>]/
+  <span class="ax">descendant</span>::<span class="at">input</span>
+
+<span class="cm">// Same as // shorthand</span>
+<span class="fn">//</span><span class="at">div</span>[<span class="st">@id</span>=<span class="st">'form'</span>]//<span class="at">input</span>  <span class="cm">← same!</span>
+
+<span class="cm">// All buttons anywhere in section</span>
+<span class="fn">//</span><span class="at">section</span>[<span class="st">@class</span>=<span class="st">'main'</span>]/
+  <span class="ax">descendant</span>::<span class="at">button</span>
+
+<span class="cm">// following:: — all nodes after</span>
+<span class="cm">// (different from following-sibling)</span>
+<span class="cm">// Includes nested children too</span>
+<span class="fn">//</span><span class="at">h1</span>[<span class="kw">text()</span>=<span class="st">'Login'</span>]/
+  <span class="ax">following</span>::<span class="at">input</span>
+<span class="cm">// Gets ALL inputs anywhere after h1</span>
+
+<span class="cm">// preceding:: — all nodes before</span>
+<span class="fn">//</span><span class="at">button</span>[<span class="st">@id</span>=<span class="st">'submit'</span>]/
+  <span class="ax">preceding</span>::<span class="at">input</span></code>
+    </div>
+
+    <div class="card">
+      <div class="ct pk"><div class="d"></div>Real World Axes Examples</div>
+<code><span class="cm">// SCENARIO 1:</span>
+<span class="cm">// Click Edit for row with "John"</span>
+<span class="cm">// HTML: &lt;td&gt;John&lt;/td&gt;&lt;td&gt;&lt;button&gt;Edit&lt;/button&gt;&lt;/td&gt;</span>
+<span class="fn">//</span><span class="at">td</span>[<span class="kw">text()</span>=<span class="st">'John'</span>]/
+  <span class="ax">following-sibling</span>::<span class="at">td</span>/
+  <span class="at">button</span>[<span class="kw">text()</span>=<span class="st">'Edit'</span>]
+
+<span class="cm">// SCENARIO 2:</span>
+<span class="cm">// Find input by label name</span>
+<span class="cm">// HTML: &lt;label&gt;Mobile&lt;/label&gt;&lt;input&gt;</span>
+<span class="fn">//</span><span class="at">label</span>[<span class="kw">contains</span>(<span class="kw">text()</span>,<span class="st">'Mobile'</span>)]/
+  <span class="ax">following-sibling</span>::<span class="at">input</span>
+
+<span class="cm">// SCENARIO 3:</span>
+<span class="cm">// Delete button in specific table row</span>
+<span class="fn">//</span><span class="at">tr</span>[<span class="at">td</span>[<span class="kw">text()</span>=<span class="st">'Alice'</span>]]/
+  <span class="ax">descendant</span>::<span class="at">button</span>[<span class="kw">text()</span>=<span class="st">'Delete'</span>]</code>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 4 — CSS SELECTOR ══════════ -->
+<div class="sec-div">CSS Selectors — All Patterns · Attribute · Pseudo-classes · XPath vs CSS Comparison</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>CSS Selector Basics</div>
+<code><span class="cm">// By ID — prefix: #</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"#username"</span>)
+<span class="cm">// Finds: &lt;input id="username"&gt;</span>
+
+<span class="cm">// By Class — prefix: .</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">".btn-submit"</span>)
+<span class="cm">// Finds: &lt;button class="btn-submit"&gt;</span>
+
+<span class="cm">// By Tag name</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input"</span>)
+
+<span class="cm">// By Tag + ID</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input#email"</span>)
+
+<span class="cm">// By Tag + Class</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"button.btn-primary"</span>)
+
+<span class="cm">// Multiple classes</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">".btn.btn-lg.active"</span>)
+
+<span class="cm">// Tag + ID + Class</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input#email.form-ctrl"</span>)</code>
+    </div>
+
+    <div class="card">
+      <div class="ct am"><div class="d"></div>CSS Attribute Selectors</div>
+<code><span class="cm">// Exact attribute value</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input[type='email']"</span>)
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"a[target='_blank']"</span>)
+
+<span class="cm">// Attribute exists (any value)</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input[required]"</span>)
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input[disabled]"</span>)
+
+<span class="cm">// Contains: *=</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input[id*='user']"</span>)
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"a[href*='login']"</span>)
+
+<span class="cm">// Starts with: ^=</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input[id^='user']"</span>)
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"a[href^='https']"</span>)
+
+<span class="cm">// Ends with: $=</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input[id$='field']"</span>)
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"img[src$='.png']"</span>)
+
+<span class="cm">// Word match: ~=</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"div[class~='active']"</span>)</code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>CSS Child &amp; Descendant</div>
+<code><span class="cm">// Direct child: &gt;</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"form &gt; input"</span>)
+<span class="cm">// Only direct input children of form</span>
+
+<span class="cm">// Any descendant: space</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"form input"</span>)
+<span class="cm">// All inputs anywhere inside form</span>
+
+<span class="cm">// Adjacent sibling: +</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"label + input"</span>)
+<span class="cm">// Input immediately after a label</span>
+
+<span class="cm">// General sibling: ~</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"label ~ input"</span>)
+<span class="cm">// All inputs that are siblings of label</span>
+
+<span class="cm">// Deep nested</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"div.form &gt; div &gt; input"</span>)
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"table tbody tr td a"</span>)</code>
+    </div>
+
+    <div class="card">
+      <div class="ct re"><div class="d"></div>CSS Pseudo-classes</div>
+<code><span class="cm">// :nth-child — 1-based index</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"ul li:nth-child(1)"</span>)
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"tr:nth-child(3) td"</span>)
+
+<span class="cm">// :first-child / :last-child</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"li:first-child"</span>)
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"tr:last-child"</span>)
+
+<span class="cm">// :nth-of-type</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"p:nth-of-type(2)"</span>)
+
+<span class="cm">// :not() — exclude elements</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input:not([disabled])"</span>)
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"li:not(.active)"</span>)
+
+<span class="cm">// :checked (checkbox/radio)</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input:checked"</span>)
+
+<span class="cm">// :enabled / :disabled</span>
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"input:enabled"</span>)
+<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="st">"button:disabled"</span>)</code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct pu"><div class="d"></div>XPath vs CSS Selector</div>
+      <table class="mini-table">
+        <tr><th>Feature</th><th class="cy">XPath</th><th class="gn">CSS Selector</th></tr>
+        <tr><td>Direction</td><td class="cy">Both ways (up &amp; down)</td><td>Down only</td></tr>
+        <tr><td>Text search</td><td class="gn">✅ text()</td><td class="re">❌ Not supported</td></tr>
+        <tr><td>Axes</td><td class="gn">✅ parent, sibling</td><td class="re">Limited</td></tr>
+        <tr><td>Speed</td><td>Slower</td><td class="gn">Faster</td></tr>
+        <tr><td>Syntax</td><td>Complex</td><td class="gn">Simpler</td></tr>
+        <tr><td>Browser support</td><td class="gn">All</td><td class="gn">All</td></tr>
+        <tr><td>Contains</td><td class="gn">contains()</td><td class="gn">*=</td></tr>
+        <tr><td>Starts-with</td><td class="gn">starts-with()</td><td class="gn">^=</td></tr>
+        <tr><td>Ends-with</td><td class="re">No (use substring)</td><td class="gn">$=</td></tr>
+        <tr><td>nth element</td><td class="gn">[position()=n]</td><td class="gn">:nth-child(n)</td></tr>
+      </table>
+      <div class="def-list" style="margin-top:6px;">
+        <div class="def-item gn"><div class="def-key gn">Use CSS when</div><div class="def-val">Locating by ID, class, attribute, or tag. Faster and simpler for most cases.</div></div>
+        <div class="def-item cy"><div class="def-key">Use XPath when</div><div class="def-val">Need to search by text, navigate parent/sibling, or handle complex dynamic elements.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>How to Find &amp; Test XPath in Browser</div>
+      <div class="def-list">
+        <div class="def-item bl"><div class="def-key bl">Step 1 — Open DevTools</div><div class="def-val">Press <span class="cy">F12</span> or Right-click → Inspect Element</div></div>
+        <div class="def-item gn"><div class="def-key gn">Step 2 — Open Console Tab</div><div class="def-val">Click the <span class="gn">Console</span> tab in DevTools</div></div>
+        <div class="def-item am"><div class="def-key am">Step 3 — Test XPath</div><div class="def-val">Type: <span class="cy">$x("//input[@id='email']")</span> and press Enter. Shows matching elements.</div></div>
+        <div class="def-item pu"><div class="def-key pu">Step 4 — Test CSS</div><div class="def-val">Type: <span class="cy">$$("input#email")</span> and press Enter. Shows matching elements.</div></div>
+        <div class="def-item re"><div class="def-key re">Step 5 — Highlight on Page</div><div class="def-val">Hover over result in console — element highlights on the page!</div></div>
+      </div>
+      <div style="margin-top:7px;">
+        <div class="desc">Browser Console Commands</div>
+<code><span class="cm">// Test XPath in browser console</span>
+$x(<span class="st">"//input[@id='username']"</span>)
+$x(<span class="st">"//button[text()='Login']"</span>)
+$x(<span class="st">"//div[contains(@class,'active')]"</span>)
+
+<span class="cm">// Test CSS in browser console</span>
+$$(<span class="st">"input#email"</span>)
+$$(<span class="st">"button.btn-primary"</span>)
+$$(<span class="st">"input[type='text']"</span>)
+
+<span class="cm">// Check count of elements</span>
+$x(<span class="st">"//li"</span>).<span class="fn">length</span>
+$$(<span class="st">"li"</span>).<span class="fn">length</span></code>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 5 — INTERVIEW Q&A + PRO TIPS ══════════ -->
+<div class="sec-div">XPath Interview Questions · Pro Tips · Common Mistakes · Best Practices</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>XPath Interview Q&amp;A — Part 1</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">Q: What is XPath?</div><div class="def-val">XPath is XML Path Language used to navigate and locate elements in HTML/XML documents. Used in Selenium via By.xpath().</div></div>
+        <div class="def-item bl"><div class="def-key bl">Q: Absolute vs Relative XPath?</div><div class="def-val">Absolute starts from root /html/body... (brittle). Relative starts from anywhere //tagname (recommended, robust).</div></div>
+        <div class="def-item gn"><div class="def-key gn">Q: What is contains() in XPath?</div><div class="def-val">Function to match partial attribute or text value. e.g. //input[contains(@id,'user')] — finds elements where id contains 'user'.</div></div>
+        <div class="def-item am"><div class="def-key am">Q: What are XPath Axes?</div><div class="def-val">Axes define relationships between nodes: parent, child, following-sibling, preceding-sibling, ancestor, descendant.</div></div>
+        <div class="def-item re"><div class="def-key re">Q: How to find dynamic elements?</div><div class="def-val">Use contains() for partial ID match, starts-with() for prefix match, or locate by stable attributes like text content.</div></div>
+        <div class="def-item pu"><div class="def-key pu">Q: // vs / in XPath?</div><div class="def-val">/ = direct child only. // = anywhere in document (any descendant). //div means find div anywhere in HTML.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Q: What is * in XPath?</div><div class="def-val">Wildcard — matches any tag. //*[@id='x'] finds any element with id='x' regardless of tag name.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct am"><div class="d"></div>XPath Interview Q&amp;A — Part 2</div>
+      <div class="def-list">
+        <div class="def-item am"><div class="def-key am">Q: XPath vs CSS Selector?</div><div class="def-val">XPath can navigate UP (parent/sibling) and search by text. CSS is faster and simpler but can only go down the DOM. Use CSS for simple cases, XPath for complex ones.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Q: How to find sibling elements?</div><div class="def-val">Use following-sibling:: (after) or preceding-sibling:: (before). e.g. //label[text()='Email']/following-sibling::input</div></div>
+        <div class="def-item bl"><div class="def-key bl">Q: How to locate nth element?</div><div class="def-val">Use index in brackets: (//button)[2] for 2nd button, or //tr[position()=3] for 3rd row, or //tr[last()] for last row.</div></div>
+        <div class="def-item re"><div class="def-key re">Q: How to handle multiple classes?</div><div class="def-val">Use contains() for each class: //div[contains(@class,'btn') and contains(@class,'active')]. Never use = for multiple classes.</div></div>
+        <div class="def-item pu"><div class="def-key pu">Q: What is normalize-space()?</div><div class="def-val">Trims leading/trailing whitespace from text. Useful when button text has spaces. //button[normalize-space()='Login']</div></div>
+        <div class="def-item pk"><div class="def-key pk">Q: How to test XPath without running Selenium?</div><div class="def-val">In browser DevTools Console: $x("your-xpath") to test XPath. $$("your-css") to test CSS selectors instantly.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Pro Tips &amp; Best Practices</div>
+      <div class="def-list">
+        <div class="def-item gn"><div class="def-key gn">✅ Prefer ID or Name first</div><div class="def-val">Always check if element has unique id or name. By.id() and By.name() are fastest and most reliable.</div></div>
+        <div class="def-item bl"><div class="def-key bl">✅ Use Relative XPath always</div><div class="def-val">Never use Absolute XPath. One small page change breaks it. Always use // to start.</div></div>
+        <div class="def-item cy"><div class="def-key">✅ Prefer CSS over XPath</div><div class="def-val">When text search not needed — CSS selector is faster and simpler than XPath.</div></div>
+        <div class="def-item am"><div class="def-key am">✅ Use data-testid attributes</div><div class="def-val">Ask developers to add data-testid="login-btn" attributes. Most stable for automation.</div></div>
+        <div class="def-item pu"><div class="def-key pu">✅ Test in browser first</div><div class="def-val">Always validate XPath in browser console using $x() before writing Selenium code.</div></div>
+        <div class="def-item re"><div class="def-key re">✅ Avoid index-based XPath</div><div class="def-val">XPath like //div[3]/input[2] breaks when page structure changes. Use attribute-based instead.</div></div>
+        <div class="def-item pk"><div class="def-key pk">✅ Use normalize-space()</div><div class="def-val">When button text might have extra spaces — always use normalize-space() to avoid failures.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct re"><div class="d"></div>Common XPath Mistakes</div>
+      <div class="def-list">
+        <div class="def-item re"><div class="def-key re">❌ Using Absolute XPath</div><div class="def-val">/html/body/div[1]/form/input — Breaks immediately when page changes. Never use this!</div></div>
+        <div class="def-item am"><div class="def-key am">❌ = for multiple classes</div><div class="def-val">//div[@class='btn primary active'] — FAILS if class order changes. Use contains() for each class instead.</div></div>
+        <div class="def-item"><div class="def-key">❌ Wrong case in text()</div><div class="def-val">XPath is case-sensitive. //button[text()='login'] won't find 'Login'. Match exact case always.</div></div>
+        <div class="def-item pu"><div class="def-key pu">❌ Missing parentheses for index</div><div class="def-val">//button[2] ≠ (//button)[2]. First finds 2nd button child. Second finds 2nd button globally. Use (//tag)[n] for global nth.</div></div>
+        <div class="def-item gn"><div class="def-key gn">❌ Index starts at 0</div><div class="def-val">XPath index starts at 1, NOT 0! //tr[1] is first row. //tr[0] returns nothing!</div></div>
+        <div class="def-item bl"><div class="def-key bl">❌ Forgetting // before axis</div><div class="def-val">Wrong: /label/following-sibling::input. Correct: //label/following-sibling::input. Always use // to start.</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct ye"><div class="d"></div>Locator Priority Guide</div>
+      <table class="mini-table">
+        <tr><th>Priority</th><th>Locator</th><th>Use When</th></tr>
+        <tr><td class="gn">1st</td><td class="gn">By.id()</td><td>Element has unique ID</td></tr>
+        <tr><td class="gn">2nd</td><td class="gn">By.name()</td><td>Element has name attr</td></tr>
+        <tr><td class="cy">3rd</td><td class="cy">By.cssSelector()</td><td>No text search needed</td></tr>
+        <tr><td class="cy">4th</td><td class="cy">By.xpath()</td><td>Need text / axes</td></tr>
+        <tr><td class="am">5th</td><td class="am">By.className()</td><td>Unique single class</td></tr>
+        <tr><td class="re">Last</td><td class="re">By.tagName()</td><td>Only one of that tag</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="footer">
+  <div class="fl">
+    <span>Selenium XPath Cheat Sheet</span> · Absolute · Relative · Functions · Axes · CSS · Interview Ready · Selenium WebDriver 4.x
+  </div>
+  <div class="fr">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp;
+    🌍 nextgenqa94-ui.github.io/nextgenqa &nbsp;|&nbsp;
+    B.Tech · BCA · MCA · CBSE · ICSE · Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>

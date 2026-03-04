@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual Testing Complete Notes – Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0818;--surface:#130d20;--card:#1a1030;--border:#2a1a45;
+  --purple:#c084fc;--purple2:#e879f9;--blue:#60a5fa;--green:#4ade80;
+  --amber:#fbbf24;--red:#f87171;--cyan:#22d3ee;--pink:#f472b6;
+  --text:#f0e6ff;--muted:#6b4f8a;--light:#b39ddb;--code-bg:#080612;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:11px;line-height:1.5;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--purple);border-radius:4px;}
+
+/* ══ HEADER ══ */
+.header{
+  background:linear-gradient(135deg,#0a0614 0%,#130d20 60%,#0e0818 100%);
+  border-bottom:2px solid var(--purple);
+  padding:14px 24px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.header::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 50% 100% at 70% 50%,rgba(192,132,252,0.08) 0%,transparent 70%);
+  pointer-events:none;}
+.header::after{content:'MANUAL TESTING';position:absolute;right:300px;top:50%;
+  transform:translateY(-50%);font-size:60px;font-weight:800;
+  color:rgba(192,132,252,0.03);letter-spacing:-1px;pointer-events:none;}
+.logo-wrap{display:flex;align-items:center;gap:14px;}
+.logo-box{width:54px;height:54px;background:linear-gradient(135deg,#9333ea,#c084fc);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:#fff;
+  letter-spacing:-0.5px;box-shadow:0 0 20px rgba(192,132,252,0.4);flex-shrink:0;
+  text-align:center;line-height:1.2;}
+.title-block h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#fff;}
+.title-block h1 span{color:var(--purple);}
+.title-block p{color:var(--muted);font-size:9.5px;margin-top:2px;letter-spacing:1px;font-family:'Syne',sans-serif;}
+.coach-info{text-align:right;font-size:10.5px;}
+.coach-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--amber);}
+.coach-phone{display:flex;align-items:center;gap:6px;justify-content:flex-end;color:var(--purple);font-weight:600;font-size:12px;margin-top:3px;}
+.coach-tags{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap;margin-top:5px;}
+.ctag{padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;}
+.ctag.p{background:rgba(192,132,252,0.12);border:1px solid rgba(192,132,252,0.3);color:var(--purple);}
+.ctag.a{background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:var(--amber);}
+.ctag.g{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);color:var(--green);}
+.social-row{display:flex;gap:8px;justify-content:flex-end;margin-top:6px;flex-wrap:wrap;}
+.slink{font-size:9px;color:var(--muted);text-decoration:none;}
+.slink:hover{color:var(--purple);}
+
+/* ══ SECTION DIVIDER ══ */
+.sec-div{
+  background:linear-gradient(90deg,rgba(192,132,252,0.15),rgba(192,132,252,0.05),transparent);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:4px 16px;font-family:'Syne',sans-serif;font-size:8.5px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--purple);
+  display:flex;align-items:center;gap:8px;
+}
+.sec-div::before{content:'▶';font-size:7px;}
+
+/* ══ GRID ══ */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--border);}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);border-left:1px solid var(--border);}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);border-left:1px solid var(--border);}
+.col{border-right:1px solid var(--border);}
+.span2{grid-column:span 2;}
+.span3{grid-column:span 3;}
+
+/* ══ CARD ══ */
+.card{border-bottom:1px solid var(--border);padding:9px 11px;}
+.ct{display:flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;font-size:9.5px;
+  font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;
+  padding-bottom:5px;border-bottom:1px solid rgba(192,132,252,0.12);color:var(--purple);}
+.ct .d{width:5px;height:5px;border-radius:50%;background:var(--purple);
+  box-shadow:0 0 6px var(--purple);flex-shrink:0;}
+.ct.am{color:var(--amber);border-bottom-color:rgba(251,191,36,0.12);}
+.ct.am .d{background:var(--amber);box-shadow:0 0 6px var(--amber);}
+.ct.bl{color:var(--blue);border-bottom-color:rgba(96,165,250,0.12);}
+.ct.bl .d{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+.ct.gn{color:var(--green);border-bottom-color:rgba(74,222,128,0.12);}
+.ct.gn .d{background:var(--green);box-shadow:0 0 6px var(--green);}
+.ct.re{color:var(--red);border-bottom-color:rgba(248,113,113,0.12);}
+.ct.re .d{background:var(--red);box-shadow:0 0 6px var(--red);}
+.ct.cy{color:var(--cyan);border-bottom-color:rgba(34,211,238,0.12);}
+.ct.cy .d{background:var(--cyan);box-shadow:0 0 6px var(--cyan);}
+.ct.pk{color:var(--pink);border-bottom-color:rgba(244,114,182,0.12);}
+.ct.pk .d{background:var(--pink);box-shadow:0 0 6px var(--pink);}
+
+.item{margin-bottom:6px;}
+.item:last-child{margin-bottom:0;}
+.desc{font-size:9.5px;color:var(--light);margin-bottom:3px;font-family:'Syne',sans-serif;font-weight:600;}
+
+/* Definition style for concepts */
+.def-list{display:flex;flex-direction:column;gap:4px;}
+.def-item{padding:4px 8px;background:var(--code-bg);border:1px solid var(--border);
+  border-left:2px solid var(--purple);border-radius:3px;font-size:10px;line-height:1.6;}
+.def-item.am{border-left-color:var(--amber);}
+.def-item.gn{border-left-color:var(--green);}
+.def-item.bl{border-left-color:var(--blue);}
+.def-item.re{border-left-color:var(--red);}
+.def-item.cy{border-left-color:var(--cyan);}
+.def-item.pk{border-left-color:var(--pink);}
+.def-key{color:var(--purple);font-weight:700;font-family:'Syne',sans-serif;font-size:9.5px;}
+.def-key.am{color:var(--amber);}
+.def-key.gn{color:var(--green);}
+.def-key.bl{color:var(--blue);}
+.def-key.re{color:var(--red);}
+.def-key.cy{color:var(--cyan);}
+.def-key.pk{color:var(--pink);}
+.def-val{color:#c4b5d4;font-size:9.5px;line-height:1.5;}
+
+/* Flow/Phase boxes */
+.flow{display:flex;flex-direction:column;gap:3px;}
+.phase{padding:5px 8px;border-radius:4px;font-size:10px;font-weight:600;
+  font-family:'Syne',sans-serif;display:flex;align-items:center;gap:8px;}
+.phase-num{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:9px;font-weight:800;flex-shrink:0;}
+.phase-text{flex:1;}
+.phase-sub{font-size:9px;font-weight:400;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.phase.p1{background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.2);}
+.phase.p1 .phase-num{background:rgba(192,132,252,0.2);color:var(--purple);}
+.phase.p2{background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);}
+.phase.p2 .phase-num{background:rgba(96,165,250,0.2);color:var(--blue);}
+.phase.p3{background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);}
+.phase.p3 .phase-num{background:rgba(74,222,128,0.15);color:var(--green);}
+.phase.p4{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);}
+.phase.p4 .phase-num{background:rgba(251,191,36,0.15);color:var(--amber);}
+.phase.p5{background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.2);}
+.phase.p5 .phase-num{background:rgba(248,113,113,0.15);color:var(--red);}
+.phase.p6{background:rgba(34,211,238,0.06);border:1px solid rgba(34,211,238,0.2);}
+.phase.p6 .phase-num{background:rgba(34,211,238,0.15);color:var(--cyan);}
+.phase.p7{background:rgba(244,114,182,0.06);border:1px solid rgba(244,114,182,0.2);}
+.phase.p7 .phase-num{background:rgba(244,114,182,0.15);color:var(--pink);}
+
+/* Table style */
+.mini-table{width:100%;border-collapse:collapse;font-size:9.5px;}
+.mini-table th{background:rgba(192,132,252,0.1);color:var(--purple);font-family:'Syne',sans-serif;
+  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;
+  padding:4px 8px;border:1px solid var(--border);text-align:left;}
+.mini-table td{padding:4px 8px;border:1px solid var(--border);color:#c4b5d4;vertical-align:top;}
+.mini-table tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+.hl-p{color:var(--purple);font-weight:700;}
+.hl-g{color:var(--green);font-weight:700;}
+.hl-r{color:var(--red);font-weight:700;}
+.hl-a{color:var(--amber);font-weight:700;}
+.hl-b{color:var(--blue);font-weight:700;}
+.hl-c{color:var(--cyan);font-weight:700;}
+
+/* Grid-2 inside card */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+
+/* ══ FOOTER ══ */
+.footer{background:linear-gradient(90deg,#0a0614,#130d20);border-top:2px solid rgba(192,132,252,0.4);
+  padding:8px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+.footer .fl{font-size:9.5px;color:var(--muted);font-family:'Syne',sans-serif;}
+.footer .fl span{color:var(--purple);font-weight:700;}
+.footer .fr{font-size:9.5px;color:var(--muted);text-align:right;font-family:'Syne',sans-serif;}
+.footer .fr strong{color:var(--amber);}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo-box">MT<br>Notes</div>
+    <div class="title-block">
+      <h1>Manual Testing <span>Complete Notes</span></h1>
+      <p>SDLC · STLC · TEST CASE · BUG LIFECYCLE · TESTING TYPES · BVA · AGILE · JIRA · INTERVIEW READY</p>
+    </div>
+  </div>
+  <div class="coach-info">
+    <div class="coach-name">🎓 Next Gen QA IT Coaching Classes</div>
+    <div class="coach-phone">📞 Mr. Khan Sir &nbsp;|&nbsp; 8700350994</div>
+    <div class="coach-tags">
+      <span class="ctag p">Manual Testing</span>
+      <span class="ctag a">Selenium &amp; Playwright</span>
+      <span class="ctag g">Online &amp; Offline</span>
+      <span class="ctag p">B.Tech / BCA / MCA</span>
+      <span class="ctag a">CBSE / ICSE / Polytechnic</span>
+    </div>
+    <div class="social-row">
+      <a class="slink" href="https://nextgenqa94-ui.github.io/nextgenqa">🌍 Website</a>
+      <a class="slink" href="https://www.linkedin.com/posts/next-gen-qa-8a48ba336_playwright-softwaretesting-qa-activity-7433836972202221568-4vf8">💼 LinkedIn</a>
+      <a class="slink" href="https://www.facebook.com/share/p/187KVCpEhw/">📘 Facebook</a>
+      <a class="slink" href="https://www.instagram.com/p/DVV2F-rCUZG/">📸 Instagram</a>
+      <a class="slink" href="http://youtube.com/post/UgkxQqIpyhpPA2My0o4Vdb20kxVBv4REJw3S">▶ YouTube</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ROW 1: SDLC + STLC ══════════ -->
+<div class="sec-div">SDLC — Software Development Life Cycle · STLC — Software Testing Life Cycle</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>SDLC Phases</div>
+      <div class="flow">
+        <div class="phase p1"><div class="phase-num">1</div><div><div class="phase-text">Requirement Gathering</div><div class="phase-sub">Collect &amp; analyze business requirements from client</div></div></div>
+        <div class="phase p2"><div class="phase-num">2</div><div><div class="phase-text">System Design</div><div class="phase-sub">HLD (High Level) + LLD (Low Level) design documents</div></div></div>
+        <div class="phase p3"><div class="phase-num">3</div><div><div class="phase-text">Implementation / Coding</div><div class="phase-sub">Developers write the actual source code</div></div></div>
+        <div class="phase p4"><div class="phase-num">4</div><div><div class="phase-text">Testing</div><div class="phase-sub">QA team tests the developed software</div></div></div>
+        <div class="phase p5"><div class="phase-num">5</div><div><div class="phase-text">Deployment</div><div class="phase-sub">Software released to production/live environment</div></div></div>
+        <div class="phase p6"><div class="phase-num">6</div><div><div class="phase-text">Maintenance</div><div class="phase-sub">Bug fixes, updates and enhancements post-release</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct am"><div class="d"></div>STLC Phases</div>
+      <div class="flow">
+        <div class="phase p1"><div class="phase-num">1</div><div><div class="phase-text">Requirement Analysis</div><div class="phase-sub">QA studies &amp; reviews requirements — identifies testable items</div></div></div>
+        <div class="phase p2"><div class="phase-num">2</div><div><div class="phase-text">Test Planning</div><div class="phase-sub">Scope, strategy, resources, timeline, tools decided</div></div></div>
+        <div class="phase p3"><div class="phase-num">3</div><div><div class="phase-text">Test Case Development</div><div class="phase-sub">Write test cases, test scripts, test data preparation</div></div></div>
+        <div class="phase p4"><div class="phase-num">4</div><div><div class="phase-text">Test Environment Setup</div><div class="phase-sub">Configure hardware, software, network for testing</div></div></div>
+        <div class="phase p5"><div class="phase-num">5</div><div><div class="phase-text">Test Execution</div><div class="phase-sub">Execute test cases, log defects, retest fixed bugs</div></div></div>
+        <div class="phase p6"><div class="phase-num">6</div><div><div class="phase-text">Test Closure</div><div class="phase-sub">Test summary report, lessons learned, sign-off</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>SDLC Models</div>
+      <div class="def-list">
+        <div class="def-item bl"><div class="def-key bl">Waterfall Model</div><div class="def-val">Sequential — each phase completes before next begins. No going back. Best for fixed requirements.</div></div>
+        <div class="def-item"><div class="def-key">V-Model</div><div class="def-val">Each dev phase has a corresponding test phase. Testing starts early. Verification + Validation.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Agile Model</div><div class="def-val">Iterative sprints (2–4 weeks). Continuous delivery. Flexible to changes. Most popular today.</div></div>
+        <div class="def-item am"><div class="def-key am">Spiral Model</div><div class="def-val">Risk-driven. Combines Waterfall + Prototyping. Multiple loops. Good for large risky projects.</div></div>
+        <div class="def-item cy"><div class="def-key cy">Incremental Model</div><div class="def-val">Software built in increments. Each increment adds functionality. Partial working product early.</div></div>
+        <div class="def-item re"><div class="def-key re">RAD Model</div><div class="def-val">Rapid Application Development. Prototype-based. Fast delivery. Works with active user feedback.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Verification vs Validation</div>
+      <table class="mini-table">
+        <tr><th>Verification</th><th>Validation</th></tr>
+        <tr><td><span class="hl-p">Are we building the product RIGHT?</span></td><td><span class="hl-g">Are we building the RIGHT product?</span></td></tr>
+        <tr><td>Process oriented</td><td>Product oriented</td></tr>
+        <tr><td>Static testing (no execution)</td><td>Dynamic testing (execution)</td></tr>
+        <tr><td>Reviews, walkthroughs, inspections</td><td>Actual testing of software</td></tr>
+        <tr><td>Done by QA team</td><td>Done by testing team</td></tr>
+        <tr><td>Early in SDLC</td><td>Later in SDLC</td></tr>
+      </table>
+      <div class="item" style="margin-top:8px;">
+        <div class="ct cy" style="margin-bottom:5px;"><div class="d"></div>Entry &amp; Exit Criteria</div>
+        <div class="def-list">
+          <div class="def-item cy"><div class="def-key cy">Entry Criteria</div><div class="def-val">Conditions that MUST be met BEFORE testing starts. e.g. Build is deployed, test environment is ready, test data is available.</div></div>
+          <div class="def-item am"><div class="def-key am">Exit Criteria</div><div class="def-val">Conditions that MUST be met to STOP testing. e.g. All test cases executed, 95% pass rate, no critical bugs open.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 2: TESTING TYPES ══════════ -->
+<div class="sec-div">Types of Testing — Functional · Non-Functional · Structural · Change-Based</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Functional Testing Types</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">Unit Testing</div><div class="def-val">Testing individual units/components in isolation. Done by developers.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Integration Testing</div><div class="def-val">Testing interaction between integrated modules. STBI (Top-Down, Bottom-Up, Sandwich).</div></div>
+        <div class="def-item gn"><div class="def-key gn">System Testing</div><div class="def-val">Testing complete integrated system against requirements.</div></div>
+        <div class="def-item am"><div class="def-key am">UAT (User Acceptance)</div><div class="def-val">End users test software to verify it meets business needs before go-live.</div></div>
+        <div class="def-item"><div class="def-key">Smoke Testing</div><div class="def-val">Preliminary testing — checks if build is stable enough for further testing. "Build Verification Test".</div></div>
+        <div class="def-item cy"><div class="def-key cy">Sanity Testing</div><div class="def-val">Narrow regression after bug fix — verifies specific functionality works correctly.</div></div>
+        <div class="def-item re"><div class="def-key re">Regression Testing</div><div class="def-val">Re-testing after code change to ensure existing functionality still works.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Re-testing</div><div class="def-val">Re-executing failed test cases after defect is fixed to confirm it's resolved.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct am"><div class="d"></div>Non-Functional Testing Types</div>
+      <div class="def-list">
+        <div class="def-item am"><div class="def-key am">Performance Testing</div><div class="def-val">Evaluates speed, responsiveness and stability. Parent of Load, Stress, Spike testing.</div></div>
+        <div class="def-item re"><div class="def-key re">Load Testing</div><div class="def-val">Test behavior under expected normal load. Find max operating capacity.</div></div>
+        <div class="def-item"><div class="def-key">Stress Testing</div><div class="def-val">Test beyond normal capacity to find breaking point. What happens when overloaded?</div></div>
+        <div class="def-item cy"><div class="def-key cy">Spike Testing</div><div class="def-val">Sudden large increase in load. How does system handle sudden traffic bursts?</div></div>
+        <div class="def-item gn"><div class="def-key gn">Security Testing</div><div class="def-val">Find vulnerabilities, threats, risks. SQL injection, XSS, Authentication bypass.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Usability Testing</div><div class="def-val">How user-friendly is the application? Ease of use, intuitiveness, learnability.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Compatibility Testing</div><div class="def-val">Test across different OS, browsers, devices and screen sizes.</div></div>
+        <div class="def-item am"><div class="def-key am">Reliability Testing</div><div class="def-val">Can system perform its intended function without failure for specific time?</div></div>
+        <div class="def-item"><div class="def-key">Scalability Testing</div><div class="def-val">Can system handle growing workload gracefully? Vertical &amp; horizontal scaling.</div></div>
+        <div class="def-item re"><div class="def-key re">Recovery Testing</div><div class="def-val">How well does system recover from crashes, failures, hardware/network issues?</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Black Box vs White Box vs Grey Box</div>
+      <table class="mini-table">
+        <tr><th>Aspect</th><th class="hl-p">Black Box</th><th class="hl-g">White Box</th><th class="hl-b">Grey Box</th></tr>
+        <tr><td>Knowledge</td><td>No code knowledge</td><td>Full code knowledge</td><td>Partial knowledge</td></tr>
+        <tr><td>Done by</td><td>Tester/QA</td><td>Developer</td><td>Tester + Dev</td></tr>
+        <tr><td>Focus</td><td>Input/Output</td><td>Internal code</td><td>Both</td></tr>
+        <tr><td>Also called</td><td>Functional</td><td>Structural</td><td>Translucent</td></tr>
+        <tr><td>Techniques</td><td>BVA, EP, Decision</td><td>Statement, Branch</td><td>Matrix, Pattern</td></tr>
+      </table>
+      <div style="margin-top:8px;">
+        <div class="ct gn" style="margin-bottom:5px;"><div class="d"></div>Static vs Dynamic Testing</div>
+        <table class="mini-table">
+          <tr><th>Static Testing</th><th>Dynamic Testing</th></tr>
+          <tr><td>No code execution</td><td>Code is executed</td></tr>
+          <tr><td>Reviews, walkthroughs</td><td>Running test cases</td></tr>
+          <tr><td>Early defect finding</td><td>Runtime defect finding</td></tr>
+          <tr><td>Cheaper to fix</td><td>Costlier to fix</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>More Testing Types</div>
+      <div class="def-list">
+        <div class="def-item gn"><div class="def-key gn">Exploratory Testing</div><div class="def-val">Simultaneous learning, test design and execution. No predefined scripts. Tester's intuition.</div></div>
+        <div class="def-item"><div class="def-key">Ad-hoc Testing</div><div class="def-val">Unplanned, informal testing without documentation. Random testing to find unexpected bugs.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Alpha Testing</div><div class="def-val">Internal testing by developer team before release. Done at developer's site.</div></div>
+        <div class="def-item am"><div class="def-key am">Beta Testing</div><div class="def-val">External testing by real users before final release. Done at customer's site.</div></div>
+        <div class="def-item re"><div class="def-key re">Monkey Testing</div><div class="def-val">Random input testing without any test cases. Test like a monkey — anything goes!</div></div>
+        <div class="def-item cy"><div class="def-key cy">Localization Testing</div><div class="def-val">Testing for specific region — language, date format, currency, cultural content.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Globalization Testing</div><div class="def-val">Testing software works with multiple languages and regions worldwide.</div></div>
+        <div class="def-item"><div class="def-key">End-to-End Testing</div><div class="def-val">Complete workflow testing from start to finish. Simulates real user scenarios.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 3: TEST CASE + TEST PLAN ══════════ -->
+<div class="sec-div">Test Case Writing · Test Plan · Test Scenario · Test Suite · Test Data</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Test Case Components</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">Test Case ID</div><div class="def-val">Unique identifier. e.g. TC_LOGIN_001, TC_PAYMENT_002</div></div>
+        <div class="def-item bl"><div class="def-key bl">Test Case Title</div><div class="def-val">Short description of what is being tested. Clear and specific.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Preconditions</div><div class="def-val">Conditions that MUST be true before executing. e.g. User must be registered.</div></div>
+        <div class="def-item am"><div class="def-key am">Test Steps</div><div class="def-val">Step-by-step actions to perform. Clear, concise, numbered.</div></div>
+        <div class="def-item"><div class="def-key">Test Data</div><div class="def-val">Input values used for testing. e.g. Username: admin, Password: admin123</div></div>
+        <div class="def-item cy"><div class="def-key cy">Expected Result</div><div class="def-val">What SHOULD happen after executing steps. Be specific!</div></div>
+        <div class="def-item re"><div class="def-key re">Actual Result</div><div class="def-val">What ACTUALLY happened when test was executed.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Status</div><div class="def-val">Pass / Fail / Blocked / Not Executed / In Progress</div></div>
+        <div class="def-item"><div class="def-key">Priority</div><div class="def-val">High / Medium / Low — based on business importance</div></div>
+        <div class="def-item bl"><div class="def-key bl">Test Type</div><div class="def-val">Positive / Negative / Boundary</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct am"><div class="d"></div>Sample Test Case — Login Feature</div>
+      <table class="mini-table">
+        <tr><th>Field</th><th>Value</th></tr>
+        <tr><td>Test Case ID</td><td class="hl-p">TC_LOGIN_001</td></tr>
+        <tr><td>Title</td><td>Verify valid login with correct credentials</td></tr>
+        <tr><td>Precondition</td><td>User is registered. Browser is open.</td></tr>
+        <tr><td>Step 1</td><td>Navigate to login page</td></tr>
+        <tr><td>Step 2</td><td>Enter Username: admin@test.com</td></tr>
+        <tr><td>Step 3</td><td>Enter Password: Admin@123</td></tr>
+        <tr><td>Step 4</td><td>Click "Login" button</td></tr>
+        <tr><td>Expected</td><td class="hl-g">User is redirected to Dashboard page</td></tr>
+        <tr><td>Actual</td><td>User redirected to Dashboard ✅</td></tr>
+        <tr><td>Status</td><td class="hl-g">PASS</td></tr>
+        <tr><td>Priority</td><td class="hl-r">High</td></tr>
+        <tr><td>Type</td><td>Positive Test</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Test Plan Components</div>
+      <div class="def-list">
+        <div class="def-item bl"><div class="def-key bl">Test Plan ID &amp; Title</div><div class="def-val">Unique ID and descriptive title of the test plan</div></div>
+        <div class="def-item"><div class="def-key">Scope</div><div class="def-val">What WILL be tested (In Scope) and what WON'T be tested (Out of Scope)</div></div>
+        <div class="def-item gn"><div class="def-key gn">Test Objectives</div><div class="def-val">Goals and purpose of testing. What are we trying to verify?</div></div>
+        <div class="def-item am"><div class="def-key am">Test Strategy</div><div class="def-val">Approach for testing — manual/automated, testing levels, techniques</div></div>
+        <div class="def-item re"><div class="def-key re">Resources</div><div class="def-val">Team members, roles, responsibilities for testing activities</div></div>
+        <div class="def-item cy"><div class="def-key cy">Schedule / Timeline</div><div class="def-val">Start date, end date, milestones for each testing phase</div></div>
+        <div class="def-item pk"><div class="def-key pk">Test Environment</div><div class="def-val">Hardware, software, OS, browser, network requirements</div></div>
+        <div class="def-item"><div class="def-key">Risks &amp; Mitigation</div><div class="def-val">Potential risks and plans to handle them</div></div>
+        <div class="def-item bl"><div class="def-key bl">Deliverables</div><div class="def-val">Test cases, test reports, defect logs, test summary report</div></div>
+        <div class="def-item gn"><div class="def-key gn">Entry / Exit Criteria</div><div class="def-val">Conditions to start and stop testing</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Test Scenario vs Test Case</div>
+      <table class="mini-table">
+        <tr><th>Test Scenario</th><th>Test Case</th></tr>
+        <tr><td>High-level description</td><td>Detailed step-by-step</td></tr>
+        <tr><td>What to test</td><td>How to test</td></tr>
+        <tr><td>One scenario → many cases</td><td>Specific single test</td></tr>
+        <tr><td>No test data</td><td>Has test data</td></tr>
+        <tr><td class="hl-a">e.g. "Test Login"</td><td class="hl-g">e.g. TC_001 valid login steps</td></tr>
+      </table>
+      <div style="margin-top:8px;">
+        <div class="ct cy" style="margin-bottom:5px;"><div class="d"></div>Positive vs Negative Testing</div>
+        <div class="def-list">
+          <div class="def-item gn"><div class="def-key gn">Positive Testing</div><div class="def-val">Test with VALID inputs to verify system works correctly as expected.</div></div>
+          <div class="def-item re"><div class="def-key re">Negative Testing</div><div class="def-val">Test with INVALID inputs to verify system handles errors gracefully.</div></div>
+        </div>
+      </div>
+      <div style="margin-top:8px;">
+        <div class="ct pk" style="margin-bottom:5px;"><div class="d"></div>Test Suite &amp; Test Script</div>
+        <div class="def-list">
+          <div class="def-item pk"><div class="def-key pk">Test Suite</div><div class="def-val">Collection of related test cases grouped together. e.g. Login Test Suite.</div></div>
+          <div class="def-item bl"><div class="def-key bl">Test Script</div><div class="def-val">Automated code that executes test steps. Used in automation testing.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 4: BUG LIFECYCLE + SEVERITY/PRIORITY ══════════ -->
+<div class="sec-div">Bug / Defect Life Cycle · Severity · Priority · Bug Report · JIRA</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct re"><div class="d"></div>Bug / Defect Life Cycle</div>
+      <div class="flow">
+        <div class="phase p1"><div class="phase-num">1</div><div><div class="phase-text">New</div><div class="phase-sub">Bug discovered and logged by tester for the first time</div></div></div>
+        <div class="phase p2"><div class="phase-num">2</div><div><div class="phase-text">Assigned</div><div class="phase-sub">Bug assigned to developer by team lead / manager</div></div></div>
+        <div class="phase p3"><div class="phase-num">3</div><div><div class="phase-text">Open</div><div class="phase-sub">Developer starts working on the bug fix</div></div></div>
+        <div class="phase p4"><div class="phase-num">4</div><div><div class="phase-text">Fixed / Resolved</div><div class="phase-sub">Developer fixes the bug and marks it resolved</div></div></div>
+        <div class="phase p5"><div class="phase-num">5</div><div><div class="phase-text">Retest</div><div class="phase-sub">Tester re-executes test case to verify fix</div></div></div>
+        <div class="phase p6"><div class="phase-num">6</div><div><div class="phase-text">Verified / Closed</div><div class="phase-sub">Bug fix confirmed — bug is closed</div></div></div>
+        <div class="phase p7"><div class="phase-num">7</div><div><div class="phase-text">Reopened</div><div class="phase-sub">Bug still exists after fix — sent back to developer</div></div></div>
+      </div>
+      <div class="def-list" style="margin-top:6px;">
+        <div class="def-item re"><div class="def-key re">Deferred</div><div class="def-val">Bug valid but fixed in next release due to low priority or resource constraints.</div></div>
+        <div class="def-item am"><div class="def-key am">Rejected / Not a Bug</div><div class="def-val">Developer disagrees — works as designed. Discussed with team.</div></div>
+        <div class="def-item cy"><div class="def-key cy">Duplicate</div><div class="def-val">Same bug already reported by another tester. Mark as duplicate.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct am"><div class="d"></div>Severity vs Priority</div>
+      <table class="mini-table">
+        <tr><th>Severity</th><th>Priority</th></tr>
+        <tr><td>Impact on functionality</td><td>Order of fixing</td></tr>
+        <tr><td>Technical perspective</td><td>Business perspective</td></tr>
+        <tr><td>Set by: Tester</td><td>Set by: Product Manager</td></tr>
+        <tr><td>S1-Critical, S2-Major</td><td>P1-High, P2-Medium, P3-Low</td></tr>
+      </table>
+      <div style="margin-top:8px;">
+        <div class="desc">Severity Levels</div>
+        <div class="def-list">
+          <div class="def-item re"><div class="def-key re">Critical (S1)</div><div class="def-val">System crash, data loss, no workaround. App completely unusable. e.g. Payment fails.</div></div>
+          <div class="def-item am"><div class="def-key am">Major (S2)</div><div class="def-val">Major functionality broken, workaround exists. e.g. Search not working.</div></div>
+          <div class="def-item bl"><div class="def-key bl">Moderate (S3)</div><div class="def-val">Partial functionality impacted. e.g. Filter not working on one page.</div></div>
+          <div class="def-item gn"><div class="def-key gn">Minor (S4)</div><div class="def-val">Cosmetic issues, small UI bugs. e.g. Button color wrong.</div></div>
+        </div>
+      </div>
+      <div style="margin-top:6px;">
+        <div class="desc">Classic Combinations</div>
+        <table class="mini-table">
+          <tr><th>Scenario</th><th>Severity</th><th>Priority</th></tr>
+          <tr><td>Payment system crashes</td><td class="hl-r">Critical</td><td class="hl-r">High</td></tr>
+          <tr><td>Logo not showing on homepage</td><td class="hl-g">Minor</td><td class="hl-r">High</td></tr>
+          <tr><td>Crash in rarely used feature</td><td class="hl-r">Critical</td><td class="hl-g">Low</td></tr>
+          <tr><td>Spelling error on footer</td><td class="hl-g">Minor</td><td class="hl-g">Low</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Bug Report Template</div>
+      <table class="mini-table">
+        <tr><th>Field</th><th>Value / Example</th></tr>
+        <tr><td>Bug ID</td><td class="hl-p">BUG_LOGIN_001</td></tr>
+        <tr><td>Bug Title</td><td>Login fails with valid credentials</td></tr>
+        <tr><td>Module</td><td>Login / Authentication</td></tr>
+        <tr><td>Environment</td><td>Chrome v120, Windows 11, QA env</td></tr>
+        <tr><td>Build Version</td><td>v2.3.1</td></tr>
+        <tr><td>Severity</td><td class="hl-r">Critical</td></tr>
+        <tr><td>Priority</td><td class="hl-r">High</td></tr>
+        <tr><td>Steps to Reproduce</td><td>1. Open login page 2. Enter valid credentials 3. Click Login</td></tr>
+        <tr><td>Expected Result</td><td class="hl-g">User logged in, redirected to dashboard</td></tr>
+        <tr><td>Actual Result</td><td class="hl-r">Error: "Invalid credentials" shown</td></tr>
+        <tr><td>Attachments</td><td>Screenshot / Screen recording</td></tr>
+        <tr><td>Reported By</td><td>QA Tester Name</td></tr>
+        <tr><td>Date</td><td>01-Mar-2025</td></tr>
+        <tr><td>Status</td><td class="hl-p">New</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>JIRA — Key Features for QA</div>
+      <div class="def-list">
+        <div class="def-item gn"><div class="def-key gn">Issue Types</div><div class="def-val">Bug, Story, Task, Epic, Sub-task. Each has its own workflow and fields.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Project Board</div><div class="def-val">Kanban/Scrum board showing To Do → In Progress → Done columns.</div></div>
+        <div class="def-item am"><div class="def-key am">Sprint</div><div class="def-val">Time-boxed iteration (1-4 weeks). All tasks for sprint planned upfront.</div></div>
+        <div class="def-item"><div class="def-key">Backlog</div><div class="def-val">List of all pending items/stories not yet in a sprint.</div></div>
+        <div class="def-item re"><div class="def-key re">Bug Workflow in JIRA</div><div class="def-val">Open → In Progress → Code Review → Testing → Done → Closed</div></div>
+        <div class="def-item cy"><div class="def-key cy">Labels &amp; Components</div><div class="def-val">Tags for categorizing bugs. Components = modules (Login, Payment, etc.)</div></div>
+        <div class="def-item pk"><div class="def-key pk">Fix Version</div><div class="def-val">Which version/release this bug will be fixed in.</div></div>
+        <div class="def-item"><div class="def-key">Watcher / Assignee</div><div class="def-val">Assignee works on bug. Watcher gets notified of all updates.</div></div>
+      </div>
+      <div style="margin-top:6px;">
+        <div class="desc">JIRA Bug Shortcuts</div>
+        <div class="def-list">
+          <div class="def-item gn"><div class="def-key gn">C</div><div class="def-val">Create new issue/bug</div></div>
+          <div class="def-item bl"><div class="def-key bl">G then B</div><div class="def-val">Go to board</div></div>
+          <div class="def-item am"><div class="def-key am">/ (slash)</div><div class="def-val">Quick search</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 5: TEST TECHNIQUES ══════════ -->
+<div class="sec-div">Test Design Techniques — BVA · Equivalence Partitioning · Decision Table · State Transition</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Equivalence Partitioning (EP)</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">Definition</div><div class="def-val">Divide input data into PARTITIONS where each value in a partition is expected to behave the same. Test ONE value from each partition.</div></div>
+      </div>
+      <div style="margin-top:7px;"><div class="desc">Example: Age field (18–60 valid)</div>
+        <table class="mini-table">
+          <tr><th>Partition</th><th>Range</th><th>Test Value</th><th>Type</th></tr>
+          <tr><td>Below valid</td><td class="hl-r">0 – 17</td><td class="hl-r">10</td><td>Invalid</td></tr>
+          <tr><td>Valid</td><td class="hl-g">18 – 60</td><td class="hl-g">35</td><td>Valid</td></tr>
+          <tr><td>Above valid</td><td class="hl-r">61+</td><td class="hl-r">70</td><td>Invalid</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct cy"><div class="d"></div>Decision Table Testing</div>
+      <div class="def-list">
+        <div class="def-item cy"><div class="def-key cy">Definition</div><div class="def-val">Testing with combinations of conditions and actions in a tabular format. Good for complex business rules.</div></div>
+      </div>
+      <div style="margin-top:6px;"><div class="desc">Example: Login Decision Table</div>
+        <table class="mini-table">
+          <tr><th>Username</th><th>Password</th><th>Action</th></tr>
+          <tr><td class="hl-g">Valid</td><td class="hl-g">Valid</td><td class="hl-g">Login Success</td></tr>
+          <tr><td class="hl-g">Valid</td><td class="hl-r">Invalid</td><td class="hl-r">Show Error</td></tr>
+          <tr><td class="hl-r">Invalid</td><td class="hl-g">Valid</td><td class="hl-r">Show Error</td></tr>
+          <tr><td class="hl-r">Invalid</td><td class="hl-r">Invalid</td><td class="hl-r">Show Error</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct am"><div class="d"></div>Boundary Value Analysis (BVA)</div>
+      <div class="def-list">
+        <div class="def-item am"><div class="def-key am">Definition</div><div class="def-val">Test values AT THE EDGES of partitions. Bugs are most likely to occur at boundaries. Used with EP.</div></div>
+      </div>
+      <div style="margin-top:7px;"><div class="desc">BVA Values for Age field (18–60)</div>
+        <table class="mini-table">
+          <tr><th>Value</th><th>Type</th><th>Valid?</th></tr>
+          <tr><td class="hl-r">17</td><td>Just below min</td><td class="hl-r">Invalid</td></tr>
+          <tr><td class="hl-g">18</td><td>Minimum (lower boundary)</td><td class="hl-g">Valid</td></tr>
+          <tr><td class="hl-g">19</td><td>Just above min</td><td class="hl-g">Valid</td></tr>
+          <tr><td class="hl-g">59</td><td>Just below max</td><td class="hl-g">Valid</td></tr>
+          <tr><td class="hl-g">60</td><td>Maximum (upper boundary)</td><td class="hl-g">Valid</td></tr>
+          <tr><td class="hl-r">61</td><td>Just above max</td><td class="hl-r">Invalid</td></tr>
+        </table>
+      </div>
+      <div class="def-list" style="margin-top:6px;">
+        <div class="def-item gn"><div class="def-key gn">2-value BVA</div><div class="def-val">Test min and max boundary values only. Simpler approach.</div></div>
+        <div class="def-item bl"><div class="def-key bl">3-value BVA</div><div class="def-val">Test below min, min, above min AND below max, max, above max. More thorough.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>State Transition Testing</div>
+      <div class="def-list">
+        <div class="def-item bl"><div class="def-key bl">Definition</div><div class="def-val">Testing how system transitions between states based on events/inputs. Good for login attempts, ATM flows, order status.</div></div>
+      </div>
+      <div style="margin-top:7px;"><div class="desc">Example: Login Attempt (3 tries max)</div>
+        <table class="mini-table">
+          <tr><th>Current State</th><th>Event</th><th>Next State</th></tr>
+          <tr><td>Logged Out</td><td class="hl-g">Valid login</td><td class="hl-g">Logged In</td></tr>
+          <tr><td>Logged Out</td><td class="hl-r">Invalid (1st)</td><td>1 Failed Attempt</td></tr>
+          <tr><td>1 Failed</td><td class="hl-r">Invalid (2nd)</td><td>2 Failed Attempts</td></tr>
+          <tr><td>2 Failed</td><td class="hl-r">Invalid (3rd)</td><td class="hl-r">Account Locked</td></tr>
+          <tr><td>Logged In</td><td>Logout click</td><td>Logged Out</td></tr>
+          <tr><td>Account Locked</td><td>Admin unlock</td><td>Logged Out</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct pk"><div class="d"></div>Error Guessing</div>
+      <div class="def-list">
+        <div class="def-item pk"><div class="def-key pk">Definition</div><div class="def-val">Tester uses experience and intuition to GUESS where errors might be. No formal technique.</div></div>
+        <div class="def-item"><div class="def-key">Common Error Guess Areas</div><div class="def-val">Empty input, zero values, negative numbers, very long strings, special characters, null values, duplicate data, max file size.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Test Coverage Techniques</div>
+      <div class="def-list">
+        <div class="def-item gn"><div class="def-key gn">Statement Coverage</div><div class="def-val">Every line of code executed at least once. Basic coverage metric.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Branch Coverage</div><div class="def-val">Every branch (if/else) executed — both TRUE and FALSE paths covered.</div></div>
+        <div class="def-item am"><div class="def-key am">Path Coverage</div><div class="def-val">Every possible path through the code is tested. Most thorough but expensive.</div></div>
+        <div class="def-item re"><div class="def-key re">Condition Coverage</div><div class="def-val">Every condition in decision tested for both true and false outcome.</div></div>
+      </div>
+      <div style="margin-top:7px;">
+        <div class="ct cy" style="margin-bottom:5px;"><div class="d"></div>Use Case Testing</div>
+        <div class="def-list">
+          <div class="def-item cy"><div class="def-key cy">Use Case Testing</div><div class="def-val">Test based on use cases — real user scenarios from start to finish. Tests end-to-end workflows from user perspective.</div></div>
+        </div>
+      </div>
+      <div style="margin-top:6px;">
+        <div class="ct pk" style="margin-bottom:5px;"><div class="d"></div>Pairwise Testing</div>
+        <div class="def-list">
+          <div class="def-item pk"><div class="def-key pk">Pairwise / All-pairs</div><div class="def-val">Tests every possible PAIR of input values at least once. Reduces test cases while maintaining good coverage.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 6: AGILE + METRICS ══════════ -->
+<div class="sec-div">Agile Testing · Scrum · Sprint · Test Metrics · RTM · Test Summary Report</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Agile &amp; Scrum for Testers</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">Scrum</div><div class="def-val">Agile framework using fixed-length sprints (1-4 weeks) with defined ceremonies and roles.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Sprint</div><div class="def-val">Time-boxed iteration where team delivers working software increment. Usually 2 weeks.</div></div>
+        <div class="def-item gn"><div class="def-key gn">User Story</div><div class="def-val">"As a [user], I want [feature] so that [benefit]." Requirements from user's perspective.</div></div>
+        <div class="def-item am"><div class="def-key am">Sprint Planning</div><div class="def-val">Team selects stories from backlog for sprint. Estimates effort in story points.</div></div>
+        <div class="def-item re"><div class="def-key re">Daily Standup</div><div class="def-val">15-min daily meeting: What did I do? What will I do? Any blockers?</div></div>
+        <div class="def-item cy"><div class="def-key cy">Sprint Review</div><div class="def-val">Demo of completed work to stakeholders at end of sprint.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Sprint Retrospective</div><div class="def-val">Team reflection: What went well? What to improve? Action items.</div></div>
+        <div class="def-item"><div class="def-key">Definition of Done (DoD)</div><div class="def-val">Agreement on what "complete" means. e.g. Code written + reviewed + tested + deployed.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Acceptance Criteria</div><div class="def-val">Conditions a story must satisfy to be accepted by Product Owner.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Product Owner</div><div class="def-val">Prioritizes backlog, represents business. QA works closely with PO for requirements.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct am"><div class="d"></div>RTM — Requirement Traceability Matrix</div>
+      <div class="def-list">
+        <div class="def-item am"><div class="def-key am">What is RTM?</div><div class="def-val">Document that maps requirements to test cases. Ensures every requirement has test coverage.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Purpose</div><div class="def-val">Track testing coverage. No requirement is missed. Bidirectional traceability.</div></div>
+      </div>
+      <div style="margin-top:6px;"><div class="desc">RTM Sample</div>
+        <table class="mini-table">
+          <tr><th>Req ID</th><th>Requirement</th><th>Test Case</th><th>Status</th></tr>
+          <tr><td class="hl-p">REQ_001</td><td>User Login</td><td>TC_001, TC_002</td><td class="hl-g">Pass</td></tr>
+          <tr><td class="hl-p">REQ_002</td><td>User Logout</td><td>TC_003</td><td class="hl-g">Pass</td></tr>
+          <tr><td class="hl-p">REQ_003</td><td>Reset Password</td><td>TC_004, TC_005</td><td class="hl-r">Fail</td></tr>
+          <tr><td class="hl-p">REQ_004</td><td>Register User</td><td>TC_006</td><td class="hl-a">Blocked</td></tr>
+        </table>
+      </div>
+      <div style="margin-top:6px;">
+        <div class="ct re" style="margin-bottom:5px;"><div class="d"></div>Test Metrics</div>
+        <table class="mini-table">
+          <tr><th>Metric</th><th>Formula</th></tr>
+          <tr><td>Test Pass %</td><td class="hl-g">(Passed / Total) × 100</td></tr>
+          <tr><td>Test Fail %</td><td class="hl-r">(Failed / Total) × 100</td></tr>
+          <tr><td>Defect Density</td><td>(Total Bugs / Module Size)</td></tr>
+          <tr><td>Defect Leakage</td><td>(Bugs in Prod / Total Bugs) × 100</td></tr>
+          <tr><td>Test Coverage</td><td>(Tested Req / Total Req) × 100</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Test Summary Report</div>
+      <div class="def-list">
+        <div class="def-item bl"><div class="def-key bl">Purpose</div><div class="def-val">Final document at end of testing. Summarizes what was tested, results, defects found, recommendations.</div></div>
+      </div>
+      <div style="margin-top:6px;">
+        <table class="mini-table">
+          <tr><th>Section</th><th>Content</th></tr>
+          <tr><td>Project Info</td><td>Name, version, test period</td></tr>
+          <tr><td>Test Scope</td><td>What was tested / not tested</td></tr>
+          <tr><td>Test Results</td><td>Pass/Fail/Blocked counts</td></tr>
+          <tr><td>Defect Summary</td><td>Total bugs, severity breakdown</td></tr>
+          <tr><td>Coverage</td><td>% requirements covered</td></tr>
+          <tr><td>Risks</td><td>Known risks, outstanding issues</td></tr>
+          <tr><td>Recommendations</td><td>Go/No-Go decision, suggestions</td></tr>
+          <tr><td>Sign-off</td><td>QA Lead, PM, stakeholder approval</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Smoke vs Sanity vs Regression</div>
+      <table class="mini-table">
+        <tr><th>Aspect</th><th class="hl-a">Smoke</th><th class="hl-c">Sanity</th><th class="hl-p">Regression</th></tr>
+        <tr><td>Purpose</td><td>Build stable?</td><td>Fix verified?</td><td>Nothing broken?</td></tr>
+        <tr><td>Scope</td><td>Wide, shallow</td><td>Narrow, deep</td><td>Wide, deep</td></tr>
+        <tr><td>When</td><td>New build</td><td>After bug fix</td><td>After any change</td></tr>
+        <tr><td>Scripted?</td><td>Yes</td><td>Usually not</td><td>Yes</td></tr>
+        <tr><td>Time</td><td>Short</td><td>Short</td><td>Long</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct cy"><div class="d"></div>Software Quality Attributes (FURPS)</div>
+      <div class="def-list">
+        <div class="def-item cy"><div class="def-key cy">F — Functionality</div><div class="def-val">Does it do what it should? Feature completeness, accuracy, security.</div></div>
+        <div class="def-item gn"><div class="def-key gn">U — Usability</div><div class="def-val">How easy is it to use? UI, UX, documentation, consistency.</div></div>
+        <div class="def-item am"><div class="def-key am">R — Reliability</div><div class="def-val">Does it work consistently? Availability, fault tolerance, recoverability.</div></div>
+        <div class="def-item bl"><div class="def-key bl">P — Performance</div><div class="def-val">How fast and efficient? Response time, throughput, resource usage.</div></div>
+        <div class="def-item pk"><div class="def-key pk">S — Supportability</div><div class="def-val">How easy to maintain? Testability, adaptability, configurability.</div></div>
+      </div>
+      <div style="margin-top:6px;">
+        <div class="ct re" style="margin-bottom:5px;"><div class="d"></div>IEEE 829 Test Documents</div>
+        <div class="def-list">
+          <div class="def-item re"><div class="def-key re">Test Plan</div><div class="def-val">Master planning document — scope, approach, resources, schedule.</div></div>
+          <div class="def-item am"><div class="def-key am">Test Design Spec</div><div class="def-val">Test conditions and test cases derived from requirements.</div></div>
+          <div class="def-item gn"><div class="def-key gn">Test Incident Report</div><div class="def-val">Document describing any event requiring investigation during testing.</div></div>
+          <div class="def-item bl"><div class="def-key bl">Test Summary Report</div><div class="def-val">Final test results, evaluation, and recommendations summary.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ ROW 7: INTERVIEW Q&A ══════════ -->
+<div class="sec-div">Top Interview Questions &amp; Answers — Must Know for Every QA Fresher</div>
+<div class="grid-3">
+
+  <div class="col">
+    <div class="card">
+      <div class="ct"><div class="d"></div>Must-Know Interview Q&amp;A — Part 1</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key">Q: What is Software Testing?</div><div class="def-val">Process of evaluating software to find bugs, ensure it meets requirements and works as expected before release.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Q: What is a Bug/Defect?</div><div class="def-val">Any deviation between expected result and actual result. A mistake in code that causes incorrect behavior.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Q: What is Test Plan?</div><div class="def-val">Document that describes scope, approach, resources and schedule of testing activities for a project.</div></div>
+        <div class="def-item am"><div class="def-key am">Q: Difference between Error, Bug, Failure?</div><div class="def-val">Error = Human mistake in code. Bug = Defect in code (result of error). Failure = System doesn't work as expected (result of bug).</div></div>
+        <div class="def-item re"><div class="def-key re">Q: What is Quality Assurance vs Quality Control?</div><div class="def-val">QA = Process-oriented, prevent defects (SDLC). QC = Product-oriented, find defects (actual testing).</div></div>
+        <div class="def-item cy"><div class="def-key cy">Q: What is Test Environment?</div><div class="def-val">Setup of hardware, software, OS, network and tools required to execute test cases.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Q: What is Traceability Matrix?</div><div class="def-val">Document mapping requirements to test cases. Ensures no requirement is missed during testing.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct am"><div class="d"></div>Must-Know Interview Q&amp;A — Part 2</div>
+      <div class="def-list">
+        <div class="def-item am"><div class="def-key am">Q: What is Boundary Value Analysis?</div><div class="def-val">Testing values at the edges of valid/invalid input ranges. Bugs are most likely at boundaries — e.g. 17, 18, 19 for age min of 18.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Q: What is Equivalence Partitioning?</div><div class="def-val">Dividing input data into valid and invalid partitions. Testing one value from each partition covers the entire partition.</div></div>
+        <div class="def-item bl"><div class="def-key bl">Q: What is Regression Testing?</div><div class="def-val">Re-testing existing functionality after code changes/bug fixes to ensure nothing is broken. Can be automated.</div></div>
+        <div class="def-item re"><div class="def-key re">Q: What is UAT?</div><div class="def-val">User Acceptance Testing — end users test the software to verify it meets business requirements before go-live.</div></div>
+        <div class="def-item cy"><div class="def-key cy">Q: What is the difference between Smoke and Sanity?</div><div class="def-val">Smoke = Wide &amp; shallow check of entire build stability. Sanity = Narrow &amp; deep check of specific bug fix or feature.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Q: What makes a good test case?</div><div class="def-val">Clear title, specific steps, expected result, test data, and covers positive, negative and boundary scenarios.</div></div>
+        <div class="def-item"><div class="def-key">Q: What tools do you know?</div><div class="def-val">JIRA (bug tracking), Selenium (automation), Playwright, Postman (API), TestNG, JMeter (performance).</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Must-Know Interview Q&amp;A — Part 3</div>
+      <div class="def-list">
+        <div class="def-item bl"><div class="def-key bl">Q: What is Severity vs Priority?</div><div class="def-val">Severity = Bug's impact on functionality (set by tester). Priority = Order of fixing (set by manager). High Severity ≠ High Priority always.</div></div>
+        <div class="def-item gn"><div class="def-key gn">Q: What is Exploratory Testing?</div><div class="def-val">Unscripted testing where tester simultaneously learns, designs and executes tests using experience and intuition.</div></div>
+        <div class="def-item am"><div class="def-key am">Q: What is End-to-End Testing?</div><div class="def-val">Testing complete workflow from start to finish simulating real user behavior. e.g. Login → Add to cart → Checkout → Payment → Confirmation.</div></div>
+        <div class="def-item re"><div class="def-key re">Q: What is Alpha vs Beta Testing?</div><div class="def-val">Alpha = Internal testing by dev team at developer's site. Beta = External testing by real users at customer's location.</div></div>
+        <div class="def-item cy"><div class="def-key cy">Q: How do you report a bug?</div><div class="def-val">Bug ID, Title, Module, Environment, Steps to Reproduce, Expected Result, Actual Result, Severity, Priority, Screenshot/Video.</div></div>
+        <div class="def-item pk"><div class="def-key pk">Q: What is Test Closure?</div><div class="def-val">Last phase of STLC — activities include creating test summary report, lessons learned document, and formal sign-off from stakeholders.</div></div>
+        <div class="def-item"><div class="def-key">Q: What is Defect Leakage?</div><div class="def-val">When a bug escapes testing and is found by end user in production. Indicates gap in test coverage.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="footer">
+  <div class="fl">
+    <span>Manual Testing Complete Notes</span> · SDLC · STLC · Bug Life Cycle · Testing Types · BVA · EP · Agile · JIRA · Test Metrics
+  </div>
+  <div class="fr">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp;
+    🌍 nextgenqa94-ui.github.io/nextgenqa &nbsp;|&nbsp;
+    B.Tech · BCA · MCA · CBSE · ICSE · Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>
