@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Playwright API Testing Cheat Sheet — Senior SDET</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0d12;
+    --bg2: #0f1318;
+    --bg3: #141920;
+    --bg4: #1a2030;
+    --border: #1e2840;
+    --border2: #253050;
+    --text: #c8d4e8;
+    --text2: #8898b8;
+    --text3: #5568888;
+    --accent: #4fc3f7;
+    --accent2: #00e5ff;
+    --green: #4caf82;
+    --orange: #ffa040;
+    --red: #ff5370;
+    --purple: #c792ea;
+    --yellow: #ffcb6b;
+    --pink: #f07178;
+    --teal: #39adb5;
+    --code-bg: #060a10;
+    --badge-concept: rgba(79,195,247,0.12);
+    --badge-code: rgba(76,175,130,0.12);
+    --badge-usage: rgba(255,160,64,0.12);
+    --badge-mistake: rgba(255,83,112,0.12);
+    --badge-interview: rgba(199,146,234,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: linear-gradient(135deg, #0a0d12 0%, #0f1825 50%, #0a1020 100%);
+    border-bottom: 1px solid var(--border2);
+    padding: 40px 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(79,195,247,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -50px; right: 100px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(76,175,130,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .brand-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .brand-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .header-sub {
+    color: var(--text2);
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
+    border: 1px solid;
+  }
+  .pill-blue { background: rgba(79,195,247,0.1); border-color: rgba(79,195,247,0.3); color: var(--accent); }
+  .pill-green { background: rgba(76,175,130,0.1); border-color: rgba(76,175,130,0.3); color: var(--green); }
+  .pill-orange { background: rgba(255,160,64,0.1); border-color: rgba(255,160,64,0.3); color: var(--orange); }
+
+  /* ===== NAV ===== */
+  .nav-bar {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    padding-top: 4px;
+    scrollbar-width: none;
+    border-top: 1px solid var(--border);
+  }
+  .nav-bar::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
+    color: var(--text2);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    text-decoration: none;
+    display: block;
+  }
+  .nav-tab:hover { color: var(--accent); border-bottom-color: rgba(79,195,247,0.4); }
+
+  /* ===== LAYOUT ===== */
+  .main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  /* ===== SECTION ===== */
+  .section {
+    margin-bottom: 64px;
+    scroll-margin-top: 20px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--teal));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #000;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+
+  /* ===== TOPIC CARD ===== */
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 680px), 1fr));
+    gap: 20px;
+  }
+  .topic-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .topic-card:hover { border-color: var(--border2); }
+  .topic-title {
+    padding: 16px 20px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+  }
+  .topic-icon { font-size: 16px; }
+  .topic-body { padding: 0; }
+
+  /* ===== BADGES ===== */
+  .badge-row {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  .badge-row:last-child { border-bottom: none; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .badge-concept { background: var(--badge-concept); color: var(--accent); border: 1px solid rgba(79,195,247,0.25); }
+  .badge-code    { background: var(--badge-code);    color: var(--green); border: 1px solid rgba(76,175,130,0.25); }
+  .badge-usage   { background: var(--badge-usage);   color: var(--orange); border: 1px solid rgba(255,160,64,0.25); }
+  .badge-mistake { background: var(--badge-mistake); color: var(--red); border: 1px solid rgba(255,83,112,0.25); }
+  .badge-interview { background: var(--badge-interview); color: var(--purple); border: 1px solid rgba(199,146,234,0.25); }
+
+  .badge-row .content {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.65;
+  }
+  .badge-row .content strong { color: #fff; }
+  .badge-row .content em { color: var(--orange); font-style: normal; }
+
+  /* ===== CODE BLOCKS ===== */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.75;
+    margin: 0;
+    position: relative;
+  }
+  pre .lang-tag {
+    position: absolute;
+    top: 8px; right: 12px;
+    font-size: 9px;
+    color: var(--text2);
+    letter-spacing: 1px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+  /* Syntax */
+  .kw { color: #c792ea; }
+  .fn { color: #82aaff; }
+  .str { color: #c3e88d; }
+  .cm { color: #546e7a; font-style: italic; }
+  .num { color: #f78c6c; }
+  .obj { color: #ffcb6b; }
+  .prop { color: #4fc3f7; }
+  .op { color: #89ddff; }
+  .cls { color: #ffcb6b; font-weight: 600; }
+  .dec { color: #ff5370; }
+
+  /* ===== FULL-WIDTH CARD ===== */
+  .full-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .full-card + .full-card { margin-top: 20px; }
+
+  /* ===== COMPARISON TABLE ===== */
+  .cmp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .cmp-table th {
+    background: var(--bg4);
+    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border2);
+  }
+  .cmp-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  .cmp-table tr:last-child td { border-bottom: none; }
+  .cmp-table tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+  .td-label { color: var(--yellow); font-weight: 600; }
+  .td-green { color: var(--green); }
+  .td-red { color: var(--red); }
+
+  /* ===== TIPS GRID ===== */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .tip-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: flex;
+    gap: 12px;
+  }
+  .tip-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .tip-content h4 { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .tip-content p { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .tip-content code { color: var(--green); background: rgba(76,175,130,0.1); padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+
+  /* ===== INLINE CODE ===== */
+  .ic {
+    background: rgba(79,195,247,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(79,195,247,0.2);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+
+  /* ===== ALERT BOXES ===== */
+  .alert {
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .alert-warn { background: rgba(255,160,64,0.08); border: 1px solid rgba(255,160,64,0.25); color: #ffd08a; }
+  .alert-info { background: rgba(79,195,247,0.08); border: 1px solid rgba(79,195,247,0.25); color: #9dd8f5; }
+  .alert-success { background: rgba(76,175,130,0.08); border: 1px solid rgba(76,175,130,0.25); color: #85d4a8; }
+
+  /* ===== DIVIDER ===== */
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    text-align: center;
+    color: var(--text2);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .footer span { color: var(--accent); }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  @media (max-width: 768px) {
+    .header-inner, .main { padding: 20px; }
+    .topic-grid { grid-template-columns: 1fr; }
+    .badge-row { grid-template-columns: 1fr; }
+    .header h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">🎭</div>
+      <div class="brand-label">Next Gen QA · Senior SDET Reference</div>
+    </div>
+    <h1>Playwright API Testing<br/>Cheat Sheet</h1>
+    <div class="header-sub">
+      <span class="pill pill-blue">⚡ JavaScript</span>
+      <span class="pill pill-green">✅ Playwright Test</span>
+      <span class="pill pill-orange">🔥 Production-Level</span>
+      <span style="color:var(--text2)">10+ Years SDET Patterns · Real-World Implementation</span>
+    </div>
+    <nav class="nav-bar">
+      <a class="nav-tab" href="#s1">01 · Config</a>
+      <a class="nav-tab" href="#s2">02 · Context</a>
+      <a class="nav-tab" href="#s3">03 · HTTP Methods</a>
+      <a class="nav-tab" href="#s4">04 · Request Building</a>
+      <a class="nav-tab" href="#s5">05 · Auth</a>
+      <a class="nav-tab" href="#s6">06 · Response</a>
+      <a class="nav-tab" href="#s7">07 · Assertions</a>
+      <a class="nav-tab" href="#s8">08 · Error & Debug</a>
+      <a class="nav-tab" href="#s9">09 · Parallel</a>
+      <a class="nav-tab" href="#s10">10 · Framework</a>
+      <a class="nav-tab" href="#s11">11 · Best Practices</a>
+    </nav>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ==========================================
+     SECTION 1 — CORE SETUP & CONFIGURATION
+=========================================== -->
+<section class="section" id="s1">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <h2>Core Setup &amp; Configuration</h2>
+  </div>
+
+  <div class="topic-grid">
+
+    <!-- request vs APIRequestContext -->
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🔀</span>request fixture vs APIRequestContext — Detailed Difference</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-concept">Concept</span>
+          <div class="content">
+            <strong>request</strong> = Playwright built-in fixture — auto-created, auto-disposed per test. <strong>APIRequestContext</strong> = raw class instance you create/manage manually. Both make HTTP calls; lifecycle &amp; isolation differ entirely.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// ✅ request fixture — auto lifecycle, good for most tests</span>
+<span class="fn">test</span>(<span class="str">'GET users'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">get</span>(<span class="str">'/api/users'</span>);
+  <span class="cm">// context is auto-disposed after test</span>
+});
+
+<span class="cm">// ✅ APIRequestContext — manual control, ideal for shared sessions</span>
+<span class="kw">import</span> { <span class="cls">request</span> <span class="kw">as</span> <span class="prop">playwrightRequest</span> } <span class="kw">from</span> <span class="str">'@playwright/test'</span>;
+
+<span class="kw">let</span> <span class="obj">apiContext</span>;
+<span class="fn">test.beforeAll</span>(<span class="kw">async</span> () => {
+  <span class="obj">apiContext</span> = <span class="kw">await</span> <span class="obj">playwrightRequest</span>.<span class="fn">newContext</span>({
+    <span class="prop">baseURL</span>: <span class="str">'https://api.qa.myapp.com'</span>,
+    <span class="prop">extraHTTPHeaders</span>: { <span class="str">'Authorization'</span>: <span class="str">`Bearer ${process.env.TOKEN}`</span> }
+  });
+});
+<span class="fn">test.afterAll</span>(<span class="kw">async</span> () => <span class="kw">await</span> <span class="obj">apiContext</span>.<span class="fn">dispose</span>());
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-usage">Usage</span>
+          <div class="content">
+            Use <em>request fixture</em> for stateless, isolated tests. Use <em>APIRequestContext</em> when you need a shared authenticated session across a suite, or when managing cookies/storage manually.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Creating a new <span class="ic">APIRequestContext</span> per test — memory leak. Not calling <span class="ic">.dispose()</span> — leaks TCP connections. Sharing the <em>request</em> fixture across test files — it's already scoped per test.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"request fixture internally calls request.newContext() and disposes it in afterEach. APIRequestContext is the underlying class — use it when you need lifecycle control, cookie jar sharing, or pre-authenticated sessions."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- playwright.config.js -->
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">⚙️</span>playwright.config.js — API Testing Setup</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-concept">Concept</span>
+          <div class="content">
+            Centralize <strong>baseURL, timeout, retry, reporter, extraHTTPHeaders</strong> per environment. For API-only projects, disable <em>browserName</em> and use the <em>api</em> project with no browser.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// playwright.config.js</span>
+<span class="kw">import</span> { <span class="fn">defineConfig</span> } <span class="kw">from</span> <span class="str">'@playwright/test'</span>;
+<span class="kw">import</span> { <span class="obj">config</span> } <span class="kw">from</span> <span class="str">'./src/config/env.config'</span>;
+
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  <span class="prop">testDir</span>: <span class="str">'./tests'</span>,
+  <span class="prop">timeout</span>: <span class="num">30000</span>,
+  <span class="prop">retries</span>: process.env.<span class="obj">CI</span> ? <span class="num">2</span> : <span class="num">0</span>,
+  <span class="prop">reporter</span>: [[<span class="str">'html'</span>, { <span class="prop">open</span>: <span class="str">'never'</span> }], [<span class="str">'list'</span>]],
+  <span class="prop">use</span>: {
+    <span class="prop">baseURL</span>: <span class="obj">config</span>.<span class="prop">baseUrl</span>,          <span class="cm">// from env config</span>
+    <span class="prop">extraHTTPHeaders</span>: {
+      <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span>,
+      <span class="str">'Accept'</span>: <span class="str">'application/json'</span>,
+      <span class="str">'x-api-version'</span>: <span class="str">'v2'</span>
+    },
+    <span class="prop">ignoreHTTPSErrors</span>: <span class="kw">true</span>,   <span class="cm">// for self-signed QA certs</span>
+  },
+  <span class="prop">projects</span>: [
+    { <span class="prop">name</span>: <span class="str">'api-smoke'</span>,    <span class="prop">testMatch</span>: <span class="str">'**/*.smoke.spec.js'</span> },
+    { <span class="prop">name</span>: <span class="str">'api-regression'</span>, <span class="prop">testMatch</span>: <span class="str">'**/*.spec.js'</span> },
+  ],
+  <span class="prop">globalSetup</span>:    <span class="str">'./src/global/globalSetup.js'</span>,
+  <span class="prop">globalTeardown</span>: <span class="str">'./src/global/globalTeardown.js'</span>,
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-usage">Usage</span>
+          <div class="content">
+            <span class="ic">baseURL</span> from env means all requests use relative paths <span class="ic">/api/users</span>. Combine with <span class="ic">projects</span> to run smoke vs full regression on different ENV targets.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Hardcoding URLs inside test files. Forgetting <span class="ic">retries: 2</span> on CI — flaky network calls cause false failures. Setting <span class="ic">timeout</span> too low for slow QA environments.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"extraHTTPHeaders in playwright.config applies to the request fixture only — not to manually created APIRequestContext unless explicitly passed during newContext()."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Env Config -->
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🌍</span>BaseURL &amp; Environment Config (dev/qa/prod)</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-concept">Concept</span>
+          <div class="content">
+            Drive environment selection via <strong>ENV</strong> variable. Single config file resolves the correct baseURL, credentials, and timeouts per environment.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// src/config/env.config.js</span>
+<span class="kw">const</span> <span class="obj">environments</span> = {
+  <span class="prop">dev</span>:  { <span class="prop">baseUrl</span>: <span class="str">'https://api.dev.myapp.com'</span>,  <span class="prop">timeout</span>: <span class="num">5000</span> },
+  <span class="prop">qa</span>:   { <span class="prop">baseUrl</span>: <span class="str">'https://api.qa.myapp.com'</span>,   <span class="prop">timeout</span>: <span class="num">10000</span> },
+  <span class="prop">prod</span>: { <span class="prop">baseUrl</span>: <span class="str">'https://api.myapp.com'</span>,      <span class="prop">timeout</span>: <span class="num">8000</span> },
+};
+<span class="kw">const</span> <span class="obj">env</span> = process.env.<span class="obj">ENV</span> || <span class="str">'qa'</span>;
+<span class="kw">if</span> (!<span class="obj">environments</span>[<span class="obj">env</span>]) <span class="kw">throw new</span> <span class="cls">Error</span>(<span class="str">`Unknown ENV: ${env}`</span>);
+<span class="kw">export const</span> <span class="obj">config</span> = { ...<span class="obj">environments</span>[<span class="obj">env</span>], <span class="prop">env</span> };
+
+<span class="cm">// Run: ENV=prod npx playwright test</span>
+<span class="cm">// CI pipeline: ENV=qa npx playwright test --project=api-smoke</span>
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Putting prod credentials in source control. Using <span class="ic">process.env.BASE_URL</span> directly in tests — no validation, silent failures if env is misconfigured.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"We validate the ENV value at startup and throw early if it's invalid — fail fast is better than silent wrong-environment tests."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Global Setup/Teardown -->
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🌐</span>Global Setup / Teardown for API Tests</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-concept">Concept</span>
+          <div class="content">
+            <strong>globalSetup</strong> runs once before ALL tests. Use it to get an auth token, seed test data, or validate environment health. Result is stored in <span class="ic">process.env</span> for all workers.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// src/global/globalSetup.js</span>
+<span class="kw">import</span> { <span class="cls">request</span> } <span class="kw">from</span> <span class="str">'@playwright/test'</span>;
+<span class="kw">import</span> { <span class="obj">config</span> } <span class="kw">from</span> <span class="str">'../config/env.config.js'</span>;
+
+<span class="kw">export default async function</span> <span class="fn">globalSetup</span>() {
+  <span class="kw">const</span> <span class="obj">ctx</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">newContext</span>({ <span class="prop">baseURL</span>: <span class="obj">config</span>.<span class="prop">baseUrl</span> });
+  <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">ctx</span>.<span class="fn">post</span>(<span class="str">'/auth/login'</span>, {
+    <span class="prop">data</span>: { <span class="prop">email</span>: process.env.<span class="obj">API_USER</span>, <span class="prop">password</span>: process.env.<span class="obj">API_PASS</span> }
+  });
+  <span class="kw">if</span> (!<span class="obj">res</span>.<span class="fn">ok</span>()) <span class="kw">throw new</span> <span class="cls">Error</span>(<span class="str">'Global auth failed: '</span> + <span class="kw">await</span> <span class="obj">res</span>.<span class="fn">text</span>());
+  <span class="kw">const</span> { <span class="prop">token</span> } = <span class="kw">await</span> <span class="obj">res</span>.<span class="fn">json</span>();
+  process.env.<span class="obj">AUTH_TOKEN</span> = <span class="obj">token</span>;       <span class="cm">// shared across all workers</span>
+  <span class="kw">await</span> <span class="obj">ctx</span>.<span class="fn">dispose</span>();
+}
+
+<span class="cm">// src/global/globalTeardown.js</span>
+<span class="kw">export default async function</span> <span class="fn">globalTeardown</span>() {
+  <span class="cm">// revoke token, cleanup seeded data, send Slack notification, etc.</span>
+  console.<span class="fn">log</span>(<span class="str">'🧹 Global teardown complete'</span>);
+}
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Storing large objects in <span class="ic">process.env</span> — it's string-only, no objects. Instead, write to a <span class="ic">auth.json</span> file and read back. Forgetting that globalSetup runs in its own worker context.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"globalSetup runs before the test workers are forked — process.env changes here propagate to all workers, but imported module state does not."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /topic-grid -->
+</section>
+
+<!-- ==========================================
+     SECTION 2 — APIRequestContext Deep Dive
+=========================================== -->
+<section class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <h2>APIRequestContext — Deep Dive</h2>
+  </div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🔬</span>Internal Working &amp; Lifecycle</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-concept">Concept</span>
+          <div class="content">
+            Wraps Node.js <strong>fetch/http</strong> under the hood. Maintains its own <strong>cookie jar</strong>, <strong>connection pool</strong>, and <strong>default headers</strong>. Lifecycle: <em>newContext() → use → dispose()</em>.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// Lifecycle diagram in code</span>
+<span class="kw">import</span> { <span class="cls">request</span> } <span class="kw">from</span> <span class="str">'@playwright/test'</span>;
+
+<span class="cm">// 1. CREATE — allocates connection pool + cookie store</span>
+<span class="kw">const</span> <span class="obj">ctx</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">newContext</span>({
+  <span class="prop">baseURL</span>: <span class="str">'https://api.qa.myapp.com'</span>,
+  <span class="prop">storageState</span>: <span class="str">'./auth.json'</span>,    <span class="cm">// pre-load cookies/token</span>
+  <span class="prop">extraHTTPHeaders</span>: { <span class="str">'x-request-id'</span>: <span class="str">'automation'</span> },
+  <span class="prop">httpCredentials</span>: { <span class="prop">username</span>: <span class="str">'u'</span>, <span class="prop">password</span>: <span class="str">'p'</span> }, <span class="cm">// Basic Auth</span>
+});
+
+<span class="cm">// 2. USE — all calls share the same context (cookies persist)</span>
+<span class="kw">const</span> <span class="obj">loginRes</span> = <span class="kw">await</span> <span class="obj">ctx</span>.<span class="fn">post</span>(<span class="str">'/auth/login'</span>, { <span class="prop">data</span>: <span class="obj">creds</span> });
+<span class="kw">const</span> <span class="obj">profileRes</span> = <span class="kw">await</span> <span class="obj">ctx</span>.<span class="fn">get</span>(<span class="str">'/users/me'</span>); <span class="cm">// cookie auto-sent</span>
+
+<span class="cm">// 3. SAVE STATE (optional — for reuse across test files)</span>
+<span class="kw">await</span> <span class="obj">ctx</span>.<span class="fn">storageState</span>({ <span class="prop">path</span>: <span class="str">'./auth.json'</span> });
+
+<span class="cm">// 4. DISPOSE — closes connections, clears cookie jar</span>
+<span class="kw">await</span> <span class="obj">ctx</span>.<span class="fn">dispose</span>();
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Not calling <span class="ic">.dispose()</span> → leaked file descriptors + open sockets. Creating context inside a loop for each request — extreme overhead.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"storageState serializes cookies + localStorage to disk — this is how we persist login state across test files without repeating the auth flow on every test run."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🏗️</span>Isolated vs Shared Context Strategy</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-concept">Concept</span>
+          <div class="content">
+            <strong>Isolated</strong> = each test gets its own context (request fixture). <strong>Shared</strong> = one context for a suite (beforeAll). Choose based on whether tests share session state.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// PATTERN A — Isolated (Stateless REST APIs)</span>
+<span class="fn">test</span>(<span class="str">'create user'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="cm">// fresh context, no pollution from other tests</span>
+  <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">post</span>(<span class="str">'/users'</span>, { <span class="prop">data</span>: <span class="obj">userData</span> });
+});
+
+<span class="cm">// PATTERN B — Shared (Session / Token reuse across suite)</span>
+<span class="kw">import</span> { <span class="cls">test</span>, <span class="cls">expect</span> } <span class="kw">from</span> <span class="str">'@playwright/test'</span>;
+<span class="kw">import</span> { <span class="cls">request</span> } <span class="kw">from</span> <span class="str">'@playwright/test'</span>;
+
+<span class="kw">let</span> <span class="obj">apiCtx</span>;
+<span class="fn">test.describe</span>(<span class="str">'User CRUD Suite'</span>, () => {
+  <span class="fn">test.beforeAll</span>(<span class="kw">async</span> () => {
+    <span class="obj">apiCtx</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">newContext</span>({
+      <span class="prop">baseURL</span>: <span class="str">'https://api.qa.myapp.com'</span>,
+      <span class="prop">storageState</span>: <span class="str">'./auth.json'</span> <span class="cm">// pre-authenticated</span>
+    });
+  });
+  <span class="fn">test.afterAll</span>(<span class="kw">async</span> () => <span class="kw">await</span> <span class="obj">apiCtx</span>.<span class="fn">dispose</span>());
+
+  <span class="fn">test</span>(<span class="str">'get user list'</span>, <span class="kw">async</span> () => { <span class="kw">await</span> <span class="obj">apiCtx</span>.<span class="fn">get</span>(<span class="str">'/users'</span>); });
+  <span class="fn">test</span>(<span class="str">'update user'</span>,  <span class="kw">async</span> () => { <span class="kw">await</span> <span class="obj">apiCtx</span>.<span class="fn">patch</span>(<span class="str">'/users/1'</span>, {...}); });
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-usage">Usage</span>
+          <div class="content">
+            Shared context saves <em>N × auth round-trip time</em>. For a suite of 50 tests that each take 200ms to login, that's 10 seconds saved per run.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Sharing context between <em>parallel workers</em> — contexts are not thread-safe across workers. Keep shared context within a single <span class="ic">test.describe</span> block.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 3 — HTTP Methods
+=========================================== -->
+<section class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <h2>HTTP Methods with Real Scenarios</h2>
+  </div>
+  <div class="topic-grid">
+
+    <!-- GET -->
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">📥</span>GET — Pagination &amp; Filtering</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// Pagination — traverse all pages</span>
+<span class="kw">async function</span> <span class="fn">getAllUsers</span>(<span class="obj">request</span>) {
+  <span class="kw">let</span> <span class="obj">page</span> = <span class="num">1</span>, <span class="obj">all</span> = [];
+  <span class="kw">while</span> (<span class="kw">true</span>) {
+    <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">get</span>(<span class="str">'/users'</span>, {
+      <span class="prop">params</span>: { <span class="prop">page</span>, <span class="prop">limit</span>: <span class="num">50</span>, <span class="prop">status</span>: <span class="str">'active'</span> }
+    });
+    <span class="fn">expect</span>(<span class="obj">res</span>).<span class="fn">toBeOK</span>();
+    <span class="kw">const</span> { <span class="prop">data</span>, <span class="prop">meta</span> } = <span class="kw">await</span> <span class="obj">res</span>.<span class="fn">json</span>();
+    <span class="obj">all</span>.<span class="fn">push</span>(...<span class="obj">data</span>);
+    <span class="kw">if</span> (<span class="obj">page</span> >= <span class="obj">meta</span>.<span class="prop">totalPages</span>) <span class="kw">break</span>;
+    <span class="obj">page</span>++;
+  }
+  <span class="kw">return</span> <span class="obj">all</span>;
+}
+
+<span class="fn">test</span>(<span class="str">'all active users returned'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="kw">const</span> <span class="obj">users</span> = <span class="kw">await</span> <span class="fn">getAllUsers</span>(<span class="obj">request</span>);
+  <span class="fn">expect</span>(<span class="obj">users</span>.<span class="prop">length</span>).<span class="fn">toBeGreaterThan</span>(<span class="num">0</span>);
+  <span class="fn">expect</span>(<span class="obj">users</span>.<span class="fn">every</span>(<span class="obj">u</span> => <span class="obj">u</span>.<span class="prop">status</span> === <span class="str">'active'</span>)).<span class="fn">toBe</span>(<span class="kw">true</span>);
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Only testing page 1. Not validating <span class="ic">meta.totalCount</span> matches actual items fetched. Ignoring edge case: empty <span class="ic">data</span> array (zero results).
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"params in Playwright request are auto-encoded and appended to the URL — no manual URLSearchParams needed."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POST -->
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">📤</span>POST — Dynamic Payload Creation</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// Test data factory + POST</span>
+<span class="kw">import</span> { <span class="fn">buildUser</span> } <span class="kw">from</span> <span class="str">'../factories/user.factory'</span>;
+
+<span class="fn">test</span>(<span class="str">'create user with dynamic payload'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="kw">const</span> <span class="obj">payload</span> = <span class="fn">buildUser</span>({ <span class="prop">role</span>: <span class="str">'admin'</span>, <span class="prop">verified</span>: <span class="kw">true</span> });
+
+  <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">post</span>(<span class="str">'/users'</span>, {
+    <span class="prop">data</span>: <span class="obj">payload</span>,
+    <span class="prop">headers</span>: { <span class="str">'Idempotency-Key'</span>: <span class="obj">payload</span>.<span class="prop">email</span> } <span class="cm">// prevent duplicate on retry</span>
+  });
+
+  <span class="fn">expect</span>(<span class="obj">res</span>.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">201</span>);
+  <span class="kw">const</span> <span class="obj">body</span> = <span class="kw">await</span> <span class="obj">res</span>.<span class="fn">json</span>();
+  <span class="fn">expect</span>(<span class="obj">body</span>).<span class="fn">toMatchObject</span>({
+    <span class="prop">email</span>: <span class="obj">payload</span>.<span class="prop">email</span>,
+    <span class="prop">role</span>:  <span class="str">'admin'</span>,
+    <span class="prop">id</span>:    <span class="fn">expect</span>.<span class="fn">any</span>(<span class="cls">String</span>)
+  });
+});
+
+<span class="cm">// src/factories/user.factory.js</span>
+<span class="kw">import</span> { <span class="fn">faker</span> } <span class="kw">from</span> <span class="str">'@faker-js/faker'</span>;
+<span class="kw">export const</span> <span class="fn">buildUser</span> = (<span class="obj">overrides</span> = {}) => ({
+  <span class="prop">name</span>:     <span class="obj">faker</span>.<span class="fn">person</span>().<span class="fn">fullName</span>(),
+  <span class="prop">email</span>:    <span class="obj">faker</span>.<span class="fn">internet</span>().<span class="fn">email</span>(),
+  <span class="prop">role</span>:     <span class="str">'viewer'</span>,
+  <span class="prop">verified</span>: <span class="kw">false</span>,
+  ...<span class="obj">overrides</span>
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Hardcoded email in POST payload — duplicate key error on second run. Not asserting <span class="ic">201</span> specifically (only <span class="ic">ok()</span> which includes 200).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUT vs PATCH -->
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🔄</span>PUT vs PATCH — Difference + Usage</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-concept">Concept</span>
+          <div class="content">
+            <strong>PUT</strong> = full replacement (send complete resource). <strong>PATCH</strong> = partial update (send only changed fields). Missing fields in PUT = nulled; missing in PATCH = untouched.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// PUT — full replacement (all fields required)</span>
+<span class="fn">test</span>(<span class="str">'PUT replaces entire user object'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">put</span>(<span class="str">`/users/${userId}`</span>, {
+    <span class="prop">data</span>: { <span class="prop">name</span>: <span class="str">'Amir Khan'</span>, <span class="prop">email</span>: <span class="str">'amir@qa.com'</span>, <span class="prop">role</span>: <span class="str">'admin'</span> }
+  });
+  <span class="fn">expect</span>(<span class="obj">res</span>.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">200</span>);
+  <span class="kw">const</span> <span class="obj">body</span> = <span class="kw">await</span> <span class="obj">res</span>.<span class="fn">json</span>();
+  <span class="fn">expect</span>(<span class="obj">body</span>.<span class="prop">role</span>).<span class="fn">toBe</span>(<span class="str">'admin'</span>);
+});
+
+<span class="cm">// PATCH — partial update (only changed fields)</span>
+<span class="fn">test</span>(<span class="str">'PATCH updates only role field'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="cm">// Capture pre-state</span>
+  <span class="kw">const</span> <span class="obj">before</span> = <span class="kw">await</span> (<span class="kw">await</span> <span class="obj">request</span>.<span class="fn">get</span>(<span class="str">`/users/${userId}`</span>)).<span class="fn">json</span>();
+
+  <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">patch</span>(<span class="str">`/users/${userId}`</span>, {
+    <span class="prop">data</span>: { <span class="prop">role</span>: <span class="str">'viewer'</span> } <span class="cm">// ONLY role changes</span>
+  });
+  <span class="fn">expect</span>(<span class="obj">res</span>.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">200</span>);
+  <span class="kw">const</span> <span class="obj">after</span> = <span class="kw">await</span> <span class="obj">res</span>.<span class="fn">json</span>();
+  <span class="fn">expect</span>(<span class="obj">after</span>.<span class="prop">role</span>).<span class="fn">toBe</span>(<span class="str">'viewer'</span>);
+  <span class="fn">expect</span>(<span class="obj">after</span>.<span class="prop">name</span>).<span class="fn">toBe</span>(<span class="obj">before</span>.<span class="prop">name</span>); <span class="cm">// name must be unchanged</span>
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"Always validate the unchanged fields after PATCH — that's the real assertion. Missing this catches bugs where PATCH accidentally nullifies unspecified fields."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELETE -->
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🗑️</span>DELETE — Cleanup Strategy in Automation</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="fn">test</span>(<span class="str">'delete user — full lifecycle'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="cm">// Setup — create resource for this test</span>
+  <span class="kw">const</span> <span class="obj">createRes</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">post</span>(<span class="str">'/users'</span>, { <span class="prop">data</span>: <span class="fn">buildUser</span>() });
+  <span class="kw">const</span> { <span class="prop">id</span> } = <span class="kw">await</span> <span class="obj">createRes</span>.<span class="fn">json</span>();
+
+  <span class="cm">// DELETE</span>
+  <span class="kw">const</span> <span class="obj">delRes</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">delete</span>(<span class="str">`/users/${id}`</span>);
+  <span class="fn">expect</span>(<span class="obj">delRes</span>.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">204</span>); <span class="cm">// No Content</span>
+
+  <span class="cm">// Verify — 404 on subsequent GET</span>
+  <span class="kw">const</span> <span class="obj">getRes</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">get</span>(<span class="str">`/users/${id}`</span>);
+  <span class="fn">expect</span>(<span class="obj">getRes</span>.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">404</span>);
+
+  <span class="cm">// Idempotency — DELETE again should still be 404</span>
+  <span class="kw">const</span> <span class="obj">del2</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">delete</span>(<span class="str">`/users/${id}`</span>);
+  <span class="fn">expect</span>(<span class="obj">del2</span>.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">404</span>); <span class="cm">// not 500!</span>
+});
+
+<span class="cm">// Cleanup pattern — afterEach tracking</span>
+<span class="kw">const</span> <span class="obj">createdIds</span> = [];
+<span class="fn">test.afterEach</span>(<span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="kw">for</span> (<span class="kw">const</span> <span class="obj">id</span> <span class="kw">of</span> <span class="obj">createdIds</span>) {
+    <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">delete</span>(<span class="str">`/users/${id}`</span>).<span class="fn">catch</span>(() => {}); <span class="cm">// best-effort</span>
+  }
+  <span class="obj">createdIds</span>.<span class="prop">length</span> = <span class="num">0</span>;
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Only checking 204 but not verifying GET returns 404. Not testing idempotency (double DELETE). Cleanup in <span class="ic">afterAll</span> instead of <span class="ic">afterEach</span> — if suite fails mid-way, data leaks.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 4 — REQUEST BUILDING
+=========================================== -->
+<section class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <h2>Request Building — Advanced</h2>
+  </div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🔑</span>Headers — Authorization &amp; Dynamic Tokens</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// Dynamic token in each request</span>
+<span class="kw">const</span> <span class="fn">getAuthHeader</span> = () => ({
+  <span class="str">'Authorization'</span>: <span class="str">`Bearer ${process.env.AUTH_TOKEN}`</span>,
+  <span class="str">'x-correlation-id'</span>: <span class="obj">crypto</span>.<span class="fn">randomUUID</span>(),  <span class="cm">// traceability</span>
+  <span class="str">'x-test-run'</span>: process.env.<span class="obj">CI_RUN_ID</span> || <span class="str">'local'</span>,
+});
+
+<span class="cm">// Per-request header override</span>
+<span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">get</span>(<span class="str">'/admin/users'</span>, {
+  <span class="prop">headers</span>: {
+    ...<span class="fn">getAuthHeader</span>(),
+    <span class="str">'x-admin-key'</span>: process.env.<span class="obj">ADMIN_KEY</span>
+  }
+});
+
+<span class="cm">// Context-level default (applies to all calls in this context)</span>
+<span class="kw">const</span> <span class="obj">ctx</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">newContext</span>({
+  <span class="prop">extraHTTPHeaders</span>: <span class="fn">getAuthHeader</span>()   <span class="cm">// set once, used everywhere</span>
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Hardcoding token strings in tests. Not rotating <span class="ic">x-correlation-id</span> — makes production log tracing impossible.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">📦</span>Body Types — JSON, form-data, x-www-form-urlencoded</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// 1. JSON body (default with 'data')</span>
+<span class="kw">await</span> <span class="obj">request</span>.<span class="fn">post</span>(<span class="str">'/users'</span>, {
+  <span class="prop">data</span>: { <span class="prop">name</span>: <span class="str">'Amir'</span>, <span class="prop">email</span>: <span class="str">'a@qa.com'</span> }  <span class="cm">// auto Content-Type: application/json</span>
+});
+
+<span class="cm">// 2. form-data (file upload)</span>
+<span class="kw">import</span> { <span class="fn">readFileSync</span> } <span class="kw">from</span> <span class="str">'fs'</span>;
+<span class="kw">await</span> <span class="obj">request</span>.<span class="fn">post</span>(<span class="str">'/upload'</span>, {
+  <span class="prop">multipart</span>: {
+    <span class="prop">file</span>: {
+      <span class="prop">name</span>: <span class="str">'report.pdf'</span>,
+      <span class="prop">mimeType</span>: <span class="str">'application/pdf'</span>,
+      <span class="prop">buffer</span>: <span class="fn">readFileSync</span>(<span class="str">'./fixtures/report.pdf'</span>)
+    },
+    <span class="prop">category</span>: <span class="str">'finance'</span>   <span class="cm">// additional form field</span>
+  }
+});
+
+<span class="cm">// 3. x-www-form-urlencoded (legacy / OAuth token endpoints)</span>
+<span class="kw">await</span> <span class="obj">request</span>.<span class="fn">post</span>(<span class="str">'/oauth/token'</span>, {
+  <span class="prop">form</span>: {
+    <span class="prop">grant_type</span>:    <span class="str">'client_credentials'</span>,
+    <span class="prop">client_id</span>:     process.env.<span class="obj">CLIENT_ID</span>,
+    <span class="prop">client_secret</span>: process.env.<span class="obj">CLIENT_SECRET</span>,
+    <span class="prop">scope</span>:         <span class="str">'read:users write:users'</span>
+  }
+  <span class="cm">// auto Content-Type: application/x-www-form-urlencoded</span>
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"data = JSON, form = urlencoded, multipart = multipart/form-data. Playwright sets Content-Type automatically for each — don't set it manually or it may conflict."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 5 — AUTHENTICATION
+=========================================== -->
+<section class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <h2>Authentication — Real-World Patterns</h2>
+  </div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🔐</span>Bearer Token — Generate &amp; Reuse Pattern</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// src/helpers/auth.helper.js</span>
+<span class="kw">import</span> { <span class="cls">request</span> } <span class="kw">from</span> <span class="str">'@playwright/test'</span>;
+<span class="kw">import</span> { <span class="obj">config</span> } <span class="kw">from</span> <span class="str">'../config/env.config.js'</span>;
+
+<span class="kw">let</span> <span class="obj">cachedToken</span> = <span class="kw">null</span>;
+<span class="kw">let</span> <span class="obj">tokenExpiry</span> = <span class="num">0</span>;
+
+<span class="kw">export async function</span> <span class="fn">getToken</span>() {
+  <span class="kw">if</span> (<span class="obj">cachedToken</span> && Date.<span class="fn">now</span>() < <span class="obj">tokenExpiry</span>) <span class="kw">return</span> <span class="obj">cachedToken</span>;
+
+  <span class="kw">const</span> <span class="obj">ctx</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">newContext</span>({ <span class="prop">baseURL</span>: <span class="obj">config</span>.<span class="prop">baseUrl</span> });
+  <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">ctx</span>.<span class="fn">post</span>(<span class="str">'/auth/token'</span>, {
+    <span class="prop">form</span>: {
+      <span class="prop">grant_type</span>: <span class="str">'client_credentials'</span>,
+      <span class="prop">client_id</span>:  process.env.<span class="obj">CLIENT_ID</span>,
+      <span class="prop">client_secret</span>: process.env.<span class="obj">CLIENT_SECRET</span>
+    }
+  });
+  <span class="kw">const</span> { <span class="prop">access_token</span>, <span class="prop">expires_in</span> } = <span class="kw">await</span> <span class="obj">res</span>.<span class="fn">json</span>();
+  <span class="obj">cachedToken</span> = <span class="obj">access_token</span>;
+  <span class="obj">tokenExpiry</span> = Date.<span class="fn">now</span>() + (<span class="obj">expires_in</span> - <span class="num">60</span>) * <span class="num">1000</span>; <span class="cm">// 60s buffer</span>
+  <span class="kw">await</span> <span class="obj">ctx</span>.<span class="fn">dispose</span>();
+  <span class="kw">return</span> <span class="obj">cachedToken</span>;
+}
+
+<span class="cm">// Usage in test</span>
+<span class="fn">test</span>(<span class="str">'authenticated call'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="kw">const</span> <span class="obj">token</span> = <span class="kw">await</span> <span class="fn">getToken</span>();
+  <span class="kw">const</span> <span class="obj">res</span>   = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">get</span>(<span class="str">'/profile'</span>, {
+    <span class="prop">headers</span>: { <span class="str">'Authorization'</span>: <span class="str">`Bearer ${token}`</span> }
+  });
+  <span class="fn">expect</span>(<span class="obj">res</span>).<span class="fn">toBeOK</span>();
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Fetching a new token per test (N × auth latency). Not accounting for token expiry mid-run — tests fail with 401 after 1 hour if token lifetime is short.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"We cache the token with a 60-second expiry buffer to handle clock skew between our test runner and the auth server."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🗝️</span>API Key, Session &amp; storageState Pattern</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// API Key — header or query param</span>
+<span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">get</span>(<span class="str">'/data'</span>, {
+  <span class="prop">headers</span>: { <span class="str">'X-API-Key'</span>: process.env.<span class="obj">API_KEY</span> }
+  <span class="cm">// OR: params: { api_key: process.env.API_KEY }</span>
+});
+
+<span class="cm">// Session via storageState — save after login, reuse across files</span>
+<span class="cm">// Step 1: globalSetup — login and save</span>
+<span class="kw">const</span> <span class="obj">ctx</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">newContext</span>({ <span class="prop">baseURL</span>: <span class="obj">config</span>.<span class="prop">baseUrl</span> });
+<span class="kw">await</span> <span class="obj">ctx</span>.<span class="fn">post</span>(<span class="str">'/auth/login'</span>, { <span class="prop">data</span>: <span class="obj">creds</span> });
+<span class="kw">await</span> <span class="obj">ctx</span>.<span class="fn">storageState</span>({ <span class="prop">path</span>: <span class="str">'./auth-state/admin.json'</span> });
+<span class="kw">await</span> <span class="obj">ctx</span>.<span class="fn">dispose</span>();
+
+<span class="cm">// Step 2: In tests — load saved state</span>
+<span class="kw">const</span> <span class="obj">authedCtx</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">newContext</span>({
+  <span class="prop">baseURL</span>: <span class="obj">config</span>.<span class="prop">baseUrl</span>,
+  <span class="prop">storageState</span>: <span class="str">'./auth-state/admin.json'</span>
+});
+<span class="cm">// All cookies from login are automatically sent</span>
+<span class="kw">const</span> <span class="obj">profile</span> = <span class="kw">await</span> <span class="obj">authedCtx</span>.<span class="fn">get</span>(<span class="str">'/me'</span>);
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Committing <span class="ic">auth-state/admin.json</span> to git — contains session cookies. Add to <span class="ic">.gitignore</span>.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 6 — RESPONSE HANDLING
+=========================================== -->
+<section class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <h2>Response Handling — Deep</h2>
+  </div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">📊</span>status(), ok(), headers() &amp; JSON Parsing</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="fn">test</span>(<span class="str">'response deep dive'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">get</span>(<span class="str">'/users/42'</span>);
+
+  <span class="cm">// status + ok</span>
+  console.<span class="fn">log</span>(<span class="obj">res</span>.<span class="fn">status</span>());        <span class="cm">// 200</span>
+  console.<span class="fn">log</span>(<span class="obj">res</span>.<span class="fn">ok</span>());            <span class="cm">// true (200-299)</span>
+  console.<span class="fn">log</span>(<span class="obj">res</span>.<span class="fn">statusText</span>());    <span class="cm">// "OK"</span>
+  console.<span class="fn">log</span>(<span class="obj">res</span>.<span class="fn">url</span>());           <span class="cm">// actual URL hit</span>
+
+  <span class="cm">// headers</span>
+  <span class="kw">const</span> <span class="obj">headers</span> = <span class="obj">res</span>.<span class="fn">headers</span>();     <span class="cm">// returns plain object</span>
+  <span class="fn">expect</span>(<span class="obj">headers</span>[<span class="str">'content-type'</span>]).<span class="fn">toContain</span>(<span class="str">'application/json'</span>);
+  <span class="fn">expect</span>(<span class="obj">headers</span>[<span class="str">'x-request-id'</span>]).<span class="fn">toBeDefined</span>(); <span class="cm">// traceability</span>
+
+  <span class="cm">// JSON — always await, call once and store</span>
+  <span class="kw">const</span> <span class="obj">body</span> = <span class="kw">await</span> <span class="obj">res</span>.<span class="fn">json</span>();
+  <span class="fn">expect</span>(<span class="obj">body</span>.<span class="prop">id</span>).<span class="fn">toBe</span>(<span class="num">42</span>);
+
+  <span class="cm">// Response time — custom validation</span>
+  <span class="kw">const</span> <span class="obj">timing</span> = <span class="obj">res</span>.<span class="fn">headers</span>()[<span class="str">'x-response-time'</span>]; <span class="cm">// if server sends it</span>
+  <span class="kw">const</span> <span class="obj">start</span>  = Date.<span class="fn">now</span>();
+  <span class="kw">const</span> <span class="obj">slow</span>   = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">get</span>(<span class="str">'/heavy-report'</span>);
+  <span class="kw">const</span> <span class="obj">ms</span>     = Date.<span class="fn">now</span>() - <span class="obj">start</span>;
+  <span class="fn">expect</span>(<span class="obj">ms</span>).<span class="fn">toBeLessThan</span>(<span class="num">3000</span>); <span class="cm">// SLA: under 3s</span>
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Calling <span class="ic">res.json()</span> multiple times — it reads the stream, second call returns empty. Store result in a variable. Using <span class="ic">res.body()</span> and then <span class="ic">res.json()</span> — same issue.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"ok() returns true for any 2xx status — but in POST, 201 ≠ 200. Always use status() for precise status code assertion in CRUD tests."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">📦</span>Handling Large / Complex Responses</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// Large response — extract only what you need</span>
+<span class="fn">test</span>(<span class="str">'validate report summary in large response'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="kw">const</span> <span class="obj">res</span>  = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">get</span>(<span class="str">'/reports/annual?year=2024'</span>);
+  <span class="kw">const</span> <span class="obj">body</span> = <span class="kw">await</span> <span class="obj">res</span>.<span class="fn">json</span>();
+
+  <span class="cm">// Destructure only needed fields</span>
+  <span class="kw">const</span> { <span class="prop">summary</span>, <span class="prop">status</span>, <span class="prop">generatedAt</span> } = <span class="obj">body</span>;
+
+  <span class="fn">expect</span>(<span class="obj">status</span>).<span class="fn">toBe</span>(<span class="str">'completed'</span>);
+  <span class="fn">expect</span>(<span class="obj">summary</span>.<span class="prop">totalRevenue</span>).<span class="fn">toBeGreaterThan</span>(<span class="num">0</span>);
+  <span class="fn">expect</span>(<span class="kw">new</span> <span class="cls">Date</span>(<span class="obj">generatedAt</span>)).<span class="fn">toBeInstanceOf</span>(<span class="cls">Date</span>);
+
+  <span class="cm">// Find in array — avoid full array assertion</span>
+  <span class="kw">const</span> <span class="obj">q4</span> = <span class="obj">body</span>.<span class="prop">quarters</span>.<span class="fn">find</span>(<span class="obj">q</span> => <span class="obj">q</span>.<span class="prop">name</span> === <span class="str">'Q4'</span>);
+  <span class="fn">expect</span>(<span class="obj">q4</span>.<span class="prop">growth</span>).<span class="fn">toBeGreaterThan</span>(<span class="num">0.05</span>); <span class="cm">// 5%+ growth</span>
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            <span class="ic">expect(body).toEqual(hugeExpectedObject)</span> — any tiny schema change breaks test. Use targeted assertions on specific fields.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 7 — ASSERTIONS
+=========================================== -->
+<section class="section" id="s7">
+  <div class="section-header">
+    <div class="section-num">07</div>
+    <h2>Assertions — Advanced</h2>
+  </div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">✅</span>Advanced Assertion Patterns</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// Status codes</span>
+<span class="fn">expect</span>(<span class="obj">res</span>.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">201</span>);
+<span class="fn">expect</span>([<span class="num">200</span>, <span class="num">201</span>]).<span class="fn">toContain</span>(<span class="obj">res</span>.<span class="fn">status</span>());  <span class="cm">// either OK</span>
+
+<span class="cm">// Deep nested object validation</span>
+<span class="fn">expect</span>(<span class="obj">body</span>).<span class="fn">toMatchObject</span>({
+  <span class="prop">user</span>: {
+    <span class="prop">profile</span>: {
+      <span class="prop">address</span>: {
+        <span class="prop">city</span>: <span class="str">'Noida'</span>,
+        <span class="prop">pincode</span>: <span class="fn">expect</span>.<span class="fn">any</span>(<span class="cls">String</span>)
+      }
+    },
+    <span class="prop">roles</span>: <span class="fn">expect</span>.<span class="fn">arrayContaining</span>([<span class="str">'admin'</span>])
+  }
+});
+
+<span class="cm">// Partial match — extra fields OK</span>
+<span class="fn">expect</span>(<span class="obj">body</span>.<span class="prop">user</span>).<span class="fn">toMatchObject</span>({ <span class="prop">email</span>: <span class="str">'amir@qa.com'</span> });
+
+<span class="cm">// Array shape</span>
+<span class="fn">expect</span>(<span class="obj">body</span>.<span class="prop">items</span>).<span class="fn">toHaveLength</span>(<span class="num">10</span>);
+<span class="fn">expect</span>(<span class="obj">body</span>.<span class="prop">items</span>[<span class="num">0</span>]).<span class="fn">toMatchObject</span>({
+  <span class="prop">id</span>:    <span class="fn">expect</span>.<span class="fn">any</span>(<span class="cls">String</span>),
+  <span class="prop">price</span>: <span class="fn">expect</span>.<span class="fn">any</span>(<span class="cls">Number</span>),
+});
+
+<span class="cm">// Custom assertion util</span>
+<span class="kw">function</span> <span class="fn">assertPagination</span>(<span class="obj">meta</span>, { <span class="obj">page</span>, <span class="obj">limit</span> }) {
+  <span class="fn">expect</span>(<span class="obj">meta</span>.<span class="prop">currentPage</span>).<span class="fn">toBe</span>(<span class="obj">page</span>);
+  <span class="fn">expect</span>(<span class="obj">meta</span>.<span class="prop">perPage</span>).<span class="fn">toBe</span>(<span class="obj">limit</span>);
+  <span class="fn">expect</span>(<span class="obj">meta</span>.<span class="prop">totalPages</span>).<span class="fn">toBeGreaterThanOrEqual</span>(<span class="num">1</span>);
+  <span class="fn">expect</span>(<span class="obj">meta</span>.<span class="prop">totalCount</span>).<span class="fn">toBeGreaterThanOrEqual</span>(<span class="num">0</span>);
+}
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"toMatchObject does partial deep matching — ideal for API responses where server adds computed fields (id, createdAt) you don't control. toEqual would fail on those."</em>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Using <span class="ic">toEqual</span> for full response comparison — will break whenever server adds new optional fields. Prefer <span class="ic">toMatchObject</span> for response bodies.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🔍</span>Schema Validation with JSON Schema</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-concept">Concept</span>
+          <div class="content">
+            Use <strong>ajv</strong> (JSON Schema validator) for contract testing — validate structure without caring about values. Catches breaking API changes early.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// npm install ajv</span>
+<span class="kw">import</span> <span class="cls">Ajv</span> <span class="kw">from</span> <span class="str">'ajv'</span>;
+<span class="kw">const</span> <span class="obj">ajv</span> = <span class="kw">new</span> <span class="cls">Ajv</span>();
+
+<span class="kw">const</span> <span class="obj">userSchema</span> = {
+  <span class="prop">type</span>: <span class="str">'object'</span>,
+  <span class="prop">required</span>: [<span class="str">'id'</span>, <span class="str">'email'</span>, <span class="str">'role'</span>],
+  <span class="prop">properties</span>: {
+    <span class="prop">id</span>:    { <span class="prop">type</span>: <span class="str">'string'</span> },
+    <span class="prop">email</span>: { <span class="prop">type</span>: <span class="str">'string'</span>, <span class="prop">format</span>: <span class="str">'email'</span> },
+    <span class="prop">role</span>:  { <span class="prop">type</span>: <span class="str">'string'</span>, <span class="prop">enum</span>: [<span class="str">'admin'</span>, <span class="str">'viewer'</span>] },
+    <span class="prop">age</span>:   { <span class="prop">type</span>: <span class="str">'integer'</span>, <span class="prop">minimum</span>: <span class="num">0</span> }
+  },
+  <span class="prop">additionalProperties</span>: <span class="kw">false</span>  <span class="cm">// strict — no surprise fields</span>
+};
+
+<span class="fn">test</span>(<span class="str">'user schema is valid'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="kw">const</span> <span class="obj">body</span> = <span class="kw">await</span> (<span class="kw">await</span> <span class="obj">request</span>.<span class="fn">get</span>(<span class="str">'/users/1'</span>)).<span class="fn">json</span>();
+  <span class="kw">const</span> <span class="obj">valid</span> = <span class="obj">ajv</span>.<span class="fn">validate</span>(<span class="obj">userSchema</span>, <span class="obj">body</span>);
+  <span class="fn">expect</span>(<span class="obj">valid</span>, <span class="obj">ajv</span>.<span class="fn">errorsText</span>()).<span class="fn">toBe</span>(<span class="kw">true</span>);
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"Schema validation as contract testing — we catch API breaking changes before they reach UI tests. It's the cheapest integration test you can write."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 8 — ERROR HANDLING & DEBUGGING
+=========================================== -->
+<section class="section" id="s8">
+  <div class="section-header">
+    <div class="section-num">08</div>
+    <h2>Error Handling &amp; Debugging</h2>
+  </div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🔁</span>Retry Logic &amp; 4xx/5xx Handling</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// Utility: retry with exponential backoff</span>
+<span class="kw">async function</span> <span class="fn">retryRequest</span>(<span class="obj">fn</span>, { <span class="obj">retries</span> = <span class="num">3</span>, <span class="obj">delayMs</span> = <span class="num">500</span> } = {}) {
+  <span class="kw">let</span> <span class="obj">attempt</span> = <span class="num">0</span>;
+  <span class="kw">while</span> (<span class="kw">true</span>) {
+    <span class="kw">try</span> {
+      <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="fn">fn</span>();
+      <span class="kw">if</span> (<span class="obj">res</span>.<span class="fn">status</span>() === <span class="num">429</span> || <span class="obj">res</span>.<span class="fn">status</span>() >= <span class="num">500</span>) {
+        <span class="kw">if</span> (++<span class="obj">attempt</span> > <span class="obj">retries</span>) <span class="kw">throw new</span> <span class="cls">Error</span>(<span class="str">`Failed after ${retries} retries: ${res.status()}`</span>);
+        <span class="kw">await</span> <span class="kw">new</span> <span class="cls">Promise</span>(<span class="obj">r</span> => <span class="fn">setTimeout</span>(<span class="obj">r</span>, <span class="obj">delayMs</span> * <span class="num">2</span> ** <span class="obj">attempt</span>));
+        <span class="kw">continue</span>;
+      }
+      <span class="kw">return</span> <span class="obj">res</span>;
+    } <span class="kw">catch</span> (<span class="obj">e</span>) {
+      <span class="kw">if</span> (++<span class="obj">attempt</span> > <span class="obj">retries</span>) <span class="kw">throw</span> <span class="obj">e</span>;
+      <span class="kw">await</span> <span class="kw">new</span> <span class="cls">Promise</span>(<span class="obj">r</span> => <span class="fn">setTimeout</span>(<span class="obj">r</span>, <span class="obj">delayMs</span> * <span class="num">2</span> ** <span class="obj">attempt</span>));
+    }
+  }
+}
+
+<span class="cm">// Test: 4xx should contain error message</span>
+<span class="fn">test</span>(<span class="str">'400 Bad Request has error detail'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => {
+  <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">post</span>(<span class="str">'/users'</span>, { <span class="prop">data</span>: { <span class="prop">email</span>: <span class="str">'bad'</span> } });
+  <span class="fn">expect</span>(<span class="obj">res</span>.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">400</span>);
+  <span class="kw">const</span> <span class="obj">err</span> = <span class="kw">await</span> <span class="obj">res</span>.<span class="fn">json</span>();
+  <span class="fn">expect</span>(<span class="obj">err</span>.<span class="prop">message</span>).<span class="fn">toContain</span>(<span class="str">'email'</span>);
+  <span class="fn">expect</span>(<span class="obj">err</span>.<span class="prop">code</span>).<span class="fn">toBeDefined</span>();  <span class="cm">// e.g. "VALIDATION_ERROR"</span>
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"We retry on 429 and 5xx only — not on 4xx, because those are test/data bugs, not transient. Retrying on 4xx masks real failures."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🪵</span>Logging Request &amp; Response for Debugging</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// Logging wrapper — wraps any request method</span>
+<span class="kw">export async function</span> <span class="fn">loggedRequest</span>(<span class="obj">fn</span>, <span class="obj">label</span> = <span class="str">''</span>) {
+  <span class="kw">const</span> <span class="obj">start</span> = Date.<span class="fn">now</span>();
+  <span class="kw">let</span> <span class="obj">res</span>;
+  <span class="kw">try</span> {
+    <span class="obj">res</span> = <span class="kw">await</span> <span class="fn">fn</span>();
+    <span class="kw">const</span> <span class="obj">ms</span>   = Date.<span class="fn">now</span>() - <span class="obj">start</span>;
+    <span class="kw">const</span> <span class="obj">body</span> = <span class="kw">await</span> <span class="obj">res</span>.<span class="fn">text</span>();
+    console.<span class="fn">log</span>(<span class="str">`[API] ${label} → ${res.status()} (${ms}ms)\n`</span> +
+      <span class="str">`  URL: ${res.url()}\n`</span> +
+      <span class="str">`  Body: ${body.slice(0, 500)}`</span>);
+    <span class="kw">return</span> { <span class="prop">res</span>, <span class="prop">body</span>: <span class="obj">JSON</span>.<span class="fn">parse</span>(<span class="obj">body</span>) };
+  } <span class="kw">catch</span> (<span class="obj">e</span>) {
+    console.<span class="fn">error</span>(<span class="str">`[API] ${label} FAILED:`, e.message</span>);
+    <span class="kw">throw</span> <span class="obj">e</span>;
+  }
+}
+
+<span class="cm">// Usage</span>
+<span class="kw">const</span> { <span class="prop">res</span>, <span class="prop">body</span> } = <span class="kw">await</span> <span class="fn">loggedRequest</span>(
+  () => <span class="obj">request</span>.<span class="fn">post</span>(<span class="str">'/payment'</span>, { <span class="prop">data</span>: <span class="obj">payload</span> }),
+  <span class="str">'POST /payment'</span>
+);
+
+<span class="cm">// Built-in: DEBUG=pw:api npx playwright test  ← logs all HTTP</span>
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-usage">Usage</span>
+          <div class="content">
+            Set <span class="ic">DEBUG=pw:api</span> env variable to get Playwright's built-in HTTP logging. Use the wrapper for business-level logging in your CI reports.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Logging entire response body in production CI — may expose PII/secrets. Truncate with <span class="ic">.slice(0, 500)</span> or mask sensitive fields.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 9 — PARALLEL EXECUTION
+=========================================== -->
+<section class="section" id="s9">
+  <div class="section-header">
+    <div class="section-num">09</div>
+    <h2>Parallel Execution</h2>
+  </div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">⚡</span>Parallel API Tests — Safe Data Strategy</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-concept">Concept</span>
+          <div class="content">
+            Playwright runs test files in parallel by default. API tests must use <strong>unique test data per worker</strong> to avoid conflicts (unique email, userId, etc.).
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// playwright.config.js</span>
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  <span class="prop">workers</span>: process.env.<span class="obj">CI</span> ? <span class="num">4</span> : <span class="num">2</span>,         <span class="cm">// parallel workers</span>
+  <span class="prop">fullyParallel</span>: <span class="kw">true</span>,                       <span class="cm">// tests within file also parallel</span>
+  <span class="cm">// Use test.describe.configure({ mode: 'serial' }) for dependent tests</span>
+});
+
+<span class="cm">// Unique data per test — worker index + timestamp</span>
+<span class="fn">test</span>(<span class="str">'parallel safe user creation'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }, <span class="obj">testInfo</span>) => {
+  <span class="kw">const</span> <span class="obj">uniqueSuffix</span> = <span class="str">`${testInfo.workerIndex}_${Date.now()}`</span>;
+  <span class="kw">const</span> <span class="obj">payload</span> = {
+    <span class="prop">email</span>: <span class="str">`user_${uniqueSuffix}@test.com`</span>,
+    <span class="prop">name</span>:  <span class="str">`Test User ${uniqueSuffix}`</span>
+  };
+  <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="obj">request</span>.<span class="fn">post</span>(<span class="str">'/users'</span>, { <span class="prop">data</span>: <span class="obj">payload</span> });
+  <span class="fn">expect</span>(<span class="obj">res</span>.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">201</span>);
+});
+
+<span class="cm">// Serial mode for dependent tests (login → action → logout)</span>
+<span class="fn">test.describe</span>.<span class="fn">configure</span>({ <span class="prop">mode</span>: <span class="str">'serial'</span> });
+<span class="fn">test.describe</span>(<span class="str">'Payment flow'</span>, () => {
+  <span class="kw">let</span> <span class="obj">orderId</span>;
+  <span class="fn">test</span>(<span class="str">'create order'</span>,  <span class="kw">async</span> ({ <span class="prop">request</span> }) => { <span class="obj">orderId</span> = ...; });
+  <span class="fn">test</span>(<span class="str">'pay order'</span>,     <span class="kw">async</span> ({ <span class="prop">request</span> }) => { <span class="cm">/* uses orderId */</span> });
+  <span class="fn">test</span>(<span class="str">'verify payment'</span>, <span class="kw">async</span> ({ <span class="prop">request</span> }) => { <span class="cm">/* sequential */</span> });
+});
+</code></pre>
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-mistake">Mistake</span>
+          <div class="content">
+            Shared global state between parallel workers (like a module-level <span class="ic">let userId</span>). Each worker is a separate Node.js process — module state is not shared.
+          </div>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-interview">Interview</span>
+          <div class="content">
+            <em>"testInfo.workerIndex gives worker ID (0,1,2…). Combined with timestamp it guarantees uniqueness even when workers start at the same millisecond."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 10 — FRAMEWORK DESIGN
+=========================================== -->
+<section class="section" id="s10">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <h2>Framework Design — VERY IMPORTANT</h2>
+  </div>
+
+  <div class="full-card">
+    <div class="topic-title" style="font-size:15px">🏛️ API Service Layer — Client Class Architecture</div>
+    <div style="padding:20px">
+<pre><code><span class="cm">// src/services/UserService.js — API Client class</span>
+<span class="kw">export class</span> <span class="cls">UserService</span> {
+  <span class="fn">constructor</span>(<span class="obj">request</span>) {
+    <span class="kw">this</span>.<span class="obj">request</span> = <span class="obj">request</span>;
+    <span class="kw">this</span>.<span class="obj">base</span> = <span class="str">'/api/v2/users'</span>;
+  }
+
+  <span class="kw">async</span> <span class="fn">getAll</span>({ <span class="obj">page</span> = <span class="num">1</span>, <span class="obj">limit</span> = <span class="num">20</span>, <span class="obj">status</span> } = {}) {
+    <span class="kw">return</span> <span class="kw">this</span>.<span class="obj">request</span>.<span class="fn">get</span>(<span class="kw">this</span>.<span class="obj">base</span>, { <span class="prop">params</span>: { <span class="obj">page</span>, <span class="obj">limit</span>, <span class="obj">status</span> } });
+  }
+  <span class="kw">async</span> <span class="fn">getById</span>(<span class="obj">id</span>)       { <span class="kw">return</span> <span class="kw">this</span>.<span class="obj">request</span>.<span class="fn">get</span>(<span class="str">`${this.base}/${id}`</span>); }
+  <span class="kw">async</span> <span class="fn">create</span>(<span class="obj">data</span>)      { <span class="kw">return</span> <span class="kw">this</span>.<span class="obj">request</span>.<span class="fn">post</span>(<span class="kw">this</span>.<span class="obj">base</span>, { <span class="prop">data</span> }); }
+  <span class="kw">async</span> <span class="fn">update</span>(<span class="obj">id</span>, <span class="obj">data</span>) { <span class="kw">return</span> <span class="kw">this</span>.<span class="obj">request</span>.<span class="fn">patch</span>(<span class="str">`${this.base}/${id}`</span>, { <span class="prop">data</span> }); }
+  <span class="kw">async</span> <span class="fn">replace</span>(<span class="obj">id</span>, <span class="obj">data</span>){ <span class="kw">return</span> <span class="kw">this</span>.<span class="obj">request</span>.<span class="fn">put</span>(<span class="str">`${this.base}/${id}`</span>, { <span class="prop">data</span> }); }
+  <span class="kw">async</span> <span class="fn">remove</span>(<span class="obj">id</span>)       { <span class="kw">return</span> <span class="kw">this</span>.<span class="obj">request</span>.<span class="fn">delete</span>(<span class="str">`${this.base}/${id}`</span>); }
+
+  <span class="cm">// Domain-specific method</span>
+  <span class="kw">async</span> <span class="fn">promoteToAdmin</span>(<span class="obj">id</span>) {
+    <span class="kw">return</span> <span class="kw">this</span>.<span class="obj">request</span>.<span class="fn">post</span>(<span class="str">`${this.base}/${id}/promote`</span>);
+  }
+
+  <span class="cm">// With response parsing (shorthand)</span>
+  <span class="kw">async</span> <span class="fn">createAndParse</span>(<span class="obj">data</span>) {
+    <span class="kw">const</span> <span class="obj">res</span> = <span class="kw">await</span> <span class="fn">this</span>.<span class="fn">create</span>(<span class="obj">data</span>);
+    <span class="fn">expect</span>(<span class="obj">res</span>.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">201</span>);
+    <span class="kw">return</span> <span class="obj">res</span>.<span class="fn">json</span>();
+  }
+}
+
+<span class="cm">// Custom fixture — injects service into tests</span>
+<span class="cm">// src/fixtures/apiFixtures.js</span>
+<span class="kw">import</span> { <span class="fn">test</span> <span class="kw">as</span> <span class="obj">base</span> } <span class="kw">from</span> <span class="str">'@playwright/test'</span>;
+<span class="kw">import</span> { <span class="cls">UserService</span> } <span class="kw">from</span> <span class="str">'../services/UserService.js'</span>;
+
+<span class="kw">export const</span> <span class="obj">test</span> = <span class="obj">base</span>.<span class="fn">extend</span>({
+  <span class="prop">userService</span>: <span class="kw">async</span> ({ <span class="prop">request</span> }, <span class="fn">use</span>) => {
+    <span class="kw">await</span> <span class="fn">use</span>(<span class="kw">new</span> <span class="cls">UserService</span>(<span class="obj">request</span>));
+  }
+});
+
+<span class="cm">// Test using fixture</span>
+<span class="kw">import</span> { <span class="obj">test</span>, <span class="cls">expect</span> } <span class="kw">from</span> <span class="str">'../fixtures/apiFixtures.js'</span>;
+<span class="fn">test</span>(<span class="str">'create and verify user'</span>, <span class="kw">async</span> ({ <span class="prop">userService</span> }) => {
+  <span class="kw">const</span> <span class="obj">user</span> = <span class="kw">await</span> <span class="obj">userService</span>.<span class="fn">createAndParse</span>(<span class="fn">buildUser</span>());
+  <span class="fn">expect</span>(<span class="obj">user</span>.<span class="prop">id</span>).<span class="fn">toBeDefined</span>();
+});
+</code></pre>
+    </div>
+  </div>
+
+  <div style="margin-top:20px" class="topic-grid">
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">🏭</span>Test Data Factory Pattern</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-code">Code</span>
+          <div class="content">
+<pre><code><span class="cm">// src/factories/index.js</span>
+<span class="kw">import</span> { <span class="fn">faker</span> } <span class="kw">from</span> <span class="str">'@faker-js/faker'</span>;
+
+<span class="kw">export const</span> <span class="fn">buildUser</span> = (<span class="obj">o</span> = {}) => ({
+  <span class="prop">name</span>:     <span class="obj">faker</span>.<span class="fn">person</span>().<span class="fn">fullName</span>(),
+  <span class="prop">email</span>:    <span class="obj">faker</span>.<span class="fn">internet</span>().<span class="fn">email</span>(),
+  <span class="prop">phone</span>:    <span class="obj">faker</span>.<span class="fn">phone</span>().<span class="fn">number</span>(<span class="str">'+91##########'</span>),
+  <span class="prop">role</span>:     <span class="str">'viewer'</span>,
+  <span class="prop">verified</span>: <span class="kw">false</span>,
+  ...<span class="obj">o</span>  <span class="cm">// caller overrides win</span>
+});
+
+<span class="kw">export const</span> <span class="fn">buildProduct</span> = (<span class="obj">o</span> = {}) => ({
+  <span class="prop">name</span>:  <span class="obj">faker</span>.<span class="fn">commerce</span>().<span class="fn">productName</span>(),
+  <span class="prop">price</span>: <span class="fn">parseFloat</span>(<span class="obj">faker</span>.<span class="fn">commerce</span>().<span class="fn">price</span>({ <span class="prop">min</span>: <span class="num">10</span>, <span class="prop">max</span>: <span class="num">999</span> })),
+  <span class="prop">sku</span>:   <span class="obj">faker</span>.<span class="fn">string</span>().<span class="fn">alphanumeric</span>(<span class="num">8</span>).<span class="fn">toUpperCase</span>(),
+  <span class="prop">stock</span>: <span class="obj">faker</span>.<span class="fn">number</span>().<span class="fn">int</span>({ <span class="prop">min</span>: <span class="num">1</span>, <span class="prop">max</span>: <span class="num">100</span> }),
+  ...<span class="obj">o</span>
+});
+
+<span class="cm">// Edge case builders</span>
+<span class="kw">export const</span> <span class="fn">buildUserMinimal</span> = () => <span class="fn">buildUser</span>({ <span class="prop">phone</span>: <span class="kw">undefined</span> });
+<span class="kw">export const</span> <span class="fn">buildAdminUser</span>  = () => <span class="fn">buildUser</span>({ <span class="prop">role</span>: <span class="str">'admin'</span>, <span class="prop">verified</span>: <span class="kw">true</span> });
+</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-title"><span class="topic-icon">📁</span>Recommended Framework Structure</div>
+      <div class="topic-body">
+        <div class="badge-row">
+          <span class="badge badge-concept">Concept</span>
+          <div class="content">
+<pre><code><span class="cm">playwright-api-framework/</span>
+<span class="prop">├── src/</span>
+<span class="prop">│   ├── config/</span>
+<span class="prop">│   │   └── env.config.js       </span><span class="cm"># env + baseURL</span>
+<span class="prop">│   ├── services/</span>
+<span class="prop">│   │   ├── UserService.js      </span><span class="cm"># API client per domain</span>
+<span class="prop">│   │   ├── AuthService.js</span>
+<span class="prop">│   │   └── PaymentService.js</span>
+<span class="prop">│   ├── factories/</span>
+<span class="prop">│   │   └── index.js            </span><span class="cm"># buildUser, buildProduct</span>
+<span class="prop">│   ├── fixtures/</span>
+<span class="prop">│   │   └── apiFixtures.js      </span><span class="cm"># extended test fixtures</span>
+<span class="prop">│   ├── helpers/</span>
+<span class="prop">│   │   ├── auth.helper.js      </span><span class="cm"># token cache, login</span>
+<span class="prop">│   │   └── request.helper.js   </span><span class="cm"># retry, logging</span>
+<span class="prop">│   ├── schemas/</span>
+<span class="prop">│   │   └── user.schema.json    </span><span class="cm"># AJV schemas</span>
+<span class="prop">│   └── global/</span>
+<span class="prop">│       ├── globalSetup.js</span>
+<span class="prop">│       └── globalTeardown.js</span>
+<span class="prop">├── tests/</span>
+<span class="prop">│   ├── users/</span>
+<span class="prop">│   │   ├── users.smoke.spec.js</span>
+<span class="prop">│   │   └── users.spec.js</span>
+<span class="prop">│   └── payments/</span>
+<span class="prop">│       └── payments.spec.js</span>
+<span class="prop">├── auth-state/                 </span><span class="cm"># gitignored!</span>
+<span class="prop">├── playwright.config.js</span>
+<span class="prop">└── package.json</span>
+</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 11 — BEST PRACTICES
+=========================================== -->
+<section class="section" id="s11">
+  <div class="section-header">
+    <div class="section-num">11</div>
+    <h2>Best Practices</h2>
+  </div>
+
+  <div class="tips-grid">
+    <div class="tip-card">
+      <span class="tip-icon">🧹</span>
+      <div class="tip-content">
+        <h4>Never Hardcode URLs or Tokens</h4>
+        <p>All URLs via <code>config.baseUrl</code>, all secrets via <code>process.env</code>. Any hardcoded value = a maintenance nightmare at scale.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🎯</span>
+      <div class="tip-content">
+        <h4>Assert What Matters, Not Everything</h4>
+        <p>3 precise assertions beat 20 shallow ones. Focus on: status code, key field value, response structure (schema). Skip timestamps and IDs you don't control.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🧪</span>
+      <div class="tip-content">
+        <h4>Test Data Isolation</h4>
+        <p>Each test owns its data. Create in setup, cleanup in teardown. Use <code>afterEach</code> cleanup tracking arrays. Never reuse data between tests.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🔢</span>
+      <div class="tip-content">
+        <h4>One Concern Per Test</h4>
+        <p>Don't test CRUD in one test. <code>create user</code>, <code>get user</code>, <code>delete user</code> = 3 separate tests. Easier to debug, faster to rerun.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">📝</span>
+      <div class="tip-content">
+        <h4>Use test.step() for Clarity</h4>
+        <p><code>await test.step('Create user', async () => {...})</code> — shows in HTML report as nested steps. Makes complex test flows readable without comments.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🏷️</span>
+      <div class="tip-content">
+        <h4>Tag Tests for Selective Running</h4>
+        <p><code>test('login @smoke @critical', ...)</code> → <code>npx playwright test --grep @smoke</code>. Use tags for smoke, regression, blocker, slow, api-only.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">📊</span>
+      <div class="tip-content">
+        <h4>HTML Report + Allure</h4>
+        <p>Enable built-in HTML reporter for local runs. Add Allure for CI dashboards. Attach request/response body to failed tests via <code>test.info().attach()</code>.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🔒</span>
+      <div class="tip-content">
+        <h4>Security Test Coverage</h4>
+        <p>Test for: missing <code>Authorization</code> → 401, wrong role → 403, another user's resource → 403/404, expired token → 401. These are free regression tests.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">⏱️</span>
+      <div class="tip-content">
+        <h4>Performance Baselines in API Tests</h4>
+        <p>Wrap time-sensitive calls with <code>Date.now()</code>. Assert <code>toBeLessThan(2000)</code> for critical endpoints. Catch regressions before UAT.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🔄</span>
+      <div class="tip-content">
+        <h4>CI/CD Integration</h4>
+        <p>Run <code>ENV=qa npx playwright test --project=api-smoke</code> on every PR. Full regression nightly. Never block deploy on flaky non-critical tests — use <code>retries: 2</code>.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">📦</span>
+      <div class="tip-content">
+        <h4>Service Layer = Maintainability</h4>
+        <p>If the API endpoint changes, update one file (<code>UserService.js</code>), not 50 test files. This is the single biggest maintainability win in large frameworks.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🧠</span>
+      <div class="tip-content">
+        <h4>Contract Testing First</h4>
+        <p>Run schema (AJV) validation on every endpoint before value assertions. If schema fails → data assertions are meaningless. Fail fast, fail clear.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Reference Table -->
+  <div style="margin-top:32px" class="full-card">
+    <div class="topic-title" style="font-size:15px">📋 Quick Reference — Status Codes &amp; When to Test Them</div>
+    <div style="overflow-x:auto">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Meaning</th>
+            <th>When Your Test Should Hit This</th>
+            <th>Playwright Assertion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-label">200</td><td>OK</td><td>GET success, POST/PATCH returning resource</td><td><code>expect(res.status()).toBe(200)</code></td></tr>
+          <tr><td class="td-label">201</td><td>Created</td><td>POST creates a new resource</td><td><code>expect(res.status()).toBe(201)</code></td></tr>
+          <tr><td class="td-label">204</td><td>No Content</td><td>DELETE, sometimes PATCH with no body</td><td><code>expect(res.status()).toBe(204)</code></td></tr>
+          <tr><td class="td-label td-red">400</td><td>Bad Request</td><td>Invalid payload, missing required field</td><td>Assert body has <code>.message</code> / <code>.errors</code></td></tr>
+          <tr><td class="td-label td-red">401</td><td>Unauthorized</td><td>Missing or invalid token</td><td>Test without <code>Authorization</code> header</td></tr>
+          <tr><td class="td-label td-red">403</td><td>Forbidden</td><td>Valid token but wrong role/permission</td><td>Test with viewer role on admin endpoint</td></tr>
+          <tr><td class="td-label td-red">404</td><td>Not Found</td><td>After DELETE, or non-existent ID</td><td>Verify resource is gone after delete</td></tr>
+          <tr><td class="td-label td-red">409</td><td>Conflict</td><td>Duplicate email, unique constraint violation</td><td>POST same email twice</td></tr>
+          <tr><td class="td-label td-red">422</td><td>Unprocessable</td><td>Semantically invalid data</td><td>Invalid enum value, wrong date format</td></tr>
+          <tr><td class="td-label td-red">429</td><td>Rate Limited</td><td>Too many requests (test with retry)</td><td>Implement backoff, assert retry works</td></tr>
+          <tr><td class="td-label td-red">500</td><td>Server Error</td><td>Bug in server — should NEVER be expected</td><td>Fail immediately, file a defect</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PUT vs PATCH quick diff -->
+  <div style="margin-top:20px" class="full-card">
+    <div class="topic-title" style="font-size:15px">⚡ Playwright API Methods — Quick Reference</div>
+    <div style="overflow-x:auto">
+      <table class="cmp-table">
+        <thead>
+          <tr><th>Method</th><th>Playwright Call</th><th>Body Key</th><th>Content-Type Set</th><th>Use Case</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-label">GET</td><td><code>request.get(url, {params})</code></td><td>params</td><td class="td-green">none (query string)</td><td>Read data, search, filter</td></tr>
+          <tr><td class="td-label">POST</td><td><code>request.post(url, {data})</code></td><td>data</td><td class="td-green">application/json</td><td>Create resource</td></tr>
+          <tr><td class="td-label">PUT</td><td><code>request.put(url, {data})</code></td><td>data</td><td class="td-green">application/json</td><td>Full replacement</td></tr>
+          <tr><td class="td-label">PATCH</td><td><code>request.patch(url, {data})</code></td><td>data</td><td class="td-green">application/json</td><td>Partial update</td></tr>
+          <tr><td class="td-label">DELETE</td><td><code>request.delete(url)</code></td><td>—</td><td class="td-green">none</td><td>Remove resource</td></tr>
+          <tr><td class="td-label">POST form</td><td><code>request.post(url, {form})</code></td><td>form</td><td class="td-green">application/x-www-form-urlencoded</td><td>OAuth, legacy APIs</td></tr>
+          <tr><td class="td-label">POST file</td><td><code>request.post(url, {multipart})</code></td><td>multipart</td><td class="td-green">multipart/form-data</td><td>File upload</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+</div><!-- /main -->
+
+<footer class="footer">
+  <span>🎭 Playwright API Testing Cheat Sheet</span> &nbsp;·&nbsp;
+  Built for <span>Next Gen QA IT Coaching</span> &nbsp;·&nbsp;
+  Senior/Lead SDET Reference &nbsp;·&nbsp;
+  <span>JavaScript · Playwright Test · Production-Level</span>
+</footer>
+
+<script>
+  // Smooth scroll for nav tabs
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(tab.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Highlight active nav on scroll
+  const sections = document.querySelectorAll('.section[id]');
+  const navTabs  = document.querySelectorAll('.nav-tab');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navTabs.forEach(t => t.style.removeProperty('color'));
+        const active = document.querySelector(`.nav-tab[href="#${entry.target.id}"]`);
+        if (active) active.style.color = '#4fc3f7';
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Appium with Java Master Cheat Sheet – Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a; --surface: #111827; --card: #161d2e; --border: #1e2d45;
+    --accent: #00d4ff; --accent2: #7c3aed; --accent3: #f59e0b; --green: #10b981; --red: #ef4444;
+    --text: #e2e8f0; --muted: #64748b; --code-bg: #0d1117;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5; }
+  .header {
+    background: linear-gradient(135deg, #0d1b35 0%, #111827 50%, #0a1628 100%);
+    border-bottom: 2px solid var(--accent); padding: 20px 32px 16px;
+    display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden;
+  }
+  .header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0,212,255,0.07) 0%, transparent 70%); pointer-events: none; }
+  .logo-area { display: flex; align-items: center; gap: 16px; }
+  .logo-icon { width: 52px; height: 52px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: #fff; letter-spacing: -1px; box-shadow: 0 0 20px rgba(0,212,255,0.3); flex-shrink: 0; }
+  .title-block h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(90deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .title-block h1 span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+  .title-block p { color: var(--muted); font-size: 11px; margin-top: 2px; letter-spacing: 0.5px; }
+  .coaching-info { text-align: right; font-size: 11.5px; }
+  .coaching-info .name { font-size: 14px; font-weight: 700; color: var(--accent3); }
+  .coaching-info .phone { display: inline-flex; align-items: center; gap: 6px; margin-top: 3px; color: var(--green); font-weight: 600; font-size: 13px; font-family: 'JetBrains Mono', monospace; }
+  .coaching-info .tags { margin-top: 5px; display: flex; gap: 5px; justify-content: flex-end; flex-wrap: wrap; max-width: 440px; }
+  .tag { background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4); color: #a78bfa; padding: 1px 7px; border-radius: 20px; font-size: 9.5px; font-weight: 600; }
+  .tag.blue { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); color: var(--accent); }
+  .tag.amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: var(--accent3); }
+  .section-label { font-size: 9px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; color: var(--muted); padding: 8px 32px 4px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-left: 1px solid var(--border); }
+  .col { border-right: 1px solid var(--border); }
+  .card { border-bottom: 1px solid var(--border); padding: 10px 12px; }
+  .card-title { display: flex; align-items: center; gap: 7px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid rgba(0,212,255,0.15); }
+  .card-title .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; box-shadow: 0 0 6px var(--accent); }
+  .card-title.purple .dot { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; } .card-title.purple { color: #a78bfa; border-bottom-color: rgba(167,139,250,0.15); }
+  .card-title.green .dot { background: var(--green); box-shadow: 0 0 6px var(--green); } .card-title.green { color: var(--green); border-bottom-color: rgba(16,185,129,0.15); }
+  .card-title.amber .dot { background: var(--accent3); box-shadow: 0 0 6px var(--accent3); } .card-title.amber { color: var(--accent3); border-bottom-color: rgba(245,158,11,0.15); }
+  .card-title.red .dot { background: var(--red); box-shadow: 0 0 6px var(--red); } .card-title.red { color: #fb7185; border-bottom-color: rgba(239,68,68,0.15); }
+  .item { margin-bottom: 6px; } .item:last-child { margin-bottom: 0; }
+  .item-desc { font-size: 10.3px; color: #94a3b8; margin-bottom: 3px; font-weight: 400; }
+  code { display: block; font-family: 'JetBrains Mono', monospace; font-size: 9.4px; background: var(--code-bg); border: 1px solid var(--border); border-left: 2px solid rgba(0,212,255,0.4); color: #7dd3fc; padding: 4px 7px; border-radius: 4px; overflow-x: auto; white-space: pre; line-height: 1.5; }
+  code .kw { color: #c792ea; } code .fn { color: #82aaff; } code .str { color: #c3e88d; } code .cm { color: #546e7a; font-style: italic; }
+  code .num { color: #f78c6c; } code .op { color: #89ddff; } code .key { color: #f07178; } code .ty { color: #ffcb6b; } code .an { color: #ffcb6b; }
+  .note { font-size: 9.3px; color: #fbbf24; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: 4px; padding: 4px 7px; margin-top: 4px; }
+  table.mini { width: 100%; border-collapse: collapse; font-size: 9.4px; margin-top: 2px; }
+  table.mini th { background: rgba(0,212,255,0.12); color: var(--accent); text-align: left; padding: 3px 5px; font-weight: 700; }
+  table.mini td { padding: 3px 5px; border-bottom: 1px solid var(--border); color: #cbd5e1; }
+  .footer { background: linear-gradient(90deg, #0d1b35, #111827); border-top: 2px solid var(--accent2); padding: 10px 32px; display: flex; justify-content: space-between; align-items: center; }
+  .footer .left { font-size: 10px; color: var(--muted); } .footer .left span { color: var(--accent); font-weight: 700; }
+  .footer .right { font-size: 10px; color: var(--muted); text-align: right; } .footer .right strong { color: var(--accent3); }
+  @media print { body { font-size: 11px; } .grid { page-break-inside: avoid; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-area">
+    <div class="logo-icon">APM</div>
+    <div class="title-block">
+      <h1>Appium with Java <span>Master Cheat Sheet</span></h1>
+      <p>SETUP · TOOLS &amp; DRIVERS · NATIVE/HYBRID/DESKTOP · FULL DRIVER &amp; SERVER API — END TO END</p>
+    </div>
+  </div>
+  <div class="coaching-info">
+    <div class="name">🎓 Next Gen QA IT Coaching Classes</div>
+    <div class="phone">📞 Mr. Khan Sir &nbsp;|&nbsp; 8700350994</div>
+    <div class="tags">
+      <span class="tag blue">Appium Java Client</span>
+      <span class="tag amber">Android + iOS</span>
+      <span class="tag">Windows (WinAppDriver)</span>
+      <span class="tag blue">Mac (Mac2Driver)</span>
+      <span class="tag amber">TestNG + Maven</span>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 1 -->
+<div class="section-label">1. Setup Overview &amp; Flow &middot; 2. Java &amp; JDK Setup &middot; 3. Node.js &amp; Appium Server &middot; 4. Android Studio &amp; Android SDK</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>1. Full Setup Flow (Order Matters)</div>
+    <div class="item"><div class="item-desc">Install order for a working Appium+Java rig</div><code><span class="num">1.</span> JDK <span class="op">&rarr;</span> JAVA_HOME
+<span class="num">2.</span> Node.js <span class="op">&rarr;</span> npm install -g appium
+<span class="num">3.</span> Android Studio <span class="op">&rarr;</span> Android SDK <span class="op">&rarr;</span> ANDROID_HOME
+<span class="num">4.</span> appium driver install uiautomator2
+<span class="num">5.</span> Xcode (Mac only) <span class="op">&rarr;</span> appium driver install xcuitest
+<span class="num">6.</span> Appium Inspector (standalone app)
+<span class="num">7.</span> IDE (VS Code / IntelliJ) + Maven project
+<span class="num">8.</span> Java client dependency in pom.xml</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>2. Java &amp; JDK Setup</div>
+    <div class="item"><div class="item-desc">Install JDK 11+ &amp; verify</div><code>java -version
+javac -version</code></div>
+    <div class="item"><div class="item-desc">Set JAVA_HOME (macOS/Linux ~/.zshrc)</div><code><span class="kw">export</span> JAVA_HOME=$(/usr/libexec/java_home -v 11)
+<span class="kw">export</span> PATH=$JAVA_HOME/bin:$PATH</code></div>
+    <div class="item"><div class="item-desc">Windows (System Env Variables)</div><code>JAVA_HOME = C:\Program Files\Java\jdk-11
+PATH += %JAVA_HOME%\bin</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>3. Node.js &amp; Appium Server</div>
+    <div class="item"><div class="item-desc">Install Node (LTS) then Appium</div><code>node -v &amp;&amp; npm -v
+npm install -g appium
+appium -v</code></div>
+    <div class="item"><div class="item-desc">Start server / check installed drivers</div><code>appium --address 127.0.0.1 --port 4723
+appium driver list --installed</code></div>
+    <div class="item"><div class="item-desc">appium-doctor – verify full setup health</div><code>npm install -g appium-doctor
+appium-doctor --android
+appium-doctor --ios</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>4. Android Studio &amp; SDK</div>
+    <div class="item"><div class="item-desc">Install via Android Studio &rarr; SDK Manager</div><code><span class="cm">// SDK Manager &rarr; install:</span>
+<span class="cm">//  - Android SDK Platform (API 34/33)</span>
+<span class="cm">//  - Android SDK Build-Tools</span>
+<span class="cm">//  - Android SDK Platform-Tools (adb)</span>
+<span class="cm">//  - Android Emulator</span></code></div>
+    <div class="item"><div class="item-desc">Create AVD (emulator) via Device Manager</div><code><span class="cm">// Tools &rarr; Device Manager &rarr; Create Device</span>
+<span class="cm">// pick Pixel 6, API 34 system image</span></code></div>
+  </div></div>
+</div>
+
+<!-- ROW 2 -->
+<div class="section-label">5. Env Variables (ANDROID_HOME) &middot; 6. Appium Drivers &middot; 7. Appium Inspector &middot; 8. Appium Desktop (Legacy GUI)</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>5. ANDROID_HOME &amp; PATH Setup</div>
+    <div class="item"><div class="item-desc">macOS/Linux (~/.zshrc or ~/.bash_profile)</div><code><span class="kw">export</span> ANDROID_HOME=$HOME/Library/Android/sdk
+<span class="kw">export</span> PATH=$PATH:$ANDROID_HOME/platform-tools
+<span class="kw">export</span> PATH=$PATH:$ANDROID_HOME/emulator
+<span class="kw">export</span> PATH=$PATH:$ANDROID_HOME/tools</code></div>
+    <div class="item"><div class="item-desc">Windows (Env Variables)</div><code>ANDROID_HOME = C:\Users\you\AppData\Local\Android\Sdk
+PATH += %ANDROID_HOME%\platform-tools</code></div>
+    <div class="item"><div class="item-desc">Verify</div><code>adb version
+emulator -list-avds</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>6. Appium Drivers (per platform)</div>
+    <table class="mini">
+      <tr><th>Platform</th><th>Driver / Install</th></tr>
+      <tr><td>Android (native/hybrid)</td><td>uiautomator2</td></tr>
+      <tr><td>iOS (native/hybrid)</td><td>xcuitest</td></tr>
+      <tr><td>Windows Desktop</td><td>windows (WinAppDriver-based)</td></tr>
+      <tr><td>macOS Desktop</td><td>mac2</td></tr>
+      <tr><td>Flutter apps</td><td>flutter (community)</td></tr>
+    </table>
+    <div class="item" style="margin-top:5px;"><div class="item-desc">Install / list drivers</div><code>appium driver install uiautomator2
+appium driver install xcuitest
+appium driver install mac2
+appium driver list --installed</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>7. Appium Inspector</div>
+    <div class="item"><div class="item-desc">Standalone GUI app (separate download)</div><code><span class="cm">// download from: github.com/appium/appium-inspector/releases</span>
+<span class="cm">// Remote Host: 127.0.0.1  Port: 4723  Path: /</span>
+<span class="cm">// paste JSON capabilities &rarr; Start Session</span>
+<span class="cm">// inspect element tree, copy ID/XPath/Accessibility ID</span>
+<span class="cm">// record actions &rarr; export as Java code snippet</span></code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title amber"><div class="dot"></div>8. Appium Desktop (Legacy, Deprecated)</div>
+    <div class="item"><div class="item-desc">Old all-in-one app (server + inspector)</div><code><span class="cm">// Appium Desktop = Appium Server GUI + old Inspector</span>
+<span class="cm">// now split into: Appium Server (CLI/npm) + Appium Inspector (separate app)</span>
+<span class="cm">// prefer CLI server + standalone Inspector for new projects</span></code></div>
+  </div></div>
+</div>
+
+<!-- ROW 3 -->
+<div class="section-label">9. VS Code Setup &middot; 10. IntelliJ/Eclipse + Maven &middot; 11. Xcode &amp; iOS Setup &middot; 12. Real Device Setup (Android + iOS)</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>9. VS Code Setup</div>
+    <div class="item"><div class="item-desc">Extensions needed for Java + Appium</div><code><span class="cm">// Extension Pack for Java (Microsoft)</span>
+<span class="cm">// Maven for Java</span>
+<span class="cm">// Test Runner for Java</span>
+<span class="cm">// (optional) XML Tools for pom.xml editing</span></code></div>
+    <div class="item"><div class="item-desc">Run a TestNG test from VS Code</div><code><span class="cm">// Testing icon (flask) in sidebar &rarr; Run Test</span>
+<span class="cm">// or terminal: mvn test</span></code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>10. IntelliJ / Eclipse + Maven Project</div>
+    <div class="item"><div class="item-desc">Create Maven project structure</div><code>src/main/java
+src/test/java
+  &boxvr;&boxh; pages/        <span class="cm">// Page Object classes</span>
+  &boxvr;&boxh; tests/        <span class="cm">// TestNG test classes</span>
+  &boxur;&boxh; utils/        <span class="cm">// DriverFactory, helpers</span>
+pom.xml
+testng.xml</code></div>
+    <div class="item"><div class="item-desc">Run via Maven from IntelliJ terminal</div><code>mvn clean test -Dsurefire.suiteXmlFiles=testng.xml</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>11. Xcode &amp; iOS Setup (Mac only)</div>
+    <div class="item"><div class="item-desc">Install Xcode + command line tools</div><code>xcode-select --install
+sudo xcode-select -s /Applications/Xcode.app
+xcrun simctl list devices</code></div>
+    <div class="item"><div class="item-desc">WebDriverAgent (auto-built by xcuitest driver)</div><code><span class="cm">// first run builds WDA via xcodebuild — can take minutes</span>
+<span class="cm">// needs a free/paid Apple Developer signing team for real device</span></code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>12. Real Device Setup</div>
+    <div class="item"><div class="item-desc">Android real device</div><code><span class="cm">// enable Developer Options &rarr; USB Debugging</span>
+adb devices   <span class="cm">// should list device serial</span></code></div>
+    <div class="item"><div class="item-desc">iOS real device</div><code><span class="cm">// trust computer on device, set signing team in WDA</span>
+<span class="cm">// capability: xcodeOrgId, xcodeSigningId, udid</span></code></div>
+  </div></div>
+</div>
+
+<!-- ROW 4 -->
+<div class="section-label">13. Desired Capabilities – Native Android &middot; 14. Native iOS &middot; 15. Hybrid App (WebView) &middot; 16. Desktop App (Windows – WinAppDriver)</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>13. Native Android Capabilities (Java)</div>
+    <div class="item"><div class="item-desc">UiAutomator2Options</div><code><span class="ty">UiAutomator2Options</span> options = <span class="kw">new</span> <span class="fn">UiAutomator2Options</span>();
+options.<span class="fn">setPlatformName</span>(<span class="str">"Android"</span>);
+options.<span class="fn">setAutomationName</span>(<span class="str">"UiAutomator2"</span>);
+options.<span class="fn">setDeviceName</span>(<span class="str">"Pixel_6_API_34"</span>);
+options.<span class="fn">setApp</span>(<span class="str">"/path/app.apk"</span>);
+options.<span class="fn">setAppPackage</span>(<span class="str">"com.example.app"</span>);
+options.<span class="fn">setAppActivity</span>(<span class="str">".MainActivity"</span>);
+options.<span class="fn">setNoReset</span>(<span class="kw">true</span>);
+<span class="ty">AndroidDriver</span> driver = <span class="kw">new</span> <span class="fn">AndroidDriver</span>(
+  <span class="kw">new</span> <span class="fn">URL</span>(<span class="str">"http://127.0.0.1:4723"</span>), options);</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>14. Native iOS Capabilities (Java)</div>
+    <div class="item"><div class="item-desc">XCUITestOptions</div><code><span class="ty">XCUITestOptions</span> options = <span class="kw">new</span> <span class="fn">XCUITestOptions</span>();
+options.<span class="fn">setPlatformName</span>(<span class="str">"iOS"</span>);
+options.<span class="fn">setAutomationName</span>(<span class="str">"XCUITest"</span>);
+options.<span class="fn">setDeviceName</span>(<span class="str">"iPhone 15"</span>);
+options.<span class="fn">setPlatformVersion</span>(<span class="str">"17.0"</span>);
+options.<span class="fn">setApp</span>(<span class="str">"/path/app.app"</span>);
+options.<span class="fn">setBundleId</span>(<span class="str">"com.example.app"</span>);
+<span class="ty">IOSDriver</span> driver = <span class="kw">new</span> <span class="fn">IOSDriver</span>(
+  <span class="kw">new</span> <span class="fn">URL</span>(<span class="str">"http://127.0.0.1:4723"</span>), options);</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>15. Hybrid App (WebView) Setup</div>
+    <div class="item"><div class="item-desc">Capability to allow webview inspection</div><code>options.<span class="fn">setCapability</span>(<span class="str">"autoWebview"</span>, <span class="kw">false</span>);
+options.<span class="fn">setCapability</span>(<span class="str">"chromedriverAutodownload"</span>, <span class="kw">true</span>);</code></div>
+    <div class="item"><div class="item-desc">List &amp; switch contexts</div><code><span class="ty">Set&lt;String&gt;</span> contexts = driver.<span class="fn">getContextHandles</span>();
+<span class="cm">// e.g. [NATIVE_APP, WEBVIEW_com.example.app]</span>
+driver.<span class="fn">context</span>(<span class="str">"WEBVIEW_com.example.app"</span>);
+driver.<span class="fn">findElement</span>(<span class="fn">By</span>.<span class="fn">cssSelector</span>(<span class="str">"#login-btn"</span>)).<span class="fn">click</span>();
+driver.<span class="fn">context</span>(<span class="str">"NATIVE_APP"</span>);</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>16. Desktop App – Windows (WinAppDriver)</div>
+    <div class="item"><div class="item-desc">Setup: enable Dev Mode + start WinAppDriver</div><code><span class="cm">// Settings &rarr; Update &amp; Security &rarr; For Developers &rarr; Developer Mode ON</span>
+<span class="cm">// install WinAppDriver.msi, run WinAppDriver.exe (port 4723)</span></code></div>
+    <div class="item"><div class="item-desc">Capabilities (Java) – Windows driver</div><code><span class="ty">WindowsOptions</span> options = <span class="kw">new</span> <span class="fn">WindowsOptions</span>();
+options.<span class="fn">setApp</span>(<span class="str">"C:\\Path\\App.exe"</span>);
+options.<span class="fn">setPlatformName</span>(<span class="str">"Windows"</span>);
+<span class="ty">WindowsDriver</span> driver = <span class="kw">new</span> <span class="fn">WindowsDriver</span>(
+  <span class="kw">new</span> <span class="fn">URL</span>(<span class="str">"http://127.0.0.1:4723"</span>), options);</code></div>
+  </div></div>
+</div>
+
+<!-- ROW 5 -->
+<div class="section-label">17. Desktop App – macOS (Mac2Driver) &middot; 18. Locator Strategies &middot; 19. Waits &amp; Synchronization &middot; 20. Gestures (W3C Actions)</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>17. Desktop App – macOS (Mac2Driver)</div>
+    <div class="item"><div class="item-desc">Enable accessibility permission first</div><code><span class="cm">// System Settings &rarr; Privacy &amp; Security &rarr; Accessibility</span>
+<span class="cm">// allow Terminal / Appium to control the Mac</span>
+appium driver install mac2</code></div>
+    <div class="item"><div class="item-desc">Capabilities (Java) – Mac2 driver</div><code><span class="ty">Mac2Options</span> options = <span class="kw">new</span> <span class="fn">Mac2Options</span>();
+options.<span class="fn">setBundleId</span>(<span class="str">"com.apple.calculator"</span>);
+<span class="ty">Mac2Driver</span> driver = <span class="kw">new</span> <span class="fn">Mac2Driver</span>(
+  <span class="kw">new</span> <span class="fn">URL</span>(<span class="str">"http://127.0.0.1:4723"</span>), options);</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>18. Locator Strategies</div>
+    <table class="mini">
+      <tr><th>Strategy</th><th>Example</th></tr>
+      <tr><td>ID</td><td>By.id("com.app:id/btn")</td></tr>
+      <tr><td>Accessibility ID</td><td>AppiumBy.accessibilityId("login")</td></tr>
+      <tr><td>XPath</td><td>//android.widget.Button[@text='Login']</td></tr>
+      <tr><td>UiAutomator (Android)</td><td>androidUIAutomator("new UiSelector()...")</td></tr>
+      <tr><td>NSPredicate (iOS)</td><td>iOSNsPredicateString("name=='Login'")</td></tr>
+      <tr><td>Class Chain (iOS)</td><td>iOSClassChain("**/XCUIElementTypeButton")</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>19. Waits &amp; Synchronization</div>
+    <div class="item"><div class="item-desc">Explicit wait (recommended)</div><code><span class="ty">WebDriverWait</span> wait = <span class="kw">new</span> <span class="fn">WebDriverWait</span>(driver, <span class="ty">Duration</span>.<span class="fn">ofSeconds</span>(<span class="num">15</span>));
+<span class="ty">WebElement</span> el = wait.<span class="fn">until</span>(<span class="ty">ExpectedConditions</span>.<span class="fn">elementToBeClickable</span>(
+  <span class="fn">AppiumBy</span>.<span class="fn">accessibilityId</span>(<span class="str">"login"</span>)));</code></div>
+    <div class="item"><div class="item-desc">Fluent wait w/ polling</div><code><span class="ty">Wait&lt;AndroidDriver&gt;</span> fw = <span class="kw">new</span> <span class="fn">FluentWait&lt;&gt;</span>(driver)
+  .<span class="fn">withTimeout</span>(<span class="ty">Duration</span>.<span class="fn">ofSeconds</span>(<span class="num">20</span>))
+  .<span class="fn">pollingEvery</span>(<span class="ty">Duration</span>.<span class="fn">ofMillis</span>(<span class="num">500</span>))
+  .<span class="fn">ignoring</span>(<span class="ty">NoSuchElementException</span>.<span class="kw">class</span>);</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>20. Gestures (W3C Actions)</div>
+    <div class="item"><div class="item-desc">Swipe via mobile: command (simplest)</div><code><span class="ty">Map&lt;String, Object&gt;</span> params = <span class="kw">new</span> <span class="fn">HashMap&lt;&gt;</span>();
+params.<span class="fn">put</span>(<span class="str">"direction"</span>, <span class="str">"up"</span>);
+params.<span class="fn">put</span>(<span class="str">"percent"</span>, <span class="num">0.75</span>);
+driver.<span class="fn">executeScript</span>(<span class="str">"mobile: swipeGesture"</span>, params);</code></div>
+    <div class="item"><div class="item-desc">Long press</div><code><span class="ty">Map&lt;String, Object&gt;</span> lp = <span class="kw">new</span> <span class="fn">HashMap&lt;&gt;</span>();
+lp.<span class="fn">put</span>(<span class="str">"elementId"</span>, ((<span class="ty">RemoteWebElement</span>) el).<span class="fn">getId</span>());
+lp.<span class="fn">put</span>(<span class="str">"duration"</span>, <span class="num">1500</span>);
+driver.<span class="fn">executeScript</span>(<span class="str">"mobile: longClickGesture"</span>, lp);</code></div>
+  </div></div>
+</div>
+
+<!-- ROW 6 -->
+<div class="section-label">21. Platform-Specific Commands &middot; 22. Context Switching Detail &middot; 23. Page Object Model (Java) &middot; 24. TestNG + Maven Project Setup</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title amber"><div class="dot"></div>21. Platform-Specific Commands</div>
+    <table class="mini">
+      <tr><th>Action</th><th>Android</th><th>iOS</th></tr>
+      <tr><td>Hide keyboard</td><td>driver.hideKeyboard()</td><td>same</td></tr>
+      <tr><td>Back</td><td>driver.navigate().back()</td><td>N/A</td></tr>
+      <tr><td>Launch/Terminate</td><td>activateApp()/terminateApp()</td><td>same</td></tr>
+      <tr><td>Install app</td><td>installApp(path)</td><td>installApp(path)</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>22. Context Switching (Hybrid Detail)</div>
+    <div class="item"><div class="item-desc">Wait for webview context to appear</div><code><span class="kw">new</span> <span class="fn">WebDriverWait</span>(driver, <span class="ty">Duration</span>.<span class="fn">ofSeconds</span>(<span class="num">10</span>)).<span class="fn">until</span>(
+  d -&gt; ((<span class="ty">AndroidDriver</span>) d).<span class="fn">getContextHandles</span>().<span class="fn">size</span>() &gt; <span class="num">1</span>);
+<span class="kw">for</span> (<span class="ty">String</span> ctx : driver.<span class="fn">getContextHandles</span>()) {
+  <span class="kw">if</span> (ctx.<span class="fn">contains</span>(<span class="str">"WEBVIEW"</span>)) driver.<span class="fn">context</span>(ctx);
+}</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>23. Page Object Model (Java)</div>
+    <div class="item"><div class="item-desc">POM with PageFactory + AppiumFieldDecorator</div><code><span class="kw">public</span> <span class="kw">class</span> <span class="ty">LoginPage</span> {
+  <span class="ty">AndroidDriver</span> driver;
+  <span class="an">@AndroidFindBy</span>(accessibility = <span class="str">"username"</span>)
+  <span class="ty">WebElement</span> username;
+  <span class="an">@AndroidFindBy</span>(accessibility = <span class="str">"loginBtn"</span>)
+  <span class="ty">WebElement</span> loginBtn;
+
+  <span class="kw">public</span> <span class="fn">LoginPage</span>(<span class="ty">AndroidDriver</span> driver) {
+    <span class="kw">this</span>.driver = driver;
+    <span class="ty">PageFactory</span>.<span class="fn">initElements</span>(
+      <span class="kw">new</span> <span class="fn">AppiumFieldDecorator</span>(driver), <span class="kw">this</span>);
+  }
+  <span class="kw">public</span> <span class="kw">void</span> <span class="fn">login</span>(<span class="ty">String</span> user) {
+    username.<span class="fn">sendKeys</span>(user); loginBtn.<span class="fn">click</span>();
+  }
+}</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>24. TestNG + Maven Project Setup</div>
+    <div class="item"><div class="item-desc">pom.xml core dependencies</div><code><span class="op">&lt;</span>dependency<span class="op">&gt;</span>
+  <span class="op">&lt;</span>groupId<span class="op">&gt;</span>io.appium<span class="op">&lt;</span>/groupId<span class="op">&gt;</span>
+  <span class="op">&lt;</span>artifactId<span class="op">&gt;</span>java-client<span class="op">&lt;</span>/artifactId<span class="op">&gt;</span>
+  <span class="op">&lt;</span>version<span class="op">&gt;</span>9.3.0<span class="op">&lt;</span>/version<span class="op">&gt;</span>
+<span class="op">&lt;</span>/dependency<span class="op">&gt;</span></code></div>
+    <div class="item"><div class="item-desc">Base test class</div><code><span class="an">@BeforeMethod</span>
+<span class="kw">public</span> <span class="kw">void</span> <span class="fn">setUp</span>() <span class="kw">throws</span> <span class="ty">Exception</span> {
+  driver = <span class="kw">new</span> <span class="fn">AndroidDriver</span>(
+    <span class="kw">new</span> <span class="fn">URL</span>(<span class="str">"http://127.0.0.1:4723"</span>), options);
+}
+<span class="an">@AfterMethod</span>
+<span class="kw">public</span> <span class="kw">void</span> <span class="fn">tearDown</span>() { <span class="kw">if</span>(driver <span class="op">!=</span> <span class="kw">null</span>) driver.<span class="fn">quit</span>(); }</code></div>
+  </div></div>
+</div>
+
+<!-- ROW 7 -->
+<div class="section-label">25. Handy ADB Commands &middot; 26. Common Exceptions &amp; Fixes &middot; 27. Cloud Execution (BrowserStack/Sauce Labs) &middot; 28. Best Practices</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>25. Handy ADB Commands</div>
+    <table class="mini">
+      <tr><th>Purpose</th><th>Command</th></tr>
+      <tr><td>List devices</td><td>adb devices</td></tr>
+      <tr><td>Install APK</td><td>adb install app.apk</td></tr>
+      <tr><td>Clear app data</td><td>adb shell pm clear pkg</td></tr>
+      <tr><td>Screenshot</td><td>adb shell screencap /sdcard/s.png</td></tr>
+      <tr><td>Logs</td><td>adb logcat</td></tr>
+      <tr><td>Get current activity</td><td>adb shell dumpsys window | grep mCurrentFocus</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>26. Common Exceptions &amp; Fixes</div>
+    <table class="mini">
+      <tr><th>Exception</th><th>Fix</th></tr>
+      <tr><td>NoSuchElementException</td><td>Verify via Inspector; add explicit wait</td></tr>
+      <tr><td>StaleElementReferenceException</td><td>Re-locate element before use</td></tr>
+      <tr><td>SessionNotCreatedException</td><td>Check driver install &amp; capability values</td></tr>
+      <tr><td>Connection refused</td><td>Appium server not running on that port</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>27. Cloud Execution</div>
+    <div class="item"><div class="item-desc">BrowserStack capability example (Java)</div><code>options.<span class="fn">setCapability</span>(<span class="str">"bstack:options"</span>, <span class="ty">Map</span>.<span class="fn">of</span>(
+  <span class="str">"deviceName"</span>, <span class="str">"Samsung Galaxy S23"</span>,
+  <span class="str">"osVersion"</span>, <span class="str">"13.0"</span>,
+  <span class="str">"projectName"</span>, <span class="str">"MyApp Tests"</span>));
+driver = <span class="kw">new</span> <span class="fn">AndroidDriver</span>(<span class="kw">new</span> <span class="fn">URL</span>(
+  <span class="str">"https://user:key@hub-cloud.browserstack.com/wd/hub"</span>), options);</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>28. Best Practices</div>
+    <div class="item"><div class="item-desc">Checklist</div><code>✔ Accessibility ID/ID over XPath for speed
+✔ Page Object Model + PageFactory always
+✔ Explicit waits only, never mix w/ implicit
+✔ noReset/fullReset controlled per test
+✔ Parallel run via TestNG + multiple devices
+✔ Screenshot + logs captured on failure
+✔ Pin java-client + driver versions together</code></div>
+  </div></div>
+</div>
+
+<!-- ROW 8 -->
+<div class="section-label">29. App Lifecycle Methods &middot; 30. Device State Methods &middot; 31. Files, Clipboard &amp; Storage &middot; 32. WebElement Core Methods</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>29. App Lifecycle Methods</div>
+    <table class="mini">
+      <tr><th>Method</th><th>Purpose</th></tr>
+      <tr><td>isAppInstalled(bundleId)</td><td>check install state</td></tr>
+      <tr><td>installApp(path)</td><td>install app</td></tr>
+      <tr><td>removeApp(bundleId)</td><td>uninstall app</td></tr>
+      <tr><td>activateApp(bundleId)</td><td>bring app to foreground</td></tr>
+      <tr><td>terminateApp(bundleId)</td><td>kill app process</td></tr>
+      <tr><td>queryAppState(bundleId)</td><td>0-4 running state enum</td></tr>
+      <tr><td>runAppInBackground(dur)</td><td>send to bg, return after N sec</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>30. Device State Methods</div>
+    <table class="mini">
+      <tr><th>Method</th><th>Purpose</th></tr>
+      <tr><td>lockDevice() / unlockDevice()</td><td>lock/unlock screen</td></tr>
+      <tr><td>isDeviceLocked()</td><td>check lock state</td></tr>
+      <tr><td>getDeviceTime()</td><td>device's current time</td></tr>
+      <tr><td>rotate(ScreenOrientation)</td><td>set LANDSCAPE/PORTRAIT</td></tr>
+      <tr><td>getOrientation()</td><td>read current orientation</td></tr>
+      <tr><td>getSystemTime()</td><td>epoch time from server</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>31. Files, Clipboard &amp; Storage</div>
+    <table class="mini">
+      <tr><th>Method</th><th>Purpose</th></tr>
+      <tr><td>pushFile(path, bytes)</td><td>copy file to device</td></tr>
+      <tr><td>pullFile(path)</td><td>copy file from device (base64)</td></tr>
+      <tr><td>pullFolder(path)</td><td>zip &amp; pull a folder</td></tr>
+      <tr><td>getClipboardText()</td><td>read device clipboard</td></tr>
+      <tr><td>setClipboard(text)</td><td>write device clipboard</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>32. WebElement Core Methods</div>
+    <table class="mini">
+      <tr><th>Method</th><th>Purpose</th></tr>
+      <tr><td>click()</td><td>tap element</td></tr>
+      <tr><td>sendKeys(text)</td><td>type text</td></tr>
+      <tr><td>clear()</td><td>clear text field</td></tr>
+      <tr><td>getText()</td><td>visible text</td></tr>
+      <tr><td>getAttribute(name)</td><td>read any attribute</td></tr>
+      <tr><td>getTagName()</td><td>element class/type</td></tr>
+    </table>
+  </div></div>
+</div>
+
+<!-- ROW 9 -->
+<div class="section-label">33. WebElement State/Geometry &middot; 34. Android-Only Driver Methods &middot; 35. Android Emulator Console Methods &middot; 36. iOS-Only Driver Methods</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>33. WebElement State &amp; Geometry</div>
+    <table class="mini">
+      <tr><th>Method</th><th>Purpose</th></tr>
+      <tr><td>isDisplayed()</td><td>visible on screen?</td></tr>
+      <tr><td>isEnabled()</td><td>interactable?</td></tr>
+      <tr><td>isSelected()</td><td>checkbox/radio/toggle state</td></tr>
+      <tr><td>getLocation()</td><td>x/y position (Point)</td></tr>
+      <tr><td>getSize()</td><td>width/height (Dimension)</td></tr>
+      <tr><td>getRect()</td><td>location + size (Rectangle)</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>34. Android-Only Driver Methods</div>
+    <table class="mini">
+      <tr><th>Method</th><th>Purpose</th></tr>
+      <tr><td>getCurrentActivity()</td><td>foreground activity name</td></tr>
+      <tr><td>getCurrentPackage()</td><td>foreground package name</td></tr>
+      <tr><td>startActivity(intent)</td><td>launch specific activity</td></tr>
+      <tr><td>toggleWifi()</td><td>toggle WiFi radio</td></tr>
+      <tr><td>toggleAirplaneMode()</td><td>toggle airplane mode</td></tr>
+      <tr><td>toggleLocationServices()</td><td>toggle GPS</td></tr>
+      <tr><td>openNotifications()</td><td>pull down notification shade</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>35. Android Emulator-Only Methods</div>
+    <table class="mini">
+      <tr><th>Method</th><th>Purpose</th></tr>
+      <tr><td>getSystemBars()</td><td>status/nav bar dimensions</td></tr>
+      <tr><td>getDisplayDensity()</td><td>screen DPI</td></tr>
+      <tr><td>getPerformanceData()</td><td>CPU/memory/battery/network</td></tr>
+      <tr><td>getSupportedPerformanceMetrics()</td><td>list available metrics</td></tr>
+      <tr><td>sendSMS(phone, msg)</td><td>emulator-only, fake SMS</td></tr>
+      <tr><td>gsmCall() / gsmSignal()</td><td>emulator-only, simulate call/signal</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>36. iOS-Only Driver Methods</div>
+    <table class="mini">
+      <tr><th>Method</th><th>Purpose</th></tr>
+      <tr><td>shake()</td><td>simulate device shake</td></tr>
+      <tr><td>performTouchID(match)</td><td>simulate Touch ID pass/fail</td></tr>
+      <tr><td>toggleTouchIDEnrollment()</td><td>enroll/unenroll simulator Touch ID</td></tr>
+      <tr><td>getSettings() / updateSettings()</td><td>read/update session settings</td></tr>
+      <tr><td>hideKeyboard(strategy)</td><td>tap outside / press Done key</td></tr>
+    </table>
+  </div></div>
+</div>
+
+<!-- ROW 10 -->
+<div class="section-label">37. mobile: Command Catalog – Android &middot; 38. mobile: Command Catalog – iOS &middot; 39. TouchAction &amp; MultiTouchAction (Legacy) &middot; 40. Appium Settings API</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>37. mobile: Commands – Android (executeScript)</div>
+    <table class="mini">
+      <tr><th>Command</th><th>Purpose</th></tr>
+      <tr><td>mobile: swipeGesture</td><td>directional swipe</td></tr>
+      <tr><td>mobile: scrollGesture</td><td>scroll a container</td></tr>
+      <tr><td>mobile: longClickGesture</td><td>long press</td></tr>
+      <tr><td>mobile: dragGesture</td><td>drag element to point</td></tr>
+      <tr><td>mobile: pinchOpenGesture / pinchCloseGesture</td><td>zoom in/out</td></tr>
+      <tr><td>mobile: shell</td><td>run raw adb shell command</td></tr>
+      <tr><td>mobile: startScreenStreaming</td><td>live device screen stream</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>38. mobile: Commands – iOS (executeScript)</div>
+    <table class="mini">
+      <tr><th>Command</th><th>Purpose</th></tr>
+      <tr><td>mobile: swipe</td><td>directional swipe</td></tr>
+      <tr><td>mobile: scroll</td><td>scroll to element/direction</td></tr>
+      <tr><td>mobile: tap</td><td>tap at coordinates</td></tr>
+      <tr><td>mobile: dragFromToForDuration</td><td>drag gesture w/ timing</td></tr>
+      <tr><td>mobile: alert</td><td>accept/dismiss/getButtons on alert</td></tr>
+      <tr><td>mobile: pressButton</td><td>home/volume/lock hardware button</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>39. TouchAction &amp; MultiTouchAction (Legacy)</div>
+    <div class="note">Deprecated in favor of W3C Actions, but still asked in interviews &amp; seen in older frameworks.</div>
+    <div class="item"><div class="item-desc">Single-finger TouchAction chain</div><code><span class="kw">new</span> <span class="fn">TouchAction&lt;&gt;</span>(driver)
+  .<span class="fn">press</span>(<span class="fn">PointOption</span>.<span class="fn">point</span>(<span class="num">100</span>,<span class="num">500</span>))
+  .<span class="fn">waitAction</span>(<span class="fn">WaitOptions</span>.<span class="fn">waitOptions</span>(<span class="ty">Duration</span>.<span class="fn">ofMillis</span>(<span class="num">500</span>)))
+  .<span class="fn">moveTo</span>(<span class="fn">PointOption</span>.<span class="fn">point</span>(<span class="num">100</span>,<span class="num">100</span>))
+  .<span class="fn">release</span>().<span class="fn">perform</span>();</code></div>
+    <div class="item"><div class="item-desc">MultiTouchAction – multiple fingers</div><code><span class="kw">new</span> <span class="fn">MultiTouchAction</span>(driver)
+  .<span class="fn">add</span>(touchAction1).<span class="fn">add</span>(touchAction2).<span class="fn">perform</span>();</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>40. Appium Settings API</div>
+    <div class="item"><div class="item-desc">Runtime settings via setSetting()</div><code>driver.<span class="fn">setSetting</span>(<span class="str">"ignoreUnimportantViews"</span>, <span class="kw">true</span>);
+driver.<span class="fn">setSetting</span>(<span class="str">"waitForIdleTimeout"</span>, <span class="num">0</span>);
+driver.<span class="fn">setSetting</span>(<span class="str">"snapshotMaxDepth"</span>, <span class="num">60</span>);
+<span class="ty">Map&lt;String,Object&gt;</span> all = driver.<span class="fn">getSettings</span>();</code></div>
+  </div></div>
+</div>
+
+<!-- ROW 11 -->
+<div class="section-label">41. Appium Server CLI Flags &middot; 42. Server Security &amp; Relaxed Security &middot; 43. Session Management &amp; Capabilities &middot; 44. Appium Extensions CLI (Drivers/Plugins)</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>41. Appium Server CLI Flags</div>
+    <table class="mini">
+      <tr><th>Flag</th><th>Purpose</th></tr>
+      <tr><td>--address / --port</td><td>bind host:port</td></tr>
+      <tr><td>--base-path</td><td>custom URL path prefix</td></tr>
+      <tr><td>--log-level</td><td>debug/info/warn/error</td></tr>
+      <tr><td>--log &lt;file&gt;</td><td>write server logs to file</td></tr>
+      <tr><td>--session-override</td><td>allow only 1 active session</td></tr>
+      <tr><td>--allow-cors</td><td>enable CORS for browser clients</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>42. Server Security &amp; Relaxed Security</div>
+    <table class="mini">
+      <tr><th>Flag</th><th>Purpose</th></tr>
+      <tr><td>--relaxed-security</td><td>unlock all insecure features</td></tr>
+      <tr><td>--allow-insecure &lt;list&gt;</td><td>whitelist specific features</td></tr>
+      <tr><td>--deny-insecure &lt;list&gt;</td><td>blacklist specific features</td></tr>
+      <tr><td>e.g. adb_shell</td><td>needed for mobile: shell command</td></tr>
+    </table>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>43. Session Management &amp; Capabilities</div>
+    <div class="item"><div class="item-desc">REST endpoints Appium server exposes</div><code>POST /session              <span class="cm">// create new session</span>
+DELETE /session/:id        <span class="cm">// quit session</span>
+GET /sessions               <span class="cm">// list active sessions</span>
+POST /session/:id/execute   <span class="cm">// run "mobile:" script</span></code></div>
+    <div class="item"><div class="item-desc">Java side session end</div><code>driver.<span class="fn">quit</span>();  <span class="cm">// always call in @AfterMethod</span></code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>44. Appium Extensions CLI (Drivers/Plugins)</div>
+    <table class="mini">
+      <tr><th>Command</th><th>Purpose</th></tr>
+      <tr><td>appium driver list</td><td>show available/installed drivers</td></tr>
+      <tr><td>appium driver update &lt;name&gt;</td><td>update a driver</td></tr>
+      <tr><td>appium plugin install &lt;name&gt;</td><td>e.g. images, execute-driver</td></tr>
+      <tr><td>appium plugin list --installed</td><td>list installed plugins</td></tr>
+      <tr><td>appium --use-plugins=&lt;names&gt;</td><td>enable plugins at server start</td></tr>
+    </table>
+  </div></div>
+</div>
+
+<div class="footer">
+  <div class="left">
+    <span>Appium with Java</span> Master Reference · Native + Hybrid + Desktop ·
+    UiAutomator2 · XCUITest · WinAppDriver · Mac2 · TestNG + Maven
+  </div>
+  <div class="right">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp; Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>

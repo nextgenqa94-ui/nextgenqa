@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playwright Interview Questions — Next Gen QA</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #00d4aa;
+    --accent2: #3b82f6;
+    --accent3: #f59e0b;
+    --accent4: #ec4899;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --code-bg: #0d1117;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,170,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,170,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 48px; padding: 40px 24px; position: relative; }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 200px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent); padding: 6px 16px; border-radius: 100px;
+    font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .badge::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.5)} }
+  h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; line-height: 1.1; margin-bottom: 12px; }
+  h1 span { color: var(--accent); }
+  .subtitle { color: var(--muted); font-size: 15px; }
+  .meta { display: flex; gap: 20px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+  .meta-item strong { color: var(--accent); }
+
+  /* Category filter tabs */
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; justify-content: center; }
+  .tab {
+    padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+    border: 1px solid var(--border); background: var(--surface); color: var(--muted);
+    transition: all 0.2s; font-family: 'Syne', sans-serif;
+  }
+  .tab:hover { border-color: var(--accent); color: var(--accent); }
+  .tab.active { background: rgba(0,212,170,0.15); border-color: var(--accent); color: var(--accent); }
+
+  /* Section */
+  .section { margin-bottom: 40px; }
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px; padding: 12px 20px;
+    background: var(--surface2); border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+  }
+  .section-icon { font-size: 18px; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--text); }
+  .section-count {
+    margin-left: auto; background: rgba(0,212,170,0.15);
+    color: var(--accent); font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px;
+  }
+
+  /* QA Card */
+  .qa-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .qa-card:hover { border-color: rgba(0,212,170,0.3); }
+  .qa-card.open { border-color: rgba(0,212,170,0.5); }
+
+  .q-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 18px; cursor: pointer; user-select: none;
+  }
+  .q-num {
+    min-width: 28px; height: 28px;
+    background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent); font-size: 11px; font-weight: 700;
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; flex-shrink: 0; margin-top: 1px;
+  }
+  .q-text { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; line-height: 1.5; }
+  .q-chevron { color: var(--muted); font-size: 12px; transition: transform 0.3s; margin-top: 4px; flex-shrink: 0; }
+  .qa-card.open .q-chevron { transform: rotate(180deg); color: var(--accent); }
+
+  .a-body {
+    display: none;
+    padding: 0 18px 18px 58px;
+    border-top: 1px solid var(--border);
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+  .qa-card.open .a-body { display: block; }
+
+  .a-text { font-size: 13.5px; line-height: 1.75; color: #94a3b8; margin-top: 14px; }
+  .a-text strong { color: var(--text); font-weight: 600; }
+
+  /* Code block */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid #1e3a5f;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre;
+    color: #e2e8f0;
+  }
+  .kw { color: #79c0ff; }
+  .fn { color: #d2a8ff; }
+  .str { color: #a5d6ff; }
+  .cm { color: #6e7781; font-style: italic; }
+  .num { color: #f78166; }
+  .acc { color: var(--accent); }
+
+  /* Diff table */
+  .diff-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+  .diff-table th {
+    background: rgba(0,212,170,0.1); color: var(--accent);
+    padding: 8px 12px; text-align: left; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .diff-table td { padding: 9px 12px; border-top: 1px solid var(--border); color: #94a3b8; vertical-align: top; }
+  .diff-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .diff-table .label { color: var(--text); font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+  /* Tag */
+  .tag {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; margin-right: 4px; font-family: 'JetBrains Mono', monospace;
+  }
+  .tag-green { background: rgba(0,212,170,0.15); color: var(--accent); border: 1px solid rgba(0,212,170,0.3); }
+  .tag-blue { background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+  .tag-amber { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+  .tag-red { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+
+  /* Tip box */
+  .tip {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 8px; padding: 12px 14px; margin-top: 12px; font-size: 13px; color: #d4a96a;
+  }
+  .tip-icon { font-size: 16px; flex-shrink: 0; }
+
+  /* Search */
+  .search-wrap { position: relative; margin-bottom: 24px; }
+  .search-input {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 16px 12px 44px;
+    color: var(--text); font-size: 14px; font-family: 'Syne', sans-serif; outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--muted); }
+  .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 16px; pointer-events: none; }
+
+  .hidden { display: none !important; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--border); }
+  .footer p { color: var(--muted); font-size: 13px; }
+  .footer strong { color: var(--accent); }
+
+  /* Progress */
+  .progress-bar {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.1s; z-index: 100;
+  }
+  /* Stats */
+  .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+  .stat-card {
+    flex: 1; min-width: 120px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px; text-align: center;
+  }
+  .stat-num { font-size: 28px; font-weight: 800; color: var(--accent); }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">🎭 Next Gen QA</div>
+    <h1>Playwright<br><span>Interview Questions</span></h1>
+    <p class="subtitle">Complete preparation guide — Basic to Advanced</p>
+    <div class="meta">
+      <div class="meta-item">🎯 <strong>40+</strong> Questions</div>
+      <div class="meta-item">📂 <strong>6</strong> Categories</div>
+      <div class="meta-item">👨‍💻 <strong>Khan Sir</strong> — Next Gen QA</div>
+      <div class="meta-item">📞 <strong>8700350994</strong></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card"><div class="stat-num">40+</div><div class="stat-label">Total Questions</div></div>
+    <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Categories</div></div>
+    <div class="stat-card"><div class="stat-num">100%</div><div class="stat-label">With Code Examples</div></div>
+    <div class="stat-card"><div class="stat-num">Free</div><div class="stat-label">Resource</div></div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="searchInput" placeholder="Search questions... e.g. locator, iframe, CI/CD" oninput="filterQuestions(this.value)">
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" id="tabs">
+    <button class="tab active" onclick="filterTab('all', this)">All</button>
+    <button class="tab" onclick="filterTab('basic', this)">🔹 Basic</button>
+    <button class="tab" onclick="filterTab('locators', this)">🎯 Locators</button>
+    <button class="tab" onclick="filterTab('frames', this)">🪟 Frames & Alerts</button>
+    <button class="tab" onclick="filterTab('waits', this)">⏱ Assertions & Waits</button>
+    <button class="tab" onclick="filterTab('config', this)">⚙️ Test Runner</button>
+    <button class="tab" onclick="filterTab('advanced', this)">🚀 Advanced</button>
+  </div>
+
+  <!-- ===== SECTION 1: BASIC ===== -->
+  <div class="section" data-cat="basic">
+    <div class="section-header">
+      <span class="section-icon">🔹</span>
+      <span class="section-title">Basic Questions</span>
+      <span class="section-count">9 Questions</span>
+    </div>
+
+    <div class="qa-card" data-q="What is Playwright? How is it different from Selenium?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">01</div>
+        <div class="q-text">What is Playwright? How is it different from Selenium?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="a-text">
+          <strong>Playwright</strong> is a modern browser automation framework by Microsoft. It supports Chromium, Firefox, and WebKit with a single API.
+          <table class="diff-table" style="margin-top:12px">
+            <tr><th>Feature</th><th>Playwright</th><th>Selenium</th></tr>
+            <tr><td class="label">Auto-wait</td><td>✅ Built-in</td><td>❌ Manual waits needed</td></tr>
+            <tr><td class="label">Browsers</td><td>Chromium, Firefox, WebKit</td><td>All browsers via WebDriver</td></tr>
+            <tr><td class="label">Speed</td><td>Faster</td><td>Slower</td></tr>
+            <tr><td class="label">Network Mock</td><td>✅ Built-in</td><td>❌ 3rd party needed</td></tr>
+            <tr><td class="label">Trace/Debug</td><td>✅ Trace Viewer</td><td>❌ Limited</td></tr>
+            <tr><td class="label">Language</td><td>JS/TS, Python, Java, C#</td><td>Same + more</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="Which languages does Playwright support?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">02</div>
+        <div class="q-text">Which languages does Playwright support?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="a-text">
+          Playwright officially supports:
+          <br><br>
+          <span class="tag tag-green">JavaScript/TypeScript</span>
+          <span class="tag tag-blue">Python</span>
+          <span class="tag tag-amber">Java</span>
+          <span class="tag tag-red">C# (.NET)</span>
+          <br><br>
+          For QA roles in India, <strong>JavaScript/TypeScript</strong> is most commonly asked in interviews.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="What is page, context, and browser in Playwright?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">03</div>
+        <div class="q-text">What is page, context, and browser in Playwright?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="a-text">These are the 3 core objects in Playwright — nested hierarchy:</div>
+        <div class="code-block"><span class="cm">// browser → context → page</span>
+
+<span class="kw">const</span> browser = <span class="kw">await</span> chromium.<span class="fn">launch</span>();         <span class="cm">// Browser process</span>
+<span class="kw">const</span> context = <span class="kw">await</span> browser.<span class="fn">newContext</span>();       <span class="cm">// Isolated session (cookies, storage)</span>
+<span class="kw">const</span> page    = <span class="kw">await</span> context.<span class="fn">newPage</span>();         <span class="cm">// A single tab</span></div>
+        <div class="a-text">
+          <strong>Browser</strong> — the actual browser instance (Chromium/Firefox/WebKit)<br>
+          <strong>Context</strong> — like an incognito window. Each context has its own cookies, localStorage, sessions. Used for multi-user testing.<br>
+          <strong>Page</strong> — a single browser tab/window. Most interactions happen here.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="Difference between locator() and elementHandle()?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">04</div>
+        <div class="q-text">Difference between locator() and elementHandle()?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <table class="diff-table">
+          <tr><th>Feature</th><th>locator()</th><th>elementHandle()</th></tr>
+          <tr><td class="label">Auto-wait</td><td>✅ Yes — retries automatically</td><td>❌ No — snapshot at that moment</td></tr>
+          <tr><td class="label">Lazy</td><td>✅ Evaluated on action</td><td>❌ Resolved immediately</td></tr>
+          <tr><td class="label">Recommended</td><td>✅ Yes (modern)</td><td>❌ Legacy, avoid</td></tr>
+          <tr><td class="label">Use case</td><td>All normal interactions</td><td>Only if you need JS handle</td></tr>
+        </table>
+        <div class="tip"><span class="tip-icon">💡</span> Always prefer <code>locator()</code> over <code>elementHandle()</code> in modern Playwright.</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How does Playwright handle auto-waiting?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">05</div>
+        <div class="q-text">How does Playwright handle auto-waiting?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="a-text">
+          Playwright automatically waits for elements to be in the right state before performing actions. This is called <strong>actionability checks</strong>.
+          <br><br>Before <code>click()</code>, Playwright checks: <span class="tag tag-green">visible</span> <span class="tag tag-blue">stable</span> <span class="tag tag-amber">enabled</span> <span class="tag tag-red">not obscured</span>
+        </div>
+        <div class="code-block"><span class="cm">// No manual wait needed — Playwright waits automatically</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#submit'</span>).<span class="fn">click</span>();  <span class="cm">// waits until button is visible + enabled</span>
+
+<span class="cm">// Default timeout: 30 seconds (configurable in playwright.config)</span></div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="What is the difference between textContent() and innerText()?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">06</div>
+        <div class="q-text">What is the difference between textContent() and innerText()?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <table class="diff-table">
+          <tr><th>Method</th><th>What it returns</th><th>Hidden elements</th></tr>
+          <tr><td class="label">textContent()</td><td>Raw text including hidden elements</td><td>✅ Included</td></tr>
+          <tr><td class="label">innerText()</td><td>Visible text only (human-readable)</td><td>❌ Excluded</td></tr>
+        </table>
+        <div class="code-block"><span class="cm">// If element has hidden span inside:</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#msg'</span>).<span class="fn">textContent</span>(); <span class="cm">// "Hello hidden"</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#msg'</span>).<span class="fn">innerText</span>();   <span class="cm">// "Hello" (hidden text ignored)</span></div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="What are frameLocator and page.frame()? When to use which?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">07</div>
+        <div class="q-text">What are frameLocator and page.frame()? When to use which?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="a-text">
+          <strong>frameLocator()</strong> — modern, chainable, uses CSS/XPath selector. Preferred approach.<br>
+          <strong>page.frame()</strong> — legacy, uses name or URL attribute.
+        </div>
+        <div class="code-block"><span class="cm">// frameLocator — preferred (modern)</span>
+<span class="kw">await</span> page.<span class="fn">frameLocator</span>(<span class="str">'iframe#payment'</span>)
+           .<span class="fn">locator</span>(<span class="str">'#cardNumber'</span>).<span class="fn">fill</span>(<span class="str">'4242424242424242'</span>);
+
+<span class="cm">// page.frame() — legacy</span>
+<span class="kw">const</span> frame = page.<span class="fn">frame</span>({ name: <span class="str">'paymentFrame'</span> });
+<span class="kw">await</span> frame.<span class="fn">locator</span>(<span class="str">'#cardNumber'</span>).<span class="fn">fill</span>(<span class="str">'4242424242424242'</span>);</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How do you run tests in multiple browsers?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">08</div>
+        <div class="q-text">How do you run tests in multiple browsers?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// playwright.config.ts</span>
+<span class="kw">export default</span> {
+  projects: [
+    { name: <span class="str">'chromium'</span>, use: { ...devices[<span class="str">'Desktop Chrome'</span>] } },
+    { name: <span class="str">'firefox'</span>,  use: { ...devices[<span class="str">'Desktop Firefox'</span>] } },
+    { name: <span class="str">'webkit'</span>,   use: { ...devices[<span class="str">'Desktop Safari'</span>] } },
+  ],
+};
+
+<span class="cm">// Run specific browser from CLI</span>
+npx playwright test --project=chromium
+npx playwright test --project=firefox</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="Difference between page.locator() vs page.$()">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">09</div>
+        <div class="q-text">Difference between page.locator() vs page.$()?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="a-text">
+          <code>page.$()</code> is a shorthand for <code>page.querySelector()</code> — returns an ElementHandle immediately (snapshot). <code>page.locator()</code> is lazy and auto-waits.
+        </div>
+        <table class="diff-table">
+          <tr><th></th><th>page.locator()</th><th>page.$()</th></tr>
+          <tr><td class="label">Returns</td><td>Locator (lazy)</td><td>ElementHandle (snapshot)</td></tr>
+          <tr><td class="label">Auto-wait</td><td>✅ Yes</td><td>❌ No</td></tr>
+          <tr><td class="label">Recommended</td><td>✅ Always</td><td>❌ Avoid</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: LOCATORS ===== -->
+  <div class="section" data-cat="locators">
+    <div class="section-header">
+      <span class="section-icon">🎯</span>
+      <span class="section-title">Locators & Selectors</span>
+      <span class="section-count">6 Questions</span>
+    </div>
+
+    <div class="qa-card" data-q="What is the benefit of using locator over elementHandle?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">10</div>
+        <div class="q-text">What is the benefit of using locator over elementHandle?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="a-text">
+          <strong>Locator advantages:</strong><br>
+          ✅ Auto-waits for actionability<br>
+          ✅ Lazy — re-queries DOM on every action (handles dynamic elements)<br>
+          ✅ Chainable — <code>locator('.list').locator('.item')</code><br>
+          ✅ Works with <code>expect()</code> assertions natively<br>
+          ✅ Supports all Playwright built-in selectors (role, text, label, etc.)
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How do you handle dynamic elements in Playwright?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">11</div>
+        <div class="q-text">How do you handle dynamic elements in Playwright?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// 1. Use role-based locators (most stable)</span>
+<span class="kw">await</span> page.<span class="fn">getByRole</span>(<span class="str">'button'</span>, { name: <span class="str">'Submit'</span> }).<span class="fn">click</span>();
+
+<span class="cm">// 2. Use text locator</span>
+<span class="kw">await</span> page.<span class="fn">getByText</span>(<span class="str">'Login'</span>).<span class="fn">click</span>();
+
+<span class="cm">// 3. waitFor state</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#loader'</span>).<span class="fn">waitFor</span>({ state: <span class="str">'hidden'</span> });
+
+<span class="cm">// 4. Use filter() for dynamic list items</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'.product'</span>)
+          .<span class="fn">filter</span>({ hasText: <span class="str">'iPhone 15'</span> })
+          .<span class="fn">click</span>();</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="Difference between allTextContents() and textContent()?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">12</div>
+        <div class="q-text">Difference between allTextContents() and textContent()?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// textContent() — single element</span>
+<span class="kw">const</span> text = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'h1'</span>).<span class="fn">textContent</span>(); <span class="cm">// "Welcome"</span>
+
+<span class="cm">// allTextContents() — ALL matching elements → returns array</span>
+<span class="kw">const</span> items = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'.list-item'</span>).<span class="fn">allTextContents</span>();
+<span class="cm">// ["Item 1", "Item 2", "Item 3"]</span></div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How to select options from a dropdown?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">13</div>
+        <div class="q-text">How to select options from a dropdown?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// selectOption() — HTML select element</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#country'</span>).<span class="fn">selectOption</span>(<span class="str">'India'</span>);      <span class="cm">// by value</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#country'</span>).<span class="fn">selectOption</span>({ label: <span class="str">'India'</span> }); <span class="cm">// by label</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#country'</span>).<span class="fn">selectOption</span>({ index: <span class="num">2</span> });       <span class="cm">// by index</span>
+
+<span class="cm">// Custom dropdown (not native select)</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#dropdown-toggle'</span>).<span class="fn">click</span>();
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'.dropdown-item'</span>).<span class="fn">filter</span>({ hasText: <span class="str">'India'</span> }).<span class="fn">click</span>();</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How to handle shadow DOM in Playwright?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">14</div>
+        <div class="q-text">How to handle shadow DOM in Playwright?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="a-text">Playwright <strong>automatically pierces shadow DOM</strong> — no special handling needed for most cases!</div>
+        <div class="code-block"><span class="cm">// Playwright auto-pierces shadow DOM</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#shadow-input'</span>).<span class="fn">fill</span>(<span class="str">'test'</span>);
+
+<span class="cm">// If needed, use >> for explicit pierce</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'custom-element >> input'</span>).<span class="fn">fill</span>(<span class="str">'value'</span>);</div>
+        <div class="tip"><span class="tip-icon">💡</span> This is one of Playwright's biggest advantages over Selenium where shadow DOM is painful.</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="Built-in locator strategies in Playwright">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">15</div>
+        <div class="q-text">What are the built-in locator strategies in Playwright?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="fn">getByRole</span>(<span class="str">'button'</span>, { name: <span class="str">'Submit'</span> })  <span class="cm">// ARIA role — most recommended</span>
+<span class="fn">getByText</span>(<span class="str">'Login'</span>)                     <span class="cm">// exact or partial text</span>
+<span class="fn">getByLabel</span>(<span class="str">'Email'</span>)                   <span class="cm">// form label</span>
+<span class="fn">getByPlaceholder</span>(<span class="str">'Enter email'</span>)       <span class="cm">// input placeholder</span>
+<span class="fn">getByAltText</span>(<span class="str">'Company logo'</span>)          <span class="cm">// img alt text</span>
+<span class="fn">getByTitle</span>(<span class="str">'Close dialog'</span>)            <span class="cm">// title attribute</span>
+<span class="fn">getByTestId</span>(<span class="str">'submit-btn'</span>)             <span class="cm">// data-testid (most stable!)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: FRAMES & ALERTS ===== -->
+  <div class="section" data-cat="frames">
+    <div class="section-header">
+      <span class="section-icon">🪟</span>
+      <span class="section-title">Frames, Windows & Alerts</span>
+      <span class="section-count">4 Questions</span>
+    </div>
+
+    <div class="qa-card" data-q="How do you handle iframes in Playwright?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">16</div>
+        <div class="q-text">How do you handle iframes in Playwright?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// Method 1: frameLocator (recommended)</span>
+<span class="kw">const</span> frame = page.<span class="fn">frameLocator</span>(<span class="str">'iframe[title="Payment Form"]'</span>);
+<span class="kw">await</span> frame.<span class="fn">locator</span>(<span class="str">'#cardNumber'</span>).<span class="fn">fill</span>(<span class="str">'4242 4242 4242 4242'</span>);
+
+<span class="cm">// Method 2: page.frame() — legacy</span>
+<span class="kw">const</span> iframe = page.<span class="fn">frame</span>({ url: <span class="str">/payment/ </span>});
+<span class="kw">await</span> iframe.<span class="fn">locator</span>(<span class="str">'#cardNumber'</span>).<span class="fn">fill</span>(<span class="str">'4242 4242 4242 4242'</span>);
+
+<span class="cm">// Nested iframes</span>
+<span class="kw">await</span> page.<span class="fn">frameLocator</span>(<span class="str">'#outer'</span>)
+          .<span class="fn">frameLocator</span>(<span class="str">'#inner'</span>)
+          .<span class="fn">locator</span>(<span class="str">'button'</span>).<span class="fn">click</span>();</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How to handle multiple browser tabs/windows?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">17</div>
+        <div class="q-text">How to handle multiple browser tabs/windows?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// Wait for new page (tab) to open</span>
+<span class="kw">const</span> [newPage] = <span class="kw">await</span> Promise.<span class="fn">all</span>([
+  context.<span class="fn">waitForEvent</span>(<span class="str">'page'</span>),
+  page.<span class="fn">locator</span>(<span class="str">'a[target="_blank"]'</span>).<span class="fn">click</span>()
+]);
+
+<span class="kw">await</span> newPage.<span class="fn">waitForLoadState</span>();
+<span class="kw">await</span> newPage.<span class="fn">locator</span>(<span class="str">'h1'</span>).<span class="fn">textContent</span>();
+
+<span class="cm">// Get all open pages</span>
+<span class="kw">const</span> pages = context.<span class="fn">pages</span>(); <span class="cm">// array of all pages</span></div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How do you handle alerts, confirm, and prompt dialogs?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">18</div>
+        <div class="q-text">How do you handle alerts, confirm, and prompt dialogs?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// Handle dialog BEFORE the action that triggers it</span>
+page.<span class="fn">on</span>(<span class="str">'dialog'</span>, <span class="kw">async</span> dialog => {
+  console.<span class="fn">log</span>(dialog.<span class="fn">message</span>());  <span class="cm">// alert message</span>
+  console.<span class="fn">log</span>(dialog.<span class="fn">type</span>());     <span class="cm">// alert / confirm / prompt</span>
+
+  <span class="kw">await</span> dialog.<span class="fn">accept</span>();            <span class="cm">// click OK</span>
+  <span class="cm">// await dialog.dismiss();         // click Cancel</span>
+  <span class="cm">// await dialog.accept('my input'); // for prompt</span>
+});
+
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#deleteBtn'</span>).<span class="fn">click</span>();  <span class="cm">// triggers confirm dialog</span></div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="Difference between frameLocator and frame()?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">19</div>
+        <div class="q-text">Difference between frameLocator() and frame()?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <table class="diff-table">
+          <tr><th></th><th>frameLocator()</th><th>page.frame()</th></tr>
+          <tr><td class="label">Selector</td><td>CSS/XPath of iframe element</td><td>name or URL attribute</td></tr>
+          <tr><td class="label">Returns</td><td>FrameLocator (lazy, chainable)</td><td>Frame object</td></tr>
+          <tr><td class="label">Auto-wait</td><td>✅ Yes</td><td>❌ No</td></tr>
+          <tr><td class="label">Recommended</td><td>✅ Modern approach</td><td>Legacy</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: ASSERTIONS & WAITS ===== -->
+  <div class="section" data-cat="waits">
+    <div class="section-header">
+      <span class="section-icon">⏱</span>
+      <span class="section-title">Assertions & Waits</span>
+      <span class="section-count">3 Questions</span>
+    </div>
+
+    <div class="qa-card" data-q="What is the difference between expect(locator).toBeVisible() and await locator.isVisible()?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">20</div>
+        <div class="q-text">Difference between expect(locator).toBeVisible() and locator.isVisible()?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <table class="diff-table">
+          <tr><th></th><th>expect().toBeVisible()</th><th>locator.isVisible()</th></tr>
+          <tr><td class="label">Type</td><td>Assertion (test fails if wrong)</td><td>Returns boolean</td></tr>
+          <tr><td class="label">Auto-retry</td><td>✅ Yes — retries until timeout</td><td>❌ No — instant check</td></tr>
+          <tr><td class="label">Use case</td><td>Assertions in test</td><td>Conditional logic</td></tr>
+        </table>
+        <div class="code-block"><span class="cm">// Assertion — retries automatically, fails test if not visible</span>
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#success'</span>)).<span class="fn">toBeVisible</span>();
+
+<span class="cm">// Boolean — instant, use for if/else logic</span>
+<span class="kw">const</span> visible = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#modal'</span>).<span class="fn">isVisible</span>();
+<span class="kw">if</span> (visible) { <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#close'</span>).<span class="fn">click</span>(); }</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How do you wait for an element explicitly?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">21</div>
+        <div class="q-text">How do you wait for an element explicitly?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// waitFor — explicit wait with state</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#loader'</span>).<span class="fn">waitFor</span>({ state: <span class="str">'hidden'</span> });
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#result'</span>).<span class="fn">waitFor</span>({ state: <span class="str">'visible'</span> });
+
+<span class="cm">// Wait for navigation</span>
+<span class="kw">await</span> page.<span class="fn">waitForURL</span>(<span class="str">'**/dashboard'</span>);
+<span class="kw">await</span> page.<span class="fn">waitForLoadState</span>(<span class="str">'networkidle'</span>);
+
+<span class="cm">// Custom wait — wait until condition is true</span>
+<span class="kw">await</span> page.<span class="fn">waitForFunction</span>(() => document.title.includes(<span class="str">'Done'</span>));
+
+<span class="cm">// Common assertion waits</span>
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="str">'#count'</span>)).<span class="fn">toHaveText</span>(<span class="str">'5 items'</span>); <span class="cm">// retries</span></div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="Common Playwright assertions">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">22</div>
+        <div class="q-text">What are the most common Playwright assertions?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="fn">expect</span>(locator).<span class="fn">toBeVisible</span>()
+<span class="fn">expect</span>(locator).<span class="fn">toBeHidden</span>()
+<span class="fn">expect</span>(locator).<span class="fn">toBeEnabled</span>()
+<span class="fn">expect</span>(locator).<span class="fn">toBeDisabled</span>()
+<span class="fn">expect</span>(locator).<span class="fn">toBeChecked</span>()
+<span class="fn">expect</span>(locator).<span class="fn">toHaveText</span>(<span class="str">'Expected text'</span>)
+<span class="fn">expect</span>(locator).<span class="fn">toContainText</span>(<span class="str">'partial text'</span>)
+<span class="fn">expect</span>(locator).<span class="fn">toHaveValue</span>(<span class="str">'input value'</span>)
+<span class="fn">expect</span>(locator).<span class="fn">toHaveCount</span>(<span class="num">3</span>)
+<span class="fn">expect</span>(locator).<span class="fn">toHaveAttribute</span>(<span class="str">'href'</span>, <span class="str">'/home'</span>)
+<span class="fn">expect</span>(page).<span class="fn">toHaveURL</span>(<span class="str">'/dashboard'</span>)
+<span class="fn">expect</span>(page).<span class="fn">toHaveTitle</span>(<span class="str">'My App'</span>)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: TEST RUNNER ===== -->
+  <div class="section" data-cat="config">
+    <div class="section-header">
+      <span class="section-icon">⚙️</span>
+      <span class="section-title">Test Runner & Config</span>
+      <span class="section-count">5 Questions</span>
+    </div>
+
+    <div class="qa-card" data-q="How do you run only one test?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">23</div>
+        <div class="q-text">How do you run only one test?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// 1. test.only — in code</span>
+test.<span class="fn">only</span>(<span class="str">'login test'</span>, <span class="kw">async</span> ({ page }) => { ... });
+
+<span class="cm">// 2. --grep flag — run by test name pattern</span>
+npx playwright test --grep <span class="str">"login"</span>
+
+<span class="cm">// 3. Run specific file</span>
+npx playwright test tests/login.spec.ts
+
+<span class="cm">// 4. Run specific line number</span>
+npx playwright test tests/login.spec.ts:<span class="num">15</span></div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How do you group tests?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">24</div>
+        <div class="q-text">How do you group tests?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// test.describe — group related tests</span>
+test.<span class="fn">describe</span>(<span class="str">'Login functionality'</span>, () => {
+
+  test.<span class="fn">beforeEach</span>(<span class="kw">async</span> ({ page }) => {
+    <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'https://example.com/login'</span>);
+  });
+
+  test(<span class="str">'valid login'</span>, <span class="kw">async</span> ({ page }) => { ... });
+  test(<span class="str">'invalid password'</span>, <span class="kw">async</span> ({ page }) => { ... });
+  test(<span class="str">'empty fields'</span>, <span class="kw">async</span> ({ page }) => { ... });
+});</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="Difference between test.beforeEach and test.beforeAll?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">25</div>
+        <div class="q-text">Difference between test.beforeEach and test.beforeAll?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <table class="diff-table">
+          <tr><th>Hook</th><th>Runs</th><th>Use case</th></tr>
+          <tr><td class="label">beforeEach</td><td>Before EVERY test</td><td>Navigate to page, login, reset state</td></tr>
+          <tr><td class="label">afterEach</td><td>After EVERY test</td><td>Cleanup, logout, close modals</td></tr>
+          <tr><td class="label">beforeAll</td><td>Once before all tests in describe</td><td>DB setup, create test data</td></tr>
+          <tr><td class="label">afterAll</td><td>Once after all tests</td><td>DB cleanup, close connections</td></tr>
+        </table>
+        <div class="tip"><span class="tip-icon">💡</span> <code>beforeAll</code> shares state between tests — use carefully! <code>beforeEach</code> is safer for isolated tests.</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How to run Playwright tests in parallel?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">26</div>
+        <div class="q-text">How to run Playwright tests in parallel?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// playwright.config.ts</span>
+<span class="kw">export default</span> {
+  workers: <span class="num">4</span>,             <span class="cm">// 4 parallel workers</span>
+  fullyParallel: <span class="kw">true</span>,   <span class="cm">// run tests in same file in parallel</span>
+};
+
+<span class="cm">// CLI — set workers from command line</span>
+npx playwright test --workers=<span class="num">4</span>
+
+<span class="cm">// Disable parallel for a specific describe</span>
+test.describe.<span class="fn">configure</span>({ mode: <span class="str">'serial'</span> });
+
+<span class="cm">// Force single worker</span>
+npx playwright test --workers=<span class="num">1</span></div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How to generate HTML reports in Playwright?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">27</div>
+        <div class="q-text">How to generate HTML reports in Playwright?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// playwright.config.ts</span>
+<span class="kw">export default</span> {
+  reporter: [
+    [<span class="str">'html'</span>, { open: <span class="str">'never'</span> }],  <span class="cm">// HTML report</span>
+    [<span class="str">'list'</span>],                          <span class="cm">// console output</span>
+    [<span class="str">'json'</span>, { outputFile: <span class="str">'results.json'</span> }]
+  ],
+};
+
+<span class="cm">// Generate and open report</span>
+npx playwright test
+npx playwright show-report         <span class="cm">// opens browser with report</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: ADVANCED ===== -->
+  <div class="section" data-cat="advanced">
+    <div class="section-header">
+      <span class="section-icon">🚀</span>
+      <span class="section-title">Advanced Topics</span>
+      <span class="section-count">8 Questions</span>
+    </div>
+
+    <div class="qa-card" data-q="How do you handle API testing in Playwright?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">28</div>
+        <div class="q-text">How do you handle API testing in Playwright?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// Using APIRequestContext</span>
+<span class="kw">const</span> response = <span class="kw">await</span> request.<span class="fn">get</span>(<span class="str">'https://api.example.com/users'</span>);
+<span class="fn">expect</span>(response.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">200</span>);
+
+<span class="kw">const</span> body = <span class="kw">await</span> response.<span class="fn">json</span>();
+<span class="fn">expect</span>(body.users).<span class="fn">toHaveLength</span>(<span class="num">10</span>);
+
+<span class="cm">// POST request</span>
+<span class="kw">const</span> res = <span class="kw">await</span> request.<span class="fn">post</span>(<span class="str">'/api/login'</span>, {
+  data: { email: <span class="str">'test@test.com'</span>, password: <span class="str">'123456'</span> }
+});
+<span class="fn">expect</span>(res.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">200</span>);</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How do you mock API responses in Playwright?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">29</div>
+        <div class="q-text">How do you mock API responses in Playwright?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// route.fulfill() — intercept and mock API</span>
+<span class="kw">await</span> page.<span class="fn">route</span>(<span class="str">'**/api/users'</span>, <span class="kw">async</span> route => {
+  <span class="kw">await</span> route.<span class="fn">fulfill</span>({
+    status: <span class="num">200</span>,
+    contentType: <span class="str">'application/json'</span>,
+    body: JSON.<span class="fn">stringify</span>([{ id: <span class="num">1</span>, name: <span class="str">'Test User'</span> }])
+  });
+});
+
+<span class="cm">// Abort a request</span>
+<span class="kw">await</span> page.<span class="fn">route</span>(<span class="str">'**/*.png'</span>, route => route.<span class="fn">abort</span>());
+
+<span class="cm">// Modify response</span>
+<span class="kw">await</span> page.<span class="fn">route</span>(<span class="str">'**/api/data'</span>, <span class="kw">async</span> route => {
+  <span class="kw">const</span> response = <span class="kw">await</span> route.<span class="fn">fetch</span>();
+  <span class="kw">const</span> json = <span class="kw">await</span> response.<span class="fn">json</span>();
+  json.status = <span class="str">'modified'</span>;
+  <span class="kw">await</span> route.<span class="fn">fulfill</span>({ response, json });
+});</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How do you take screenshots and videos?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">30</div>
+        <div class="q-text">How do you take screenshots and videos?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// Screenshots</span>
+<span class="kw">await</span> page.<span class="fn">screenshot</span>({ path: <span class="str">'screenshot.png'</span> });
+<span class="kw">await</span> page.<span class="fn">screenshot</span>({ path: <span class="str">'full.png'</span>, fullPage: <span class="kw">true</span> });
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#chart'</span>).<span class="fn">screenshot</span>({ path: <span class="str">'chart.png'</span> });
+
+<span class="cm">// Videos in config</span>
+<span class="kw">export default</span> {
+  use: {
+    screenshot: <span class="str">'only-on-failure'</span>,   <span class="cm">// or 'on', 'off'</span>
+    video: <span class="str">'retain-on-failure'</span>,      <span class="cm">// or 'on', 'off'</span>
+    trace: <span class="str">'retain-on-failure'</span>,      <span class="cm">// or 'on', 'off'</span>
+  }
+};</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How do you run Playwright tests in CI/CD pipeline?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">31</div>
+        <div class="q-text">How do you run Playwright tests in CI/CD pipeline?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm"># GitHub Actions — .github/workflows/playwright.yml</span>
+name: Playwright Tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: <span class="str">'20'</span>
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/</div>
+        <div class="tip"><span class="tip-icon">💡</span> Always use <code>--with-deps</code> in CI to install browser OS dependencies on Linux.</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="What is tracing in Playwright and how is it useful?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">32</div>
+        <div class="q-text">What is tracing in Playwright and how is it useful?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="a-text">
+          <strong>Trace</strong> records everything — DOM snapshots, network requests, console logs, screenshots — for full test debugging. Like a "time-travel debugger".
+        </div>
+        <div class="code-block"><span class="cm">// Enable tracing</span>
+<span class="kw">await</span> context.<span class="fn">tracing</span>.<span class="fn">start</span>({ screenshots: <span class="kw">true</span>, snapshots: <span class="kw">true</span> });
+
+<span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'https://example.com'</span>);
+<span class="cm">// ... test steps ...</span>
+
+<span class="kw">await</span> context.<span class="fn">tracing</span>.<span class="fn">stop</span>({ path: <span class="str">'trace.zip'</span> });
+
+<span class="cm">// View trace in browser</span>
+npx playwright show-trace trace.zip
+
+<span class="cm">// In config (auto trace on failure)</span>
+use: { trace: <span class="str">'retain-on-failure'</span> }</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How do you handle authentication (basic auth, bearer tokens, storageState)?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">33</div>
+        <div class="q-text">How do you handle authentication — basic auth, bearer tokens, storageState?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// 1. Basic Auth</span>
+<span class="kw">const</span> context = <span class="kw">await</span> browser.<span class="fn">newContext</span>({
+  httpCredentials: { username: <span class="str">'admin'</span>, password: <span class="str">'pass123'</span> }
+});
+
+<span class="cm">// 2. Bearer token via extra headers</span>
+<span class="kw">const</span> context = <span class="kw">await</span> browser.<span class="fn">newContext</span>({
+  extraHTTPHeaders: { <span class="str">'Authorization'</span>: <span class="str">'Bearer your_token_here'</span> }
+});
+
+<span class="cm">// 3. storageState — save login state once, reuse in all tests</span>
+<span class="cm">// Step 1: Save auth state</span>
+<span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'/login'</span>);
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#email'</span>).<span class="fn">fill</span>(<span class="str">'user@test.com'</span>);
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'#submit'</span>).<span class="fn">click</span>();
+<span class="kw">await</span> context.<span class="fn">storageState</span>({ path: <span class="str">'auth.json'</span> });
+
+<span class="cm">// Step 2: Reuse in all tests (skip login)</span>
+<span class="kw">export default</span> {
+  use: { storageState: <span class="str">'auth.json'</span> }
+};</div>
+        <div class="tip"><span class="tip-icon">💡</span> <code>storageState</code> is a major time-saver — login once, skip login in all other tests!</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="How to run tests in headless vs headed mode?">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">34</div>
+        <div class="q-text">How to run tests in headless vs headed mode?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// CLI</span>
+npx playwright test                   <span class="cm">// headless (default)</span>
+npx playwright test --headed          <span class="cm">// headed (shows browser)</span>
+npx playwright test --ui              <span class="cm">// Playwright UI mode (best for debug)</span>
+
+<span class="cm">// playwright.config.ts</span>
+use: {
+  headless: <span class="kw">false</span>,   <span class="cm">// always headed</span>
+  slowMo: <span class="num">500</span>,        <span class="cm">// slow down 500ms per action (debug)</span>
+}</div>
+        <div class="tip"><span class="tip-icon">💡</span> <strong>Headless</strong> = no UI, faster, for CI/CD. <strong>Headed</strong> = shows browser, for debugging. <strong>UI mode</strong> = best for local development.</div>
+      </div>
+    </div>
+
+    <div class="qa-card" data-q="Page Object Model in Playwright">
+      <div class="q-row" onclick="toggle(this)">
+        <div class="q-num">35</div>
+        <div class="q-text">How to implement Page Object Model (POM) in Playwright?</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="a-body">
+        <div class="code-block"><span class="cm">// pages/LoginPage.ts</span>
+<span class="kw">export class</span> LoginPage {
+  <span class="kw">constructor</span>(<span class="kw">private</span> page: Page) {}
+
+  <span class="kw">async</span> <span class="fn">goto</span>() {
+    <span class="kw">await</span> <span class="kw">this</span>.page.<span class="fn">goto</span>(<span class="str">'/login'</span>);
+  }
+
+  <span class="kw">async</span> <span class="fn">login</span>(email: <span class="kw">string</span>, password: <span class="kw">string</span>) {
+    <span class="kw">await</span> <span class="kw">this</span>.page.<span class="fn">getByLabel</span>(<span class="str">'Email'</span>).<span class="fn">fill</span>(email);
+    <span class="kw">await</span> <span class="kw">this</span>.page.<span class="fn">getByLabel</span>(<span class="str">'Password'</span>).<span class="fn">fill</span>(password);
+    <span class="kw">await</span> <span class="kw">this</span>.page.<span class="fn">getByRole</span>(<span class="str">'button'</span>, { name: <span class="str">'Login'</span> }).<span class="fn">click</span>();
+  }
+}
+
+<span class="cm">// tests/login.spec.ts</span>
+test(<span class="str">'user can login'</span>, <span class="kw">async</span> ({ page }) => {
+  <span class="kw">const</span> loginPage = <span class="kw">new</span> LoginPage(page);
+  <span class="kw">await</span> loginPage.<span class="fn">goto</span>();
+  <span class="kw">await</span> loginPage.<span class="fn">login</span>(<span class="str">'user@test.com'</span>, <span class="str">'password'</span>);
+  <span class="kw">await</span> <span class="fn">expect</span>(page).<span class="fn">toHaveURL</span>(<span class="str">'/dashboard'</span>);
+});</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Made with ❤️ by <strong>Khan Sir</strong> — Next Gen QA IT Coaching Classes</p>
+    <p style="margin-top:8px">📞 <strong>8700350994</strong> &nbsp;|&nbsp; Online & Offline Classes &nbsp;|&nbsp; Manual · Automation · API Testing</p>
+  </div>
+
+</div>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+  });
+
+  // Toggle Q&A
+  function toggle(el) {
+    const card = el.closest('.qa-card');
+    card.classList.toggle('open');
+  }
+
+  // Filter by category tab
+  function filterTab(cat, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.section').forEach(s => {
+      s.style.display = (cat === 'all' || s.dataset.cat === cat) ? '' : 'none';
+    });
+    document.getElementById('searchInput').value = '';
+  }
+
+  // Search
+  function filterQuestions(q) {
+    const val = q.toLowerCase();
+    document.querySelectorAll('.section').forEach(s => s.style.display = '');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('.tab').classList.add('active');
+    document.querySelectorAll('.qa-card').forEach(card => {
+      const text = (card.dataset.q || '') + card.innerText;
+      card.style.display = text.toLowerCase().includes(val) ? '' : 'none';
+    });
+  }
+</script>
+</body>
+</html>

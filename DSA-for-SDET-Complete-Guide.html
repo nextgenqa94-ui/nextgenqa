@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Structures & Algorithms for SDET – Complete Interview Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080c14;--surface:#0d1320;--card:#101a28;--border:#172540;
+  --cyan:#00e5ff;--cyan2:#80d8ff;--amber:#ffab40;--amber2:#ffd180;
+  --green:#69ff47;--green2:#b9f6ca;--red:#ff5252;--purple:#ea80fc;
+  --blue:#448aff;--pink:#ff80ab;--yellow:#ffff00;
+  --text:#e0f7fa;--muted:#2a4a6a;--light:#80cbc4;--code-bg:#040810;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:11px;line-height:1.6;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:4px;}
+
+/* ══ HEADER ══ */
+.header{
+  background:linear-gradient(135deg,#04080e 0%,#0a1422 60%,#080c14 100%);
+  border-bottom:3px solid var(--cyan);padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;sticky:top 0;z-index:1000;
+}
+.header::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 50% 100% at 75% 50%,rgba(0,229,255,0.1) 0%,transparent 70%);pointer-events:none;}
+.header::after{content:'DSA';position:absolute;right:380px;top:50%;
+  transform:translateY(-50%);font-size:100px;font-weight:800;
+  color:rgba(0,229,255,0.04);letter-spacing:-2px;pointer-events:none;}
+.logo-wrap{display:flex;align-items:center;gap:14px;z-index:2;}
+.logo-box{width:54px;height:54px;background:linear-gradient(135deg,#ff6b35,#f7931e);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:#080c14;
+  letter-spacing:-0.5px;box-shadow:0 0 20px rgba(255,107,53,0.5);flex-shrink:0;
+  text-align:center;line-height:1.2;border:2px solid #ffab40;}
+.title-block h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.8px;color:#fff;z-index:2;position:relative;}
+.title-block h1 span{color:var(--amber);}
+.title-block p{color:var(--muted);font-size:9.5px;margin-top:3px;letter-spacing:1px;font-family:'Syne',sans-serif;}
+.coach-info{text-align:right;z-index:2;position:relative;}
+.coach-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--amber);}
+.coach-phone{display:flex;align-items:center;gap:6px;justify-content:flex-end;color:var(--cyan);font-weight:600;font-size:11px;margin-top:3px;}
+.coach-tags{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap;margin-top:5px;}
+.ctag{padding:3px 10px;border-radius:20px;font-size:8.5px;font-weight:700;font-family:'Syne',sans-serif;}
+.ctag.c{background:rgba(0,229,255,0.15);border:1px solid rgba(0,229,255,0.4);color:var(--cyan);}
+.ctag.a{background:rgba(255,171,64,0.15);border:1px solid rgba(255,171,64,0.4);color:var(--amber);}
+.ctag.g{background:rgba(105,255,71,0.12);border:1px solid rgba(105,255,71,0.3);color:var(--green);}
+
+/* ══ SECTION DIVIDER ══ */
+.sec-div{
+  background:linear-gradient(90deg,rgba(255,107,53,0.2),rgba(255,107,53,0.05),transparent);
+  border-top:2px solid var(--amber);border-bottom:2px solid var(--border);
+  padding:6px 18px;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--amber);
+  display:flex;align-items:center;gap:10px;margin:20px 0 15px;
+}
+.sec-div::before{content:'🔷';font-size:11px;}
+.sec-div.major{
+  background:linear-gradient(90deg,rgba(68,138,255,0.25),rgba(68,138,255,0.08),transparent);
+  border-top-color:var(--blue);color:var(--blue);
+}
+.sec-div.major::before{content:'▶';}
+
+/* ══ CONTAINER ══ */
+.container{max-width:100%;margin:0;padding:0;}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);border-left:1px solid var(--border);margin:0;}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);border-left:1px solid var(--border);}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--border);}
+.col{border-right:1px solid var(--border);}
+
+/* ══ CARD ══ */
+.card{border-bottom:1px solid var(--border);padding:11px 12px;background:rgba(16,26,40,0.5);}
+.card:hover{background:rgba(16,26,40,0.8);}
+.ct{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-size:9.5px;
+  font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;
+  padding-bottom:6px;border-bottom:2px solid rgba(255,107,53,0.2);color:var(--amber);}
+.ct .d{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px var(--amber);flex-shrink:0;}
+.ct.c{color:var(--cyan);border-bottom-color:rgba(0,229,255,0.15);}
+.ct.c .d{background:var(--cyan);box-shadow:0 0 8px var(--cyan);}
+.ct.gn{color:var(--green);border-bottom-color:rgba(105,255,71,0.15);}
+.ct.gn .d{background:var(--green);box-shadow:0 0 8px var(--green);}
+.ct.bl{color:var(--blue);border-bottom-color:rgba(68,138,255,0.15);}
+.ct.bl .d{background:var(--blue);box-shadow:0 0 8px var(--blue);}
+.ct.re{color:var(--red);border-bottom-color:rgba(255,82,82,0.15);}
+.ct.re .d{background:var(--red);box-shadow:0 0 8px var(--red);}
+.ct.pu{color:var(--purple);border-bottom-color:rgba(234,128,252,0.15);}
+.ct.pu .d{background:var(--purple);box-shadow:0 0 8px var(--purple);}
+
+.desc{font-size:10px;color:var(--light);margin-bottom:6px;font-family:'Syne',sans-serif;font-weight:600;}
+.item{margin-bottom:8px;padding:6px;background:rgba(13,19,32,0.4);border-radius:3px;border-left:2px solid var(--cyan);}
+.item:last-child{margin-bottom:0;}
+.item.warn{border-left-color:var(--red);}
+.item.good{border-left-color:var(--green);}
+.item.info{border-left-color:var(--blue);}
+
+/* ══ CODE BLOCK ══ */
+code{
+  display:block;font-family:'JetBrains Mono',monospace;font-size:9px;
+  background:var(--code-bg);border:1px solid var(--border);
+  border-left:3px solid var(--amber);
+  color:#80cbc4;padding:8px 10px;border-radius:3px;
+  white-space:pre;line-height:1.7;overflow-x:auto;margin:6px 0;
+}
+code .kw{color:#80deea;}
+code .fn{color:#00e5ff;}
+code .st{color:#a5d6a7;}
+code .cm{color:#2a4a5a;font-style:italic;}
+code .at{color:#ffab40;}
+code .tx{color:#fff9c4;}
+code .op{color:#b2dfdb;}
+code .ax{color:#ea80fc;}
+code .nu{color:#f48fb1;}
+code .good{color:#69ff47;}
+code .bad{color:#ff5252;}
+code .warn{color:#ffab40;}
+
+/* ══ TABLES ══ */
+.mini-table{width:100%;border-collapse:collapse;font-size:9px;margin:8px 0;background:rgba(13,19,32,0.5);}
+.mini-table th{background:rgba(255,107,53,0.15);color:var(--amber);font-family:'Syne',sans-serif;
+  font-weight:700;padding:5px 6px;border:1px solid var(--border);text-align:left;}
+.mini-table td{padding:4px 6px;border:1px solid var(--border);color:var(--light);}
+.mini-table tr:hover{background:rgba(255,107,53,0.08);}
+.mini-table .gn{color:var(--green);font-weight:600;}
+.mini-table .cy{color:var(--cyan);font-weight:600;}
+.mini-table .am{color:var(--amber);font-weight:600;}
+.mini-table .re{color:var(--red);font-weight:600;}
+
+/* ══ DEF LIST ══ */
+.def-list{margin:6px 0;}
+.def-item{margin-bottom:8px;padding:6px;background:rgba(8,12,20,0.6);border-radius:3px;}
+.def-key{font-weight:700;color:var(--amber);margin-bottom:2px;font-size:10px;}
+.def-key.c{color:var(--cyan);}
+.def-key.gn{color:var(--green);}
+.def-key.bl{color:var(--blue);}
+.def-key.re{color:var(--red);}
+.def-val{color:var(--light);font-size:9px;line-height:1.6;}
+
+/* ══ HIGHLIGHTS ══ */
+.highlight{background:rgba(255,107,53,0.2);padding:2px 4px;border-radius:2px;color:var(--amber);font-weight:600;}
+.highlight.good{background:rgba(105,255,71,0.2);color:var(--green);}
+.highlight.warn{background:rgba(255,82,82,0.2);color:var(--red);}
+.highlight.info{background:rgba(0,229,255,0.2);color:var(--cyan);}
+
+/* ══ BOX ══ */
+.box{border:1px solid var(--border);border-radius:4px;padding:10px;margin:8px 0;background:rgba(16,26,40,0.4);}
+.box.warn{border-color:var(--red);border-left:3px solid var(--red);}
+.box.good{border-color:var(--green);border-left:3px solid var(--green);}
+.box.info{border-color:var(--blue);border-left:3px solid var(--blue);}
+.box.tip{border-color:var(--amber);border-left:3px solid var(--amber);}
+
+/* ══ FOOTER ══ */
+.footer{
+  background:linear-gradient(135deg,#04080e,#0a1422);
+  border-top:2px solid var(--amber);padding:12px 24px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:9px;color:var(--muted);margin-top:30px;
+}
+.fl,.fr{flex:1;}
+.fr{text-align:right;}
+
+/* ══ TABLE OF CONTENTS ══ */
+.toc{background:rgba(16,26,40,0.7);border:2px solid var(--amber);border-radius:4px;padding:12px;margin:15px 0;}
+.toc .title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--amber);margin-bottom:8px;}
+.toc a{color:var(--cyan);text-decoration:none;font-size:9px;display:block;padding:3px 0;transition:0.2s;}
+.toc a:hover{color:var(--amber);}
+
+/* ══ COMPLEXITY BADGES ══ */
+.badge{display:inline-block;padding:2px 6px;border-radius:12px;font-size:8px;font-weight:700;margin:2px 2px 2px 0;}
+.badge.t{background:rgba(68,138,255,0.2);color:var(--blue);}
+.badge.s{background:rgba(234,128,252,0.2);color:var(--purple);}
+.badge.easy{background:rgba(105,255,71,0.2);color:var(--green);}
+.badge.medium{background:rgba(255,171,64,0.2);color:var(--amber);}
+.badge.hard{background:rgba(255,82,82,0.2);color:var(--red);}
+
+.problem-card{background:rgba(16,26,40,0.6);border:1px solid var(--border);border-radius:4px;padding:10px;margin:6px 0;}
+.problem-num{font-family:'Syne',sans-serif;font-weight:700;color:var(--amber);font-size:10px;}
+.problem-title{color:var(--cyan);font-weight:600;font-size:10px;margin:3px 0;}
+.problem-desc{color:var(--light);font-size:9px;margin:4px 0;}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1200px){
+  .grid{grid-template-columns:repeat(2,1fr);}
+  .grid-4{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:768px){
+  .grid,.grid-2,.grid-4{grid-template-columns:1fr;}
+  .header{flex-direction:column;align-items:flex-start;}
+  .coach-info{text-align:left;margin-top:10px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo-box">DSA<br>SDET</div>
+    <div class="title-block">
+      <h1>Data Structures & <span>Algorithms</span></h1>
+      <p>Complete Interview Guide for Lead SDET & QA Automation Engineers</p>
+    </div>
+  </div>
+  <div class="coach-info">
+    <div class="coach-name">Mr. Amir Khan Sir</div>
+    <div class="coach-phone">📞 8700350994</div>
+    <div class="coach-tags">
+      <span class="ctag c">Freecharge Lead SDET</span>
+      <span class="ctag a">10+ YRS EXP</span>
+      <span class="ctag g">AI Automation</span>
+    </div>
+    <div style="margin-top:6px;font-size:9px;color:var(--muted);">
+      🌍 nextgenqa94-ui.github.io/nextgenqa
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOC ══════════ -->
+<div style="padding:20px;background:rgba(0,0,0,0.3);">
+<div class="toc">
+  <div class="title">📚 COMPREHENSIVE GUIDE STRUCTURE</div>
+  <a href="#java-basics">✦ Java Basics for DSA</a>
+  <a href="#complexity">✦ Time & Space Complexity</a>
+  <a href="#fundamentals">✦ Data Structures Fundamentals</a>
+  <a href="#patterns">✦ Coding Patterns & Algorithms</a>
+  <a href="#problems">✦ Top LeetCode Problems</a>
+  <a href="#sdet-specific">✦ SDET-Specific Interview Questions</a>
+  <a href="#system-design">✦ System Design for SDET</a>
+  <a href="#roadmap">✦ 90-Day Learning Roadmap</a>
+</div>
+</div>
+
+<!-- ══════════ SECTION 1: JAVA BASICS ══════════ -->
+<div style="padding:0 24px;">
+
+<div class="sec-div major" id="java-basics">Java Basics for DSA · Core Language Concepts · Essential for Coding Interviews</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Variables & Data Types</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Primitive Types</div><div class="def-val">byte (8-bit), short (16-bit), int (32-bit), long (64-bit), float, double, boolean, char</div></div>
+        <div class="def-item"><div class="def-key c">Reference Types</div><div class="def-val">String, Array, List, Map, Set, Object</div></div>
+      </div>
+      <div style="margin-top:10px;">
+        <div class="desc">Variable Declaration Examples</div>
+<code><span class="kw">int</span> age = <span class="nu">25</span>;
+<span class="kw">long</span> largeNum = <span class="nu">1000000L</span>;
+<span class="kw">double</span> price = <span class="nu">99.99</span>;
+<span class="kw">String</span> name = <span class="st">"Amir"</span>;
+<span class="kw">boolean</span> isActive = <span class="kw">true</span>;
+<span class="kw">int</span>[] arr = <span class="kw">new</span> <span class="kw">int</span>[<span class="nu">5</span>];</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Loops & Control Flow</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key gn">for Loop</div><div class="def-val">for (int i=0; i<n; i++) — iterate n times. O(n) complexity</div></div>
+        <div class="def-item"><div class="def-key gn">while Loop</div><div class="def-val">while (condition) — execute while true. Used for unknown iterations</div></div>
+        <div class="def-item"><div class="def-key gn">Enhanced for</div><div class="def-val">for (int x : arr) — iterate through arrays/collections. Cleaner syntax</div></div>
+      </div>
+      <div style="margin-top:10px;">
+        <div class="desc">Loop Examples</div>
+<code><span class="cm">// Traditional for loop</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; <span class="nu">5</span>; i++) {
+    System.<span class="fn">out</span>.<span class="fn">println</span>(i);
+}
+
+<span class="cm">// While loop</span>
+<span class="kw">int</span> i = <span class="nu">0</span>;
+<span class="kw">while</span> (i &lt; <span class="nu">5</span>) {
+    System.<span class="fn">out</span>.<span class="fn">println</span>(i++);
+}</code>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Arrays Operations</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key bl">Declaration</div><div class="def-val">int[] arr = new int[5]; or int[] arr = {1,2,3,4,5};</div></div>
+        <div class="def-item"><div class="def-key bl">Access</div><div class="def-val">arr[0] = 10; — index starts at 0. arr.length gives size</div></div>
+        <div class="def-item"><div class="def-key bl">2D Array</div><div class="def-val">int[][] matrix = new int[3][3]; — rows x columns</div></div>
+      </div>
+      <div style="margin-top:10px;">
+        <div class="desc">Array Example</div>
+<code><span class="kw">int</span>[] numbers = {<span class="nu">10</span>, <span class="nu">20</span>, <span class="nu">30</span>};
+System.<span class="fn">out</span>.<span class="fn">println</span>(numbers[<span class="nu">0</span>]); <span class="cm">// Output: 10</span>
+System.<span class="fn">out</span>.<span class="fn">println</span>(numbers.<span class="fn">length</span>); <span class="cm">// Output: 3</span></code>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct pu"><div class="d"></div>String Operations</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key pu">Immutable</div><div class="def-val">Strings cannot be changed. Each modification creates new String object</div></div>
+        <div class="def-item"><div class="def-key pu">Common Methods</div><div class="def-val">length(), charAt(i), substring(), indexOf(), toCharArray(), split()</div></div>
+        <div class="def-item"><div class="def-key pu">StringBuilder</div><div class="def-val">Use for multiple concatenations. Mutable alternative to String</div></div>
+      </div>
+      <div style="margin-top:10px;">
+        <div class="desc">String Examples</div>
+<code><span class="kw">String</span> str = <span class="st">"Hello"</span>;
+<span class="kw">int</span> len = str.<span class="fn">length</span>(); <span class="cm">// 5</span>
+<span class="kw">char</span> ch = str.<span class="fn">charAt</span>(<span class="nu">0</span>); <span class="cm">// 'H'</span>
+<span class="kw">String</span> sub = str.<span class="fn">substring</span>(<span class="nu">0</span>, <span class="nu">3</span>); <span class="cm">// "Hel"</span></code>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>OOP Concepts</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Encapsulation</div><div class="def-val">Private variables, public getters/setters. Data hiding</div></div>
+        <div class="def-item"><div class="def-key c">Inheritance</div><div class="def-val">extends keyword. Child inherits parent properties</div></div>
+        <div class="def-item"><div class="def-key c">Polymorphism</div><div class="def-val">Method overriding. Same method name, different behavior</div></div>
+        <div class="def-item"><div class="def-key c">Abstraction</div><div class="def-val">abstract class/interface. Hide implementation details</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Collections Framework</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key gn">List (Ordered)</div><div class="def-val">ArrayList, LinkedList. Duplicates allowed. add(), get(), remove()</div></div>
+        <div class="def-item"><div class="def-key gn">Set (Unique)</div><div class="def-val">HashSet, TreeSet. No duplicates. add(), contains(), remove()</div></div>
+        <div class="def-item"><div class="def-key gn">Map (Key-Value)</div><div class="def-val">HashMap, TreeMap. Key-value pairs. put(), get(), remove()</div></div>
+        <div class="def-item"><div class="def-key gn">Queue</div><div class="def-val">PriorityQueue, LinkedList. FIFO. offer(), poll(), peek()</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Exception Handling</div>
+      <div class="desc">Try-Catch-Finally Pattern</div>
+<code><span class="kw">try</span> {
+    <span class="cm">// Code that might throw exception</span>
+    <span class="kw">int</span> result = <span class="nu">10</span> / <span class="nu">0</span>;
+} <span class="kw">catch</span> (ArithmeticException e) {
+    System.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Error: "</span> + e.<span class="fn">getMessage</span>());
+} <span class="kw">finally</span> {
+    System.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Cleanup"</span>);
+}</code>
+      <div class="def-list" style="margin-top:8px;">
+        <div class="def-item"><div class="def-key bl">checked vs unchecked</div><div class="def-val">Checked: IOException, SQLException (must handle). Unchecked: NullPointerException, ArrayIndexOutOfBoundsException</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct pu"><div class="d"></div>Common Mistakes to Avoid</div>
+      <div class="def-list">
+        <div class="def-item warn"><div class="def-key re">❌ Null Pointer Exception</div><div class="def-val">String str = null; str.length(); — Always check null before using</div></div>
+        <div class="def-item warn"><div class="def-key re">❌ Array Index Out of Bounds</div><div class="def-val">arr[arr.length] — Index goes 0 to length-1</div></div>
+        <div class="def-item good"><div class="def-key gn">✅ Use ArrayList over Array</div><div class="def-val">ArrayList is dynamic, easier to manipulate than fixed-size arrays</div></div>
+        <div class="def-item good"><div class="def-key gn">✅ Prefer for-each loop</div><div class="def-val">for (int x : arr) is cleaner than traditional for loop</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 2: COMPLEXITY ══════════ -->
+<div class="sec-div major" id="complexity">Time Complexity · Space Complexity · Big O Notation · Analysis Basics</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Big O Notation</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">O(1) Constant</div><div class="def-val">Accessing array element by index. No loop. Fastest</div></div>
+        <div class="def-item"><div class="def-key c">O(log n) Logarithmic</div><div class="def-val">Binary search. Divide & conquer. Very fast</div></div>
+        <div class="def-item"><div class="def-key c">O(n) Linear</div><div class="def-val">Single loop through n elements. Normal</div></div>
+        <div class="def-item"><div class="def-key c">O(n log n) Linearithmic</div><div class="def-val">Merge sort, Quick sort. Good for sorting</div></div>
+        <div class="def-item"><div class="def-key c">O(n²) Quadratic</div><div class="def-val">Nested loops. Bubble sort. Acceptable for small n</div></div>
+        <div class="def-item"><div class="def-key c">O(2ⁿ) Exponential</div><div class="def-val">Recursive without memoization. Very slow</div></div>
+        <div class="def-item"><div class="def-key c">O(n!) Factorial</div><div class="def-val">Permutations. Extremely slow. Avoid</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Complexity Comparison & Use Cases</div>
+      <table class="mini-table">
+        <tr><th>Complexity</th><th>n=10</th><th>n=100</th><th>n=1000</th><th>Rating</th></tr>
+        <tr><td>O(1)</td><td>1</td><td>1</td><td>1</td><td class="gn">🟢 Excellent</td></tr>
+        <tr><td>O(log n)</td><td>3</td><td>7</td><td>10</td><td class="gn">🟢 Excellent</td></tr>
+        <tr><td>O(n)</td><td>10</td><td>100</td><td>1000</td><td class="gn">🟢 Good</td></tr>
+        <tr><td>O(n log n)</td><td>30</td><td>700</td><td>10K</td><td class="gn">🟢 Good</td></tr>
+        <tr><td>O(n²)</td><td>100</td><td>10K</td><td>1M</td><td class="am">🟡 Okay</td></tr>
+        <tr><td>O(n³)</td><td>1K</td><td>1M</td><td>1B</td><td class="am">🟡 Slow</td></tr>
+        <tr><td>O(2ⁿ)</td><td>1K</td><td>1e30</td><td>∞</td><td class="re">🔴 Very Slow</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>How to Analyze Time Complexity</div>
+      <div class="def-list">
+        <div class="def-item info"><div class="def-key bl">Step 1: Count Basic Operations</div><div class="def-val">Assignment, comparison, arithmetic — each is O(1)</div></div>
+        <div class="def-item info"><div class="def-key bl">Step 2: Count Loops</div><div class="def-val">Single loop = O(n). Nested loop = O(n²). Nested 3x = O(n³)</div></div>
+        <div class="def-item info"><div class="def-key bl">Step 3: Drop Constants</div><div class="def-val">O(2n) = O(n). O(n + 100) = O(n). Only highest order matters</div></div>
+        <div class="def-item info"><div class="def-key bl">Step 4: Drop Lower Order</div><div class="def-val">O(n² + n) = O(n²). O(n log n + n) = O(n log n)</div></div>
+      </div>
+      <div style="margin-top:10px;">
+        <div class="desc">Analysis Example</div>
+<code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; n; i++) {           <span class="cm">// Loop n times</span>
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="nu">0</span>; j &lt; n; j++) {     <span class="cm">// Inner loop n times</span>
+        arr[i][j] = <span class="nu">0</span>;                  <span class="cm">// O(1)</span>
+    }
+}
+<span class="cm">// Total: n * n * 1 = O(n²)</span></code>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct pu"><div class="d"></div>Space Complexity Analysis</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key pu">O(1) Constant Space</div><div class="def-val">No extra space. Variables only. Best for interviews</div></div>
+        <div class="def-item"><div class="def-key pu">O(n) Linear Space</div><div class="def-val">Extra array/list of size n. Common trade-off</div></div>
+        <div class="def-item"><div class="def-key pu">O(log n) Space</div><div class="def-val">Recursion depth. Binary search: log n call stack</div></div>
+        <div class="def-item"><div class="def-key pu">O(n²) Quadratic Space</div><div class="def-val">2D array or nested structures. Avoid if possible</div></div>
+      </div>
+      <div style="margin-top:10px;">
+        <div class="box tip">
+          <strong>💡 Interview Tip:</strong> Always state both time & space complexity. Space-optimized solutions (O(1) space) impress interviewers more than brute force O(n) space solutions.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 3: DATA STRUCTURES ══════════ -->
+<div class="sec-div major" id="fundamentals">Data Structures · Arrays to Graphs · Complete Implementation & Analysis</div>
+
+<!-- ══ ARRAYS ══ -->
+<div class="sec-div">Arrays · Fixed Size · Index-Based Access · Foundation of DSA</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Array Fundamentals</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Definition</div><div class="def-val">Contiguous memory storing same type elements. Access by index (0-based)</div></div>
+        <div class="def-item"><div class="def-key c">Real-World Use</div><div class="def-val">Test case data, API response arrays, log entries, dynamic lists</div></div>
+      </div>
+      <table class="mini-table">
+        <tr><th>Operation</th><th>Time</th><th>Space</th></tr>
+        <tr><td>Access arr[i]</td><td class="gn">O(1)</td><td>—</td></tr>
+        <tr><td>Search (unsorted)</td><td class="am">O(n)</td><td>—</td></tr>
+        <tr><td>Insert</td><td class="re">O(n)</td><td>O(1)</td></tr>
+        <tr><td>Delete</td><td class="re">O(n)</td><td>O(1)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Array Operations Code</div>
+      <div class="desc">Common Array Patterns</div>
+<code><span class="cm">// Array creation & traversal</span>
+<span class="kw">int</span>[] arr = {<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>, <span class="nu">4</span>, <span class="nu">5</span>};
+
+<span class="cm">// Forward traversal</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; arr.length; i++) {
+    System.<span class="fn">out</span>.<span class="fn">println</span>(arr[i]);
+}
+
+<span class="cm">// Reverse traversal</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = arr.length - <span class="nu">1</span>; i &gt;= <span class="nu">0</span>; i--) {
+    System.<span class="fn">out</span>.<span class="fn">println</span>(arr[i]);
+}</code>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STRINGS ══ -->
+<div class="sec-div">Strings · Immutable Character Arrays · Critical for Coding Rounds</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>String Operations</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Immutable</div><div class="def-val">Cannot change. String s = "hello"; s.toUpperCase() returns new String</div></div>
+        <div class="def-item"><div class="def-key c">Common Methods</div><div class="def-val">length(), charAt(i), substring(start,end), indexOf(), toCharArray(), split()</div></div>
+      </div>
+      <table class="mini-table">
+        <tr><th>Method</th><th>Example</th><th>Result</th></tr>
+        <tr><td>length()</td><td>"hello".length()</td><td>5</td></tr>
+        <tr><td>charAt(0)</td><td>"hello".charAt(0)</td><td>'h'</td></tr>
+        <tr><td>substring(0,3)</td><td>"hello".substring(0,3)</td><td>"hel"</td></tr>
+        <tr><td>indexOf('l')</td><td>"hello".indexOf('l')</td><td>2</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>String Problem: Reverse String</div>
+      <div class="desc">Problem: Reverse "hello" to "olleh"</div>
+<code><span class="kw">public static</span> String <span class="fn">reverseString</span>(String s) {
+    <span class="kw">int</span> n = s.<span class="fn">length</span>();
+    String result = <span class="st">""</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = n - <span class="nu">1</span>; i &gt;= <span class="nu">0</span>; i--) {
+        result += s.<span class="fn">charAt</span>(i);
+    }
+    <span class="kw">return</span> result;
+}
+<span class="cm">// Time: O(n) | Space: O(n)</span></code>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HASHMAP ══ -->
+<div class="sec-div">HashMap · Key-Value Pairs · Most Important for Interviews</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>HashMap Operations</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Definition</div><div class="def-val">Hash table storing key-value pairs. Uses hash function for O(1) lookup</div></div>
+        <div class="def-item"><div class="def-key c">Real-World</div><div class="def-val">Count frequency, cache results, API rate limiting, test data mapping</div></div>
+      </div>
+      <table class="mini-table">
+        <tr><th>Operation</th><th>Time (Avg)</th><th>Time (Worst)</th></tr>
+        <tr><td>get(key)</td><td class="gn">O(1)</td><td class="re">O(n)</td></tr>
+        <tr><td>put(k,v)</td><td class="gn">O(1)</td><td class="re">O(n)</td></tr>
+        <tr><td>remove(key)</td><td class="gn">O(1)</td><td class="re">O(n)</td></tr>
+        <tr><td>containsKey</td><td class="gn">O(1)</td><td class="re">O(n)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>HashMap Example: Character Frequency</div>
+      <div class="desc">Count each character in "hello"</div>
+<code><span class="kw">public static</span> Map&lt;Character, Integer&gt; <span class="fn">countFrequency</span>(String s) {
+    Map&lt;Character, Integer&gt; map = <span class="kw">new</span> HashMap&lt;&gt;();
+    <span class="kw">for</span> (<span class="kw">char</span> c : s.<span class="fn">toCharArray</span>()) {
+        map.<span class="fn">put</span>(c, map.<span class="fn">getOrDefault</span>(c, <span class="nu">0</span>) + <span class="nu">1</span>);
+    }
+    <span class="kw">return</span> map;
+}
+<span class="cm">// Output: {h=1, e=1, l=2, o=1}</span>
+<span class="cm">// Time: O(n) | Space: O(k) where k=unique chars</span></code>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STACK ══ -->
+<div class="sec-div">Stack · LIFO (Last In First Out) · Essential for Recursion & DFS</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Stack Operations</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Definition</div><div class="def-val">LIFO structure. Last element added is first to be removed</div></div>
+        <div class="def-item"><div class="def-key c">Operations</div><div class="def-val">push(x) — add, pop() — remove top, peek() — view top, isEmpty()</div></div>
+        <div class="def-item"><div class="def-key c">Real-World</div><div class="def-val">Browser back button, undo functionality, expression evaluation</div></div>
+      </div>
+      <table class="mini-table">
+        <tr><th>Operation</th><th>Time</th><th>Space</th></tr>
+        <tr><td>push(x)</td><td class="gn">O(1)</td><td>O(1)</td></tr>
+        <tr><td>pop()</td><td class="gn">O(1)</td><td>O(1)</td></tr>
+        <tr><td>peek()</td><td class="gn">O(1)</td><td>—</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Stack Example: Valid Parentheses</div>
+      <div class="desc">Check if brackets are balanced: "(())" valid, "())" invalid</div>
+<code><span class="kw">public static</span> <span class="kw">boolean</span> <span class="fn">isValid</span>(String s) {
+    Stack&lt;Character&gt; st = <span class="kw">new</span> Stack&lt;&gt;();
+    <span class="kw">for</span> (<span class="kw">char</span> c : s.<span class="fn">toCharArray</span>()) {
+        <span class="kw">if</span> (c == <span class="st">'('</span> || c == <span class="st">'{'</span> || c == <span class="st">'['</span>) {
+            st.<span class="fn">push</span>(c);
+        } <span class="kw">else</span> {
+            <span class="kw">if</span> (st.<span class="fn">isEmpty</span>()) <span class="kw">return false</span>;
+            st.<span class="fn">pop</span>();
+        }
+    }
+    <span class="kw">return</span> st.<span class="fn">isEmpty</span>();
+}
+<span class="cm">// Time: O(n) | Space: O(n)</span></code>
+    </div>
+  </div>
+</div>
+
+<!-- ══ QUEUE ══ -->
+<div class="sec-div">Queue · FIFO (First In First Out) · Used in BFS & Scheduling</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Queue Operations</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Definition</div><div class="def-val">FIFO structure. First element added is first to be removed</div></div>
+        <div class="def-item"><div class="def-key c">Operations</div><div class="def-val">offer(x)/add(x) — add, poll()/remove() — get & remove, peek()</div></div>
+        <div class="def-item"><div class="def-key c">Real-World</div><div class="def-val">Job scheduling, print queue, BFS graph traversal, message queues</div></div>
+      </div>
+      <table class="mini-table">
+        <tr><th>Operation</th><th>Time</th></tr>
+        <tr><td>offer(x)</td><td class="gn">O(1)</td></tr>
+        <tr><td>poll()</td><td class="gn">O(1)</td></tr>
+        <tr><td>peek()</td><td class="gn">O(1)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Queue Example: BFS (Breadth-First Search)</div>
+      <div class="desc">Traverse tree level by level</div>
+<code><span class="kw">Queue&lt;Integer&gt;</span> q = <span class="kw">new</span> LinkedList&lt;&gt;();
+q.<span class="fn">offer</span>(root);
+<span class="kw">while</span> (!q.<span class="fn">isEmpty</span>()) {
+    <span class="kw">int</span> node = q.<span class="fn">poll</span>();
+    System.<span class="fn">out</span>.<span class="fn">println</span>(node);
+    <span class="kw">if</span> (node.left != <span class="kw">null</span>) q.<span class="fn">offer</span>(node.left);
+    <span class="kw">if</span> (node.right != <span class="kw">null</span>) q.<span class="fn">offer</span>(node.right);
+}
+<span class="cm">// Time: O(n) | Space: O(w) where w=max width</span></code>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LINKED LIST ══ -->
+<div class="sec-div">Linked List · Dynamic Size · Pointer-Based Structure</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Linked List Concept</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Definition</div><div class="def-val">Chain of nodes. Each node has data & next pointer. Dynamic allocation</div></div>
+        <div class="def-item"><div class="def-key c">Operations</div><div class="def-val">Insert head O(1), Insert middle O(n), Delete O(n), Search O(n)</div></div>
+        <div class="def-item"><div class="def-key c">Real-World</div><div class="def-val">LRU Cache, browser history, memory allocation, skip lists</div></div>
+      </div>
+      <table class="mini-table">
+        <tr><th>Operation</th><th>Time</th></tr>
+        <tr><td>Access i-th</td><td class="re">O(n)</td></tr>
+        <tr><td>Search</td><td class="re">O(n)</td></tr>
+        <tr><td>Insert at head</td><td class="gn">O(1)</td></tr>
+        <tr><td>Delete at head</td><td class="gn">O(1)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Linked List Node Definition & Traversal</div>
+      <div class="desc">Define node & traverse list</div>
+<code><span class="kw">class</span> <span class="ax">Node</span> {
+    <span class="kw">int</span> data;
+    Node next;
+    <span class="kw">public</span> <span class="ax">Node</span>(<span class="kw">int</span> data) {
+        <span class="kw">this</span>.data = data;
+        <span class="kw">this</span>.next = <span class="kw">null</span>;
+    }
+}
+
+<span class="cm">// Traverse linked list</span>
+<span class="kw">while</span> (head != <span class="kw">null</span>) {
+    System.<span class="fn">out</span>.<span class="fn">println</span>(head.data);
+    head = head.next;
+}</code>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TREE ══ -->
+<div class="sec-div">Trees · Binary Tree · BST · Heap · Hierarchical Data Structure</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Tree Terminology</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Root</div><div class="def-val">Top node with no parent. Starting point for traversal</div></div>
+        <div class="def-item"><div class="def-key c">Leaf</div><div class="def-val">Node with no children. Terminal node</div></div>
+        <div class="def-item"><div class="def-key c">Height</div><div class="def-val">Longest path from node to leaf. Root height = depth of tree</div></div>
+        <div class="def-item"><div class="def-key c">Balanced</div><div class="def-val">Height difference between left & right ≤ 1. AVL, Red-Black trees</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Tree Traversals</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key gn">In-Order (LNR)</div><div class="def-val">Left → Node → Right. For BST gives sorted sequence</div></div>
+        <div class="def-item"><div class="def-key gn">Pre-Order (NLR)</div><div class="def-val">Node → Left → Right. Root visited first</div></div>
+        <div class="def-item"><div class="def-key gn">Post-Order (LRN)</div><div class="def-val">Left → Right → Node. Root visited last</div></div>
+        <div class="def-item"><div class="def-key gn">Level-Order (BFS)</div><div class="def-val">Level by level using Queue. Breadth-first</div></div>
+      </div>
+      <div class="desc" style="margin-top:8px;">Time & Space: O(n) for all traversals</div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>In-Order Traversal (DFS)</div>
+      <div class="desc">Recursive approach: Left → Node → Right</div>
+<code><span class="kw">public static void</span> <span class="fn">inOrder</span>(TreeNode root) {
+    <span class="kw">if</span> (root == <span class="kw">null</span>) <span class="kw">return</span>;
+    <span class="fn">inOrder</span>(root.left);
+    System.<span class="fn">out</span>.<span class="fn">println</span>(root.val);
+    <span class="fn">inOrder</span>(root.right);
+}
+<span class="cm">// For BST: 1 → 2 → 3 → 4 → 5 (sorted)</span></code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct pu"><div class="d"></div>Level-Order Traversal (BFS)</div>
+      <div class="desc">Using Queue for breadth-first</div>
+<code><span class="kw">public static void</span> <span class="fn">levelOrder</span>(TreeNode root) {
+    Queue&lt;TreeNode&gt; q = <span class="kw">new</span> LinkedList&lt;&gt;();
+    q.<span class="fn">offer</span>(root);
+    <span class="kw">while</span> (!q.<span class="fn">isEmpty</span>()) {
+        TreeNode node = q.<span class="fn">poll</span>();
+        System.<span class="fn">out</span>.<span class="fn">println</span>(node.val);
+        <span class="kw">if</span> (node.left != <span class="kw">null</span>) q.<span class="fn">offer</span>(node.left);
+        <span class="kw">if</span> (node.right != <span class="kw">null</span>) q.<span class="fn">offer</span>(node.right);
+    }
+}</code>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GRAPH ══ -->
+<div class="sec-div">Graphs · Complex Data Structure · DFS & BFS Applications</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Graph Fundamentals</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Definition</div><div class="def-val">Nodes & Edges. Can be directed/undirected, weighted/unweighted</div></div>
+        <div class="def-item"><div class="def-key c">Representation</div><div class="def-val">Adjacency List (preferred), Adjacency Matrix, Edge List</div></div>
+        <div class="def-item"><div class="def-key c">Real-World</div><div class="def-val">Social networks, web crawling, maps, dependency resolution</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>DFS (Depth-First Search)</div>
+      <div class="desc">Recursive approach: Go deep first</div>
+<code><span class="kw">public static void</span> <span class="fn">dfs</span>(<span class="kw">int</span> node, List[] adj, <span class="kw">boolean</span>[] vis) {
+    vis[node] = <span class="kw">true</span>;
+    System.<span class="fn">out</span>.<span class="fn">println</span>(node);
+    <span class="kw">for</span> (<span class="kw">int</span> neighbor : adj[node]) {
+        <span class="kw">if</span> (!vis[neighbor]) {
+            <span class="fn">dfs</span>(neighbor, adj, vis);
+        }
+    }
+}
+<span class="cm">// Time: O(V+E) | Space: O(V)</span></code>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 4: CODING PATTERNS ══════════ -->
+<div class="sec-div major" id="patterns">Coding Patterns · Sliding Window · Two Pointer · Binary Search · DP</div>
+
+<!-- ══ SLIDING WINDOW ══ -->
+<div class="sec-div">Sliding Window · Efficient for Subarray/Substring Problems</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Pattern Overview</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Concept</div><div class="def-val">Use 2 pointers to maintain a window. Expand & contract window</div></div>
+        <div class="def-item"><div class="def-key c">When to Use</div><div class="def-val">Subarray/substring with condition. Multiple loops reduction from O(n²) to O(n)</div></div>
+        <div class="def-item"><div class="def-key c">Problems</div><div class="def-val">Longest substring without repeating chars, Max sum subarray, Contains duplicate II</div></div>
+      </div>
+      <div style="margin-top:8px;"><span class="badge good">Easy</span><span class="badge easy">Pattern-1</span></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Example: Longest Substring Without Repeating</div>
+      <div class="desc">Find length of longest substring with unique characters</div>
+<code><span class="kw">public static</span> <span class="kw">int</span> <span class="fn">lengthOfLongestSubstring</span>(String s) {
+    Map&lt;Character, Integer&gt; map = <span class="kw">new</span> HashMap&lt;&gt;();
+    <span class="kw">int</span> left = <span class="nu">0</span>, maxLen = <span class="nu">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> right = <span class="nu">0</span>; right &lt; s.<span class="fn">length</span>(); right++) {
+        <span class="kw">if</span> (map.<span class="fn">containsKey</span>(s.<span class="fn">charAt</span>(right))) {
+            left = Math.<span class="fn">max</span>(left, map.<span class="fn">get</span>(s.<span class="fn">charAt</span>(right)) + <span class="nu">1</span>);
+        }
+        map.<span class="fn">put</span>(s.<span class="fn">charAt</span>(right), right);
+        maxLen = Math.<span class="fn">max</span>(maxLen, right - left + <span class="nu">1</span>);
+    }
+    <span class="kw">return</span> maxLen;
+}
+<span class="cm">// Time: O(n) | Space: O(min(m,n))</span></code>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TWO POINTER ══ -->
+<div class="sec-div">Two Pointer · Sorted Arrays · Efficient for Finding Pairs</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Pattern Overview</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Concept</div><div class="def-val">Start from opposite ends or same start. Move based on condition</div></div>
+        <div class="def-item"><div class="def-key c">When to Use</div><div class="def-val">Sorted array problems. Find pairs/triplets/k-sums</div></div>
+        <div class="def-item"><div class="def-key c">Problems</div><div class="def-val">Two Sum II, Valid Palindrome, Container With Most Water</div></div>
+      </div>
+      <div style="margin-top:8px;"><span class="badge medium">Medium</span><span class="badge easy">Pattern-2</span></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Example: Two Sum (Sorted Array)</div>
+      <div class="desc">Find 2 numbers that add up to target. Return indices</div>
+<code><span class="kw">public static</span> <span class="kw">int</span>[] <span class="fn">twoSum</span>(<span class="kw">int</span>[] nums, <span class="kw">int</span> target) {
+    <span class="kw">int</span> left = <span class="nu">0</span>, right = nums.length - <span class="nu">1</span>;
+    <span class="kw">while</span> (left &lt; right) {
+        <span class="kw">int</span> sum = nums[left] + nums[right];
+        <span class="kw">if</span> (sum == target) <span class="kw">return</span> <span class="kw">new</span> <span class="kw">int</span>[]{left, right};
+        <span class="kw">else if</span> (sum &lt; target) left++;
+        <span class="kw">else</span> right--;
+    }
+    <span class="kw">return</span> <span class="kw">new</span> <span class="kw">int</span>[]{<span class="nu">-1</span>, <span class="nu">-1</span>};
+}
+<span class="cm">// Time: O(n) | Space: O(1)</span></code>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BINARY SEARCH ══ -->
+<div class="sec-div">Binary Search · Divide & Conquer · O(log n) Efficiency</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Pattern Overview</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Concept</div><div class="def-val">Divide sorted array in half. Eliminate half based on target</div></div>
+        <div class="def-item"><div class="def-key c">When to Use</div><div class="def-val">Sorted array/matrix. Find target, peak, rotated array</div></div>
+        <div class="def-item"><div class="def-key c">Time</div><div class="def-val">O(log n). Much faster than linear O(n)</div></div>
+      </div>
+      <div style="margin-top:8px;"><span class="badge easy">Easy</span><span class="badge easy">Pattern-3</span></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Example: Binary Search on Sorted Array</div>
+      <div class="desc">Find target value in sorted array</div>
+<code><span class="kw">public static</span> <span class="kw">int</span> <span class="fn">binarySearch</span>(<span class="kw">int</span>[] nums, <span class="kw">int</span> target) {
+    <span class="kw">int</span> left = <span class="nu">0</span>, right = nums.length - <span class="nu">1</span>;
+    <span class="kw">while</span> (left &lt;= right) {
+        <span class="kw">int</span> mid = left + (right - left) / <span class="nu">2</span>;
+        <span class="kw">if</span> (nums[mid] == target) <span class="kw">return</span> mid;
+        <span class="kw">else if</span> (nums[mid] &lt; target) left = mid + <span class="nu">1</span>;
+        <span class="kw">else</span> right = mid - <span class="nu">1</span>;
+    }
+    <span class="kw">return</span> <span class="nu">-1</span>;
+}
+<span class="cm">// Time: O(log n) | Space: O(1)</span></code>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DYNAMIC PROGRAMMING ══ -->
+<div class="sec-div">Dynamic Programming · Memoization · Optimal Substructure</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>DP Fundamentals</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Concept</div><div class="def-val">Break problem into overlapping subproblems. Store results to avoid recomputation</div></div>
+        <div class="def-item"><div class="def-key c">2 Approaches</div><div class="def-val">Top-Down (Memoization) + Bottom-Up (Tabulation)</div></div>
+        <div class="def-item"><div class="def-key c">When to Use</div><div class="def-val">Fibonacci, coin change, LCS, knapsack, longest increasing subsequence</div></div>
+      </div>
+      <div style="margin-top:8px;"><span class="badge hard">Hard</span><span class="badge medium">Pattern-5</span></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Example: Fibonacci with Memoization</div>
+      <div class="desc">Calculate nth Fibonacci number efficiently</div>
+<code><span class="kw">public static</span> <span class="kw">int</span> <span class="fn">fib</span>(<span class="kw">int</span> n, Map&lt;Integer, Integer&gt; memo) {
+    <span class="kw">if</span> (n &lt;= <span class="nu">1</span>) <span class="kw">return</span> n;
+    <span class="kw">if</span> (memo.<span class="fn">containsKey</span>(n)) <span class="kw">return</span> memo.<span class="fn">get</span>(n);
+    
+    <span class="kw">int</span> result = <span class="fn">fib</span>(n - <span class="nu">1</span>, memo) + <span class="fn">fib</span>(n - <span class="nu">2</span>, memo);
+    memo.<span class="fn">put</span>(n, result);
+    <span class="kw">return</span> result;
+}
+<span class="cm">// Time: O(n) | Space: O(n)</span></code>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 5: TOP PROBLEMS ══════════ -->
+<div class="sec-div major" id="problems">Top LeetCode Problems · Easy to Hard · Company Frequencies</div>
+
+<!-- ══ EASY PROBLEMS ══ -->
+<div class="sec-div">Easy Problems · Foundation Building · 15-20 Minutes Per Problem</div>
+
+<div class="card" style="padding:12px;margin:12px 12px;">
+  <div class="ct gn"><div class="d"></div>Essential Easy Problems</div>
+  
+  <div class="problem-card">
+    <div class="problem-num">1. Two Sum</div>
+    <div class="problem-title">LeetCode #1 · Hash Map Pattern</div>
+    <div class="problem-desc">Find two numbers in array that add to target. Return indices.</div>
+    <div class="badge easy" style="margin-top:4px;">Easy</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">2. Contains Duplicate</div>
+    <div class="problem-title">LeetCode #217 · Hash Set Pattern</div>
+    <div class="problem-desc">Return true if array has duplicate elements. Use Set for O(1) lookup</div>
+    <div class="badge easy" style="margin-top:4px;">Easy</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">3. Valid Palindrome</div>
+    <div class="problem-title">LeetCode #125 · Two Pointer Pattern</div>
+    <div class="problem-desc">Check if string is palindrome ignoring spaces & special chars</div>
+    <div class="badge easy" style="margin-top:4px;">Easy</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">4. Best Time to Buy/Sell Stock</div>
+    <div class="problem-title">LeetCode #121 · One Pass Pattern</div>
+    <div class="problem-desc">Find max profit from stock prices. O(n) single pass solution</div>
+    <div class="badge easy" style="margin-top:4px;">Easy</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">5. Reverse String</div>
+    <div class="problem-title">LeetCode #344 · Two Pointer String</div>
+    <div class="problem-desc">Reverse character array in-place. Must be O(1) space</div>
+    <div class="badge easy" style="margin-top:4px;">Easy</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">6. Majority Element</div>
+    <div class="problem-title">LeetCode #169 · Boyer-Moore Voting</div>
+    <div class="problem-desc">Find element appearing > n/2 times. Optimal O(1) space</div>
+    <div class="badge easy" style="margin-top:4px;">Easy</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">7. Merge Sorted Array</div>
+    <div class="problem-title">LeetCode #88 · Two Pointer Merge</div>
+    <div class="problem-desc">Merge two sorted arrays in-place. Start from end</div>
+    <div class="badge easy" style="margin-top:4px;">Easy</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">8. Remove Duplicates From Sorted Array</div>
+    <div class="problem-title">LeetCode #26 · Two Pointer In-Place</div>
+    <div class="problem-desc">Remove duplicates in-place. Return length of unique elements</div>
+    <div class="badge easy" style="margin-top:4px;">Easy</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">9. Valid Parentheses</div>
+    <div class="problem-title">LeetCode #20 · Stack Pattern</div>
+    <div class="problem-desc">Check if brackets are properly closed. Use Stack</div>
+    <div class="badge easy" style="margin-top:4px;">Easy</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">10. Binary Search</div>
+    <div class="problem-title">LeetCode #704 · Classic Binary Search</div>
+    <div class="problem-desc">Find target in sorted array. O(log n) solution</div>
+    <div class="badge easy" style="margin-top:4px;">Easy</div>
+  </div>
+</div>
+
+<!-- ══ MEDIUM PROBLEMS ══ -->
+<div class="sec-div">Medium Problems · Interview Favorites · 25-35 Minutes Per Problem</div>
+
+<div class="card" style="padding:12px;margin:12px 12px;">
+  <div class="ct c"><div class="d"></div>Critical Medium Problems</div>
+  
+  <div class="problem-card">
+    <div class="problem-num">11. Longest Substring Without Repeating</div>
+    <div class="problem-title">LeetCode #3 · Sliding Window (IMPORTANT)</div>
+    <div class="problem-desc">Find longest substring with unique characters. Use HashMap + sliding window</div>
+    <div class="badge medium" style="margin-top:4px;">Medium</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">12. Maximum Product Subarray</div>
+    <div class="problem-title">LeetCode #152 · DP with State</div>
+    <div class="problem-desc">Find contiguous subarray with max product. Track max & min</div>
+    <div class="badge medium" style="margin-top:4px;">Medium</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">13. Minimum Window Substring</div>
+    <div class="problem-title">LeetCode #76 · Sliding Window (HARD)</div>
+    <div class="problem-desc">Find minimum window containing all target chars. Tricky sliding window</div>
+    <div class="badge hard" style="margin-top:4px;">Hard Pattern</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">14. Three Sum</div>
+    <div class="problem-title">LeetCode #15 · Two Pointer + Loop</div>
+    <div class="problem-desc">Find all unique triplets that sum to 0. Two pointer inside loop</div>
+    <div class="badge medium" style="margin-top:4px;">Medium</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">15. Coin Change</div>
+    <div class="problem-title">LeetCode #322 · DP Optimization (CLASSIC)</div>
+    <div class="problem-desc">Min coins to make amount. DP bottom-up tabulation</div>
+    <div class="badge medium" style="margin-top:4px;">Medium</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">16. Number of Islands</div>
+    <div class="problem-title">LeetCode #200 · DFS/BFS (IMPORTANT)</div>
+    <div class="problem-desc">Count islands in 2D grid. Use DFS for connected components</div>
+    <div class="badge medium" style="margin-top:4px;">Medium</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">17. Longest Increasing Subsequence</div>
+    <div class="problem-title">LeetCode #300 · DP Classic</div>
+    <div class="problem-desc">Find length of LIS. DP approach O(n log n) optimal</div>
+    <div class="badge medium" style="margin-top:4px;">Medium</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">18. Evaluate Reverse Polish Notation</div>
+    <div class="problem-title">LeetCode #150 · Stack Applications</div>
+    <div class="problem-desc">Calculate math expression from postfix notation. Use Stack</div>
+    <div class="badge medium" style="margin-top:4px;">Medium</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">19. Binary Tree Level Order Traversal</div>
+    <div class="problem-title">LeetCode #102 · BFS on Trees</div>
+    <div class="problem-desc">Traverse tree level by level. Return list of lists</div>
+    <div class="badge medium" style="margin-top:4px;">Medium</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">20. Lowest Common Ancestor</div>
+    <div class="problem-title">LeetCode #236 · Tree Recursion</div>
+    <div class="problem-desc">Find LCA of two nodes in binary tree. Recursive approach</div>
+    <div class="badge medium" style="margin-top:4px;">Medium</div>
+  </div>
+</div>
+
+<!-- ══ HARD PROBLEMS ══ -->
+<div class="sec-div">Hard Problems · Interview Whiteboard · 40+ Minutes</div>
+
+<div class="card" style="padding:12px;margin:12px 12px;">
+  <div class="ct re"><div class="d"></div>Advanced Hard Problems (Solve 3-5 before interviews)</div>
+  
+  <div class="problem-card">
+    <div class="problem-num">21. Trapping Rain Water</div>
+    <div class="problem-title">LeetCode #42 · Two Pointer / Stack</div>
+    <div class="problem-desc">Calculate water trapped after rainfall. O(n) optimal</div>
+    <div class="badge hard" style="margin-top:4px;">Hard</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">22. Word Ladder II</div>
+    <div class="problem-title">LeetCode #126 · BFS + Backtracking</div>
+    <div class="problem-desc">Find all shortest paths to transform word. Complex BFS</div>
+    <div class="badge hard" style="margin-top:4px;">Hard</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">23. Alien Dictionary</div>
+    <div class="problem-title">LeetCode #269 · Topological Sort</div>
+    <div class="problem-desc">Find alien language order from word list. Graph + topo sort</div>
+    <div class="badge hard" style="margin-top:4px;">Hard</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">24. Regular Expression Matching</div>
+    <div class="problem-title">LeetCode #10 · DP Hard</div>
+    <div class="problem-desc">Match string with regex pattern. Complex DP states</div>
+    <div class="badge hard" style="margin-top:4px;">Hard</div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">25. Merge K Sorted Lists</div>
+    <div class="problem-title">LeetCode #23 · Heap / Divide & Conquer</div>
+    <div class="problem-desc">Merge k linked lists. Use Min-Heap for efficiency</div>
+    <div class="badge hard" style="margin-top:4px;">Hard</div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 6: SDET-SPECIFIC ══════════ -->
+<div class="sec-div major" id="sdet-specific">SDET-Specific DSA Interview Questions · Framework & Automation Focus</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Framework Optimization Patterns</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Q: Parallel Test Execution</div><div class="def-val">How to distribute test cases across threads? Use ThreadPoolExecutor, manage shared state with ConcurrentHashMap, ensure thread-safety. Real: Run 100 tests in 5 threads = 20 per thread</div></div>
+        <div class="def-item"><div class="def-key c">Q: Retry Failed Tests</div><div class="def-val">Implement exponential backoff for flaky tests. Use Queue for retry logic, priority queue for failed tests priority</div></div>
+        <div class="def-item"><div class="def-key c">Q: Test Report Generation</div><div class="def-val">Store results in HashMap<TestName, TestResult>. Aggregate O(n) complexity. Sort by status/duration</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Data Processing for QA</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key gn">Q: Parse API Response JSON</div><div class="def-val">Extract nested values. HashMap for key-value, ArrayList for arrays. Handle null safely. Complexity O(n)</div></div>
+        <div class="def-item"><div class="def-key gn">Q: CSV/Excel Log Processing</div><div class="def-val">Read test logs into List<String[]>. Filter errors: O(n). Find duplicates: O(n) with HashSet</div></div>
+        <div class="def-item"><div class="def-key gn">Q: Match Expected vs Actual</div><div class="def-val">Compare API response fields. Use HashMap for validation. Diff algorithm for assertions</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Real SDET Interview Scenario 1</div>
+      <div class="desc">Design: Test Retry Mechanism</div>
+      <div class="item info">
+        <strong>Problem:</strong> Flaky tests fail randomly. Design a retry system.
+      </div>
+<code><span class="kw">class</span> <span class="ax">TestRetryManager</span> {
+    <span class="kw">private</span> Queue&lt;TestCase&gt; failedTests = <span class="kw">new</span> LinkedList&lt;&gt;();
+    <span class="kw">private</span> Map&lt;String, Integer&gt; retryCount = <span class="kw">new</span> HashMap&lt;&gt;();
+    <span class="kw">private</span> <span class="kw">static final int</span> MAX_RETRIES = <span class="nu">3</span>;
+    
+    <span class="kw">public void</span> <span class="fn">retryFailedTests</span>() {
+        <span class="kw">while</span> (!failedTests.<span class="fn">isEmpty</span>()) {
+            TestCase test = failedTests.<span class="fn">poll</span>();
+            <span class="kw">int</span> count = retryCount.<span class="fn">getOrDefault</span>(test.name, <span class="nu">0</span>);
+            <span class="kw">if</span> (count &lt; MAX_RETRIES) {
+                test.<span class="fn">run</span>();
+                <span class="kw">if</span> (test.<span class="fn">failed</span>()) {
+                    failedTests.<span class="fn">offer</span>(test);
+                    retryCount.<span class="fn">put</span>(test.name, count + <span class="nu">1</span>);
+                }
+            }
+        }
+    }
+}
+<span class="cm">// Time: O(n*m) where m=max retries | Space: O(n)</span></code>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct pu"><div class="d"></div>Real SDET Interview Scenario 2</div>
+      <div class="desc">Design: Test Result Aggregation & Reporting</div>
+      <div class="item info">
+        <strong>Problem:</strong> Collect test results from 10 threads, generate report with stats.
+      </div>
+<code><span class="kw">class</span> <span class="ax">TestReporter</span> {
+    <span class="kw">private</span> Map&lt;String, TestResult&gt; results = <span class="kw">new</span> ConcurrentHashMap&lt;&gt;();
+    
+    <span class="kw">public void</span> <span class="fn">reportResult</span>(String name, TestResult result) {
+        results.<span class="fn">put</span>(name, result);
+    }
+    
+    <span class="kw">public void</span> <span class="fn">printStats</span>() {
+        <span class="kw">int</span> passed = <span class="nu">0</span>, failed = <span class="nu">0</span>;
+        <span class="kw">for</span> (TestResult r : results.<span class="fn">values</span>()) {
+            <span class="kw">if</span> (r.<span class="fn">isPassed</span>()) passed++;
+            <span class="kw">else</span> failed++;
+        }
+        System.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Passed: "</span> + passed + <span class="st">" Failed: "</span> + failed);
+    }
+}
+<span class="cm">// Time: O(n) | Space: O(n) | Thread-Safe</span></code>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 7: SYSTEM DESIGN ══════════ -->
+<div class="sec-div major" id="system-design">System Design for SDET · Architecture · Scalability · Best Practices</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Framework Architecture Design</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Component 1: Test Manager</div><div class="def-val">Orchestrates test execution. Controls threading, retry logic, sequencing</div></div>
+        <div class="def-item"><div class="def-key c">Component 2: Data Layer</div><div class="def-val">HashMap for test data. JSON parsing for API responses. Database connection pooling</div></div>
+        <div class="def-item"><div class="def-key c">Component 3: Reporter</div><div class="def-val">Collects results. Generates HTML/JSON reports. ConcurrentHashMap for thread-safety</div></div>
+        <div class="def-item"><div class="def-key c">Component 4: CI/CD Integration</div><div class="def-val">Jenkins pipeline. Docker containers. Artifact storage. Log aggregation</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Parallel Execution Design</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key gn">Approach 1: Thread Pool</div><div class="def-val">ExecutorService with fixed thread pool. Distribute n tests across m threads. O(n/m) speedup</div></div>
+        <div class="def-item"><div class="def-key gn">Approach 2: Grid Distribution</div><div class="def-val">Selenium Grid / Appium Server. Multiple machines. Centralized node tracking</div></div>
+        <div class="def-item"><div class="def-key gn">Thread Safety</div><div class="def-val">Use ConcurrentHashMap, CopyOnWriteArrayList. Avoid data race conditions</div></div>
+      </div>
+      <div style="margin-top:8px;"><code><span class="cm">// Thread Pool: 4 threads for 100 tests = 25 tests/thread</span>
+ExecutorService executor = Executors.<span class="fn">newFixedThreadPool</span>(<span class="nu">4</span>);
+<span class="kw">for</span> (TestCase test : tests) {
+    executor.<span class="fn">execute</span>(() -&gt; test.<span class="fn">run</span>());
+}
+executor.<span class="fn">shutdown</span>();</code></div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>API Response Validation Design</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key bl">Parsing: Use Map</div><div class="def-val">Parse JSON to Map<String, Object>. Extract nested values using dot notation</div></div>
+        <div class="def-item"><div class="def-key bl">Validation: Schema Check</div><div class="def-val">Compare actual response schema with expected. Field count, types, required fields</div></div>
+        <div class="def-item"><div class="def-key bl">Data Assertion</div><div class="def-val">Assert field values. Handle null, empty arrays, dynamic values</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct pu"><div class="d"></div>Performance & Reliability</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key pu">Timeout Management</div><div class="def-val">Set appropriate timeouts. Use exponential backoff for retries</div></div>
+        <div class="def-item"><div class="def-key pu">Resource Management</div><div class="def-val">Close connections properly. Use try-with-resources. Monitor memory</div></div>
+        <div class="def-item"><div class="def-key pu">Failure Handling</div><div class="def-val">Graceful degradation. Log errors comprehensively. Enable debugging</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 8: 90-DAY ROADMAP ══════════ -->
+<div class="sec-div major" id="roadmap">90-Day DSA Mastery Roadmap · Structured Learning · Daily Commitment</div>
+
+<div style="background:rgba(16,26,40,0.7);border:2px solid var(--amber);border-radius:4px;padding:14px;margin:15px 12px;">
+  <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--amber);margin-bottom:12px;">📅 COMPLETE 90-DAY ROADMAP</div>
+  
+  <div class="grid-2">
+    <div class="col">
+      <div class="card">
+        <div class="ct c"><div class="d"></div>Month 1: Foundation (Days 1-30)</div>
+        <div class="def-list">
+          <div class="def-item"><div class="def-key c">Week 1: Java Basics</div><div class="def-val">Variables, loops, arrays, strings. Solve 3 easy problems daily</div></div>
+          <div class="def-item"><div class="def-key c">Week 2: Complexity Analysis</div><div class="def-val">Big O, time/space analysis. Analyze 5 code snippets daily</div></div>
+          <div class="def-item"><div class="def-key c">Week 3: Arrays & Strings</div><div class="def-val">Array operations, string manipulation. 2 easy problems + 1 medium daily</div></div>
+          <div class="def-item"><div class="def-key c">Week 4: Hashing Basics</div><div class="def-val">HashMap, HashSet concepts. Character frequency, two sum problems</div></div>
+          <div class="def-item info"><strong>Target:</strong> Solve 30-40 Easy problems. Understand fundamentals</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <div class="ct gn"><div class="d"></div>Month 2: Core Patterns (Days 31-60)</div>
+        <div class="def-list">
+          <div class="def-item"><div class="def-key gn">Week 5: Stack & Queue</div><div class="def-val">Valid parentheses, BFS, DFS concepts. Practice recursive thinking</div></div>
+          <div class="def-item"><div class="def-key gn">Week 6: Linked Lists</div><div class="def-val">Node operations, reversal, cycle detection. 10 problems</div></div>
+          <div class="def-item"><div class="def-key gn">Week 7: Trees & Graphs</div><div class="def-val">Traversals, BST, DFS/BFS. Level-order, inorder, preorder</div></div>
+          <div class="def-item"><div class="def-key gn">Week 8: Two Pointers & Sliding Window</div><div class="def-val">Pattern mastery. Solve 15 medium problems</div></div>
+          <div class="def-item info"><strong>Target:</strong> Solve 40-50 Medium problems. Know 2-3 patterns well</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <div class="ct bl"><div class="d"></div>Month 3: Advanced & Interview Prep (Days 61-90)</div>
+        <div class="def-list">
+          <div class="def-item"><div class="def-key bl">Week 9: Binary Search & Sorting</div><div class="def-val">BST problems, rotated arrays, merge sort. 10 medium/hard</div></div>
+          <div class="def-item"><div class="def-key bl">Week 10: Dynamic Programming</div><div class="def-val">Fibonacci, coin change, LCS. Bottom-up DP approach. 10 hard</div></div>
+          <div class="def-item"><div class="def-key bl">Week 11: Mock Interviews</div><div class="def-val">Solve hard problems under 45-minute time limit. Record solutions</div></div>
+          <div class="def-item"><div class="def-key bl">Week 12: Company-Specific & SDET Focus</div><div class="def-val">Amazon/Google frequent questions. SDET-specific scenarios</div></div>
+          <div class="def-item info"><strong>Target:</strong> Solve 20-30 Hard problems. Confidence in interviews</div>
+        </div>
+      </div>
+
+    <div class="col">
+      <div class="card">
+        <div class="ct pu"><div class="d"></div>Daily & Weekly Schedule</div>
+        <div class="def-list">
+          <div class="def-item"><div class="def-key pu">Daily (1.5-2 hours)</div><div class="def-val">Morning: Concept review (30 min). Solve 2-3 problems (60 min). Debug & optimize (15 min)</div></div>
+          <div class="def-item"><div class="def-key pu">Weekly (3-4 hours)</div><div class="def-val">Monday: New topic learning. Wed: Practice pattern-based problems. Sat: Mock interview</div></div>
+          <div class="def-item"><div class="def-key pu">Monthly Milestone</div><div class="def-val">Review mistakes. Identify weak patterns. Adjust plan. Mock technical round</div></div>
+          <div class="def-item info">Total commitment: ~15 hours/week for 12 weeks = 180 hours</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px;padding:10px;background:rgba(255,107,53,0.15);border-radius:4px;border-left:3px solid var(--amber);">
+    <strong style="color:var(--amber);">🎯 Success Metrics:</strong><br>
+    <span style="font-size:10px;color:var(--light);">
+      ✓ Solve 100-120 LeetCode problems (40 Easy, 50 Medium, 20-30 Hard)<br>
+      ✓ Understand 8-10 core patterns deeply<br>
+      ✓ Code fluency: Write solution in 15-30 min per problem<br>
+      ✓ Explain time/space complexity instantly<br>
+      ✓ Apply patterns to SDET-specific scenarios<br>
+      ✓ Pass 3+ mock interviews confidently
+    </span>
+  </div>
+</div>
+
+<!-- ══════════ COMPANY-WISE PREPARATION ══════════ -->
+<div class="sec-div major">Company-Wise Interview Preparation · Focus Areas & Difficulty Levels</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct c"><div class="d"></div>Amazon (Most Common)</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key c">Focus: 2-Pointer, DP, Trees</div><div class="def-val">Two Sum, LIS, LCA, Number of Islands. Medium difficulty mostly</div></div>
+        <div class="def-item"><div class="def-key c">Rounds: 3-4 coding</div><div class="def-val">45 min each. Need to discuss complexity deeply</div></div>
+        <div class="def-item"><div class="def-key c">SDET Specific</div><div class="def-val">Parallel execution, test scheduling, data validation APIs</div></div>
+      </div>
+      <div style="margin-top:6px;"><span class="badge medium">Medium</span><span class="badge medium">Pattern-Heavy</span></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>Google (Most Difficult)</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key gn">Focus: Graph, Hard Patterns, Optimization</div><div class="def-val">Alien Dictionary, Trapping Rain Water, Complex DP</div></div>
+        <div class="def-item"><div class="def-key gn">Rounds: 4+ coding</div><div class="def-val">Need to solve hard problems quickly. Optimize proactively</div></div>
+        <div class="def-item"><div class="def-key gn">SDET Specific</div><div class="def-val">Scalability at Google scale, distributed testing, optimization</div></div>
+      </div>
+      <div style="margin-top:6px;"><span class="badge hard">Hard</span><span class="badge hard">Optimization</span></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct bl"><div class="d"></div>Microsoft (Balanced)</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key bl">Focus: Arrays, Strings, Trees</div><div class="def-val">Mostly medium. Clean code emphasis. Good communication</div></div>
+        <div class="def-item"><div class="def-key bl">Rounds: 3 coding</div><div class="def-val">Follow-ups common. Can ask about edge cases</div></div>
+        <div class="def-item"><div class="def-key bl">SDET Specific</div><div class="def-val">Cross-platform testing, Azure integration, test analytics</div></div>
+      </div>
+      <div style="margin-top:6px;"><span class="badge medium">Medium</span><span class="badge medium">Code Quality</span></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct pu"><div class="d"></div>Product Companies (TCS, Infosys, Accenture)</div>
+      <div class="def-list">
+        <div class="def-item"><div class="def-key pu">Focus: Data Structures Basics</div><div class="def-val">Arrays, Strings, basic LinkedList. Mostly Easy-Medium</div></div>
+        <div class="def-item"><div class="def-key pu">Rounds: 1-2 coding</div><div class="def-val">Less rigorous. More focus on fundamentals & communication</div></div>
+        <div class="def-item"><div class="def-key pu">SDET Specific</div><div class="def-val">Performance testing, load testing framework design, test data generation</div></div>
+      </div>
+      <div style="margin-top:6px;"><span class="badge easy">Easy-Medium</span><span class="badge easy">Fundamentals</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FINAL TIPS ══════════ -->
+<div class="sec-div major">Final Interview Tips · Do's & Don'ts · Success Strategies</div>
+
+<div class="grid-2">
+  <div class="col">
+    <div class="card">
+      <div class="ct gn"><div class="d"></div>✅ DO THESE</div>
+      <div class="def-list">
+        <div class="def-item good"><div class="def-key gn">✓ Ask Clarifying Questions</div><div class="def-val">"Can array have duplicates?" "What's the range of n?" Saves mistakes</div></div>
+        <div class="def-item good"><div class="def-key gn">✓ Start with Brute Force</div><div class="def-val">Get working solution first. Then optimize. Interviewers like this approach</div></div>
+        <div class="def-item good"><div class="def-key gn">✓ Explain Your Approach</div><div class="def-val">Walk through logic before coding. Makes thinking process clear</div></div>
+        <div class="def-item good"><div class="def-key gn">✓ Write Clean Code</div><div class="def-val">Good variable names, proper indentation, comments where complex</div></div>
+        <div class="def-item good"><div class="def-key gn">✓ Test Your Code</div><div class="def-val">Test with examples, edge cases, empty/single input, large input</div></div>
+        <div class="def-item good"><div class="def-key gn">✓ State Complexity</div><div class="def-val">Always mention time & space. Shows you think about efficiency</div></div>
+        <div class="def-item good"><div class="def-key gn">✓ Mention SDET Experience</div><div class="def-val">Connect solutions to real automation problems you've solved</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="ct re"><div class="d"></div>❌ AVOID THESE</div>
+      <div class="def-list">
+        <div class="def-item warn"><div class="def-key re">✗ Jump to Coding</div><div class="def-val">Never code immediately. Think → Explain → Code → Test</div></div>
+        <div class="def-item warn"><div class="def-key re">✗ Ignore Edge Cases</div><div class="def-val">Empty array, null, single element, duplicates — test all</div></div>
+        <div class="def-item warn"><div class="def-key re">✗ Nervous Silence</div><div class="def-val">Keep talking. Even if stuck, explain your thinking process</div></div>
+        <div class="def-item warn"><div class="def-key re">✗ Forget Time Complexity</div><div class="def-val">Worst: Being asked "What's the time complexity?" and not knowing</div></div>
+        <div class="def-item warn"><div class="def-key re">✗ Copy-Paste Code</div><div class="def-val">Write from memory. Understand every line. Know what APIs do</div></div>
+        <div class="def-item warn"><div class="def-key re">✗ No Follow-Ups</div><div class="def-val">Ask "Can I optimize further?" Shows you want excellence</div></div>
+        <div class="def-item warn"><div class="def-key re">✗ Overcomplicating</div><div class="def-val">If brute force works, that's OK. Optimize only if asked</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="footer">
+  <div class="fl">
+    <span>DSA Complete Guide for SDET</span> · Java · LeetCode Patterns · System Design · SDET Focus · Interview Ready
+  </div>
+  <div class="fr">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Amir Khan Sir · 📞 8700350994 &nbsp;|&nbsp;
+    🌍 nextgenqa94-ui.github.io/nextgenqa
+  </div>
+</div>
+
+</div>
+</body>
+</html>

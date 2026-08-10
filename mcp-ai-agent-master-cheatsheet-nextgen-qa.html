@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP &amp; AI Agent Master Cheat Sheet – Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a; --surface: #111827; --card: #161d2e; --border: #1e2d45;
+    --accent: #00d4ff; --accent2: #7c3aed; --accent3: #f59e0b; --green: #10b981; --red: #ef4444;
+    --text: #e2e8f0; --muted: #64748b; --code-bg: #0d1117;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5; }
+  .header {
+    background: linear-gradient(135deg, #0d1b35 0%, #111827 50%, #0a1628 100%);
+    border-bottom: 2px solid var(--accent); padding: 20px 32px 16px;
+    display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden;
+  }
+  .header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0,212,255,0.07) 0%, transparent 70%); pointer-events: none; }
+  .logo-area { display: flex; align-items: center; gap: 16px; }
+  .logo-icon { width: 52px; height: 52px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: #fff; letter-spacing: -1px; box-shadow: 0 0 20px rgba(0,212,255,0.3); flex-shrink: 0; }
+  .title-block h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(90deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .title-block h1 span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+  .title-block p { color: var(--muted); font-size: 11px; margin-top: 2px; letter-spacing: 0.5px; }
+  .coaching-info { text-align: right; font-size: 11.5px; }
+  .coaching-info .name { font-size: 14px; font-weight: 700; color: var(--accent3); }
+  .coaching-info .phone { display: inline-flex; align-items: center; gap: 6px; margin-top: 3px; color: var(--green); font-weight: 600; font-size: 13px; font-family: 'JetBrains Mono', monospace; }
+  .coaching-info .tags { margin-top: 5px; display: flex; gap: 5px; justify-content: flex-end; flex-wrap: wrap; max-width: 420px; }
+  .tag { background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4); color: #a78bfa; padding: 1px 7px; border-radius: 20px; font-size: 9.5px; font-weight: 600; }
+  .tag.blue { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); color: var(--accent); }
+  .tag.amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: var(--accent3); }
+  .section-label { font-size: 9px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; color: var(--muted); padding: 8px 32px 4px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-left: 1px solid var(--border); }
+  .col { border-right: 1px solid var(--border); }
+  .card { border-bottom: 1px solid var(--border); padding: 10px 12px; }
+  .card-title { display: flex; align-items: center; gap: 7px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid rgba(0,212,255,0.15); }
+  .card-title .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; box-shadow: 0 0 6px var(--accent); }
+  .card-title.purple .dot { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; } .card-title.purple { color: #a78bfa; border-bottom-color: rgba(167,139,250,0.15); }
+  .card-title.green .dot { background: var(--green); box-shadow: 0 0 6px var(--green); } .card-title.green { color: var(--green); border-bottom-color: rgba(16,185,129,0.15); }
+  .card-title.amber .dot { background: var(--accent3); box-shadow: 0 0 6px var(--accent3); } .card-title.amber { color: var(--accent3); border-bottom-color: rgba(245,158,11,0.15); }
+  .card-title.red .dot { background: var(--red); box-shadow: 0 0 6px var(--red); } .card-title.red { color: #fb7185; border-bottom-color: rgba(239,68,68,0.15); }
+  .item { margin-bottom: 6px; } .item:last-child { margin-bottom: 0; }
+  .item-desc { font-size: 10.3px; color: #94a3b8; margin-bottom: 3px; font-weight: 400; }
+  code { display: block; font-family: 'JetBrains Mono', monospace; font-size: 9.4px; background: var(--code-bg); border: 1px solid var(--border); border-left: 2px solid rgba(0,212,255,0.4); color: #7dd3fc; padding: 4px 7px; border-radius: 4px; overflow-x: auto; white-space: pre; line-height: 1.5; }
+  code .kw { color: #c792ea; } code .fn { color: #82aaff; } code .str { color: #c3e88d; } code .cm { color: #546e7a; font-style: italic; }
+  code .num { color: #f78c6c; } code .op { color: #89ddff; } code .key { color: #f07178; } code .ty { color: #ffcb6b; }
+  .note { font-size: 9.3px; color: #fbbf24; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: 4px; padding: 4px 7px; margin-top: 4px; }
+  table.mini { width: 100%; border-collapse: collapse; font-size: 9.4px; margin-top: 2px; }
+  table.mini th { background: rgba(0,212,255,0.12); color: var(--accent); text-align: left; padding: 3px 5px; font-weight: 700; }
+  table.mini td { padding: 3px 5px; border-bottom: 1px solid var(--border); color: #cbd5e1; }
+  .footer { background: linear-gradient(90deg, #0d1b35, #111827); border-top: 2px solid var(--accent2); padding: 10px 32px; display: flex; justify-content: space-between; align-items: center; }
+  .footer .left { font-size: 10px; color: var(--muted); } .footer .left span { color: var(--accent); font-weight: 700; }
+  .footer .right { font-size: 10px; color: var(--muted); text-align: right; } .footer .right strong { color: var(--accent3); }
+  @media print { body { font-size: 11px; } .grid { page-break-inside: avoid; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-area">
+    <div class="logo-icon">MCP+</div>
+    <div class="title-block">
+      <h1>MCP &amp; AI Agent <span>Master Cheat Sheet</span></h1>
+      <p>MODEL CONTEXT PROTOCOL · AGENTIC AI · JAVASCRIPT / TYPESCRIPT · COMPLETE END-TO-END REFERENCE</p>
+    </div>
+  </div>
+  <div class="coaching-info">
+    <div class="name">🎓 Next Gen QA IT Coaching Classes</div>
+    <div class="phone">📞 Mr. Khan Sir &nbsp;|&nbsp; 8700350994</div>
+    <div class="tags">
+      <span class="tag blue">MCP TS SDK</span>
+      <span class="tag amber">OpenAI Agents SDK</span>
+      <span class="tag">LangGraph.js</span>
+      <span class="tag blue">AutoGen</span>
+      <span class="tag amber">Vercel AI SDK</span>
+      <span class="tag">Multi-Agent</span>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 1 -->
+<div class="section-label">1. MCP Protocol &amp; Lifecycle &middot; 2. Advanced Tools &middot; 3. Resource Templates/Subscriptions &middot; 4. Advanced Prompts &amp; Completion</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>1. Protocol Layers &amp; Lifecycle</div>
+    <div class="item"><div class="item-desc">JSON-RPC 2.0 message shape</div><code>{ <span class="key">"jsonrpc"</span>:<span class="str">"2.0"</span>, <span class="key">"id"</span>:<span class="num">1</span>, <span class="key">"method"</span>:<span class="str">"tools/call"</span>,
+  <span class="key">"params"</span>:{ <span class="key">"name"</span>:<span class="str">"get_ticket"</span>, <span class="key">"arguments"</span>:{id:<span class="str">"QA-1"</span>} } }
+<span class="cm">// notifications = no "id" field, no response expected</span></code></div>
+    <div class="item"><div class="item-desc">Handshake sequence</div><code>client &rarr; <span class="str">"initialize"</span> {protocolVersion, capabilities}
+server &rarr; returns its capabilities (tools/resources/prompts)
+client &rarr; <span class="str">"notifications/initialized"</span>
+<span class="cm">// only now can normal requests flow</span></code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>2. Advanced Tool Definition</div>
+    <div class="item"><div class="item-desc">Structured output + annotations + try/catch</div><code>server.<span class="fn">registerTool</span>(<span class="str">"create_jira_issue"</span>, {
+  inputSchema:{project:z.<span class="fn">string</span>(),summary:z.<span class="fn">string</span>()},
+  outputSchema:{issueKey:z.<span class="fn">string</span>(),url:z.<span class="fn">string</span>()},
+  annotations:{readOnlyHint:<span class="kw">false</span>,destructiveHint:<span class="kw">true</span>}
+}, <span class="kw">async</span> ({project,summary}) =&gt; {
+  <span class="kw">try</span> { <span class="kw">const</span> i = <span class="op">await</span> <span class="fn">jiraApi.create</span>({project,summary});
+    <span class="kw">return</span> {structuredContent:{issueKey:i.key,url:i.url},
+      content:[{type:<span class="str">"text"</span>,text:<span class="str">`Created ${i.key}`</span>}]};
+  } <span class="kw">catch</span>(e){ <span class="kw">return</span> {isError:<span class="kw">true</span>,content:[{type:<span class="str">"text"</span>,text:e.message}]}; }
+});</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>3. Resource Templates &amp; Subscriptions</div>
+    <div class="item"><div class="item-desc">Dynamic URI template (RFC 6570)</div><code><span class="kw">import</span>{ResourceTemplate}<span class="kw">from</span> <span class="str">"@modelcontextprotocol/sdk/server/mcp.js"</span>;
+server.<span class="fn">registerResource</span>(<span class="str">"ticket"</span>,
+  <span class="kw">new</span> <span class="fn">ResourceTemplate</span>(<span class="str">"jira://ticket/{id}"</span>,{list:<span class="kw">undefined</span>}),
+  {title:<span class="str">"Jira Ticket"</span>},
+  <span class="kw">async</span>(uri,{id})=&gt;({contents:[{uri:uri.href,
+    mimeType:<span class="str">"application/json"</span>, text:<span class="fn">JSON.stringify</span>(<span class="op">await</span> <span class="fn">getTicket</span>(id))}]})
+);</code></div>
+    <div class="item"><div class="item-desc">Push update notifications</div><code>server.<span class="fn">sendResourceListChanged</span>();
+server.<span class="fn">sendResourceUpdated</span>({uri:<span class="str">"jira://ticket/QA-1"</span>});</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>4. Advanced Prompts &amp; Argument Completion</div>
+    <div class="item"><div class="item-desc">Multi-arg prompt w/ embedded resource</div><code>server.<span class="fn">registerPrompt</span>(<span class="str">"triage-bug"</span>,{
+  argsSchema:{logUrl:z.<span class="fn">string</span>(),severity:z.<span class="fn">enum</span>([<span class="str">"P1"</span>,<span class="str">"P2"</span>])}
+},<span class="kw">async</span>({logUrl,severity})=&gt;({messages:[
+  {role:<span class="str">"user"</span>,content:{type:<span class="str">"text"</span>,text:<span class="str">`Triage ${severity} bug`</span>}},
+  {role:<span class="str">"user"</span>,content:{type:<span class="str">"resource"</span>,resource:{uri:logUrl}}}
+]}));</code></div>
+    <div class="item"><div class="item-desc">Argument autocompletion</div><code>server.<span class="fn">registerCompletion</span>(<span class="kw">async</span> (ref,arg)=&gt;
+  ({values:[<span class="str">"P1"</span>,<span class="str">"P2"</span>,<span class="str">"P3"</span>].<span class="fn">filter</span>(v=&gt;v.<span class="fn">startsWith</span>(arg.value))}));</code></div>
+  </div></div>
+</div>
+
+<!-- ROW 2 -->
+<div class="section-label">5. Sampling (Server&rarr;LLM) &middot; 6. Roots &amp; Boundaries &middot; 7. Progress/Cancellation/Logging &middot; 8. Pagination &amp; Multi-Content Results</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>5. Sampling – Server Asks Client's LLM</div>
+    <div class="item"><div class="item-desc">Server requests a completion via the client's model</div><code><span class="kw">const</span> res = <span class="op">await</span> server.<span class="fn">server</span>.<span class="fn">createMessage</span>({
+  messages:[{role:<span class="str">"user"</span>,content:{type:<span class="str">"text"</span>,
+    text:<span class="str">"Summarize this log in 1 line"</span>}}],
+  maxTokens: <span class="num">100</span>
+});
+<span class="cm">// lets a tool call back into the LLM w/o owning API keys</span></code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>6. Roots – Filesystem Boundaries</div>
+    <div class="item"><div class="item-desc">Client tells server which folders are in-scope</div><code>client.<span class="fn">setRequestHandler</span>(<span class="str">"roots/list"</span>, <span class="kw">async</span> () =&gt; ({
+  roots: [{ uri: <span class="str">"file:///Users/amirkhan/IdeaProjects"</span>, name: <span class="str">"Projects"</span> }]
+}));
+<span class="cm">// server must only read/write within declared roots</span></code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>7. Progress, Cancellation &amp; Logging</div>
+    <div class="item"><div class="item-desc">Report progress on a long tool call</div><code><span class="kw">async</span> ({file}, {sendNotification, _meta}) =&gt; {
+  <span class="kw">for</span>(<span class="kw">let</span> i=<span class="num">0</span>;i&lt;<span class="num">100</span>;i+=<span class="num">20</span>){
+    <span class="op">await</span> sendNotification({method:<span class="str">"notifications/progress"</span>,
+      params:{progressToken:_meta.progressToken, progress:i, total:<span class="num">100</span>}});
+  }
+}</code></div>
+    <div class="item"><div class="item-desc">Server-side log levels to client</div><code>server.<span class="fn">sendLoggingMessage</span>({level:<span class="str">"info"</span>, data:<span class="str">"Tool started"</span>});</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>8. Pagination &amp; Multi-Content Results</div>
+    <div class="item"><div class="item-desc">Cursor-based pagination for list ops</div><code>{ <span class="key">"method"</span>:<span class="str">"resources/list"</span>, <span class="key">"params"</span>:{cursor:<span class="str">"eyJvZmZzZXQiOjEwfQ"</span>} }
+<span class="cm">// response includes nextCursor if more items exist</span></code></div>
+    <div class="item"><div class="item-desc">Return image/audio/embedded-resource content</div><code><span class="kw">return</span> { content: [
+  { type: <span class="str">"text"</span>, text: <span class="str">"Screenshot captured"</span> },
+  { type: <span class="str">"image"</span>, data: base64Png, mimeType: <span class="str">"image/png"</span> }
+]};</code></div>
+  </div></div>
+</div>
+
+<!-- ROW 3 -->
+<div class="section-label">9. Streamable HTTP Transport &middot; 10. MCP Client Advanced &middot; 11. Host Configs (Multi-Server) &middot; 12. Debugging, Inspector &amp; Unit Tests</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>9. Streamable HTTP (Remote Server)</div>
+    <div class="item"><div class="item-desc">Express + session-scoped transport</div><code><span class="kw">import</span> express <span class="kw">from</span> <span class="str">"express"</span>;
+<span class="kw">import</span>{StreamableHTTPServerTransport}<span class="kw">from</span>
+  <span class="str">"@modelcontextprotocol/sdk/server/streamableHttp.js"</span>;
+<span class="kw">const</span> app=<span class="fn">express</span>(); app.<span class="fn">use</span>(express.<span class="fn">json</span>());
+<span class="kw">const</span> transports:<span class="ty">Record&lt;string,StreamableHTTPServerTransport&gt;</span>={};
+app.<span class="fn">post</span>(<span class="str">"/mcp"</span>, <span class="kw">async</span>(req,res)=&gt;{
+  <span class="kw">const</span> sid=req.headers[<span class="str">"mcp-session-id"</span>] <span class="kw">as</span> <span class="ty">string</span>;
+  <span class="kw">let</span> t=transports[sid];
+  <span class="kw">if</span>(<span class="op">!</span>t){ t=<span class="kw">new</span> <span class="fn">StreamableHTTPServerTransport</span>({
+    sessionIdGenerator:()=&gt;crypto.<span class="fn">randomUUID</span>()}); <span class="op">await</span> server.<span class="fn">connect</span>(t); }
+  <span class="op">await</span> t.<span class="fn">handleRequest</span>(req,res,req.body);
+});</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>10. MCP Client Advanced</div>
+    <div class="item"><div class="item-desc">Connect multiple servers, aggregate tools</div><code><span class="kw">const</span> clients=<span class="kw">new</span> <span class="fn">Map</span>&lt;<span class="ty">string</span>,Client&gt;();
+<span class="kw">for</span>(<span class="kw">const</span>[name,cfg] <span class="kw">of</span> <span class="fn">Object.entries</span>(mcpServers)){
+  <span class="kw">const</span> c=<span class="kw">new</span> <span class="fn">Client</span>({name,version:<span class="str">"1.0"</span>});
+  <span class="op">await</span> c.<span class="fn">connect</span>(<span class="kw">new</span> <span class="fn">StdioClientTransport</span>(cfg));
+  clients.<span class="fn">set</span>(name,c);
+}
+<span class="kw">const</span> allTools=(<span class="op">await</span> <span class="fn">Promise.all</span>(
+  [...clients.values()].<span class="fn">map</span>(c=&gt;c.<span class="fn">listTools</span>()))).<span class="fn">flat</span>();</code></div>
+    <div class="item"><div class="item-desc">Elicitation – server asks user for input</div><code>client.<span class="fn">setRequestHandler</span>(<span class="str">"elicitation/create"</span>,
+  <span class="kw">async</span>(req)=&gt;({action:<span class="str">"accept"</span>,content:{confirm:<span class="kw">true</span>}}));</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>11. Host Configs (Multi-Server)</div>
+    <div class="item"><div class="item-desc">claude_desktop_config.json</div><code>{ <span class="key">"mcpServers"</span>:{
+  <span class="key">"jira"</span>:{<span class="key">"command"</span>:<span class="str">"node"</span>,<span class="key">"args"</span>:[<span class="str">"./build/jira.js"</span>],
+           <span class="key">"env"</span>:{<span class="key">"JIRA_TOKEN"</span>:<span class="str">"${JIRA_TOKEN}"</span>}},
+  <span class="key">"playwright"</span>:{<span class="key">"command"</span>:<span class="str">"npx"</span>,<span class="key">"args"</span>:[<span class="str">"@playwright/mcp@latest"</span>]},
+  <span class="key">"remote-api"</span>:{<span class="key">"url"</span>:<span class="str">"https://mcp.example.com/mcp"</span>}
+}}</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title amber"><div class="dot"></div>12. Debugging, Inspector &amp; Unit Tests</div>
+    <div class="item"><div class="item-desc">Launch Inspector against a built server</div><code>npx @modelcontextprotocol/inspector node build/index.js
+<span class="cm">// UI at localhost:6274 to list/call tools live</span></code></div>
+    <div class="item"><div class="item-desc">Unit test a tool handler directly</div><code><span class="kw">import</span>{describe,it,expect}<span class="kw">from</span> <span class="str">"vitest"</span>;
+<span class="fn">describe</span>(<span class="str">"create_jira_issue"</span>,()=&gt;{
+  <span class="fn">it</span>(<span class="str">"returns issue key"</span>,<span class="kw">async</span>()=&gt;{
+    <span class="kw">const</span> res=<span class="op">await</span> handler({project:<span class="str">"QA"</span>,summary:<span class="str">"Bug"</span>});
+    <span class="fn">expect</span>(res.structuredContent.issueKey).<span class="fn">toMatch</span>(<span class="str">/QA-\d+/</span>);
+  });
+});</code></div>
+  </div></div>
+</div>
+
+<!-- ROW 4 -->
+<div class="section-label">13. Agent Loop Internals &middot; 14. Agents SDK Runner &amp; Streaming &middot; 15. Tools &amp; MCP Integration &middot; 16. Handoffs &amp; Guardrails</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>13. Agent Loop Internals</div>
+    <div class="item"><div class="item-desc">The actual loop under the hood</div><code><span class="kw">while</span>(<span class="op">!</span>done){
+  response=<span class="op">await</span> llm.<span class="fn">call</span>(messages,tools);
+  <span class="kw">if</span>(response.toolCalls.length){
+    <span class="kw">for</span>(<span class="kw">const</span> call <span class="kw">of</span> response.toolCalls){
+      result=<span class="op">await</span> <span class="fn">executeTool</span>(call);
+      messages.<span class="fn">push</span>({role:<span class="str">"tool"</span>,content:result});
+    }
+  } <span class="kw">else</span> { done=<span class="kw">true</span>; }
+}</code></div>
+    <div class="item"><div class="item-desc">Context window management</div><code><span class="cm">// trim/summarize old turns before token limit</span>
+<span class="cm">// keep: system prompt + last N turns + tool results</span></code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>14. OpenAI Agents SDK – Runner &amp; Streaming</div>
+    <div class="item"><div class="item-desc">Structured output via zod</div><code><span class="kw">import</span>{Agent,run,Runner}<span class="kw">from</span> <span class="str">"@openai/agents"</span>;
+<span class="kw">const</span> TestPlan=z.<span class="fn">object</span>({steps:z.<span class="fn">array</span>(z.<span class="fn">string</span>())});
+<span class="kw">const</span> agent=<span class="kw">new</span> <span class="fn">Agent</span>({name:<span class="str">"QA Planner"</span>,model:<span class="str">"gpt-4.1"</span>,outputType:TestPlan});
+<span class="kw">const</span> runner=<span class="kw">new</span> <span class="fn">Runner</span>({maxTurns:<span class="num">10</span>});
+<span class="kw">const</span> result=<span class="op">await</span> runner.<span class="fn">run</span>(agent,<span class="str">"Plan login tests"</span>);
+console.<span class="fn">log</span>(result.finalOutput.steps);</code></div>
+    <div class="item"><div class="item-desc">Streaming token-by-token</div><code><span class="kw">const</span> stream=<span class="op">await</span> <span class="fn">run</span>(agent,input,{stream:<span class="kw">true</span>});
+<span class="kw">for</span> <span class="kw">await</span>(<span class="kw">const</span> ev <span class="kw">of</span> stream){
+  <span class="kw">if</span>(ev.type===<span class="str">"raw_model_stream_event"</span>) process.stdout.<span class="fn">write</span>(ev.delta);
+}</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>15. Tools &amp; MCP Integration</div>
+    <div class="item"><div class="item-desc">Function tool w/ zod, strict typing</div><code><span class="kw">import</span>{tool}<span class="kw">from</span> <span class="str">"@openai/agents"</span>;
+<span class="kw">const</span> getTicket=<span class="fn">tool</span>({name:<span class="str">"get_jira_ticket"</span>,
+  description:<span class="str">"Fetch ticket by ID"</span>,
+  parameters:z.<span class="fn">object</span>({id:z.<span class="fn">string</span>()}), strict:<span class="kw">true</span>,
+  execute:<span class="kw">async</span>({id})=&gt;<span class="op">await</span> <span class="fn">fetchTicket</span>(id)
+});</code></div>
+    <div class="item"><div class="item-desc">Plug an MCP server in as tool source</div><code><span class="kw">import</span>{MCPServerStdio}<span class="kw">from</span> <span class="str">"@openai/agents"</span>;
+<span class="kw">const</span> mcp=<span class="kw">new</span> <span class="fn">MCPServerStdio</span>({command:<span class="str">"node"</span>,args:[<span class="str">"./jira-mcp/build/index.js"</span>]});
+<span class="op">await</span> mcp.<span class="fn">connect</span>();
+<span class="kw">const</span> agent=<span class="kw">new</span> <span class="fn">Agent</span>({name:<span class="str">"QA"</span>,mcpServers:[mcp]});</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>16. Handoffs &amp; Guardrails</div>
+    <div class="item"><div class="item-desc">Handoff w/ input filter + tool name override</div><code><span class="kw">import</span>{handoff}<span class="kw">from</span> <span class="str">"@openai/agents"</span>;
+<span class="kw">const</span> toBilling=<span class="fn">handoff</span>(billingAgent,{
+  toolNameOverride:<span class="str">"escalate_to_billing"</span>,
+  inputFilter:(h)=&gt;h.<span class="fn">filter</span>(m=&gt;m.role<span class="op">!==</span><span class="str">"system"</span>)});
+<span class="kw">const</span> triage=<span class="kw">new</span> <span class="fn">Agent</span>({name:<span class="str">"Triage"</span>,handoffs:[toBilling]});</code></div>
+    <div class="item"><div class="item-desc">Input/output guardrails w/ tripwire</div><code><span class="kw">const</span> piiGuard={name:<span class="str">"no-pii"</span>,
+  execute:<span class="kw">async</span>({input})=&gt;({tripwireTriggered:<span class="op">/</span>\d{<span class="num">10</span>}<span class="op">/</span>.<span class="fn">test</span>(input)})};
+<span class="kw">const</span> agent=<span class="kw">new</span> <span class="fn">Agent</span>({...,inputGuardrails:[piiGuard]});</code></div>
+  </div></div>
+</div>
+
+<!-- ROW 5 -->
+<div class="section-label">17. Tracing &amp; Sessions &middot; 18. Lifecycle Hooks &amp; Model Settings &middot; 19. Human Approval &amp; RunContext &middot; 20. Agent-as-Tool</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title amber"><div class="dot"></div>17. Tracing &amp; Sessions</div>
+    <div class="item"><div class="item-desc">Group multiple runs under one trace</div><code><span class="kw">import</span>{withTrace}<span class="kw">from</span> <span class="str">"@openai/agents"</span>;
+<span class="op">await</span> <span class="fn">withTrace</span>(<span class="str">"qa-workflow"</span>,<span class="kw">async</span>()=&gt;{
+  <span class="op">await</span> <span class="fn">run</span>(plannerAgent,input);
+  <span class="op">await</span> <span class="fn">run</span>(executorAgent,input);
+});</code></div>
+    <div class="item"><div class="item-desc">Persistent session memory</div><code><span class="kw">import</span>{SQLiteSession}<span class="kw">from</span> <span class="str">"@openai/agents"</span>;
+<span class="kw">const</span> session=<span class="kw">new</span> <span class="fn">SQLiteSession</span>(<span class="str">"user-123"</span>);
+<span class="op">await</span> <span class="fn">run</span>(agent,<span class="str">"continue where we left off"</span>,{session});</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>18. Lifecycle Hooks &amp; Model Settings</div>
+    <div class="item"><div class="item-desc">Hooks for observability</div><code><span class="kw">const</span> agent=<span class="kw">new</span> <span class="fn">Agent</span>({
+  name:<span class="str">"QA"</span>,
+  hooks:{ onStart:()=&gt;console.<span class="fn">log</span>(<span class="str">"start"</span>),
+    onToolStart:(c,t)=&gt;console.<span class="fn">log</span>(<span class="str">"tool:"</span>,t.name),
+    onEnd:(c,out)=&gt;console.<span class="fn">log</span>(<span class="str">"done"</span>,out) }
+});</code></div>
+    <div class="item"><div class="item-desc">Model settings (temp, tool_choice, parallel)</div><code><span class="kw">const</span> agent=<span class="kw">new</span> <span class="fn">Agent</span>({..., modelSettings:{
+  temperature:<span class="num">0.2</span>, toolChoice:<span class="str">"auto"</span>, parallelToolCalls:<span class="kw">true</span> }});</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>19. Human Approval &amp; RunContext</div>
+    <div class="item"><div class="item-desc">Require approval before a risky tool runs</div><code><span class="kw">const</span> deleteTool=<span class="fn">tool</span>({name:<span class="str">"delete_env"</span>,
+  needsApproval:<span class="kw">true</span>, execute:<span class="kw">async</span>()=&gt;<span class="fn">wipeEnv</span>()});
+<span class="kw">if</span>(result.interruptions?.length){
+  <span class="kw">const</span> approved = <span class="op">await</span> <span class="fn">askUser</span>(<span class="str">"Approve delete?"</span>);
+  <span class="op">await</span> runner.<span class="fn">resume</span>(result, {approve: approved});
+}</code></div>
+    <div class="item"><div class="item-desc">RunContext – dependency injection</div><code><span class="kw">const</span> agent=<span class="kw">new</span> <span class="fn">Agent</span>&lt;<span class="ty">{ userId:string }</span>&gt;({...});
+<span class="op">await</span> <span class="fn">run</span>(agent, input, { context: { userId: <span class="str">"amir"</span> } });</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>20. Agent-as-Tool Pattern</div>
+    <div class="item"><div class="item-desc">Use one agent as a callable tool for another</div><code><span class="kw">const</span> summarizer = <span class="kw">new</span> <span class="fn">Agent</span>({ name:<span class="str">"Summarizer"</span> });
+<span class="kw">const</span> summarizerTool = summarizer.<span class="fn">asTool</span>({
+  toolName:<span class="str">"summarize_text"</span>, toolDescription:<span class="str">"Summarizes text"</span>
+});
+<span class="kw">const</span> mainAgent = <span class="kw">new</span> <span class="fn">Agent</span>({ tools:[summarizerTool] });
+<span class="cm">// avoids a full handoff; keeps mainAgent in control</span></code></div>
+  </div></div>
+</div>
+
+<!-- ROW 6 -->
+<div class="section-label">21. LangGraph.js Graph &amp; State &middot; 22. Conditional Edges &amp; ToolNode &middot; 23. Persistence &amp; Human-in-Loop &middot; 24. Subgraphs, Send API &amp; Streaming</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>21. LangGraph.js – Graph &amp; Typed State</div>
+    <div class="item"><div class="item-desc">Annotated state with reducer</div><code><span class="kw">import</span>{StateGraph,Annotation,END,START}<span class="kw">from</span> <span class="str">"@langchain/langgraph"</span>;
+<span class="kw">const</span> AgentState=Annotation.<span class="fn">Root</span>({
+  messages: Annotation&lt;<span class="ty">BaseMessage[]</span>&gt;({
+    reducer:(x,y)=&gt;x.<span class="fn">concat</span>(y), default:()=&gt;[] })
+});
+<span class="kw">const</span> graph=<span class="kw">new</span> <span class="fn">StateGraph</span>(AgentState)
+  .<span class="fn">addNode</span>(<span class="str">"agent"</span>,callModelNode)
+  .<span class="fn">addNode</span>(<span class="str">"tools"</span>,toolNode)
+  .<span class="fn">addEdge</span>(START,<span class="str">"agent"</span>);</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>22. Conditional Edges &amp; Prebuilt ToolNode</div>
+    <div class="item"><div class="item-desc">Route on whether the model called a tool</div><code><span class="kw">import</span>{ToolNode,createReactAgent}<span class="kw">from</span> <span class="str">"@langchain/langgraph/prebuilt"</span>;
+graph.<span class="fn">addNode</span>(<span class="str">"tools"</span>,<span class="kw">new</span> <span class="fn">ToolNode</span>([getTicketTool,createIssueTool]));
+graph.<span class="fn">addConditionalEdges</span>(<span class="str">"agent"</span>,(state)=&gt;{
+  <span class="kw">const</span> last=state.messages.<span class="fn">at</span>(-<span class="num">1</span>);
+  <span class="kw">return</span> last.tool_calls?.length ? <span class="str">"tools"</span> : END;
+});
+graph.<span class="fn">addEdge</span>(<span class="str">"tools"</span>,<span class="str">"agent"</span>);</code></div>
+    <div class="item"><div class="item-desc">Prebuilt ReAct agent (one-liner)</div><code><span class="kw">const</span> app = <span class="fn">createReactAgent</span>({ llm: model, tools: [getTicketTool] });</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>23. Persistence &amp; Human-in-the-Loop</div>
+    <div class="item"><div class="item-desc">Checkpointer + interrupt for approval</div><code><span class="kw">import</span>{MemorySaver}<span class="kw">from</span> <span class="str">"@langchain/langgraph"</span>;
+<span class="kw">const</span> app=graph.<span class="fn">compile</span>({
+  checkpointer:<span class="kw">new</span> <span class="fn">MemorySaver</span>(), interruptBefore:[<span class="str">"tools"</span>]
+});
+<span class="kw">const</span> config={configurable:{thread_id:<span class="str">"run-1"</span>}};
+<span class="op">await</span> app.<span class="fn">invoke</span>({messages:[...]},config);
+<span class="cm">// resume after human approval:</span>
+<span class="op">await</span> app.<span class="fn">invoke</span>(<span class="kw">null</span>,config);</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>24. Subgraphs, Send API &amp; Streaming Modes</div>
+    <div class="item"><div class="item-desc">Send API – dynamic parallel fan-out (map-reduce)</div><code><span class="kw">import</span>{Send}<span class="kw">from</span> <span class="str">"@langchain/langgraph"</span>;
+<span class="kw">function</span> <span class="fn">fanOut</span>(state){
+  <span class="kw">return</span> state.tickets.<span class="fn">map</span>(t =&gt; <span class="kw">new</span> <span class="fn">Send</span>(<span class="str">"analyzeOne"</span>, { ticket: t }));
+}
+graph.<span class="fn">addConditionalEdges</span>(<span class="str">"split"</span>, fanOut);</code></div>
+    <div class="item"><div class="item-desc">Streaming modes</div><code><span class="op">for</span> <span class="kw">await</span> (<span class="kw">const</span> chunk <span class="kw">of</span> <span class="op">await</span> app.<span class="fn">stream</span>(input,
+  { streamMode: <span class="str">"values"</span> })) { <span class="cm">/* "values"|"updates"|"messages" */</span> }</code></div>
+  </div></div>
+</div>
+
+<!-- ROW 7 -->
+<div class="section-label">25. AutoGen Core &amp; JS Equivalent &middot; 26. AutoGen SelectorGroupChat &amp; State Save/Load &middot; 27. Multi-Agent Patterns &middot; 28. Advanced Multi-Agent Patterns</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title amber"><div class="dot"></div>25. AutoGen Core (Python) + JS Equivalent</div>
+    <div class="note">AutoGen has no official JS SDK. In TS, replicate the pattern manually or via LangGraph.js.</div>
+    <div class="item"><div class="item-desc">AutoGen – RoundRobinGroupChat</div><code><span class="kw">from</span> autogen_agentchat.teams <span class="kw">import</span> RoundRobinGroupChat
+team = <span class="fn">RoundRobinGroupChat</span>([writer, reviewer], max_turns=<span class="num">6</span>)</code></div>
+    <div class="item"><div class="item-desc">JS/TS manual round-robin equivalent</div><code><span class="kw">const</span> agents=[writerAgent,reviewerAgent];
+<span class="kw">let</span> msgs=[input];
+<span class="kw">for</span>(<span class="kw">let</span> i=<span class="num">0</span>;i&lt;<span class="num">6</span>;i++){
+  <span class="kw">const</span> cur=agents[i%agents.length];
+  <span class="kw">const</span> res=<span class="op">await</span> <span class="fn">run</span>(cur,msgs.<span class="fn">join</span>(<span class="str">"\n"</span>));
+  msgs.<span class="fn">push</span>(res.finalOutput);
+}</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>26. SelectorGroupChat &amp; State Save/Load</div>
+    <div class="item"><div class="item-desc">AutoGen – model picks next speaker</div><code><span class="kw">from</span> autogen_agentchat.teams <span class="kw">import</span> SelectorGroupChat
+team = <span class="fn">SelectorGroupChat</span>(agents, model_client=model,
+  selector_prompt=<span class="str">"Pick the best next agent"</span>)</code></div>
+    <div class="item"><div class="item-desc">AutoGen – save/load team state</div><code>state = <span class="op">await</span> team.save_state()
+<span class="cm"># ...later, resume from saved checkpoint</span>
+<span class="op">await</span> team.load_state(state)</code></div>
+    <div class="item"><div class="item-desc">JS/TS equivalent selector via LLM router</div><code><span class="kw">const</span> pick = <span class="op">await</span> <span class="fn">run</span>(routerAgent, <span class="str">`Who should reply next? ${msgs}`</span>);
+<span class="kw">const</span> next = agents.<span class="fn">find</span>(a =&gt; a.name === pick.finalOutput);</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>27. Multi-Agent Patterns</div>
+    <div class="item"><div class="item-desc">Supervisor (planner delegates to specialists)</div><code><span class="kw">const</span> supervisor=<span class="kw">new</span> <span class="fn">Agent</span>({name:<span class="str">"Supervisor"</span>,
+  handoffs:[researchAgent,codeAgent,testAgent],
+  instructions:<span class="str">"Route task to the right specialist"</span>});</code></div>
+    <div class="item"><div class="item-desc">Sequential pipeline (A output &rarr; B input)</div><code><span class="kw">const</span> plan=<span class="op">await</span> <span class="fn">run</span>(plannerAgent,goal);
+<span class="kw">const</span> code=<span class="op">await</span> <span class="fn">run</span>(coderAgent,plan.finalOutput);
+<span class="kw">const</span> tested=<span class="op">await</span> <span class="fn">run</span>(testerAgent,code.finalOutput);</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title red"><div class="dot"></div>28. Advanced Patterns: Swarm, Debate, Voting</div>
+    <div class="item"><div class="item-desc">Blackboard / Swarm – shared state, event-driven</div><code><span class="cm">// all agents read/write one shared "blackboard" state</span>
+<span class="cm">// each contributes only when its condition matches</span>
+<span class="cm">// good for non-linear, exploratory reasoning</span></code></div>
+    <div class="item"><div class="item-desc">Debate + Voting / Consensus</div><code><span class="kw">const</span> opinions = <span class="op">await</span> <span class="fn">Promise.all</span>(
+  panel.<span class="fn">map</span>(a =&gt; <span class="fn">run</span>(a, question)));
+<span class="kw">const</span> final = <span class="op">await</span> <span class="fn">run</span>(judgeAgent,
+  <span class="str">`Pick best answer: ${opinions.map(o=&gt;o.finalOutput)}`</span>);</code></div>
+  </div></div>
+</div>
+
+<!-- ROW 8 -->
+<div class="section-label">29. Vercel AI SDK – Tools &amp; Structured Output &middot; 30. Vercel AI SDK + MCP &middot; 31. Security &amp; Production Practices &middot; 32. Testing, Deployment &amp; Common Errors</div>
+<div class="grid">
+  <div class="col"><div class="card">
+    <div class="card-title"><div class="dot"></div>29. Vercel AI SDK – Tools &amp; generateObject</div>
+    <div class="item"><div class="item-desc">Tool calling with generateText</div><code><span class="kw">import</span>{generateText,tool}<span class="kw">from</span> <span class="str">"ai"</span>;
+<span class="kw">import</span>{openai}<span class="kw">from</span> <span class="str">"@ai-sdk/openai"</span>;
+<span class="kw">const</span>{text}=<span class="op">await</span> <span class="fn">generateText</span>({
+  model: openai(<span class="str">"gpt-4.1"</span>),
+  tools: { getTicket: <span class="fn">tool</span>({ description: <span class="str">"Get Jira ticket"</span>,
+    parameters: z.<span class="fn">object</span>({ id: z.<span class="fn">string</span>() }),
+    execute: <span class="kw">async</span> ({ id }) =&gt; <span class="fn">fetchTicket</span>(id) }) },
+  prompt: <span class="str">"Get status of QA-1"</span>
+});</code></div>
+    <div class="item"><div class="item-desc">Structured JSON output</div><code><span class="kw">const</span>{object}=<span class="op">await</span> <span class="fn">generateObject</span>({
+  model: openai(<span class="str">"gpt-4.1"</span>), schema: TestPlanSchema, prompt: goal });</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title purple"><div class="dot"></div>30. Vercel AI SDK + MCP</div>
+    <div class="item"><div class="item-desc">Consume an MCP server's tools directly</div><code><span class="kw">import</span>{experimental_createMCPClient <span class="kw">as</span> createMCPClient}<span class="kw">from</span> <span class="str">"ai"</span>;
+<span class="kw">const</span> mcpClient = <span class="op">await</span> <span class="fn">createMCPClient</span>({
+  transport: { type: <span class="str">"stdio"</span>, command: <span class="str">"node"</span>, args: [<span class="str">"./jira-mcp/build/index.js"</span>] }
+});
+<span class="kw">const</span> tools = <span class="op">await</span> mcpClient.<span class="fn">tools</span>();
+<span class="kw">const</span>{text}=<span class="op">await</span> <span class="fn">generateText</span>({ model: openai(<span class="str">"gpt-4.1"</span>), tools, prompt: goal });
+<span class="op">await</span> mcpClient.<span class="fn">close</span>();</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title green"><div class="dot"></div>31. Security &amp; Production Practices</div>
+    <div class="item"><div class="item-desc">OAuth 2.1 on a remote MCP server</div><code>app.<span class="fn">use</span>(<span class="str">"/mcp"</span>,<span class="kw">async</span>(req,res,next)=&gt;{
+  <span class="kw">const</span> token=req.headers.authorization?.<span class="fn">split</span>(<span class="str">" "</span>)[<span class="num">1</span>];
+  <span class="kw">if</span>(<span class="op">!</span><span class="op">await</span> <span class="fn">verifyToken</span>(token)) <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">401</span>).<span class="fn">json</span>({error:<span class="str">"unauthorized"</span>});
+  next();
+});</code></div>
+    <div class="item"><div class="item-desc">Reliability &amp; cost checklist</div><code>✔ maxTurns cap, retry w/ backoff, timeout each tool
+✔ least-privilege scopes per tool, cache tool lists
+✔ never log secrets/tokens in traces</code></div>
+  </div></div>
+  <div class="col"><div class="card">
+    <div class="card-title amber"><div class="dot"></div>32. Testing, Deployment &amp; Common Errors</div>
+    <table class="mini">
+      <tr><th>Layer</th><th>How to test</th></tr>
+      <tr><td>Tool handler</td><td>Unit test (vitest/jest)</td></tr>
+      <tr><td>MCP server</td><td>Inspector + integration test</td></tr>
+      <tr><td>Agent run</td><td>Assert finalOutput schema</td></tr>
+    </table>
+    <table class="mini" style="margin-top:5px;">
+      <tr><th>Error</th><th>Fix</th></tr>
+      <tr><td>Server exits on start</td><td>No console.log in stdio mode</td></tr>
+      <tr><td>Session lost (HTTP)</td><td>Persist by mcp-session-id header</td></tr>
+      <tr><td>Handoff loops forever</td><td>Cap maxTurns / exit condition</td></tr>
+    </table>
+  </div></div>
+</div>
+
+<div class="footer">
+  <div class="left">
+    <span>MCP + AI Agents (Master)</span> Quick Reference · TypeScript / JavaScript ·
+    @modelcontextprotocol/sdk · @openai/agents · @langchain/langgraph · Vercel AI SDK
+  </div>
+  <div class="right">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp; Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,3622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mastering Playwright with JavaScript — Amir Khan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   RESET & VARIABLES
+═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:       #0D2B5E;
+  --navy-mid:   #1A3F7A;
+  --navy-light: #2356A8;
+  --teal:       #00A878;
+  --teal-light: #00D49A;
+  --amber:      #F59E0B;
+  --amber-light:#FDE68A;
+  --bg:         #F8FAFF;
+  --bg-alt:     #EFF3FB;
+  --surface:    #FFFFFF;
+  --border:     #D6E0F5;
+  --text:       #1A2744;
+  --text-mid:   #4A5980;
+  --text-muted: #7B8FB5;
+  --code-bg:    #0D1117;
+  --code-border:#21262D;
+  --tip-bg:     #EDFAF4;
+  --tip-border: #00A878;
+  --ex-bg:      #FFF7ED;
+  --ex-border:  #F59E0B;
+  --sidebar-w:  300px;
+  --header-h:   60px;
+  --radius:     10px;
+  --shadow:     0 4px 24px rgba(13,43,94,0.08);
+  --shadow-lg:  0 12px 48px rgba(13,43,94,0.14);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOP BAR (Mobile)
+═══════════════════════════════════════════════════════════════ */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  padding: 0 1.2rem;
+  z-index: 200;
+  gap: 1rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+}
+.topbar-brand {
+  display: flex; align-items: center; gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+.topbar-logo {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-light));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.topbar-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar-title span { color: var(--teal-light); }
+
+.menu-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+@media (max-width: 900px) {
+  .menu-btn { display: flex; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════════════════════ */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--navy);
+  overflow-y: auto;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+
+.sidebar-header {
+  padding: 1.6rem 1.4rem 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+.sidebar-logo {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 1.2rem;
+}
+.sidebar-logo-icon {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--teal), #00F0B0);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 4px 12px rgba(0,168,120,0.4);
+}
+.sidebar-book-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 12.5px;
+  color: #fff;
+  line-height: 1.4;
+}
+.sidebar-book-sub {
+  font-size: 10px;
+  color: var(--teal-light);
+  margin-top: 2px;
+}
+
+/* Author card in sidebar */
+.sidebar-author {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.sidebar-author-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+}
+.sidebar-author-role {
+  font-size: 10.5px;
+  color: var(--teal-light);
+  margin-top: 1px;
+}
+.sidebar-author-institute {
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 4px;
+  display: flex; align-items: center; gap: 5px;
+}
+
+/* Progress bar */
+.reading-progress {
+  padding: 0.8rem 1.4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+.progress-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+  display: flex; justify-content: space-between;
+}
+.progress-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--teal-light));
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Nav */
+.sidebar-nav {
+  flex: 1;
+  padding: 0.6rem 0 1rem;
+  overflow-y: auto;
+}
+.nav-section {
+  padding: 0.6rem 1.4rem 0.3rem;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: rgba(255,255,255,0.3);
+}
+.nav-item { list-style: none; }
+.nav-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 1.4rem;
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.18s ease;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+.nav-link:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.05);
+}
+.nav-link.active {
+  color: var(--teal-light);
+  background: rgba(0,168,120,0.12);
+  border-left-color: var(--teal);
+}
+.nav-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  width: 22px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.nav-link.active .nav-num { color: var(--teal); }
+.nav-text { line-height: 1.3; }
+
+/* Institute badge in sidebar footer */
+.sidebar-footer {
+  padding: 1rem 1.4rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+.institute-badge {
+  background: linear-gradient(135deg, rgba(0,168,120,0.15), rgba(0,212,154,0.08));
+  border: 1px solid rgba(0,168,120,0.25);
+  border-radius: 8px;
+  padding: 10px 12px;
+  text-align: center;
+}
+.institute-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--teal-light);
+  margin-bottom: 2px;
+}
+.institute-url {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    transform: translateX(-100%);
+    top: var(--header-h);
+  }
+  .sidebar.open { transform: translateX(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN CONTENT
+═══════════════════════════════════════════════════════════════ */
+.main {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+  padding-top: 0;
+}
+@media (max-width: 900px) {
+  .main { margin-left: 0; padding-top: var(--header-h); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COVER PAGE
+═══════════════════════════════════════════════════════════════ */
+.cover {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #050F28 0%, #0D2B5E 40%, #1A3F7A 70%, #0D3B6E 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  overflow: hidden;
+}
+.cover::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(0,168,120,0.12) 0%, transparent 70%),
+              radial-gradient(ellipse 60% 40% at 20% 20%, rgba(245,158,11,0.06) 0%, transparent 60%);
+}
+.cover-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.cover-content { position: relative; z-index: 1; max-width: 720px; }
+
+.cover-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,168,120,0.15);
+  border: 1px solid rgba(0,168,120,0.35);
+  color: var(--teal-light);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 30px;
+  margin-bottom: 2rem;
+}
+.cover-badge-dot {
+  width: 6px; height: 6px;
+  background: var(--teal);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.cover-icon {
+  font-size: 80px;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 30px rgba(0,168,120,0.5));
+  animation: float 4s ease-in-out infinite;
+}
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+.cover-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  letter-spacing: -0.5px;
+}
+.cover-title-accent { color: var(--teal-light); }
+
+.cover-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 3rem;
+  font-weight: 300;
+}
+
+.cover-divider {
+  width: 80px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  margin: 0 auto 2.5rem;
+}
+
+.cover-author {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.cover-author-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+.cover-author-role {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.55);
+}
+.cover-institute {
+  margin-top: 10px;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(245,158,11,0.12);
+  border: 1px solid rgba(245,158,11,0.25);
+  color: var(--amber-light);
+  font-size: 11px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* Tags */
+.cover-tags {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 3rem;
+}
+.cover-tag {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.65);
+  font-size: 11px; padding: 5px 12px; border-radius: 20px;
+}
+
+/* Scroll hint */
+.scroll-hint {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: rgba(255,255,255,0.35); font-size: 11px; letter-spacing: 0.5px;
+}
+.scroll-arrow {
+  width: 1px; height: 40px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.4), transparent);
+  animation: scrollDown 2s ease infinite;
+}
+@keyframes scrollDown { 0%{opacity:1;transform:scaleY(1)} 100%{opacity:0;transform:scaleY(0);transform-origin:top} }
+
+/* ═══════════════════════════════════════════════════════════════
+   ABOUT PAGE
+═══════════════════════════════════════════════════════════════ */
+.about-section {
+  background: var(--surface);
+  padding: 5rem 4rem;
+  border-bottom: 1px solid var(--border);
+}
+@media(max-width:768px){ .about-section{padding:3rem 1.5rem;} }
+
+.about-grid {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 3rem;
+  align-items: start;
+}
+@media(max-width:700px){ .about-grid{grid-template-columns:1fr;} }
+
+.about-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 1rem;
+}
+.about-heading span { color: var(--teal); }
+.about-text { color: var(--text-mid); line-height: 1.75; margin-bottom: 1.2rem; font-size: 15px; }
+
+.about-features {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1.5rem;
+}
+.feature-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px; font-weight: 600; color: var(--navy);
+}
+.feature-chip-icon { font-size: 15px; }
+
+/* Author card */
+.author-card {
+  background: linear-gradient(145deg, var(--navy), var(--navy-mid));
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  color: #fff;
+  box-shadow: var(--shadow-lg);
+  position: sticky; top: 2rem;
+}
+.author-avatar {
+  width: 80px; height: 80px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-light));
+  border-radius: 50%;
+  margin: 0 auto 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  box-shadow: 0 8px 24px rgba(0,168,120,0.4);
+}
+.author-card-name { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; }
+.author-card-role { font-size:12px; color:rgba(255,255,255,0.6); margin-top:4px; }
+.author-stats {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 1.4rem 0;
+}
+.author-stat {
+  background: rgba(255,255,255,0.07);
+  border-radius: 8px; padding: 10px;
+}
+.author-stat-num { font-size:1.2rem; font-weight:700; color:var(--teal-light); }
+.author-stat-label { font-size:9.5px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.5px; }
+
+.institute-card {
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 10px; padding: 14px; margin-top: 1rem;
+}
+.institute-card-name { font-weight:700; font-size:13px; color:var(--amber-light); }
+.institute-card-url { font-size:11px; color:rgba(255,255,255,0.4); margin-top:3px; }
+.institute-card-desc { font-size:11px; color:rgba(255,255,255,0.55); margin-top:6px; line-height:1.4; }
+
+/* ═══════════════════════════════════════════════════════════════
+   CHAPTERS
+═══════════════════════════════════════════════════════════════ */
+.chapter {
+  padding: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.chapter-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  padding: 3.5rem 4rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.chapter-header::before {
+  content: '';
+  position: absolute;
+  right: -40px; top: -40px;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+.chapter-header::after {
+  content: attr(data-chapter-bg);
+  position: absolute;
+  right: 3rem; top: 50%; transform: translateY(-50%);
+  font-family: 'Playfair Display', serif;
+  font-size: 9rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.04);
+  line-height: 1;
+  pointer-events: none;
+}
+@media(max-width:768px){ .chapter-header{padding:2.5rem 1.5rem;} }
+
+.chapter-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--teal-light);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 10px;
+}
+.chapter-number::before {
+  content: '';
+  width: 30px; height: 1px;
+  background: var(--teal);
+}
+.chapter-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+  max-width: 680px;
+}
+.chapter-divider {
+  width: 50px; height: 3px;
+  background: linear-gradient(90deg, var(--teal), transparent);
+  margin-top: 1.5rem;
+  border-radius: 2px;
+}
+
+.chapter-content {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 3rem 4rem;
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text);
+}
+@media(max-width:768px){ .chapter-content{padding:2rem 1.5rem;} }
+
+/* Typography in chapters */
+.chapter-content p {
+  margin-bottom: 1.2rem;
+  color: var(--text-mid);
+}
+.section-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 2.5rem 0 1rem;
+  padding-left: 14px;
+  border-left: 3px solid var(--teal);
+  line-height: 1.4;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CODE BLOCKS
+═══════════════════════════════════════════════════════════════ */
+.code-block {
+  margin: 1.5rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--code-border);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  position: relative;
+}
+.code-block::before {
+  content: '';
+  display: block;
+  background: #161B22;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid var(--code-border);
+  position: relative;
+}
+.code-block pre {
+  margin: 0;
+  background: var(--code-bg) !important;
+  border-radius: 0 !important;
+  padding: 1.4rem 1.6rem !important;
+  overflow-x: auto;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+}
+.code-block pre code {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  background: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+/* Code dots decoration */
+.code-block { position: relative; }
+.code-block::before {
+  content: '● ● ●';
+  display: block;
+  color: rgba(255,255,255,0.2);
+  font-size: 9px;
+  letter-spacing: 3px;
+  background: #161B22;
+  padding: 10px 16px;
+  border-bottom: 1px solid #21262D;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CALLOUTS
+═══════════════════════════════════════════════════════════════ */
+.callout {
+  display: flex;
+  gap: 14px;
+  padding: 1.2rem 1.4rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+}
+.callout.tip {
+  background: var(--tip-bg);
+  border: 1px solid #A8DFD0;
+  border-left: 4px solid var(--tip-border);
+}
+.callout.exercise {
+  background: var(--ex-bg);
+  border: 1px solid #F5CFA8;
+  border-left: 4px solid var(--ex-border);
+}
+.callout-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+.callout-body strong {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.callout.tip .callout-body strong { color: #006B50; }
+.callout.exercise .callout-body strong { color: #9A3E00; }
+.callout-body p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  margin-bottom: 0 !important;
+}
+.callout.tip .callout-body p { color: #1A5C46 !important; }
+.callout.exercise .callout-body p { color: #7C3200 !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   LISTS
+═══════════════════════════════════════════════════════════════ */
+.styled-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 1.5rem;
+}
+.styled-list li {
+  position: relative;
+  padding: 6px 0 6px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14.5px;
+  color: var(--text-mid);
+  border-bottom: 1px solid rgba(214,224,245,0.4);
+  line-height: 1.5;
+}
+.styled-list li:last-child { border-bottom: none; }
+.styled-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 4px;
+  color: var(--teal);
+  font-size: 12px;
+  top: 7px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TABLES
+═══════════════════════════════════════════════════════════════ */
+.table-wrap {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table thead tr {
+  background: var(--navy);
+  color: #fff;
+}
+.data-table th {
+  padding: 12px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 11px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text-mid);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.data-table tbody tr:nth-child(even) { background: var(--bg); }
+.data-table tbody tr:hover { background: var(--bg-alt); }
+.data-table tbody tr:last-child td { border-bottom: none; }
+
+/* ═══════════════════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════════════════ */
+.book-footer {
+  background: var(--navy);
+  color: rgba(255,255,255,0.6);
+  padding: 3rem 4rem;
+  text-align: center;
+}
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.footer-brand span { color: var(--teal-light); }
+.footer-meta { font-size: 13px; margin-bottom: 1rem; }
+.footer-institute {
+  display: inline-block;
+  background: rgba(0,168,120,0.15);
+  border: 1px solid rgba(0,168,120,0.3);
+  color: var(--teal-light);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+  text-decoration: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   OVERLAY (mobile)
+═══════════════════════════════════════════════════════════════ */
+.overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 140;
+  backdrop-filter: blur(2px);
+}
+.overlay.open { display: block; }
+@media(min-width:901px){ .overlay{ display:none !important; } }
+
+/* ═══════════════════════════════════════════════════════════════
+   PRINT
+═══════════════════════════════════════════════════════════════ */
+@media print {
+  .sidebar, .topbar, .menu-btn, .scroll-hint, .overlay { display: none !important; }
+  .main { margin-left: 0; padding-top: 0; }
+  .chapter-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .code-block { page-break-inside: avoid; }
+  .callout { page-break-inside: avoid; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOC PAGE
+═══════════════════════════════════════════════════════════════ */
+.toc-page {
+  padding: 4rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+@media(max-width:768px){ .toc-page{ padding: 2rem 1.5rem; } }
+.toc-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.5rem;
+}
+.toc-subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 2.5rem; }
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 10px;
+  max-width: 900px;
+}
+.toc-item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.18s;
+}
+.toc-item:hover {
+  background: var(--bg-alt);
+  border-color: var(--teal);
+  transform: translateX(4px);
+}
+.toc-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--teal);
+  background: rgba(0,168,120,0.08);
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.toc-title {
+  font-size: 13px; font-weight: 600; color: var(--navy); line-height: 1.35;
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR (mobile) -->
+<div class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <div class="topbar-brand">
+    <div class="topbar-logo">🎭</div>
+    <div class="topbar-title">Mastering <span>Playwright</span></div>
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🎭</div>
+      <div>
+        <div class="sidebar-book-title">Mastering Playwright<br>with JavaScript</div>
+        <div class="sidebar-book-sub">Beginner to Advanced</div>
+      </div>
+    </div>
+    <div class="sidebar-author">
+      <div class="sidebar-author-name">✍️ Amir Khan</div>
+      <div class="sidebar-author-role">Lead SDET (Automation Engineer)</div>
+      <div class="sidebar-author-institute">🏫 Next Gen QA IT Coaching</div>
+    </div>
+  </div>
+
+  <div class="reading-progress">
+    <div class="progress-label">
+      <span>Reading Progress</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">Chapters</div>
+    <ul style="list-style:none;padding:0">
+      <li class="nav-item">
+        <a href="#cover" class="nav-link" data-target="cover">
+          <span class="nav-num">00</span>
+          <span class="nav-text">Cover & Introduction</span>
+        </a>
+      </li>
+      <li class="nav-item">
+  <a href="#chapter-1" class="nav-link" data-target="chapter-1">
+    <span class="nav-num">01</span>
+    <span class="nav-text">Introduction to Automation Testing</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-2" class="nav-link" data-target="chapter-2">
+    <span class="nav-num">02</span>
+    <span class="nav-text">Introduction to Playwright</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-3" class="nav-link" data-target="chapter-3">
+    <span class="nav-num">03</span>
+    <span class="nav-text">Setup Playwright with JavaScript</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-4" class="nav-link" data-target="chapter-4">
+    <span class="nav-num">04</span>
+    <span class="nav-text">Playwright Architecture &amp; Internals</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-5" class="nav-link" data-target="chapter-5">
+    <span class="nav-num">05</span>
+    <span class="nav-text">Playwright CLI – Commands &amp; Usage</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-6" class="nav-link" data-target="chapter-6">
+    <span class="nav-num">06</span>
+    <span class="nav-text">Locators – Advanced Strategies</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-7" class="nav-link" data-target="chapter-7">
+    <span class="nav-num">07</span>
+    <span class="nav-text">Handling UI Elements – Forms, Alerts, Frames</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-8" class="nav-link" data-target="chapter-8">
+    <span class="nav-num">08</span>
+    <span class="nav-text">Assertions &amp; Validations</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-9" class="nav-link" data-target="chapter-9">
+    <span class="nav-num">09</span>
+    <span class="nav-text">Test Organization &amp; Fixtures</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-10" class="nav-link" data-target="chapter-10">
+    <span class="nav-num">10</span>
+    <span class="nav-text">Parallel Execution &amp; Performance</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-11" class="nav-link" data-target="chapter-11">
+    <span class="nav-num">11</span>
+    <span class="nav-text">Cross-Browser Testing</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-12" class="nav-link" data-target="chapter-12">
+    <span class="nav-num">12</span>
+    <span class="nav-text">API Testing with Playwright</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-13" class="nav-link" data-target="chapter-13">
+    <span class="nav-num">13</span>
+    <span class="nav-text">Authentication &amp; Session Handling</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-14" class="nav-link" data-target="chapter-14">
+    <span class="nav-num">14</span>
+    <span class="nav-text">File Upload &amp; Download</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-15" class="nav-link" data-target="chapter-15">
+    <span class="nav-num">15</span>
+    <span class="nav-text">Debugging &amp; Tracing</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-16" class="nav-link" data-target="chapter-16">
+    <span class="nav-num">16</span>
+    <span class="nav-text">Custom Framework Design – Hybrid Framework</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-17" class="nav-link" data-target="chapter-17">
+    <span class="nav-num">17</span>
+    <span class="nav-text">Data-Driven Testing</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-18" class="nav-link" data-target="chapter-18">
+    <span class="nav-num">18</span>
+    <span class="nav-text">Page Object Model (POM)</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-19" class="nav-link" data-target="chapter-19">
+    <span class="nav-num">19</span>
+    <span class="nav-text">Docker Integration</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-20" class="nav-link" data-target="chapter-20">
+    <span class="nav-num">20</span>
+    <span class="nav-text">CI/CD Integration using Jenkins</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-21" class="nav-link" data-target="chapter-21">
+    <span class="nav-num">21</span>
+    <span class="nav-text">Reporting – Allure &amp; HTML Reports</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-22" class="nav-link" data-target="chapter-22">
+    <span class="nav-num">22</span>
+    <span class="nav-text">Advanced Playwright Hooks &amp; Events</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-23" class="nav-link" data-target="chapter-23">
+    <span class="nav-num">23</span>
+    <span class="nav-text">Error Handling &amp; Retry Strategies</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-24" class="nav-link" data-target="chapter-24">
+    <span class="nav-num">24</span>
+    <span class="nav-text">Best Practices &amp; Design Patterns</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-25" class="nav-link" data-target="chapter-25">
+    <span class="nav-num">25</span>
+    <span class="nav-text">AI in Test Automation</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-26" class="nav-link" data-target="chapter-26">
+    <span class="nav-num">26</span>
+    <span class="nav-text">Agentic AI in Testing</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-27" class="nav-link" data-target="chapter-27">
+    <span class="nav-num">27</span>
+    <span class="nav-text">MCP – Model Context Protocol Integration</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-28" class="nav-link" data-target="chapter-28">
+    <span class="nav-num">28</span>
+    <span class="nav-text">Building Smart Test Agents</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-29" class="nav-link" data-target="chapter-29">
+    <span class="nav-num">29</span>
+    <span class="nav-text">Scaling Automation for Enterprise</span>
+  </a>
+</li><li class="nav-item">
+  <a href="#chapter-30" class="nav-link" data-target="chapter-30">
+    <span class="nav-num">30</span>
+    <span class="nav-text">Interview Questions &amp; Answers</span>
+  </a>
+</li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="institute-badge">
+      <div class="institute-name">🎓 Next Gen QA IT Coaching</div>
+      <div class="institute-url">nextgenqa94-ui.github.io/nextgenqa</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- ── COVER ── -->
+  <div class="cover" id="cover">
+    <div class="cover-grid"></div>
+    <div class="cover-content">
+      <div class="cover-badge"><span class="cover-badge-dot"></span> Complete Guide · 30 Chapters</div>
+      <div class="cover-icon">🎭</div>
+      <h1 class="cover-title">Mastering <span class="cover-title-accent">Playwright</span><br>with JavaScript</h1>
+      <p class="cover-subtitle">From Beginner to Advanced with AI, Docker &amp; CI/CD</p>
+      <div class="cover-divider"></div>
+      <div class="cover-author">
+        <div class="cover-author-name">Amir Khan</div>
+        <div class="cover-author-role">Lead SDET (Automation Engineer)</div>
+        <div class="cover-institute">🎓 Next Gen QA IT Coaching Classes</div>
+      </div>
+      <div class="cover-tags">
+        <span class="cover-tag">Playwright</span>
+        <span class="cover-tag">JavaScript</span>
+        <span class="cover-tag">CI/CD</span>
+        <span class="cover-tag">Docker</span>
+        <span class="cover-tag">AI Testing</span>
+        <span class="cover-tag">MCP</span>
+        <span class="cover-tag">Page Object Model</span>
+        <span class="cover-tag">Interview Prep</span>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-arrow"></div>
+      Scroll to start reading
+    </div>
+  </div>
+
+  <!-- ── ABOUT ── -->
+  <div class="about-section">
+    <div class="about-grid">
+      <div>
+        <h2 class="about-heading">About <span>This Book</span></h2>
+        <p class="about-text">This is a comprehensive, practical guide to mastering Playwright with JavaScript — covering everything from your very first test to building enterprise-grade, AI-powered automation frameworks that are production-ready.</p>
+        <p class="about-text">Every chapter includes working code examples, real-world scenarios, pro tips from industry experience, and hands-on exercises that solidify your understanding. By the end, you'll be able to confidently design, build, and scale test automation systems.</p>
+        <div class="about-features">
+          <div class="feature-chip"><span class="feature-chip-icon">✅</span> 30 Chapters</div>
+          <div class="feature-chip"><span class="feature-chip-icon">💻</span> 200+ Code Examples</div>
+          <div class="feature-chip"><span class="feature-chip-icon">🤖</span> AI &amp; MCP Coverage</div>
+          <div class="feature-chip"><span class="feature-chip-icon">🐳</span> Docker + Jenkins CI/CD</div>
+          <div class="feature-chip"><span class="feature-chip-icon">🎯</span> Interview Ready</div>
+          <div class="feature-chip"><span class="feature-chip-icon">📱</span> Mobile Friendly</div>
+        </div>
+      </div>
+      <div>
+        <div class="author-card">
+          <div class="author-avatar">👨‍💻</div>
+          <div class="author-card-name">Amir Khan</div>
+          <div class="author-card-role">Lead SDET (Automation Engineer)</div>
+          <div class="author-stats">
+            <div class="author-stat"><div class="author-stat-num">5+</div><div class="author-stat-label">Years SDET</div></div>
+            <div class="author-stat"><div class="author-stat-num">30</div><div class="author-stat-label">Chapters</div></div>
+            <div class="author-stat"><div class="author-stat-num">MCP</div><div class="author-stat-label">AI Expert</div></div>
+            <div class="author-stat"><div class="author-stat-num">🏦</div><div class="author-stat-label">Freecharge</div></div>
+          </div>
+          <div class="institute-card">
+            <div class="institute-card-name">🎓 Next Gen QA IT Coaching</div>
+            <div class="institute-card-url">nextgenqa94-ui.github.io/nextgenqa</div>
+            <div class="institute-card-desc">Teaching Manual Testing, Selenium, Playwright &amp; API Testing to the next generation of QA engineers.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TABLE OF CONTENTS ── -->
+  <div class="toc-page" id="toc">
+    <h2 class="toc-heading">Table of Contents</h2>
+    <p class="toc-subtitle">30 chapters from fundamentals to AI-powered enterprise automation</p>
+    <div class="toc-grid">
+      <a href="#chapter-1" class="toc-item"><div class="toc-num">01</div><div class="toc-title">Introduction to Automation Testing</div></a><a href="#chapter-2" class="toc-item"><div class="toc-num">02</div><div class="toc-title">Introduction to Playwright</div></a><a href="#chapter-3" class="toc-item"><div class="toc-num">03</div><div class="toc-title">Setup Playwright with JavaScript</div></a><a href="#chapter-4" class="toc-item"><div class="toc-num">04</div><div class="toc-title">Playwright Architecture &amp; Internals</div></a><a href="#chapter-5" class="toc-item"><div class="toc-num">05</div><div class="toc-title">Playwright CLI – Commands &amp; Usage</div></a><a href="#chapter-6" class="toc-item"><div class="toc-num">06</div><div class="toc-title">Locators – Advanced Strategies</div></a><a href="#chapter-7" class="toc-item"><div class="toc-num">07</div><div class="toc-title">Handling UI Elements – Forms, Alerts, Frames</div></a><a href="#chapter-8" class="toc-item"><div class="toc-num">08</div><div class="toc-title">Assertions &amp; Validations</div></a><a href="#chapter-9" class="toc-item"><div class="toc-num">09</div><div class="toc-title">Test Organization &amp; Fixtures</div></a><a href="#chapter-10" class="toc-item"><div class="toc-num">10</div><div class="toc-title">Parallel Execution &amp; Performance</div></a><a href="#chapter-11" class="toc-item"><div class="toc-num">11</div><div class="toc-title">Cross-Browser Testing</div></a><a href="#chapter-12" class="toc-item"><div class="toc-num">12</div><div class="toc-title">API Testing with Playwright</div></a><a href="#chapter-13" class="toc-item"><div class="toc-num">13</div><div class="toc-title">Authentication &amp; Session Handling</div></a><a href="#chapter-14" class="toc-item"><div class="toc-num">14</div><div class="toc-title">File Upload &amp; Download</div></a><a href="#chapter-15" class="toc-item"><div class="toc-num">15</div><div class="toc-title">Debugging &amp; Tracing</div></a><a href="#chapter-16" class="toc-item"><div class="toc-num">16</div><div class="toc-title">Custom Framework Design – Hybrid Framework</div></a><a href="#chapter-17" class="toc-item"><div class="toc-num">17</div><div class="toc-title">Data-Driven Testing</div></a><a href="#chapter-18" class="toc-item"><div class="toc-num">18</div><div class="toc-title">Page Object Model (POM)</div></a><a href="#chapter-19" class="toc-item"><div class="toc-num">19</div><div class="toc-title">Docker Integration</div></a><a href="#chapter-20" class="toc-item"><div class="toc-num">20</div><div class="toc-title">CI/CD Integration using Jenkins</div></a><a href="#chapter-21" class="toc-item"><div class="toc-num">21</div><div class="toc-title">Reporting – Allure &amp; HTML Reports</div></a><a href="#chapter-22" class="toc-item"><div class="toc-num">22</div><div class="toc-title">Advanced Playwright Hooks &amp; Events</div></a><a href="#chapter-23" class="toc-item"><div class="toc-num">23</div><div class="toc-title">Error Handling &amp; Retry Strategies</div></a><a href="#chapter-24" class="toc-item"><div class="toc-num">24</div><div class="toc-title">Best Practices &amp; Design Patterns</div></a><a href="#chapter-25" class="toc-item"><div class="toc-num">25</div><div class="toc-title">AI in Test Automation</div></a><a href="#chapter-26" class="toc-item"><div class="toc-num">26</div><div class="toc-title">Agentic AI in Testing</div></a><a href="#chapter-27" class="toc-item"><div class="toc-num">27</div><div class="toc-title">MCP – Model Context Protocol Integration</div></a><a href="#chapter-28" class="toc-item"><div class="toc-num">28</div><div class="toc-title">Building Smart Test Agents</div></a><a href="#chapter-29" class="toc-item"><div class="toc-num">29</div><div class="toc-title">Scaling Automation for Enterprise</div></a><a href="#chapter-30" class="toc-item"><div class="toc-num">30</div><div class="toc-title">Interview Questions &amp; Answers</div></a>
+    </div>
+  </div>
+
+  <!-- ── ALL CHAPTERS ── -->
+  <section class="chapter" id="chapter-1" data-chapter="1">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 01</div>
+    <h1 class="chapter-title">Introduction to Automation Testing</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">1.1 What is Software Testing?</h2>
+<p>Software testing is the process of evaluating a system or application to find defects, ensure quality, and verify that it meets specified requirements. Testing is not just about finding bugs — it is about building confidence that software works as intended for end users.</p>
+<h2 class="section-title">1.2 Manual vs Automation Testing</h2>
+<p>Manual testing involves a human tester interacting with the software, following test cases, and documenting results. While effective for exploratory and usability testing, manual testing is slow, error-prone, and not scalable.</p>
+<p>Automation testing uses scripts and tools to execute tests automatically, compare actual vs expected results, and generate reports — all without human intervention. It is faster, repeatable, and essential for Continuous Integration.</p>
+<div class="table-wrap"><table class="data-table">
+  <thead><tr><th>Aspect</th><th>Manual Testing</th><th>Automation Testing</th></tr></thead>
+  <tbody><tr><td>Speed</td><td>Slow</td><td>Fast</td></tr><tr><td>Accuracy</td><td>Human error possible</td><td>Highly accurate</td></tr><tr><td>Cost (long term)</td><td>High</td><td>Low</td></tr><tr><td>Reusability</td><td>None</td><td>High</td></tr><tr><td>Best For</td><td>Exploratory, UX</td><td>Regression, Load, CI/CD</td></tr></tbody>
+</table></div>
+<h2 class="section-title">1.3 Types of Automation Testing</h2>
+<ul class="styled-list"><li>Unit Testing – Tests individual functions/components</li><li>Integration Testing – Tests interaction between modules</li><li>End-to-End (E2E) Testing – Tests complete user workflows</li><li>API Testing – Tests backend REST/GraphQL services</li><li>Performance Testing – Tests speed and scalability</li><li>Visual Regression Testing – Detects UI changes</li></ul>
+<h2 class="section-title">1.4 The Testing Pyramid</h2>
+<p>The testing pyramid is a concept introduced by Mike Cohn. It recommends having more unit tests at the base, fewer integration tests in the middle, and even fewer E2E tests at the top.</p>
+<div class="code-block"><pre><code>/\
+        /  \
+       / E2E \        ← Few, Slow, Expensive
+      /--------\
+     / Integration\   ← Medium
+    /--------------\
+   /   Unit Tests   \  ← Many, Fast, Cheap
+  /------------------\</code></pre></div>
+<h2 class="section-title">1.5 Why Playwright for E2E Automation?</h2>
+<ul class="styled-list"><li>Supports Chromium, Firefox, and WebKit natively</li><li>Auto-wait built-in — no flaky sleeps needed</li><li>Supports JavaScript, TypeScript, Python, Java, C#</li><li>API testing built right into the framework</li><li>Network interception and mocking</li><li>Parallel execution out of the box</li><li>Codegen — record tests by clicking</li><li>Trace viewer — visual debugging tool</li><li>Backed by Microsoft, actively maintained</li></ul>
+<h2 class="section-title">1.6 SDET Role in Modern Teams</h2>
+<p>A Software Development Engineer in Test (SDET) is responsible for building test infrastructure, automation frameworks, CI/CD pipelines, and ensuring quality is baked into the development process — not added as an afterthought. SDETs write production-quality code and collaborate closely with developers.</p>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: As an SDET, focus on building reusable, maintainable frameworks — not just test scripts. Your code quality should match or exceed the application code quality.</p></div>
+</div>
+<h2 class="section-title">1.7 Summary</h2>
+<ul class="styled-list"><li>Automation testing speeds up releases and improves reliability</li><li>The testing pyramid guides how many tests of each type to write</li><li>Playwright is the modern choice for E2E and API automation</li><li>SDETs own quality infrastructure, not just test scripts</li></ul>
+<div class="callout exercise">
+  <div class="callout-icon">✏️</div>
+  <div class="callout-body"><strong>Hands-On Exercise</strong><p>Exercise 1: Research 3 companies using Playwright in production. What problems did they solve? Document your findings in a short report.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-2" data-chapter="2">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 02</div>
+    <h1 class="chapter-title">Introduction to Playwright</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">2.1 What is Playwright?</h2>
+<p>Playwright is an open-source browser automation library developed by Microsoft. Released in 2020, it was built by the same team that created Puppeteer at Google. Playwright enables reliable end-to-end testing for modern web applications.</p>
+<h2 class="section-title">2.2 Playwright vs Other Tools</h2>
+<div class="table-wrap"><table class="data-table">
+  <thead><tr><th>Feature</th><th>Playwright</th><th>Selenium</th><th>Cypress</th></tr></thead>
+  <tbody><tr><td>Multi-browser</td><td>✅ All 3 engines</td><td>✅ WebDriver</td><td>⚠️ Chrome/FF only</td></tr><tr><td>Auto-wait</td><td>✅ Built-in</td><td>❌ Manual waits</td><td>✅ Built-in</td></tr><tr><td>API Testing</td><td>✅ Native</td><td>❌ No</td><td>✅ Plugin</td></tr><tr><td>Network Mock</td><td>✅ Yes</td><td>❌ No</td><td>✅ Yes</td></tr><tr><td>Parallel</td><td>✅ Workers</td><td>⚠️ Grid needed</td><td>⚠️ Paid</td></tr><tr><td>Languages</td><td>5 languages</td><td>Many</td><td>JS/TS only</td></tr><tr><td>Mobile</td><td>✅ Emulation</td><td>✅ Appium</td><td>⚠️ Limited</td></tr></tbody>
+</table></div>
+<h2 class="section-title">2.3 Key Playwright Concepts</h2>
+<ul class="styled-list"><li>Browser – Chromium, Firefox, or WebKit instance</li><li>BrowserContext – Isolated browser session (like incognito)</li><li>Page – Single browser tab or window</li><li>Locator – Smart element finder with auto-retry</li><li>Frame – iframe or child frame handle</li><li>Route – Network request interception</li><li>Trace – Recording of test execution for debugging</li></ul>
+<h2 class="section-title">2.4 Playwright Architecture Overview</h2>
+<div class="code-block"><pre><code>┌─────────────────────────────────────────────┐
+│              Your Test Code (JS/TS)         │
+└──────────────────┬──────────────────────────┘
+                   │ Playwright API
+┌──────────────────▼──────────────────────────┐
+│         Playwright Node.js Library          │
+└──────────┬──────────────────────────────────┘
+           │ WebSocket / CDP / BiDi Protocol
+┌──────────▼──────────────────────────────────┐
+│     Browser Engine (Chromium/FF/WebKit)     │
+└─────────────────────────────────────────────┘</code></pre></div>
+<h2 class="section-title">2.5 What Makes Playwright Special</h2>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Playwright&#x27;s auto-waiting mechanism waits for elements to be visible, enabled, and stable before interacting — eliminating 90% of test flakiness without any sleep() calls.</p></div>
+</div>
+<p>Playwright uses the Chrome DevTools Protocol (CDP) for Chromium and custom protocols for Firefox and WebKit. This low-level access enables features like network interception, device emulation, and geolocation mocking.</p>
+<h2 class="section-title">2.6 Summary</h2>
+<ul class="styled-list"><li>Playwright was built by Microsoft ex-Puppeteer team</li><li>Supports all 3 browser engines natively</li><li>Auto-wait eliminates flaky tests</li><li>Runs in Node.js with JavaScript or TypeScript</li><li>Enterprise-ready with parallel execution and CI/CD support</li></ul>
+<div class="callout exercise">
+  <div class="callout-icon">✏️</div>
+  <div class="callout-body"><strong>Hands-On Exercise</strong><p>Exercise 2: Visit playwright.dev and explore the docs. List 5 features you find most useful for your current project.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-3" data-chapter="3">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 03</div>
+    <h1 class="chapter-title">Setup Playwright with JavaScript</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">3.1 Prerequisites</h2>
+<ul class="styled-list"><li>Node.js v18+ installed (download from nodejs.org)</li><li>VS Code or any modern editor</li><li>Terminal / Command Prompt access</li><li>Git (for version control)</li></ul>
+<h2 class="section-title">3.2 Project Initialization</h2>
+<div class="code-block"><pre><code># Create a new project folder
+mkdir playwright-project &amp;&amp; cd playwright-project
+
+# Initialize Node.js project
+npm init -y
+
+# Install Playwright with Test Runner
+npm init playwright@latest
+
+# Follow the prompts:
+# ✔ Do you want to use TypeScript or JavaScript? → JavaScript
+# ✔ Where to put your end-to-end tests? → tests
+# ✔ Add a GitHub Actions workflow? → Yes
+# ✔ Install Playwright browsers → Yes</code></pre></div>
+<h2 class="section-title">3.3 Project Structure</h2>
+<div class="code-block"><pre><code>playwright-project/
+├── tests/
+│   ├── example.spec.js       ← Sample test
+│   └── demo-todo-app.spec.js
+├── playwright.config.js      ← Main config file
+├── package.json
+├── package-lock.json
+└── .github/
+    └── workflows/
+        └── playwright.yml    ← GitHub Actions CI</code></pre></div>
+<h2 class="section-title">3.4 playwright.config.js Explained</h2>
+<div class="code-block"><pre><code>// playwright.config.js
+const { defineConfig, devices } = require(&#x27;@playwright/test&#x27;);
+
+module.exports = defineConfig({
+  testDir: &#x27;./tests&#x27;,
+  fullyParallel: true,        // Run tests in parallel
+  retries: process.env.CI ? 2 : 0,  // Retry on CI
+  workers: process.env.CI ? 1 : undefined,
+  reporter: [
+    [&#x27;html&#x27;],                 // HTML report
+    [&#x27;list&#x27;]                  // Console output
+  ],
+  use: {
+    baseURL: &#x27;https://your-app.com&#x27;,
+    trace: &#x27;on-first-retry&#x27;,  // Capture trace on failure
+    screenshot: &#x27;only-on-failure&#x27;,
+    video: &#x27;retain-on-failure&#x27;,
+    headless: true,
+  },
+  projects: [
+    { name: &#x27;chromium&#x27;, use: { ...devices[&#x27;Desktop Chrome&#x27;] } },
+    { name: &#x27;firefox&#x27;,  use: { ...devices[&#x27;Desktop Firefox&#x27;] } },
+    { name: &#x27;webkit&#x27;,   use: { ...devices[&#x27;Desktop Safari&#x27;] } },
+  ],
+});</code></pre></div>
+<h2 class="section-title">3.5 Your First Test</h2>
+<div class="code-block"><pre><code>// tests/first.spec.js
+const { test, expect } = require(&#x27;@playwright/test&#x27;);
+
+test(&#x27;homepage has correct title&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;https://playwright.dev/&#x27;);
+  await expect(page).toHaveTitle(/Playwright/);
+});
+
+test(&#x27;get started link works&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;https://playwright.dev/&#x27;);
+  await page.getByRole(&#x27;link&#x27;, { name: &#x27;Get started&#x27; }).click();
+  await expect(page).toHaveURL(/.*intro/);
+});</code></pre></div>
+<h2 class="section-title">3.6 Running Tests</h2>
+<div class="code-block"><pre><code># Run all tests
+npx playwright test
+
+# Run specific file
+npx playwright test tests/first.spec.js
+
+# Run with headed browser (visible)
+npx playwright test --headed
+
+# Run specific browser
+npx playwright test --project=chromium
+
+# Show HTML report
+npx playwright show-report
+
+# Run in debug mode
+npx playwright test --debug</code></pre></div>
+<h2 class="section-title">3.7 Installing Browsers</h2>
+<div class="code-block"><pre><code># Install all browsers
+npx playwright install
+
+# Install specific browser
+npx playwright install chromium
+npx playwright install firefox
+npx playwright install webkit
+
+# Install with system dependencies (for CI)
+npx playwright install --with-deps</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Always commit playwright.config.js and keep browsers out of git (add node_modules/ and .playwright/ to .gitignore). Use npx playwright install in CI pipelines.</p></div>
+</div>
+<h2 class="section-title">3.8 Summary</h2>
+<ul class="styled-list"><li>Setup takes less than 5 minutes with npm init playwright@latest</li><li>playwright.config.js is the single source of truth for all settings</li><li>Tests are in .spec.js files inside the tests/ folder</li><li>Use --headed flag to watch tests run visually during development</li></ul>
+<div class="callout exercise">
+  <div class="callout-icon">✏️</div>
+  <div class="callout-body"><strong>Hands-On Exercise</strong><p>Exercise 3: Set up a fresh Playwright project. Write 3 tests for https://saucedemo.com — login, add item to cart, and logout.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-4" data-chapter="4">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 04</div>
+    <h1 class="chapter-title">Playwright Architecture &amp; Internals</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">4.1 How Playwright Communicates with Browsers</h2>
+<p>Playwright communicates with browsers using low-level protocols: Chrome DevTools Protocol (CDP) for Chromium-based browsers, a custom protocol for Firefox, and WebKit&#x27;s Remote Debugging Protocol for Safari. This gives Playwright deep control over browser behavior.</p>
+<div class="code-block"><pre><code>┌──────────────┐     WebSocket      ┌───────────────────┐
+│  Playwright  │◄──────────────────►│  Browser Process  │
+│  (Node.js)   │   CDP / Protocol   │  (Chromium/FF/WK) │
+└──────────────┘                    └───────────────────┘</code></pre></div>
+<h2 class="section-title">4.2 Browser, Context, and Page Hierarchy</h2>
+<div class="code-block"><pre><code>Browser
+ └── BrowserContext (isolated session — cookies, localStorage)
+      ├── Page (tab 1)
+      │    ├── Frame (main frame)
+      │    └── Frame (iframe)
+      └── Page (tab 2)</code></pre></div>
+<h2 class="section-title">4.3 BrowserContext Deep Dive</h2>
+<p>BrowserContext is the most important concept in Playwright. Each context is completely isolated — separate cookies, localStorage, session storage, and cache. This allows you to simulate multiple users in the same test run.</p>
+<div class="code-block"><pre><code>const { chromium } = require(&#x27;@playwright/test&#x27;);
+
+(async () =&gt; {
+  const browser = await chromium.launch();
+
+  // Context 1: Admin user
+  const adminCtx = await browser.newContext({
+    storageState: &#x27;./auth/admin.json&#x27;
+  });
+
+  // Context 2: Regular user (completely isolated)
+  const userCtx = await browser.newContext({
+    storageState: &#x27;./auth/user.json&#x27;
+  });
+
+  const adminPage = await adminCtx.newPage();
+  const userPage  = await userCtx.newPage();
+
+  // Both run independently in parallel
+  await adminPage.goto(&#x27;https://app.com/admin&#x27;);
+  await userPage.goto(&#x27;https://app.com/dashboard&#x27;);
+
+  await browser.close();
+})();</code></pre></div>
+<h2 class="section-title">4.4 Auto-Waiting Mechanism</h2>
+<p>When you interact with an element, Playwright automatically waits for it to be: attached to the DOM, visible, stable (not animating), enabled, and editable (for input actions). This is called actionability.</p>
+<ul class="styled-list"><li>click() – waits for visible + enabled + stable</li><li>fill() – waits for visible + enabled + editable</li><li>check() – waits for visible + enabled + checkable</li><li>selectOption() – waits for visible + enabled</li><li>expect(locator).toBeVisible() – assertion auto-retries</li></ul>
+<h2 class="section-title">4.5 Playwright&#x27;s Retry Architecture</h2>
+<div class="code-block"><pre><code>// Playwright retries assertions automatically for up to 5 seconds
+// No need for manual waits!
+
+// ❌ Bad practice (manual sleep)
+await page.waitForTimeout(3000);
+await page.click(&#x27;#submit-btn&#x27;);
+
+// ✅ Good practice (auto-wait)
+await page.click(&#x27;#submit-btn&#x27;); // Playwright handles the wait
+await expect(page.locator(&#x27;.success-msg&#x27;)).toBeVisible();</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Never use page.waitForTimeout() in production tests. Playwright&#x27;s auto-wait handles 99% of timing issues. If you need it, something is wrong with your test design.</p></div>
+</div>
+<h2 class="section-title">4.6 Parallel Execution Model</h2>
+<div class="code-block"><pre><code>// playwright.config.js
+module.exports = defineConfig({
+  workers: 4,          // 4 parallel workers
+  fullyParallel: true, // Tests within a file run in parallel too
+
+  // Each worker gets its own browser instance
+  // Each test gets its own BrowserContext
+  // Zero shared state between tests
+});</code></pre></div>
+<h2 class="section-title">4.7 Summary</h2>
+<ul class="styled-list"><li>Playwright uses CDP/WebSocket for deep browser control</li><li>BrowserContext provides complete isolation per user/session</li><li>Auto-waiting makes tests reliable without sleep() calls</li><li>Parallel execution is built-in with worker processes</li></ul>
+  </div>
+</section>
+<section class="chapter" id="chapter-5" data-chapter="5">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 05</div>
+    <h1 class="chapter-title">Playwright CLI – Commands &amp; Usage</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">5.1 Core CLI Commands</h2>
+<div class="code-block"><pre><code># Run all tests
+npx playwright test
+
+# Run with specific grep pattern
+npx playwright test -g &quot;login&quot;
+
+# Run specific file
+npx playwright test login.spec.js
+
+# Run in headed mode
+npx playwright test --headed
+
+# Run with specific workers
+npx playwright test --workers=4
+
+# Run with retries
+npx playwright test --retries=2
+
+# Run with specific project (browser)
+npx playwright test --project=firefox
+
+# Debug mode (opens Playwright Inspector)
+npx playwright test --debug
+
+# Generate code by recording actions
+npx playwright codegen https://saucedemo.com
+
+# Show last test report
+npx playwright show-report
+
+# Show trace viewer
+npx playwright show-trace trace.zip
+
+# Run tests with tags
+npx playwright test --grep @smoke</code></pre></div>
+<h2 class="section-title">5.2 Codegen – Record Tests</h2>
+<p>Playwright Codegen is a built-in test recorder. Open a browser, perform actions, and Playwright generates the test code automatically.</p>
+<div class="code-block"><pre><code># Open codegen for a URL
+npx playwright codegen https://saucedemo.com
+
+# Save generated code to a file
+npx playwright codegen --output=tests/recorded.spec.js https://saucedemo.com
+
+# Record in a specific browser
+npx playwright codegen --browser=firefox https://saucedemo.com
+
+# Record with device emulation
+npx playwright codegen --device=&quot;iPhone 13&quot; https://saucedemo.com</code></pre></div>
+<h2 class="section-title">5.3 Environment Variables</h2>
+<div class="code-block"><pre><code># Run in CI mode (headless, more retries)
+CI=true npx playwright test
+
+# Set base URL dynamically
+BASE_URL=https://staging.app.com npx playwright test
+
+# Usage in config
+// playwright.config.js
+use: {
+  baseURL: process.env.BASE_URL || &#x27;https://localhost:3000&#x27;,
+}</code></pre></div>
+<h2 class="section-title">5.4 Useful Flags Reference</h2>
+<div class="table-wrap"><table class="data-table">
+  <thead><tr><th>Flag</th><th>Description</th><th>Example</th></tr></thead>
+  <tbody><tr><td>--headed</td><td>Run with visible browser</td><td>--headed</td></tr><tr><td>--debug</td><td>Open inspector</td><td>--debug</td></tr><tr><td>--timeout</td><td>Set test timeout (ms)</td><td>--timeout=60000</td></tr><tr><td>--retries</td><td>Number of retries</td><td>--retries=2</td></tr><tr><td>--workers</td><td>Parallel workers</td><td>--workers=4</td></tr><tr><td>--project</td><td>Run specific browser</td><td>--project=chromium</td></tr><tr><td>--grep</td><td>Filter tests by name</td><td>--grep=login</td></tr><tr><td>--reporter</td><td>Set reporter type</td><td>--reporter=html</td></tr><tr><td>--list</td><td>List all tests</td><td>--list</td></tr></tbody>
+</table></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Create npm scripts in package.json for common commands: &#x27;test:smoke&#x27;, &#x27;test:regression&#x27;, &#x27;test:api&#x27; — this makes CI configuration much cleaner.</p></div>
+</div>
+<div class="code-block"><pre><code>// package.json
+{
+  &quot;scripts&quot;: {
+    &quot;test&quot;: &quot;playwright test&quot;,
+    &quot;test:smoke&quot;: &quot;playwright test --grep @smoke&quot;,
+    &quot;test:headed&quot;: &quot;playwright test --headed&quot;,
+    &quot;test:debug&quot;: &quot;playwright test --debug&quot;,
+    &quot;test:report&quot;: &quot;playwright show-report&quot;,
+    &quot;codegen&quot;: &quot;playwright codegen https://your-app.com&quot;
+  }
+}</code></pre></div>
+  </div>
+</section>
+<section class="chapter" id="chapter-6" data-chapter="6">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 06</div>
+    <h1 class="chapter-title">Locators – Advanced Strategies</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">6.1 What Are Locators?</h2>
+<p>Locators are the way Playwright finds elements on a page. Unlike Selenium&#x27;s WebElement, Playwright Locators are lazy — they don&#x27;t fetch the element until an action is performed. They also automatically retry when the element is not found or not in the right state.</p>
+<h2 class="section-title">6.2 Recommended Locators (Priority Order)</h2>
+<div class="code-block"><pre><code>// 1. Role-based (BEST — matches user perspective)
+page.getByRole(&#x27;button&#x27;, { name: &#x27;Submit&#x27; });
+page.getByRole(&#x27;link&#x27;, { name: &#x27;Home&#x27; });
+page.getByRole(&#x27;textbox&#x27;, { name: &#x27;Email&#x27; });
+
+// 2. Label-based
+page.getByLabel(&#x27;Password&#x27;);
+
+// 3. Placeholder-based
+page.getByPlaceholder(&#x27;Enter your email&#x27;);
+
+// 4. Text-based
+page.getByText(&#x27;Welcome back&#x27;);
+page.getByText(&#x27;Sign In&#x27;, { exact: true });
+
+// 5. Alt text (for images)
+page.getByAltText(&#x27;Company logo&#x27;);
+
+// 6. Title attribute
+page.getByTitle(&#x27;Close dialog&#x27;);
+
+// 7. Test ID (for devs who add data-testid)
+page.getByTestId(&#x27;login-button&#x27;);</code></pre></div>
+<h2 class="section-title">6.3 CSS and XPath (When Needed)</h2>
+<div class="code-block"><pre><code>// CSS Selectors
+page.locator(&#x27;input[type=&quot;email&quot;]&#x27;);
+page.locator(&#x27;.login-form input:first-child&#x27;);
+page.locator(&#x27;#submit-btn&#x27;);
+page.locator(&#x27;[data-cy=&quot;login-btn&quot;]&#x27;);
+
+// XPath (use sparingly)
+page.locator(&#x27;//button[text()=&quot;Submit&quot;]&#x27;);
+page.locator(&#x27;xpath=//div[@class=&quot;modal&quot;]//button&#x27;);
+
+// nth element
+page.locator(&#x27;.product-card&#x27;).nth(2);  // 3rd card
+page.locator(&#x27;.product-card&#x27;).first();
+page.locator(&#x27;.product-card&#x27;).last();</code></pre></div>
+<h2 class="section-title">6.4 Chaining and Filtering</h2>
+<div class="code-block"><pre><code>// Filter by text within a parent
+page.locator(&#x27;.product-card&#x27;)
+    .filter({ hasText: &#x27;Sauce Labs Backpack&#x27; });
+
+// Filter by child element
+page.locator(&#x27;.product-card&#x27;)
+    .filter({ has: page.locator(&#x27;.price&#x27;, { hasText: &#x27;$29&#x27; }) });
+
+// Chain locators
+const form = page.locator(&#x27;#login-form&#x27;);
+await form.getByLabel(&#x27;Username&#x27;).fill(&#x27;admin&#x27;);
+await form.getByLabel(&#x27;Password&#x27;).fill(&#x27;secret&#x27;);
+await form.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();</code></pre></div>
+<h2 class="section-title">6.5 Locator Assertions</h2>
+<div class="code-block"><pre><code>const btn = page.getByRole(&#x27;button&#x27;, { name: &#x27;Submit&#x27; });
+
+await expect(btn).toBeVisible();
+await expect(btn).toBeEnabled();
+await expect(btn).toBeDisabled();
+await expect(btn).toHaveText(&#x27;Submit&#x27;);
+await expect(btn).toHaveAttribute(&#x27;type&#x27;, &#x27;submit&#x27;);
+await expect(btn).toHaveClass(/primary/);
+await expect(btn).toBeChecked();   // for checkboxes
+await expect(btn).toHaveFocus();</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Always prefer getByRole() and getByLabel() over CSS/XPath. They are resilient to styling changes and reflect how users actually interact with the page — making tests more meaningful.</p></div>
+</div>
+<h2 class="section-title">6.6 Common Mistakes</h2>
+<ul class="styled-list"><li>❌ Using page.$ or page.$$ (old API) — use page.locator() instead</li><li>❌ Hardcoding index-based selectors like nth(0) everywhere</li><li>❌ Using XPath for everything — it&#x27;s brittle</li><li>❌ Not using filter() when multiple elements match</li><li>✅ Use data-testid attributes for dynamic, complex elements</li></ul>
+  </div>
+</section>
+<section class="chapter" id="chapter-7" data-chapter="7">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 07</div>
+    <h1 class="chapter-title">Handling UI Elements – Forms, Alerts, Frames</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">7.1 Working with Forms</h2>
+<div class="code-block"><pre><code>// Fill text inputs
+await page.getByLabel(&#x27;Username&#x27;).fill(&#x27;standard_user&#x27;);
+await page.getByLabel(&#x27;Password&#x27;).fill(&#x27;secret_sauce&#x27;);
+
+// Clear and retype
+await page.getByLabel(&#x27;Email&#x27;).clear();
+await page.getByLabel(&#x27;Email&#x27;).fill(&#x27;new@email.com&#x27;);
+
+// Type character by character (for autocomplete)
+await page.getByPlaceholder(&#x27;Search&#x27;).pressSequentially(&#x27;Playwright&#x27;, { delay: 100 });
+
+// Select dropdown
+await page.selectOption(&#x27;#country&#x27;, &#x27;IN&#x27;);
+await page.selectOption(&#x27;#country&#x27;, { label: &#x27;India&#x27; });
+await page.selectOption(&#x27;#multi-select&#x27;, [&#x27;opt1&#x27;, &#x27;opt2&#x27;]); // multiple
+
+// Checkboxes and Radio buttons
+await page.getByLabel(&#x27;Remember me&#x27;).check();
+await page.getByLabel(&#x27;Remember me&#x27;).uncheck();
+await page.getByLabel(&#x27;Male&#x27;).check(); // radio
+
+// Submit
+await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();</code></pre></div>
+<h2 class="section-title">7.2 Handling Alerts, Confirms, Prompts</h2>
+<div class="code-block"><pre><code>// Alert dialog
+page.on(&#x27;dialog&#x27;, dialog =&gt; {
+  console.log(dialog.message());
+  dialog.accept();
+});
+await page.getByRole(&#x27;button&#x27;, { name: &#x27;Show Alert&#x27; }).click();
+
+// Confirm dialog — accept or dismiss
+page.on(&#x27;dialog&#x27;, dialog =&gt; dialog.accept());
+// OR
+page.on(&#x27;dialog&#x27;, dialog =&gt; dialog.dismiss());
+
+// Prompt dialog — fill text
+page.on(&#x27;dialog&#x27;, async dialog =&gt; {
+  await dialog.accept(&#x27;John Doe&#x27;); // types text
+});</code></pre></div>
+<h2 class="section-title">7.3 Handling iFrames</h2>
+<div class="code-block"><pre><code>// Get iframe by selector
+const frame = page.frameLocator(&#x27;#payment-frame&#x27;);
+await frame.getByLabel(&#x27;Card Number&#x27;).fill(&#x27;4111111111111111&#x27;);
+await frame.getByLabel(&#x27;Expiry&#x27;).fill(&#x27;12/25&#x27;);
+await frame.getByRole(&#x27;button&#x27;, { name: &#x27;Pay&#x27; }).click();
+
+// Get frame by URL
+const frame2 = page.frame({ url: /payment-provider.com/ });
+
+// Nested iframes
+const outerFrame = page.frameLocator(&#x27;#outer&#x27;);
+const innerFrame = outerFrame.frameLocator(&#x27;#inner&#x27;);
+await innerFrame.getByRole(&#x27;button&#x27;).click();</code></pre></div>
+<h2 class="section-title">7.4 Mouse and Keyboard Actions</h2>
+<div class="code-block"><pre><code>// Hover
+await page.locator(&#x27;.menu-item&#x27;).hover();
+
+// Double click
+await page.locator(&#x27;.editable-cell&#x27;).dblclick();
+
+// Right click
+await page.locator(&#x27;.item&#x27;).click({ button: &#x27;right&#x27; });
+
+// Drag and Drop
+await page.locator(&#x27;#source&#x27;).dragTo(page.locator(&#x27;#target&#x27;));
+
+// Keyboard shortcuts
+await page.keyboard.press(&#x27;Enter&#x27;);
+await page.keyboard.press(&#x27;Control+A&#x27;);
+await page.keyboard.press(&#x27;Tab&#x27;);
+await page.keyboard.type(&#x27;Hello World&#x27;);
+
+// Focus and click by position
+await page.locator(&#x27;#canvas&#x27;).click({ position: { x: 100, y: 200 } });</code></pre></div>
+<h2 class="section-title">7.5 Handling New Windows and Tabs</h2>
+<div class="code-block"><pre><code>// Wait for new page (tab/window) to open
+const [newPage] = await Promise.all([
+  page.waitForEvent(&#x27;popup&#x27;),
+  page.getByRole(&#x27;link&#x27;, { name: &#x27;Open in new tab&#x27; }).click(),
+]);
+await newPage.waitForLoadState();
+await expect(newPage).toHaveTitle(/New Page/);
+await newPage.close();</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Use frameLocator() instead of frame() when possible — it supports the full Locator API with auto-waiting. The old frame() API requires manual waits.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-8" data-chapter="8">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 08</div>
+    <h1 class="chapter-title">Assertions &amp; Validations</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">8.1 expect() – The Assertion Engine</h2>
+<p>Playwright&#x27;s expect() function provides web-first assertions that automatically retry until the condition is met (up to the configured timeout). This is fundamentally different from Chai/Jest expect which checks only at that instant.</p>
+<h2 class="section-title">8.2 Page Assertions</h2>
+<div class="code-block"><pre><code>// URL assertions
+await expect(page).toHaveURL(&#x27;https://app.com/dashboard&#x27;);
+await expect(page).toHaveURL(/dashboard/);
+
+// Title assertions
+await expect(page).toHaveTitle(&#x27;Dashboard – MyApp&#x27;);
+await expect(page).toHaveTitle(/Dashboard/);</code></pre></div>
+<h2 class="section-title">8.3 Locator Assertions</h2>
+<div class="code-block"><pre><code>const el = page.locator(&#x27;.message&#x27;);
+
+// Visibility
+await expect(el).toBeVisible();
+await expect(el).toBeHidden();
+
+// Text content
+await expect(el).toHaveText(&#x27;Login successful&#x27;);
+await expect(el).toContainText(&#x27;successful&#x27;);
+await expect(el).toHaveText(/success/i); // regex
+
+// Attribute
+await expect(el).toHaveAttribute(&#x27;href&#x27;, &#x27;/home&#x27;);
+await expect(el).toHaveAttribute(&#x27;disabled&#x27;);
+
+// CSS Class
+await expect(el).toHaveClass(&#x27;active&#x27;);
+await expect(el).toHaveClass(/btn-primary/);
+
+// Value (for inputs)
+await expect(page.getByLabel(&#x27;Name&#x27;)).toHaveValue(&#x27;Amir Khan&#x27;);
+
+// Count
+await expect(page.locator(&#x27;.item&#x27;)).toHaveCount(5);
+
+// State
+await expect(page.getByRole(&#x27;checkbox&#x27;)).toBeChecked();
+await expect(page.getByRole(&#x27;button&#x27;)).toBeEnabled();
+await expect(page.getByRole(&#x27;button&#x27;)).toBeDisabled();
+await expect(page.getByLabel(&#x27;Email&#x27;)).toBeFocused();
+
+// Input value is empty
+await expect(page.getByLabel(&#x27;Search&#x27;)).toBeEmpty();</code></pre></div>
+<h2 class="section-title">8.4 Soft Assertions (Non-Blocking)</h2>
+<div class="code-block"><pre><code>// Soft assertions — test continues even if assertion fails
+// All failures collected and reported at end
+test(&#x27;product page checks&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;/product/123&#x27;);
+
+  await expect.soft(page.locator(&#x27;.title&#x27;)).toHaveText(&#x27;Product Name&#x27;);
+  await expect.soft(page.locator(&#x27;.price&#x27;)).toContainText(&#x27;$&#x27;);
+  await expect.soft(page.locator(&#x27;.add-cart&#x27;)).toBeEnabled();
+  // Test continues even if some assertions fail
+});</code></pre></div>
+<h2 class="section-title">8.5 Custom Expect Messages</h2>
+<div class="code-block"><pre><code>await expect(page.locator(&#x27;.error&#x27;), 
+  &#x27;Error message should be visible after failed login&#x27;
+).toBeVisible();</code></pre></div>
+<h2 class="section-title">8.6 API Response Assertions</h2>
+<div class="code-block"><pre><code>const response = await page.request.get(&#x27;/api/users&#x27;);
+expect(response.status()).toBe(200);
+const body = await response.json();
+expect(body.users).toHaveLength(10);
+expect(body.users[0]).toMatchObject({
+  id: expect.any(Number),
+  name: expect.any(String),
+});</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Use expect.soft() for visual/content checks where a single failure shouldn&#x27;t block the entire test. Use hard expect() for critical flow steps like successful login.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-9" data-chapter="9">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 09</div>
+    <h1 class="chapter-title">Test Organization &amp; Fixtures</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">9.1 test.describe – Grouping Tests</h2>
+<div class="code-block"><pre><code>const { test, expect } = require(&#x27;@playwright/test&#x27;);
+
+test.describe(&#x27;Login Feature&#x27;, () =&gt; {
+  
+  test.beforeEach(async ({ page }) =&gt; {
+    await page.goto(&#x27;https://saucedemo.com&#x27;);
+  });
+
+  test(&#x27;valid credentials login&#x27;, async ({ page }) =&gt; {
+    await page.getByPlaceholder(&#x27;Username&#x27;).fill(&#x27;standard_user&#x27;);
+    await page.getByPlaceholder(&#x27;Password&#x27;).fill(&#x27;secret_sauce&#x27;);
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+    await expect(page).toHaveURL(/inventory/);
+  });
+
+  test(&#x27;invalid credentials shows error&#x27;, async ({ page }) =&gt; {
+    await page.getByPlaceholder(&#x27;Username&#x27;).fill(&#x27;wrong_user&#x27;);
+    await page.getByPlaceholder(&#x27;Password&#x27;).fill(&#x27;wrong_pass&#x27;);
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+    await expect(page.locator(&#x27;.error-message-container&#x27;)).toBeVisible();
+  });
+});</code></pre></div>
+<h2 class="section-title">9.2 Hooks – beforeAll, afterAll, beforeEach, afterEach</h2>
+<div class="code-block"><pre><code>test.describe(&#x27;Shopping Cart&#x27;, () =&gt; {
+  let browser;
+
+  test.beforeAll(async ({ browser: b }) =&gt; {
+    // Runs once before all tests in this describe
+    console.log(&#x27;Suite starting...&#x27;);
+  });
+
+  test.afterAll(async () =&gt; {
+    // Cleanup after all tests
+    console.log(&#x27;Suite done!&#x27;);
+  });
+
+  test.beforeEach(async ({ page }) =&gt; {
+    // Login before each test
+    await page.goto(&#x27;/login&#x27;);
+    await page.getByLabel(&#x27;Username&#x27;).fill(&#x27;admin&#x27;);
+    await page.getByLabel(&#x27;Password&#x27;).fill(&#x27;pass&#x27;);
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+  });
+
+  test.afterEach(async ({ page }, testInfo) =&gt; {
+    if (testInfo.status !== testInfo.expectedStatus) {
+      // Take screenshot on failure
+      await page.screenshot({ path: `screenshots/${testInfo.title}.png` });
+    }
+  });
+});</code></pre></div>
+<h2 class="section-title">9.3 Custom Fixtures</h2>
+<div class="code-block"><pre><code>// fixtures/index.js
+const { test: base, expect } = require(&#x27;@playwright/test&#x27;);
+
+// Extend test with custom fixtures
+const test = base.extend({
+  
+  // Fixture: auto-login as standard user
+  loggedInPage: async ({ page }, use) =&gt; {
+    await page.goto(&#x27;https://saucedemo.com&#x27;);
+    await page.getByPlaceholder(&#x27;Username&#x27;).fill(&#x27;standard_user&#x27;);
+    await page.getByPlaceholder(&#x27;Password&#x27;).fill(&#x27;secret_sauce&#x27;);
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+    await use(page); // test runs here
+    // teardown (optional)
+  },
+
+  // Fixture: API client
+  apiClient: async ({ request }, use) =&gt; {
+    const client = {
+      async getUsers() {
+        return request.get(&#x27;/api/users&#x27;);
+      },
+      async createUser(data) {
+        return request.post(&#x27;/api/users&#x27;, { data });
+      }
+    };
+    await use(client);
+  },
+});
+
+module.exports = { test, expect };
+
+// Usage in tests:
+// const { test, expect } = require(&#x27;./fixtures&#x27;);
+// test(&#x27;add to cart&#x27;, async ({ loggedInPage }) =&gt; { ... });</code></pre></div>
+<h2 class="section-title">9.4 Tags and Annotations</h2>
+<div class="code-block"><pre><code>test(&#x27;@smoke login works&#x27;, async ({ page }) =&gt; { ... });
+test(&#x27;@regression payment flow&#x27;, async ({ page }) =&gt; { ... });
+
+// Skip a test
+test.skip(&#x27;feature not yet implemented&#x27;, async ({ page }) =&gt; { ... });
+
+// Mark as expected to fail
+test.fail(&#x27;known bug - ticket #123&#x27;, async ({ page }) =&gt; { ... });
+
+// Run only this test
+test.only(&#x27;debug this test&#x27;, async ({ page }) =&gt; { ... });
+
+// Run with grep
+// npx playwright test --grep @smoke</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Use fixtures instead of beforeEach for login and common setup. Fixtures compose better and can be reused across multiple test files without code duplication.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-10" data-chapter="10">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 10</div>
+    <h1 class="chapter-title">Parallel Execution &amp; Performance</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">10.1 Parallel Execution Configuration</h2>
+<div class="code-block"><pre><code>// playwright.config.js
+module.exports = defineConfig({
+  fullyParallel: true,   // Files AND tests run in parallel
+  workers: 4,            // 4 browser workers
+  // OR on CI:
+  workers: process.env.CI ? 2 : 4,
+});</code></pre></div>
+<h2 class="section-title">10.2 Controlling Parallelism</h2>
+<div class="code-block"><pre><code>// Run tests in a file serially (one after another)
+test.describe.configure({ mode: &#x27;serial&#x27; });
+
+test.describe(&#x27;Ordered checkout flow&#x27;, () =&gt; {
+  test(&#x27;step 1: add to cart&#x27;, async ({ page }) =&gt; { ... });
+  test(&#x27;step 2: proceed to checkout&#x27;, async ({ page }) =&gt; { ... });
+  test(&#x27;step 3: payment&#x27;, async ({ page }) =&gt; { ... });
+});</code></pre></div>
+<h2 class="section-title">10.3 Sharding for Large Test Suites</h2>
+<div class="code-block"><pre><code># Split tests across multiple machines/jobs
+
+# Machine 1: Run shard 1 of 3
+npx playwright test --shard=1/3
+
+# Machine 2: Run shard 2 of 3
+npx playwright test --shard=2/3
+
+# Machine 3: Run shard 3 of 3
+npx playwright test --shard=3/3
+
+# In GitHub Actions:
+# strategy:
+#   matrix:
+#     shardIndex: [1, 2, 3]
+#     shardTotal: [3]</code></pre></div>
+<h2 class="section-title">10.4 Performance Optimization Tips</h2>
+<ul class="styled-list"><li>Use storageState to save and reuse login sessions</li><li>Use API calls for test data setup (not UI)</li><li>Run only necessary browsers for unit/smoke tests</li><li>Use page.route() to block unnecessary network calls</li><li>Use trace: &#x27;on-first-retry&#x27; not trace: &#x27;on&#x27; always</li><li>Enable fullyParallel: true in config</li><li>Avoid test.only() in committed code</li></ul>
+<h2 class="section-title">10.5 Reusing Authentication State</h2>
+<div class="code-block"><pre><code>// global-setup.js — runs once before all tests
+const { chromium } = require(&#x27;@playwright/test&#x27;);
+
+async function globalSetup() {
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  
+  await page.goto(&#x27;https://app.com/login&#x27;);
+  await page.getByLabel(&#x27;Email&#x27;).fill(&#x27;admin@test.com&#x27;);
+  await page.getByLabel(&#x27;Password&#x27;).fill(&#x27;password&#x27;);
+  await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+  
+  // Save auth state to file
+  await page.context().storageState({ path: &#x27;./auth/admin.json&#x27; });
+  await browser.close();
+}
+
+module.exports = globalSetup;
+
+// playwright.config.js
+module.exports = defineConfig({
+  globalSetup: &#x27;./global-setup.js&#x27;,
+  use: {
+    storageState: &#x27;./auth/admin.json&#x27;,
+  },
+});</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Sharding is the most powerful optimization for large suites. A 1000-test suite that takes 30 min on 1 machine takes 10 min with 3-shard parallelism across CI machines.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-11" data-chapter="11">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 11</div>
+    <h1 class="chapter-title">Cross-Browser Testing</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">11.1 Browser Projects Configuration</h2>
+<div class="code-block"><pre><code>// playwright.config.js
+const { defineConfig, devices } = require(&#x27;@playwright/test&#x27;);
+
+module.exports = defineConfig({
+  projects: [
+    // Desktop Browsers
+    { name: &#x27;chromium&#x27;, use: { ...devices[&#x27;Desktop Chrome&#x27;] } },
+    { name: &#x27;firefox&#x27;,  use: { ...devices[&#x27;Desktop Firefox&#x27;] } },
+    { name: &#x27;webkit&#x27;,   use: { ...devices[&#x27;Desktop Safari&#x27;] } },
+
+    // Mobile Browsers
+    { name: &#x27;Mobile Chrome&#x27;, use: { ...devices[&#x27;Pixel 7&#x27;] } },
+    { name: &#x27;Mobile Safari&#x27;, use: { ...devices[&#x27;iPhone 14&#x27;] } },
+
+    // Branded Browsers
+    { name: &#x27;Microsoft Edge&#x27;, use: { ...devices[&#x27;Desktop Edge&#x27;], channel: &#x27;msedge&#x27; } },
+    { name: &#x27;Google Chrome&#x27;,  use: { ...devices[&#x27;Desktop Chrome&#x27;], channel: &#x27;chrome&#x27; } },
+  ],
+});</code></pre></div>
+<h2 class="section-title">11.2 Device Emulation</h2>
+<div class="code-block"><pre><code>// Emulate specific device
+const { devices } = require(&#x27;@playwright/test&#x27;);
+
+test(&#x27;mobile checkout&#x27;, async ({ browser }) =&gt; {
+  const ctx = await browser.newContext({
+    ...devices[&#x27;iPhone 14 Pro&#x27;],
+    locale: &#x27;en-IN&#x27;,
+    geolocation: { longitude: 77.209, latitude: 28.6139 }, // Delhi
+    permissions: [&#x27;geolocation&#x27;],
+  });
+  const page = await ctx.newPage();
+  await page.goto(&#x27;https://app.com&#x27;);
+  // Test mobile experience
+});</code></pre></div>
+<h2 class="section-title">11.3 Running Specific Browsers</h2>
+<div class="code-block"><pre><code># Run on all browsers
+npx playwright test
+
+# Run only on Firefox
+npx playwright test --project=firefox
+
+# Run on mobile
+npx playwright test --project=&quot;Mobile Chrome&quot;
+
+# Run on specific browser with headed
+npx playwright test --project=chromium --headed</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: For most projects, prioritize Chromium for development speed, then run Firefox and WebKit in CI. This saves developer time while ensuring cross-browser coverage.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-12" data-chapter="12">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 12</div>
+    <h1 class="chapter-title">API Testing with Playwright</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">12.1 Why API Testing in Playwright?</h2>
+<p>Playwright includes a built-in APIRequestContext that lets you make HTTP requests directly — no need for Postman or a separate API testing tool. This is powerful for setting up test data via API, validating backend responses, and combining UI + API assertions in a single test.</p>
+<h2 class="section-title">12.2 Basic API Requests</h2>
+<div class="code-block"><pre><code>const { test, expect } = require(&#x27;@playwright/test&#x27;);
+
+test(&#x27;GET users API&#x27;, async ({ request }) =&gt; {
+  const response = await request.get(&#x27;https://jsonplaceholder.typicode.com/users&#x27;);
+  
+  expect(response.status()).toBe(200);
+  const body = await response.json();
+  expect(body).toHaveLength(10);
+  expect(body[0]).toMatchObject({
+    id: 1,
+    name: &#x27;Leanne Graham&#x27;,
+  });
+});
+
+test(&#x27;POST create user&#x27;, async ({ request }) =&gt; {
+  const response = await request.post(&#x27;https://jsonplaceholder.typicode.com/users&#x27;, {
+    data: {
+      name: &#x27;Amir Khan&#x27;,
+      email: &#x27;amir@nextgenqa.com&#x27;,
+      role: &#x27;SDET&#x27;
+    }
+  });
+  
+  expect(response.status()).toBe(201);
+  const body = await response.json();
+  expect(body.name).toBe(&#x27;Amir Khan&#x27;);
+  expect(body.id).toBeDefined();
+});</code></pre></div>
+<h2 class="section-title">12.3 API with Auth Headers</h2>
+<div class="code-block"><pre><code>// Global API context with auth
+const apiContext = await request.newContext({
+  baseURL: &#x27;https://api.yourapp.com&#x27;,
+  extraHTTPHeaders: {
+    &#x27;Authorization&#x27;: `Bearer ${process.env.API_TOKEN}`,
+    &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,
+    &#x27;Accept&#x27;: &#x27;application/json&#x27;,
+  }
+});
+
+const response = await apiContext.get(&#x27;/v1/protected-resource&#x27;);
+expect(response.ok()).toBeTruthy();</code></pre></div>
+<h2 class="section-title">12.4 Combining UI + API Testing</h2>
+<div class="code-block"><pre><code>test(&#x27;create user via API and verify in UI&#x27;, async ({ page, request }) =&gt; {
+  // Step 1: Create user via API (fast setup)
+  const createRes = await request.post(&#x27;/api/users&#x27;, {
+    data: { name: &#x27;Test User&#x27;, email: &#x27;test@example.com&#x27; }
+  });
+  expect(createRes.status()).toBe(201);
+  const { id } = await createRes.json();
+
+  // Step 2: Verify user appears in UI
+  await page.goto(&#x27;/admin/users&#x27;);
+  await expect(page.locator(`[data-user-id=&quot;${id}&quot;]`)).toBeVisible();
+  await expect(page.locator(`[data-user-id=&quot;${id}&quot;] .email`))
+    .toHaveText(&#x27;test@example.com&#x27;);
+});</code></pre></div>
+<h2 class="section-title">12.5 Network Interception (Mocking)</h2>
+<div class="code-block"><pre><code>// Mock API response
+await page.route(&#x27;**/api/products&#x27;, route =&gt; {
+  route.fulfill({
+    status: 200,
+    contentType: &#x27;application/json&#x27;,
+    body: JSON.stringify([
+      { id: 1, name: &#x27;Mocked Product&#x27;, price: 99.99 }
+    ])
+  });
+});
+
+// Block specific requests (e.g., analytics)
+await page.route(&#x27;**/*.{png,jpg,svg}&#x27;, route =&gt; route.abort());
+await page.route(&#x27;**/analytics/**&#x27;, route =&gt; route.abort());
+
+// Modify request
+await page.route(&#x27;**/api/checkout&#x27;, async route =&gt; {
+  const request = route.request();
+  await route.continue({
+    headers: { ...request.headers(), &#x27;X-Test-Mode&#x27;: &#x27;true&#x27; }
+  });
+});</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Use API calls to set up and tear down test data instead of UI interactions. An API call takes ~50ms; the same operation through UI takes 2-5 seconds. This makes test suites 10x faster.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-13" data-chapter="13">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 13</div>
+    <h1 class="chapter-title">Authentication &amp; Session Handling</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">13.1 Saving and Reusing Auth State</h2>
+<div class="code-block"><pre><code>// Save login session once, reuse across all tests
+// auth/login.setup.js
+const { test: setup } = require(&#x27;@playwright/test&#x27;);
+
+setup(&#x27;authenticate&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;/login&#x27;);
+  await page.getByLabel(&#x27;Email&#x27;).fill(process.env.TEST_EMAIL);
+  await page.getByLabel(&#x27;Password&#x27;).fill(process.env.TEST_PASSWORD);
+  await page.getByRole(&#x27;button&#x27;, { name: &#x27;Sign In&#x27; }).click();
+  await page.waitForURL(&#x27;/dashboard&#x27;);
+  
+  // Save auth state
+  await page.context().storageState({ path: &#x27;.auth/user.json&#x27; });
+});
+
+// playwright.config.js — use saved state
+projects: [
+  {
+    name: &#x27;setup&#x27;,
+    testMatch: &#x27;**/login.setup.js&#x27;,
+  },
+  {
+    name: &#x27;authenticated tests&#x27;,
+    use: { storageState: &#x27;.auth/user.json&#x27; },
+    dependencies: [&#x27;setup&#x27;],
+  },
+]</code></pre></div>
+<h2 class="section-title">13.2 Multiple User Roles</h2>
+<div class="code-block"><pre><code>// Setup for admin user
+setup(&#x27;admin login&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;/login&#x27;);
+  await page.getByLabel(&#x27;Email&#x27;).fill(&#x27;admin@test.com&#x27;);
+  await page.getByLabel(&#x27;Password&#x27;).fill(&#x27;adminpass&#x27;);
+  await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+  await page.context().storageState({ path: &#x27;.auth/admin.json&#x27; });
+});
+
+// Setup for regular user
+setup(&#x27;user login&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;/login&#x27;);
+  await page.getByLabel(&#x27;Email&#x27;).fill(&#x27;user@test.com&#x27;);
+  await page.getByLabel(&#x27;Password&#x27;).fill(&#x27;userpass&#x27;);
+  await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+  await page.context().storageState({ path: &#x27;.auth/user.json&#x27; });
+});
+
+// Test using admin context
+test(&#x27;admin can delete users&#x27;, async ({ browser }) =&gt; {
+  const ctx = await browser.newContext({ storageState: &#x27;.auth/admin.json&#x27; });
+  const page = await ctx.newPage();
+  // ... admin actions
+});</code></pre></div>
+<h2 class="section-title">13.3 OAuth / SSO Handling</h2>
+<div class="code-block"><pre><code>test(&#x27;Google OAuth login&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;/login&#x27;);
+  await page.getByRole(&#x27;button&#x27;, { name: &#x27;Sign in with Google&#x27; }).click();
+  
+  // Handle Google OAuth popup
+  const [popup] = await Promise.all([
+    page.waitForEvent(&#x27;popup&#x27;),
+    page.getByRole(&#x27;button&#x27;, { name: &#x27;Continue with Google&#x27; }).click()
+  ]);
+  
+  await popup.getByLabel(&#x27;Email&#x27;).fill(process.env.GOOGLE_TEST_EMAIL);
+  await popup.getByRole(&#x27;button&#x27;, { name: &#x27;Next&#x27; }).click();
+  await popup.getByLabel(&#x27;Password&#x27;).fill(process.env.GOOGLE_TEST_PASS);
+  await popup.getByRole(&#x27;button&#x27;, { name: &#x27;Sign in&#x27; }).click();
+  
+  await page.waitForURL(&#x27;/dashboard&#x27;);
+});</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Never hardcode credentials in test files. Always use environment variables via .env files (loaded with dotenv) or CI secret variables. Use .gitignore to keep .env and .auth/ out of version control.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-14" data-chapter="14">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 14</div>
+    <h1 class="chapter-title">File Upload &amp; Download</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">14.1 File Upload</h2>
+<div class="code-block"><pre><code>// Simple file upload
+await page.getByLabel(&#x27;Upload file&#x27;).setInputFiles(&#x27;path/to/file.pdf&#x27;);
+
+// Upload multiple files
+await page.getByLabel(&#x27;Upload files&#x27;).setInputFiles([
+  &#x27;uploads/doc1.pdf&#x27;,
+  &#x27;uploads/doc2.pdf&#x27;,
+]);
+
+// Upload from memory (no file on disk)
+await page.getByLabel(&#x27;Upload&#x27;).setInputFiles({
+  name: &#x27;test.txt&#x27;,
+  mimeType: &#x27;text/plain&#x27;,
+  buffer: Buffer.from(&#x27;This is test content&#x27;),
+});
+
+// Clear file input
+await page.getByLabel(&#x27;Upload&#x27;).setInputFiles([]);
+
+// Handle drag and drop upload
+const dataTransfer = await page.evaluateHandle(() =&gt; new DataTransfer());
+await page.dispatchEvent(&#x27;#dropzone&#x27;, &#x27;drop&#x27;, { dataTransfer });</code></pre></div>
+<h2 class="section-title">14.2 File Download</h2>
+<div class="code-block"><pre><code>// Wait for download event
+const downloadPromise = page.waitForEvent(&#x27;download&#x27;);
+await page.getByRole(&#x27;button&#x27;, { name: &#x27;Export CSV&#x27; }).click();
+const download = await downloadPromise;
+
+// Get suggested filename
+console.log(download.suggestedFilename()); // e.g., report.csv
+
+// Save to specific path
+await download.saveAs(&#x27;./downloads/report.csv&#x27;);
+
+// Read download as stream
+const stream = await download.createReadStream();
+
+// Verify download path
+const path = await download.path();
+console.log(&#x27;Downloaded to:&#x27;, path);</code></pre></div>
+<h2 class="section-title">14.3 Verify Downloaded File Content</h2>
+<div class="code-block"><pre><code>const fs = require(&#x27;fs&#x27;);
+const path = require(&#x27;path&#x27;);
+
+test(&#x27;download and verify CSV&#x27;, async ({ page }) =&gt; {
+  const downloadPromise = page.waitForEvent(&#x27;download&#x27;);
+  await page.getByRole(&#x27;button&#x27;, { name: &#x27;Export&#x27; }).click();
+  const download = await downloadPromise;
+  
+  const savePath = `./downloads/${download.suggestedFilename()}`;
+  await download.saveAs(savePath);
+  
+  // Verify file exists
+  expect(fs.existsSync(savePath)).toBeTruthy();
+  
+  // Verify file content
+  const content = fs.readFileSync(savePath, &#x27;utf8&#x27;);
+  expect(content).toContain(&#x27;Name,Email,Role&#x27;);
+  expect(content).toContain(&#x27;Amir Khan&#x27;);
+});</code></pre></div>
+  </div>
+</section>
+<section class="chapter" id="chapter-15" data-chapter="15">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 15</div>
+    <h1 class="chapter-title">Debugging &amp; Tracing</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">15.1 Playwright Inspector</h2>
+<div class="code-block"><pre><code># Open Playwright Inspector
+npx playwright test --debug
+
+# Or set env variable
+PWDEBUG=1 npx playwright test</code></pre></div>
+<h2 class="section-title">15.2 Trace Viewer</h2>
+<div class="code-block"><pre><code>// playwright.config.js
+use: {
+  trace: &#x27;on-first-retry&#x27;,  // Only on retry
+  // Options: &#x27;on&#x27;, &#x27;off&#x27;, &#x27;on-first-retry&#x27;, &#x27;retain-on-failure&#x27;
+}
+
+// View the trace
+npx playwright show-trace test-results/trace.zip</code></pre></div>
+<p>Trace Viewer shows a timeline of actions, screenshots, network requests, console logs, and DOM snapshots for every step of the test. It is the most powerful debugging tool in Playwright.</p>
+<h2 class="section-title">15.3 Screenshots and Videos</h2>
+<div class="code-block"><pre><code>// playwright.config.js
+use: {
+  screenshot: &#x27;only-on-failure&#x27;, // or &#x27;on&#x27;, &#x27;off&#x27;
+  video: &#x27;retain-on-failure&#x27;,    // or &#x27;on&#x27;, &#x27;off&#x27;, &#x27;on-first-retry&#x27;
+}
+
+// Manual screenshot
+await page.screenshot({ path: &#x27;screenshot.png&#x27; });
+await page.screenshot({ path: &#x27;full-page.png&#x27;, fullPage: true });
+
+// Element screenshot
+await page.locator(&#x27;.chart&#x27;).screenshot({ path: &#x27;chart.png&#x27; });</code></pre></div>
+<h2 class="section-title">15.4 Console and Network Logging</h2>
+<div class="code-block"><pre><code>// Log all console messages
+page.on(&#x27;console&#x27;, msg =&gt; {
+  console.log(`[${msg.type()}] ${msg.text()}`);
+});
+
+// Log all network requests
+page.on(&#x27;request&#x27;, req =&gt; {
+  console.log(`&gt;&gt; ${req.method()} ${req.url()}`);
+});
+page.on(&#x27;response&#x27;, res =&gt; {
+  console.log(`&lt;&lt; ${res.status()} ${res.url()}`);
+});
+
+// Log page errors
+page.on(&#x27;pageerror&#x27;, err =&gt; {
+  console.error(&#x27;Page error:&#x27;, err.message);
+});</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Use trace: &#x27;on-first-retry&#x27; in CI and trace: &#x27;on&#x27; locally during development. Trace files are your best friend when diagnosing flaky tests — they show exactly what Playwright saw.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-16" data-chapter="16">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 16</div>
+    <h1 class="chapter-title">Custom Framework Design – Hybrid Framework</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">16.1 Framework Architecture</h2>
+<div class="code-block"><pre><code>playwright-framework/
+├── config/
+│   ├── playwright.config.js
+│   └── environments.js
+├── pages/                    ← POM classes
+│   ├── BasePage.js
+│   ├── LoginPage.js
+│   └── DashboardPage.js
+├── fixtures/                 ← Custom fixtures
+│   └── index.js
+├── utils/                    ← Helpers
+│   ├── apiHelper.js
+│   ├── dataHelper.js
+│   └── reportHelper.js
+├── test-data/               ← JSON/XLSX data
+│   └── users.json
+├── tests/
+│   ├── smoke/
+│   ├── regression/
+│   └── api/
+├── reports/
+├── .env
+├── .gitignore
+└── package.json</code></pre></div>
+<h2 class="section-title">16.2 BasePage Class</h2>
+<div class="code-block"><pre><code>// pages/BasePage.js
+class BasePage {
+  constructor(page) {
+    this.page = page;
+  }
+
+  async navigate(path = &#x27;&#x27;) {
+    await this.page.goto(`${process.env.BASE_URL}${path}`);
+    await this.page.waitForLoadState(&#x27;networkidle&#x27;);
+  }
+
+  async waitForElement(locator, timeout = 5000) {
+    await locator.waitFor({ state: &#x27;visible&#x27;, timeout });
+  }
+
+  async takeScreenshot(name) {
+    await this.page.screenshot({
+      path: `reports/screenshots/${name}-${Date.now()}.png`
+    });
+  }
+
+  async getTitle() {
+    return this.page.title();
+  }
+}
+
+module.exports = BasePage;</code></pre></div>
+<h2 class="section-title">16.3 Feature-Specific Page</h2>
+<div class="code-block"><pre><code>// pages/LoginPage.js
+const BasePage = require(&#x27;./BasePage&#x27;);
+
+class LoginPage extends BasePage {
+  constructor(page) {
+    super(page);
+    this.usernameInput = page.getByPlaceholder(&#x27;Username&#x27;);
+    this.passwordInput = page.getByPlaceholder(&#x27;Password&#x27;);
+    this.loginButton   = page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; });
+    this.errorMessage  = page.locator(&#x27;[data-test=&quot;error&quot;]&#x27;);
+  }
+
+  async navigate() {
+    await super.navigate(&#x27;/&#x27;);
+  }
+
+  async login(username, password) {
+    await this.usernameInput.fill(username);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
+
+  async getErrorMessage() {
+    return this.errorMessage.textContent();
+  }
+}
+
+module.exports = LoginPage;</code></pre></div>
+<h2 class="section-title">16.4 Data-Driven Fixtures</h2>
+<div class="code-block"><pre><code>// fixtures/index.js
+const { test: base } = require(&#x27;@playwright/test&#x27;);
+const LoginPage = require(&#x27;../pages/LoginPage&#x27;);
+
+const test = base.extend({
+  loginPage: async ({ page }, use) =&gt; {
+    const loginPage = new LoginPage(page);
+    await loginPage.navigate();
+    await use(loginPage);
+  },
+});
+
+module.exports = { test };</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: A well-designed framework should let a new team member write a meaningful test in under 30 minutes. If your framework is too complex to onboard quickly, it will fail adoption.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-17" data-chapter="17">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 17</div>
+    <h1 class="chapter-title">Data-Driven Testing</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">17.1 Parameterized Tests</h2>
+<div class="code-block"><pre><code>const { test, expect } = require(&#x27;@playwright/test&#x27;);
+
+const loginTests = [
+  { user: &#x27;standard_user&#x27;,   pass: &#x27;secret_sauce&#x27;, expected: &#x27;/inventory&#x27; },
+  { user: &#x27;locked_out_user&#x27;, pass: &#x27;secret_sauce&#x27;, expected: &#x27;error&#x27; },
+  { user: &#x27;problem_user&#x27;,    pass: &#x27;secret_sauce&#x27;, expected: &#x27;/inventory&#x27; },
+];
+
+for (const { user, pass, expected } of loginTests) {
+  test(`login: ${user}`, async ({ page }) =&gt; {
+    await page.goto(&#x27;https://saucedemo.com&#x27;);
+    await page.getByPlaceholder(&#x27;Username&#x27;).fill(user);
+    await page.getByPlaceholder(&#x27;Password&#x27;).fill(pass);
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+
+    if (expected === &#x27;error&#x27;) {
+      await expect(page.locator(&#x27;.error-message-container&#x27;)).toBeVisible();
+    } else {
+      await expect(page).toHaveURL(new RegExp(expected));
+    }
+  });
+}</code></pre></div>
+<h2 class="section-title">17.2 Reading Test Data from JSON</h2>
+<div class="code-block"><pre><code>// test-data/users.json
+[
+  { &quot;username&quot;: &quot;admin&quot;, &quot;password&quot;: &quot;admin123&quot;, &quot;role&quot;: &quot;admin&quot; },
+  { &quot;username&quot;: &quot;user1&quot;, &quot;password&quot;: &quot;pass123&quot;,  &quot;role&quot;: &quot;user&quot; }
+]
+
+// test that reads JSON
+const users = require(&#x27;../test-data/users.json&#x27;);
+
+for (const user of users) {
+  test(`${user.role} can access dashboard`, async ({ page }) =&gt; {
+    await page.goto(&#x27;/login&#x27;);
+    await page.getByLabel(&#x27;Username&#x27;).fill(user.username);
+    await page.getByLabel(&#x27;Password&#x27;).fill(user.password);
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+    await expect(page).toHaveURL(&#x27;/dashboard&#x27;);
+  });
+}</code></pre></div>
+<h2 class="section-title">17.3 CSV/Excel Data Source</h2>
+<div class="code-block"><pre><code>// utils/csvReader.js
+const fs = require(&#x27;fs&#x27;);
+
+function readCSV(filePath) {
+  const content = fs.readFileSync(filePath, &#x27;utf8&#x27;);
+  const rows = content.split(&#x27;\n&#x27;).filter(r =&gt; r.trim());
+  const headers = rows[0].split(&#x27;,&#x27;);
+  
+  return rows.slice(1).map(row =&gt; {
+    const values = row.split(&#x27;,&#x27;);
+    return headers.reduce((obj, h, i) =&gt; {
+      obj[h.trim()] = values[i]?.trim();
+      return obj;
+    }, {});
+  });
+}
+
+module.exports = { readCSV };
+
+// Usage:
+const { readCSV } = require(&#x27;../utils/csvReader&#x27;);
+const testData = readCSV(&#x27;./test-data/products.csv&#x27;);</code></pre></div>
+  </div>
+</section>
+<section class="chapter" id="chapter-18" data-chapter="18">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 18</div>
+    <h1 class="chapter-title">Page Object Model (POM)</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">18.1 What is POM?</h2>
+<p>The Page Object Model (POM) is a design pattern where each web page (or major component) is represented as a class. Locators and actions for that page live in the class. Tests use the page objects instead of directly interacting with the page. This makes tests readable and maintenance easy — when a locator changes, you fix it in one place.</p>
+<h2 class="section-title">18.2 Complete POM Implementation</h2>
+<div class="code-block"><pre><code>// pages/InventoryPage.js
+class InventoryPage {
+  constructor(page) {
+    this.page = page;
+    this.productList = page.locator(&#x27;.inventory_item&#x27;);
+    this.cartBadge   = page.locator(&#x27;.shopping_cart_badge&#x27;);
+    this.cartLink    = page.locator(&#x27;.shopping_cart_link&#x27;);
+    this.sortDropdown = page.locator(&#x27;[data-test=&quot;product_sort_container&quot;]&#x27;);
+  }
+
+  async addProductToCart(productName) {
+    await this.page
+      .locator(&#x27;.inventory_item&#x27;)
+      .filter({ hasText: productName })
+      .getByRole(&#x27;button&#x27;, { name: /add to cart/i })
+      .click();
+  }
+
+  async getCartCount() {
+    const text = await this.cartBadge.textContent();
+    return parseInt(text || &#x27;0&#x27;);
+  }
+
+  async sortBy(option) {
+    await this.sortDropdown.selectOption(option);
+  }
+
+  async goToCart() {
+    await this.cartLink.click();
+  }
+}
+
+module.exports = InventoryPage;</code></pre></div>
+<h2 class="section-title">18.3 Test Using POM</h2>
+<div class="code-block"><pre><code>const { test, expect } = require(&#x27;@playwright/test&#x27;);
+const LoginPage     = require(&#x27;../pages/LoginPage&#x27;);
+const InventoryPage = require(&#x27;../pages/InventoryPage&#x27;);
+
+test(&#x27;add product to cart&#x27;, async ({ page }) =&gt; {
+  const loginPage     = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
+
+  await loginPage.navigate();
+  await loginPage.login(&#x27;standard_user&#x27;, &#x27;secret_sauce&#x27;);
+  
+  await inventoryPage.addProductToCart(&#x27;Sauce Labs Backpack&#x27;);
+  
+  expect(await inventoryPage.getCartCount()).toBe(1);
+});</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Page objects should contain ONLY locators and action methods — never assertions. Keep assertions in the test file. This separation makes page objects more reusable.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-19" data-chapter="19">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 19</div>
+    <h1 class="chapter-title">Docker Integration</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">19.1 Why Docker for Playwright?</h2>
+<ul class="styled-list"><li>Consistent environment across dev, QA, and CI</li><li>No &#x27;works on my machine&#x27; issues</li><li>All browser dependencies pre-installed</li><li>Easy to run in any CI/CD system</li><li>Microsoft provides official Playwright Docker images</li></ul>
+<h2 class="section-title">19.2 Dockerfile for Playwright</h2>
+<div class="code-block"><pre><code># Dockerfile
+FROM mcr.microsoft.com/playwright:v1.44.0-jammy
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy all project files
+COPY . .
+
+# Command to run tests
+CMD [&quot;npx&quot;, &quot;playwright&quot;, &quot;test&quot;]</code></pre></div>
+<h2 class="section-title">19.3 docker-compose.yml</h2>
+<div class="code-block"><pre><code># docker-compose.yml
+version: &#x27;3.8&#x27;
+
+services:
+  playwright-tests:
+    build: .
+    environment:
+      - CI=true
+      - BASE_URL=http://app:3000
+      - TEST_EMAIL=${TEST_EMAIL}
+      - TEST_PASSWORD=${TEST_PASSWORD}
+    volumes:
+      - ./test-results:/app/test-results
+      - ./playwright-report:/app/playwright-report
+    networks:
+      - test-network
+    depends_on:
+      - app
+
+  app:
+    image: your-app:latest
+    ports:
+      - &quot;3000:3000&quot;
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge</code></pre></div>
+<h2 class="section-title">19.4 Running Tests in Docker</h2>
+<div class="code-block"><pre><code># Build and run
+docker build -t playwright-tests .
+docker run playwright-tests
+
+# With docker-compose
+docker-compose up --build
+
+# Run specific test file
+docker run playwright-tests npx playwright test tests/login.spec.js
+
+# Copy reports out of container
+docker cp &lt;container-id&gt;:/app/playwright-report ./local-report</code></pre></div>
+<h2 class="section-title">19.5 .dockerignore</h2>
+<div class="code-block"><pre><code>node_modules
+.git
+.auth
+test-results
+playwright-report
+*.log
+.env</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Use mcr.microsoft.com/playwright:v1.44.0-jammy (Microsoft&#x27;s official image) — all browser binaries and system dependencies are pre-installed. Never build your own image from scratch.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-20" data-chapter="20">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 20</div>
+    <h1 class="chapter-title">CI/CD Integration using Jenkins</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">20.1 Jenkins Pipeline Overview</h2>
+<p>Jenkins is the most widely used CI/CD tool in enterprise environments. Playwright integrates seamlessly via a Jenkinsfile that installs dependencies, runs tests, and publishes reports.</p>
+<h2 class="section-title">20.2 Jenkinsfile</h2>
+<div class="code-block"><pre><code>// Jenkinsfile
+pipeline {
+  agent { docker { image &#x27;mcr.microsoft.com/playwright:v1.44.0-jammy&#x27; } }
+
+  environment {
+    BASE_URL      = credentials(&#x27;staging-base-url&#x27;)
+    TEST_EMAIL    = credentials(&#x27;test-email&#x27;)
+    TEST_PASSWORD = credentials(&#x27;test-password&#x27;)
+    CI            = &#x27;true&#x27;
+  }
+
+  stages {
+    stage(&#x27;Install&#x27;) {
+      steps {
+        sh &#x27;npm ci&#x27;
+        sh &#x27;npx playwright install --with-deps chromium&#x27;
+      }
+    }
+
+    stage(&#x27;Test&#x27;) {
+      steps {
+        sh &#x27;npx playwright test --project=chromium --reporter=html,junit&#x27;
+      }
+      post {
+        always {
+          junit &#x27;test-results/junit.xml&#x27;
+          publishHTML([
+            allowMissing: false,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: &#x27;playwright-report&#x27;,
+            reportFiles: &#x27;index.html&#x27;,
+            reportName: &#x27;Playwright Report&#x27;
+          ])
+        }
+      }
+    }
+  }
+
+  post {
+    failure {
+      emailext(
+        subject: &quot;FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}&quot;,
+        body: &quot;Tests failed. See: ${env.BUILD_URL}&quot;,
+        to: &#x27;team@company.com&#x27;
+      )
+    }
+  }
+}</code></pre></div>
+<h2 class="section-title">20.3 GitHub Actions Workflow</h2>
+<div class="code-block"><pre><code># .github/workflows/playwright.yml
+name: Playwright Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shardIndex: [1, 2, 3]
+        shardTotal: [3]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+
+    - name: Run Playwright tests
+      run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+      env:
+        BASE_URL: ${{ secrets.STAGING_URL }}
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report-${{ matrix.shardIndex }}
+        path: playwright-report/
+        retention-days: 30</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Use sharding in GitHub Actions to split your test suite across multiple machines. A 500-test suite that takes 20 minutes sequentially takes 7 minutes with 3 shards.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-21" data-chapter="21">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 21</div>
+    <h1 class="chapter-title">Reporting – Allure &amp; HTML Reports</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">21.1 Built-in HTML Reporter</h2>
+<div class="code-block"><pre><code>// playwright.config.js
+reporter: [
+  [&#x27;html&#x27;, { outputFolder: &#x27;playwright-report&#x27;, open: &#x27;never&#x27; }],
+  [&#x27;list&#x27;],  // console output
+  [&#x27;junit&#x27;, { outputFile: &#x27;test-results/junit.xml&#x27; }],
+],
+
+// View report
+npx playwright show-report</code></pre></div>
+<h2 class="section-title">21.2 Allure Reporter Setup</h2>
+<div class="code-block"><pre><code># Install allure reporter
+npm install -D allure-playwright
+
+# playwright.config.js
+reporter: [[&#x27;allure-playwright&#x27;]],
+
+# Generate and open report
+npx allure generate allure-results --clean -o allure-report
+npx allure open allure-report</code></pre></div>
+<h2 class="section-title">21.3 Adding Test Metadata for Allure</h2>
+<div class="code-block"><pre><code>const { test } = require(&#x27;@playwright/test&#x27;);
+const { allure } = require(&#x27;allure-playwright&#x27;);
+
+test(&#x27;user can checkout product&#x27;, async ({ page }) =&gt; {
+  await allure.label(&#x27;feature&#x27;, &#x27;Checkout&#x27;);
+  await allure.label(&#x27;severity&#x27;, &#x27;critical&#x27;);
+  await allure.owner(&#x27;Amir Khan&#x27;);
+  await allure.link(&#x27;https://jira.company.com/TICKET-123&#x27;, &#x27;Jira Ticket&#x27;);
+  
+  await allure.step(&#x27;Open product page&#x27;, async () =&gt; {
+    await page.goto(&#x27;/product/123&#x27;);
+  });
+
+  await allure.step(&#x27;Add to cart&#x27;, async () =&gt; {
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Add to Cart&#x27; }).click();
+  });
+  
+  // attach screenshot to report
+  const screenshot = await page.screenshot();
+  await allure.attachment(&#x27;checkout-screenshot&#x27;, screenshot, &#x27;image/png&#x27;);
+});</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Always archive test reports as CI artifacts. For Jenkins, use the HTML Publisher plugin. For GitHub Actions, use actions/upload-artifact. Historical reports are invaluable for tracking flakiness trends.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-22" data-chapter="22">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 22</div>
+    <h1 class="chapter-title">Advanced Playwright Hooks &amp; Events</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">22.1 Page Events</h2>
+<div class="code-block"><pre><code>// Request/Response monitoring
+page.on(&#x27;request&#x27;, req =&gt; console.log(&#x27;&gt;&gt;&#x27;, req.url()));
+page.on(&#x27;response&#x27;, res =&gt; console.log(&#x27;&lt;&lt;&#x27;, res.status(), res.url()));
+
+// Console messages
+page.on(&#x27;console&#x27;, msg =&gt; {
+  if (msg.type() === &#x27;error&#x27;) console.error(&#x27;JS Error:&#x27;, msg.text());
+});
+
+// Dialog handling
+page.on(&#x27;dialog&#x27;, async dialog =&gt; {
+  console.log(&#x27;Dialog type:&#x27;, dialog.type());
+  console.log(&#x27;Dialog message:&#x27;, dialog.message());
+  await dialog.accept();
+});
+
+// Page crash detection
+page.on(&#x27;crash&#x27;, () =&gt; console.error(&#x27;Page crashed!&#x27;));
+
+// New tab/window opened
+page.on(&#x27;popup&#x27;, async popup =&gt; {
+  await popup.waitForLoadState();
+  console.log(&#x27;New tab URL:&#x27;, popup.url());
+});</code></pre></div>
+<h2 class="section-title">22.2 Worker Fixtures (Global Scope)</h2>
+<div class="code-block"><pre><code>// Worker-scoped fixture — shared across tests in same worker
+const test = base.extend({
+  workerStorageState: [async ({ browser }, use) =&gt; {
+    // This runs once per worker (not per test)
+    const id = test.info().workerIndex;
+    const fileName = `.auth/user-${id}.json`;
+    
+    const page = await browser.newPage();
+    await page.goto(&#x27;/login&#x27;);
+    await page.getByLabel(&#x27;Email&#x27;).fill(`user${id}@test.com`);
+    await page.getByLabel(&#x27;Password&#x27;).fill(&#x27;pass123&#x27;);
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+    await page.context().storageState({ path: fileName });
+    await page.close();
+    
+    await use(fileName);
+  }, { scope: &#x27;worker&#x27; }],
+});</code></pre></div>
+<h2 class="section-title">22.3 Global Setup and Teardown</h2>
+<div class="code-block"><pre><code>// global-setup.js
+const { chromium } = require(&#x27;@playwright/test&#x27;);
+
+async function globalSetup(config) {
+  console.log(&#x27;⚙️  Global Setup Running...&#x27;);
+  // Create test data, seed DB, etc.
+  const browser = await chromium.launch();
+  // ... setup logic
+  await browser.close();
+}
+
+// global-teardown.js
+async function globalTeardown(config) {
+  console.log(&#x27;🧹 Global Teardown Running...&#x27;);
+  // Clean up test data
+}
+
+// playwright.config.js
+module.exports = defineConfig({
+  globalSetup: &#x27;./global-setup.js&#x27;,
+  globalTeardown: &#x27;./global-teardown.js&#x27;,
+});</code></pre></div>
+  </div>
+</section>
+<section class="chapter" id="chapter-23" data-chapter="23">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 23</div>
+    <h1 class="chapter-title">Error Handling &amp; Retry Strategies</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">23.1 Retry Configuration</h2>
+<div class="code-block"><pre><code>// playwright.config.js
+module.exports = defineConfig({
+  retries: process.env.CI ? 2 : 0, // Retry twice on CI
+
+  // Per-project retry
+  projects: [
+    {
+      name: &#x27;chromium&#x27;,
+      retries: 1,
+      use: { ...devices[&#x27;Desktop Chrome&#x27;] }
+    }
+  ]
+});</code></pre></div>
+<h2 class="section-title">23.2 Detecting Retry in Tests</h2>
+<div class="code-block"><pre><code>test(&#x27;flaky network test&#x27;, async ({ page }, testInfo) =&gt; {
+  // testInfo.retry is 0 on first run, 1 on first retry, etc.
+  if (testInfo.retry &gt; 0) {
+    console.log(`Retrying test: attempt ${testInfo.retry + 1}`);
+    // Clear any stale state
+    await page.context().clearCookies();
+  }
+
+  await page.goto(&#x27;/&#x27;);
+  // ... test actions
+});</code></pre></div>
+<h2 class="section-title">23.3 Custom Error Handling</h2>
+<div class="code-block"><pre><code>// utils/errorHandler.js
+async function safeClick(locator, options = {}) {
+  try {
+    await locator.click({ timeout: 5000, ...options });
+  } catch (error) {
+    console.error(`Click failed: ${error.message}`);
+    // Take screenshot for debugging
+    await locator.page().screenshot({ path: &#x27;error-screenshot.png&#x27; });
+    throw error; // Re-throw to fail the test
+  }
+}
+
+// Retry a specific action
+async function retryAction(action, maxRetries = 3) {
+  for (let i = 0; i &lt; maxRetries; i++) {
+    try {
+      return await action();
+    } catch (err) {
+      if (i === maxRetries - 1) throw err;
+      console.log(`Attempt ${i + 1} failed, retrying...`);
+      await new Promise(r =&gt; setTimeout(r, 1000));
+    }
+  }
+}</code></pre></div>
+<h2 class="section-title">23.4 Handling Flaky Tests</h2>
+<ul class="styled-list"><li>Use auto-waiting instead of fixed sleep()</li><li>Add retries in CI but investigate root cause</li><li>Use test.fixme() for known flaky tests with a bug tag</li><li>Enable trace on failure to diagnose intermittent issues</li><li>Check for race conditions in async operations</li><li>Use networkidle wait state for pages with lazy loading</li></ul>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: A flaky test is a debt item. Treating retries as a permanent fix is wrong — retries buy time, but every flaky test should have a Jira ticket tracking its root cause fix.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-24" data-chapter="24">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 24</div>
+    <h1 class="chapter-title">Best Practices &amp; Design Patterns</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">24.1 The Golden Rules of Playwright Testing</h2>
+<ul class="styled-list"><li>✅ Use getByRole() first — it tests like a real user</li><li>✅ Keep tests independent — each test sets its own state</li><li>✅ Use fixtures for shared setup, not beforeEach</li><li>✅ Use API for test data setup, not UI</li><li>✅ Name tests descriptively: &#x27;user can add product to cart&#x27; not &#x27;test1&#x27;</li><li>✅ One assertion per test concept — not one test per file</li><li>❌ Never use page.waitForTimeout()</li><li>❌ Never hardcode credentials in test files</li><li>❌ Never use test.only in committed code</li><li>❌ Never share state between tests via module-level variables</li></ul>
+<h2 class="section-title">24.2 AAA Pattern – Arrange, Act, Assert</h2>
+<div class="code-block"><pre><code>test(&#x27;user can update profile email&#x27;, async ({ page }) =&gt; {
+  // ARRANGE — set up preconditions
+  await page.goto(&#x27;/profile&#x27;);
+  await expect(page.getByLabel(&#x27;Email&#x27;)).toHaveValue(&#x27;old@email.com&#x27;);
+
+  // ACT — perform the action being tested
+  await page.getByLabel(&#x27;Email&#x27;).fill(&#x27;new@email.com&#x27;);
+  await page.getByRole(&#x27;button&#x27;, { name: &#x27;Save Changes&#x27; }).click();
+
+  // ASSERT — verify the expected outcome
+  await expect(page.locator(&#x27;.success-toast&#x27;)).toHaveText(&#x27;Profile updated!&#x27;);
+  await expect(page.getByLabel(&#x27;Email&#x27;)).toHaveValue(&#x27;new@email.com&#x27;);
+});</code></pre></div>
+<h2 class="section-title">24.3 DRY vs DAMP</h2>
+<p>Tests should be DAMP (Descriptive And Meaningful Phrases), not DRY (Don&#x27;t Repeat Yourself). Some repetition in tests is acceptable if it makes them more readable. Over-abstracting tests makes them hard to understand.</p>
+<h2 class="section-title">24.4 Test Naming Conventions</h2>
+<div class="code-block"><pre><code>// Good naming — describes behavior
+test(&#x27;login fails with invalid password&#x27;);
+test(&#x27;cart shows 0 items for new user&#x27;);
+test(&#x27;admin can delete any user&#x27;);
+test(&#x27;checkout requires valid credit card&#x27;);
+
+// Bad naming — meaningless
+test(&#x27;test1&#x27;);
+test(&#x27;check login&#x27;);
+test(&#x27;verify cart&#x27;);</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Run your test suite with --list to review all test names. If you can&#x27;t tell what a test verifies from its name alone, rename it. Good test names are documentation.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-25" data-chapter="25">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 25</div>
+    <h1 class="chapter-title">AI in Test Automation</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">25.1 How AI is Transforming QA</h2>
+<p>AI is reshaping test automation in multiple dimensions: generating test cases from requirements, self-healing locators, visual regression with ML, predictive test selection, and intelligent defect analysis. As an SDET, understanding and leveraging AI tools is now a core skill.</p>
+<h2 class="section-title">25.2 AI-Powered Test Generation</h2>
+<div class="code-block"><pre><code>// Using Claude API to generate Playwright tests from a requirement
+const Anthropic = require(&#x27;@anthropic-ai/sdk&#x27;);
+
+const client = new Anthropic();
+
+async function generateTest(requirement) {
+  const message = await client.messages.create({
+    model: &#x27;claude-opus-4-20250514&#x27;,
+    max_tokens: 2048,
+    messages: [{
+      role: &#x27;user&#x27;,
+      content: `Generate a Playwright JavaScript test for this requirement:
+      
+&quot;${requirement}&quot;
+
+Use Page Object Model pattern. Include:
+- All imports
+- Page class with locators
+- Test with arrange/act/assert
+- Error handling
+Return only the code.`
+    }]
+  });
+  
+  return message.content[0].text;
+}
+
+// Usage
+const testCode = await generateTest(
+  &#x27;User should be able to login with valid credentials and be redirected to dashboard&#x27;
+);
+console.log(testCode);</code></pre></div>
+<h2 class="section-title">25.3 Self-Healing Locators with AI</h2>
+<div class="code-block"><pre><code>// Concept: If primary locator fails, try AI-suggested fallbacks
+async function resilientLocate(page, primaryLocator, context) {
+  try {
+    const el = page.locator(primaryLocator);
+    await el.waitFor({ timeout: 2000 });
+    return el;
+  } catch {
+    // Ask Claude for alternative locator strategies
+    const alternatives = await suggestAlternativeLocators(context);
+    for (const alt of alternatives) {
+      try {
+        const el = page.locator(alt);
+        await el.waitFor({ timeout: 1000 });
+        console.log(`Self-healed: ${primaryLocator} → ${alt}`);
+        return el;
+      } catch { continue; }
+    }
+    throw new Error(`Could not locate element: ${primaryLocator}`);
+  }
+}</code></pre></div>
+<h2 class="section-title">25.4 AI Tools for QA Engineers</h2>
+<div class="table-wrap"><table class="data-table">
+  <thead><tr><th>Tool</th><th>Use Case</th><th>Integration</th></tr></thead>
+  <tbody><tr><td>Claude AI</td><td>Test generation, analysis</td><td>API / Claude Desktop</td></tr><tr><td>GitHub Copilot</td><td>Code completion in IDE</td><td>VS Code plugin</td></tr><tr><td>Testim</td><td>Self-healing tests</td><td>SaaS platform</td></tr><tr><td>Applitools</td><td>Visual AI testing</td><td>Playwright plugin</td></tr><tr><td>ChatGPT</td><td>Test case ideation</td><td>API</td></tr><tr><td>Diffblue</td><td>Unit test generation</td><td>Java focus</td></tr></tbody>
+</table></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Use AI for the boring parts — generating repetitive test boilerplate, suggesting edge cases you might miss, and analyzing test failure logs. Keep human judgment for test strategy and critical path validation.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-26" data-chapter="26">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 26</div>
+    <h1 class="chapter-title">Agentic AI in Testing</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">26.1 What is Agentic AI?</h2>
+<p>Agentic AI refers to AI systems that can plan, take actions, observe results, and adjust plans autonomously to achieve a goal — without step-by-step human instruction. In testing, this means an AI agent can receive a high-level goal (&#x27;test the checkout flow&#x27;) and autonomously explore, generate tests, execute them, analyze failures, and report results.</p>
+<h2 class="section-title">26.2 AutoGen Multi-Agent Testing Framework</h2>
+<div class="code-block"><pre><code># pip install pyautogen
+import autogen
+
+# Configure LLM
+llm_config = {
+  &quot;model&quot;: &quot;claude-opus-4-20250514&quot;,
+  &quot;api_key&quot;: &quot;YOUR_API_KEY&quot;,
+  &quot;api_type&quot;: &quot;anthropic&quot;
+}
+
+# QA Agent — plans the test strategy
+qa_agent = autogen.AssistantAgent(
+  name=&quot;QA_Strategist&quot;,
+  system_message=&quot;You are an expert SDET. When given a feature, generate comprehensive test scenarios covering happy path, edge cases, and negative tests.&quot;,
+  llm_config=llm_config
+)
+
+# Code Agent — writes the Playwright code
+code_agent = autogen.AssistantAgent(
+  name=&quot;Test_Coder&quot;,
+  system_message=&quot;You write Playwright JavaScript test code. Follow POM pattern. Write clean, maintainable tests.&quot;,
+  llm_config=llm_config
+)
+
+# User Proxy — orchestrates and executes
+proxy = autogen.UserProxyAgent(
+  name=&quot;Orchestrator&quot;,
+  human_input_mode=&quot;NEVER&quot;,
+  max_consecutive_auto_reply=10,
+  code_execution_config={&quot;work_dir&quot;: &quot;generated-tests&quot;}
+)
+
+# Start the multi-agent workflow
+proxy.initiate_chat(
+  qa_agent,
+  message=&quot;Generate test cases for a checkout feature with cart, payment, and confirmation.&quot;
+)</code></pre></div>
+<h2 class="section-title">26.3 LangChain QA Agent</h2>
+<div class="code-block"><pre><code># pip install langchain anthropic
+from langchain_anthropic import ChatAnthropic
+from langchain.agents import AgentExecutor, create_tool_calling_agent
+from langchain.tools import tool
+
+llm = ChatAnthropic(model=&quot;claude-opus-4-20250514&quot;)
+
+@tool
+def generate_playwright_test(requirement: str) -&gt; str:
+  &quot;Generate a Playwright test for the given requirement.&quot;
+  # Call Claude to generate test
+  response = llm.invoke(f&quot;Write Playwright JS test for: {requirement}&quot;)
+  return response.content
+
+@tool 
+def run_playwright_test(test_file: str) -&gt; str:
+  &quot;Execute a Playwright test file and return results.&quot;
+  import subprocess
+  result = subprocess.run(
+    [&#x27;npx&#x27;, &#x27;playwright&#x27;, &#x27;test&#x27;, test_file],
+    capture_output=True, text=True
+  )
+  return result.stdout + result.stderr
+
+tools = [generate_playwright_test, run_playwright_test]
+agent = create_tool_calling_agent(llm, tools, prompt)
+executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+result = executor.invoke({&quot;input&quot;: &quot;Test the user registration flow&quot;})</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Start with simple single-agent workflows before building multi-agent systems. A single Claude API call that generates a Playwright test from a Jira ticket is already incredibly valuable and production-ready.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-27" data-chapter="27">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 27</div>
+    <h1 class="chapter-title">MCP – Model Context Protocol Integration</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">27.1 What is MCP?</h2>
+<p>Model Context Protocol (MCP) is an open standard developed by Anthropic that allows AI models (like Claude) to connect to external tools and data sources through a standardized interface. Think of it as a USB standard for AI — any MCP-compatible tool can be plugged into any MCP-compatible AI.</p>
+<h2 class="section-title">27.2 MCP Architecture</h2>
+<div class="code-block"><pre><code>┌──────────────────────────────────────────────┐
+│              Claude AI (Host)                │
+└──────────────────┬───────────────────────────┘
+                   │ MCP Protocol (JSON-RPC)
+       ┌───────────┼───────────────┐
+       ▼           ▼               ▼
+┌──────────┐ ┌──────────┐ ┌──────────────┐
+│ Jira MCP │ │Jenkins   │ │ Playwright   │
+│ Server   │ │MCP Server│ │ MCP Server   │
+└──────────┘ └──────────┘ └──────────────┘
+       │           │               │
+   Jira API   Jenkins API    Browser/Tests</code></pre></div>
+<h2 class="section-title">27.3 Playwright MCP Server</h2>
+<div class="code-block"><pre><code># Install Playwright MCP
+npm install -g @playwright/mcp
+
+# Add to Claude Desktop config
+# ~/Library/Application Support/Claude/claude_desktop_config.json
+{
+  &quot;mcpServers&quot;: {
+    &quot;playwright&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;@playwright/mcp@latest&quot;]
+    }
+  }
+}
+
+# Now Claude Desktop can:
+# - Navigate to URLs
+# - Click elements
+# - Fill forms
+# - Take screenshots
+# - Run automation tasks</code></pre></div>
+<h2 class="section-title">27.4 Building a Custom QA MCP Server</h2>
+<div class="code-block"><pre><code>// mcp-qa-server/src/index.js
+const { Server } = require(&#x27;@modelcontextprotocol/sdk/server/index.js&#x27;);
+const { StdioServerTransport } = require(&#x27;@modelcontextprotocol/sdk/server/stdio.js&#x27;);
+
+const server = new Server(
+  { name: &#x27;qa-automation-mcp&#x27;, version: &#x27;1.0.0&#x27; },
+  { capabilities: { tools: {} } }
+);
+
+// Tool: Run Playwright tests
+server.setRequestHandler(&#x27;tools/call&#x27;, async (req) =&gt; {
+  const { name, arguments: args } = req.params;
+  
+  if (name === &#x27;run_playwright_tests&#x27;) {
+    const { testFile, browser } = args;
+    const { execSync } = require(&#x27;child_process&#x27;);
+    
+    const result = execSync(
+      `npx playwright test ${testFile} --project=${browser || &#x27;chromium&#x27;} --reporter=json`,
+      { encoding: &#x27;utf8&#x27; }
+    );
+    
+    return { content: [{ type: &#x27;text&#x27;, text: result }] };
+  }
+  
+  if (name === &#x27;get_test_report&#x27;) {
+    const fs = require(&#x27;fs&#x27;);
+    const report = fs.readFileSync(&#x27;./playwright-report/index.html&#x27;, &#x27;utf8&#x27;);
+    return { content: [{ type: &#x27;text&#x27;, text: report }] };
+  }
+});
+
+// Start server
+const transport = new StdioServerTransport();
+server.connect(transport).then(() =&gt; {
+  console.error(&#x27;QA MCP Server running&#x27;);
+});</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: An MCP server you build for your Playwright suite can be plugged into Claude Desktop and used by your entire QA team — no API keys, no complex setup, just a conversation with Claude to run tests.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-28" data-chapter="28">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 28</div>
+    <h1 class="chapter-title">Building Smart Test Agents</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">28.1 What is a Test Agent?</h2>
+<p>A test agent is an autonomous system that can receive a high-level objective, break it down into subtasks, use available tools (browser, API, Jira, CI), execute steps, observe outcomes, and adapt its plan — all without human intervention for each step.</p>
+<h2 class="section-title">28.2 Complete QA Agent Architecture</h2>
+<div class="code-block"><pre><code>// qa-agent/agent.js
+const Anthropic = require(&#x27;@anthropic-ai/sdk&#x27;);
+const { execSync } = require(&#x27;child_process&#x27;);
+const fs = require(&#x27;fs&#x27;);
+
+const client = new Anthropic();
+
+// Tools the agent can use
+const tools = [
+  {
+    name: &#x27;generate_test&#x27;,
+    description: &#x27;Generate a Playwright test for a requirement&#x27;,
+    input_schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        requirement: { type: &#x27;string&#x27;, description: &#x27;Test requirement&#x27; },
+        pageName:    { type: &#x27;string&#x27;, description: &#x27;Page to test&#x27; },
+      },
+      required: [&#x27;requirement&#x27;]
+    }
+  },
+  {
+    name: &#x27;run_test&#x27;,
+    description: &#x27;Execute a Playwright test file&#x27;,
+    input_schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        filePath: { type: &#x27;string&#x27;, description: &#x27;Path to test file&#x27; },
+      },
+      required: [&#x27;filePath&#x27;]
+    }
+  },
+  {
+    name: &#x27;save_file&#x27;,
+    description: &#x27;Save content to a file&#x27;,
+    input_schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        path:    { type: &#x27;string&#x27; },
+        content: { type: &#x27;string&#x27; },
+      },
+      required: [&#x27;path&#x27;, &#x27;content&#x27;]
+    }
+  }
+];
+
+// Tool execution
+function executeTool(toolName, toolInput) {
+  switch(toolName) {
+    case &#x27;save_file&#x27;:
+      fs.writeFileSync(toolInput.path, toolInput.content);
+      return `File saved: ${toolInput.path}`;
+    
+    case &#x27;run_test&#x27;:
+      try {
+        const result = execSync(
+          `npx playwright test ${toolInput.filePath} --reporter=list`,
+          { encoding: &#x27;utf8&#x27;, timeout: 120000 }
+        );
+        return result;
+      } catch(e) {
+        return `Test failed: ${e.stdout}${e.stderr}`;
+      }
+    
+    default:
+      return &#x27;Unknown tool&#x27;;
+  }
+}
+
+// Agentic loop
+async function runQAAgent(userStory) {
+  const messages = [{
+    role: &#x27;user&#x27;,
+    content: `You are an expert SDET. Given this user story, 
+    generate a Playwright test, save it, run it, and report results.
+    
+    User Story: ${userStory}`
+  }];
+
+  while (true) {
+    const response = await client.messages.create({
+      model: &#x27;claude-opus-4-20250514&#x27;,
+      max_tokens: 4096,
+      tools,
+      messages
+    });
+
+    messages.push({ role: &#x27;assistant&#x27;, content: response.content });
+
+    if (response.stop_reason === &#x27;end_turn&#x27;) {
+      const text = response.content.find(b =&gt; b.type === &#x27;text&#x27;);
+      console.log(&#x27;Agent Result:&#x27;, text?.text);
+      break;
+    }
+
+    if (response.stop_reason === &#x27;tool_use&#x27;) {
+      const toolResults = [];
+      for (const block of response.content) {
+        if (block.type === &#x27;tool_use&#x27;) {
+          const result = executeTool(block.name, block.input);
+          toolResults.push({
+            type: &#x27;tool_result&#x27;,
+            tool_use_id: block.id,
+            content: result
+          });
+        }
+      }
+      messages.push({ role: &#x27;user&#x27;, content: toolResults });
+    }
+  }
+}
+
+runQAAgent(&#x27;As a user I want to login with valid credentials and see my dashboard&#x27;);</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: Start with a 2-tool agent (generate + run). Once stable, add tools incrementally: save_to_jira, send_report_email, update_test_suite. Agent complexity should grow with demonstrated value.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-29" data-chapter="29">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 29</div>
+    <h1 class="chapter-title">Scaling Automation for Enterprise</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">29.1 Enterprise Testing Challenges</h2>
+<ul class="styled-list"><li>Large test suites (1000+ tests) — need sharding and parallelism</li><li>Multiple teams — need shared framework standards</li><li>Multiple environments — staging, UAT, production</li><li>Flaky tests causing false alarms — need retry + monitoring</li><li>Test data management — need isolated, reproducible data</li><li>Reporting and metrics — need dashboards for leadership</li></ul>
+<h2 class="section-title">29.2 Enterprise Framework Structure</h2>
+<div class="code-block"><pre><code>enterprise-qa-framework/
+├── packages/
+│   ├── core/               ← Shared utilities, base classes
+│   ├── web-tests/          ← UI automation
+│   ├── api-tests/          ← API automation
+│   └── performance/        ← Load testing
+├── config/
+│   ├── environments/       ← env configs per environment
+│   │   ├── staging.js
+│   │   ├── uat.js
+│   │   └── production.js
+│   └── playwright.config.js
+├── ci/
+│   ├── Jenkinsfile
+│   ├── github-actions.yml
+│   └── docker-compose.yml
+├── docs/
+│   ├── contributing.md
+│   └── test-standards.md
+└── scripts/
+    ├── generate-test.js    ← AI test generator
+    └── analyze-results.js  ← AI failure analyzer</code></pre></div>
+<h2 class="section-title">29.3 Multi-Environment Configuration</h2>
+<div class="code-block"><pre><code>// config/environments/staging.js
+module.exports = {
+  baseURL: &#x27;https://staging.myapp.com&#x27;,
+  apiURL: &#x27;https://api-staging.myapp.com&#x27;,
+  adminEmail: process.env.STAGING_ADMIN_EMAIL,
+  adminPassword: process.env.STAGING_ADMIN_PASS,
+  timeout: 30000,
+};
+
+// playwright.config.js
+const env = process.env.TEST_ENV || &#x27;staging&#x27;;
+const envConfig = require(`./environments/${env}`);
+
+module.exports = defineConfig({
+  use: {
+    baseURL: envConfig.baseURL,
+    timeout: envConfig.timeout,
+  }
+});
+
+// Run against UAT:
+// TEST_ENV=uat npx playwright test</code></pre></div>
+<h2 class="section-title">29.4 Test Metrics and Quality Gates</h2>
+<div class="code-block"><pre><code>// scripts/analyze-results.js
+// Fail the build if:
+// - Pass rate &lt; 98%
+// - Any test takes &gt; 30 seconds
+// - Flake rate &gt; 2%
+
+const results = require(&#x27;./test-results/results.json&#x27;);
+const passRate = results.stats.expected / results.stats.total * 100;
+
+if (passRate &lt; 98) {
+  console.error(`Build failed: Pass rate ${passRate.toFixed(1)}% &lt; 98%`);
+  process.exit(1);
+}
+console.log(`✅ Quality gate passed: ${passRate.toFixed(1)}% pass rate`);</code></pre></div>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: In enterprise, invest in a centralized Playwright config package that all teams import. When you upgrade Playwright or add a new reporter, one PR updates all teams simultaneously.</p></div>
+</div>
+  </div>
+</section>
+<section class="chapter" id="chapter-30" data-chapter="30">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 30</div>
+    <h1 class="chapter-title">Interview Questions &amp; Answers</h1>
+    <div class="chapter-divider"></div>
+  </div>
+  <div class="chapter-content">
+    <h2 class="section-title">30.1 Core Playwright Questions</h2>
+<p>Q1: What is the difference between page.locator() and page.$() in Playwright?</p>
+<div class="code-block"><pre><code>// page.$() — returns ElementHandle (old API, deprecated)
+// - Fetches element immediately, may be stale
+// - No auto-waiting
+const el = await page.$(&#x27;#button&#x27;); // returns null if not found
+
+// page.locator() — returns Locator (modern API, preferred)
+// - Lazy, auto-retrying, auto-waiting
+// - Never stale, always re-queried
+const btn = page.locator(&#x27;#button&#x27;);
+await btn.click(); // auto-waits for element</code></pre></div>
+<p>Q2: How does Playwright&#x27;s auto-wait work? Name 6 actionability conditions.</p>
+<ul class="styled-list"><li>1. Attached — element is in the DOM</li><li>2. Visible — element is not hidden (display, visibility, opacity)</li><li>3. Stable — element is not moving/animating</li><li>4. Enabled — not disabled for click/fill</li><li>5. Editable — for fill() actions</li><li>6. Receives events — not covered by overlay</li></ul>
+<p>Q3: How do you handle authentication in Playwright for multiple test users?</p>
+<div class="code-block"><pre><code>// Best approach: storageState
+// 1. Create setup tests that login once and save auth state
+// 2. Configure test projects to use saved auth state
+// 3. Each worker loads auth state without repeating login UI
+
+// See Chapter 13 for full implementation</code></pre></div>
+<p>Q4: What is the difference between BrowserContext and Browser?</p>
+<ul class="styled-list"><li>Browser: the actual browser process (Chromium/FF/WebKit)</li><li>BrowserContext: isolated session within a browser — own cookies, localStorage, cache</li><li>Multiple contexts in one browser = multiple independent sessions</li><li>Each test should get its own BrowserContext (Playwright does this automatically)</li></ul>
+<h2 class="section-title">30.2 Advanced Questions</h2>
+<p>Q5: How do you run Playwright tests in parallel and what are the modes?</p>
+<div class="code-block"><pre><code>// Mode 1: File-level parallel (default)
+// Each file runs in a separate worker
+// Tests within a file run sequentially
+
+// Mode 2: Fully parallel  
+fullyParallel: true
+// Every test in every file runs in parallel
+
+// Mode 3: Serial (ordered)
+test.describe.configure({ mode: &#x27;serial&#x27; });
+// Tests in this describe block run one after another
+
+// Mode 4: Sharding (across machines)
+npx playwright test --shard=1/3</code></pre></div>
+<p>Q6: How do you integrate Playwright with Jenkins?</p>
+<ul class="styled-list"><li>Use mcr.microsoft.com/playwright Docker image as agent</li><li>npm ci to install dependencies</li><li>npx playwright install --with-deps for browser binaries</li><li>Use junit reporter for Jenkins test results</li><li>Archive playwright-report as HTML artifact</li><li>Set env vars from Jenkins credentials (never hardcode)</li></ul>
+<h2 class="section-title">30.3 MCP &amp; AI Questions</h2>
+<p>Q7: What is MCP and how does it benefit QA automation?</p>
+<ul class="styled-list"><li>MCP (Model Context Protocol) is an open standard by Anthropic</li><li>Allows AI like Claude to use tools: run tests, query Jira, read reports</li><li>QA benefit: Natural language interface to your test suite</li><li>Example: &#x27;Run smoke tests and create a Jira ticket for any failures&#x27;</li><li>No code changes needed — just connect MCP server to Claude Desktop</li></ul>
+<p>Q8: How would you build an autonomous test agent?</p>
+<ul class="styled-list"><li>Use Claude API with tools (generate_test, run_test, create_jira_ticket)</li><li>Implement an agentic loop: call API → execute tools → feed results back → repeat</li><li>Agent receives user story, generates Playwright code, runs it, reports</li><li>Use MCP servers for standardized tool access</li><li>Add human-in-the-loop approval for critical actions (e.g., merging PRs)</li></ul>
+<h2 class="section-title">30.4 Common Interview Tips</h2>
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body"><strong>Pro Tip</strong><p>Pro Tip: In interviews, always mention your MCP/AI experience — it immediately differentiates you from 95% of SDET candidates. Demonstrate with a real project: &#x27;I built an MCP server that lets Claude run our Playwright suite via natural language.&#x27;</p></div>
+</div>
+<ul class="styled-list"><li>Know the testing pyramid and when to use each level</li><li>Be able to explain auto-waiting vs manual waits</li><li>Know POM, fixtures, and when to use each</li><li>Have real examples of CI/CD integration (Jenkins/GitHub Actions)</li><li>Mention Docker for environment consistency</li><li>Talk about metrics: pass rate, flake rate, execution time</li><li>Show AI/MCP knowledge as a competitive differentiator</li></ul>
+<div class="callout exercise">
+  <div class="callout-icon">✏️</div>
+  <div class="callout-body"><strong>Hands-On Exercise</strong><p>Final Exercise: Build a complete mini framework for https://saucedemo.com with: LoginPage POM, InventoryPage POM, custom fixtures, 5 tests covering login/cart/checkout, GitHub Actions CI, and Allure reporting.</p></div>
+</div>
+  </div>
+</section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="book-footer">
+    <div class="footer-brand">Mastering <span>Playwright</span> with JavaScript</div>
+    <div class="footer-meta">By Amir Khan · Lead SDET (Automation Engineer) · Freecharge (Axis Bank), Gurugram</div>
+    <a href="https://nextgenqa94-ui.github.io/nextgenqa" class="footer-institute" target="_blank">
+      🎓 Next Gen QA IT Coaching Classes
+    </a>
+    <p style="font-size:11px;margin-top:1.2rem;color:rgba(255,255,255,0.3)">
+      Topics: Manual Testing · Selenium WebDriver · Playwright · API Testing · AI/MCP Automation
+    </p>
+  </footer>
+
+</main>
+
+<script>
+hljs.highlightAll();
+
+// ── Sidebar toggle (mobile) ──
+const sidebar  = document.getElementById('sidebar');
+const overlay  = document.getElementById('overlay');
+const menuBtn  = document.getElementById('menuBtn');
+
+menuBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('open');
+});
+overlay.addEventListener('click', () => {
+  sidebar.classList.remove('open');
+  overlay.classList.remove('open');
+});
+
+// Close sidebar on nav link click (mobile)
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth < 901) {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('open');
+    }
+  });
+});
+
+// ── Active nav + reading progress ──
+const chapters = document.querySelectorAll('.chapter');
+const navLinks = document.querySelectorAll('.nav-link[data-target]');
+const progressFill = document.getElementById('progressFill');
+const progressPct  = document.getElementById('progressPct');
+
+function updateNav() {
+  const scrollY = window.scrollY;
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = Math.min(100, Math.round((scrollY / docH) * 100));
+  progressFill.style.width = pct + '%';
+  progressPct.textContent  = pct + '%';
+
+  let activeId = '';
+  chapters.forEach(ch => {
+    if (ch.getBoundingClientRect().top < 200) activeId = ch.id;
+  });
+
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.dataset.target === activeId);
+  });
+}
+
+window.addEventListener('scroll', updateNav, { passive: true });
+updateNav();
+
+// ── Chapter header data-chapter-bg attribute ──
+document.querySelectorAll('.chapter-header').forEach(header => {
+  const chapter = header.closest('.chapter');
+  const num = chapter.dataset.chapter;
+  header.setAttribute('data-chapter-bg', num);
+});
+</script>
+</body>
+</html>

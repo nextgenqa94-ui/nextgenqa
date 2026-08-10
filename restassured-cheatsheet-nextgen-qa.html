@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REST Assured Cheat Sheet – Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #161d2e;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --code-bg: #0d1117;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #0d1b35 0%, #111827 50%, #0a1628 100%);
+    border-bottom: 2px solid var(--green);
+    padding: 20px 32px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(16,185,129,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .logo-area { display: flex; align-items: center; gap: 16px; }
+  .logo-icon {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--green), var(--accent2));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 800;
+    color: #fff; letter-spacing: -1px;
+    box-shadow: 0 0 20px rgba(16,185,129,0.35);
+    flex-shrink: 0;
+  }
+  .title-block h1 {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #fff 0%, var(--green) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .title-block h1 span { color: var(--green); -webkit-text-fill-color: var(--green); }
+  .title-block p { color: var(--muted); font-size: 11px; margin-top: 2px; letter-spacing: 0.5px; }
+  .coaching-info { text-align: right; font-size: 11.5px; }
+  .coaching-info .name { font-size: 14px; font-weight: 700; color: var(--accent3); }
+  .coaching-info .phone {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 3px; color: var(--green); font-weight: 600; font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .coaching-info .tags { margin-top: 5px; display: flex; gap: 5px; justify-content: flex-end; flex-wrap: wrap; }
+  .tag {
+    background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4);
+    color: #a78bfa; padding: 1px 7px; border-radius: 20px; font-size: 9.5px; font-weight: 600;
+  }
+  .tag.blue { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); color: var(--accent); }
+  .tag.amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: var(--accent3); }
+  .tag.green { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: var(--green); }
+
+  .section-label {
+    font-size: 9px; letter-spacing: 2px; font-weight: 700;
+    text-transform: uppercase; color: var(--muted);
+    padding: 8px 32px 4px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-left: 1px solid var(--border);
+  }
+
+  .col { border-right: 1px solid var(--border); }
+
+  .card {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 12px;
+  }
+  .card-title {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.4px;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 7px; padding-bottom: 5px;
+    border-bottom: 1px solid rgba(0,212,255,0.15);
+  }
+  .card-title .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+    box-shadow: 0 0 6px var(--accent);
+  }
+  .card-title.purple .dot { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; }
+  .card-title.purple { color: #a78bfa; border-bottom-color: rgba(167,139,250,0.15); }
+  .card-title.green .dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .card-title.green { color: var(--green); border-bottom-color: rgba(16,185,129,0.15); }
+  .card-title.amber .dot { background: var(--accent3); box-shadow: 0 0 6px var(--accent3); }
+  .card-title.amber { color: var(--accent3); border-bottom-color: rgba(245,158,11,0.15); }
+  .card-title.red .dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .card-title.red { color: #fb7185; border-bottom-color: rgba(239,68,68,0.15); }
+
+  .item { margin-bottom: 6px; }
+  .item:last-child { margin-bottom: 0; }
+  .item-desc {
+    font-size: 10.5px; color: #94a3b8; margin-bottom: 3px; font-weight: 400;
+  }
+  code {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 2px solid rgba(16,185,129,0.5);
+    color: #7dd3fc;
+    padding: 4px 7px;
+    border-radius: 4px;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.6;
+  }
+  code .kw  { color: #c792ea; }
+  code .fn  { color: #82aaff; }
+  code .str { color: #c3e88d; }
+  code .cm  { color: #546e7a; font-style: italic; }
+  code .num { color: #f78c6c; }
+  code .op  { color: #89ddff; }
+  code .ann { color: #ffcb6b; }
+  code .cls { color: #f07178; }
+
+  .footer {
+    background: linear-gradient(90deg, #0d1b35, #111827);
+    border-top: 2px solid var(--accent2);
+    padding: 10px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer .left { font-size: 10px; color: var(--muted); }
+  .footer .left span { color: var(--green); font-weight: 700; }
+  .footer .right { font-size: 10px; color: var(--muted); text-align: right; }
+  .footer .right strong { color: var(--accent3); }
+
+  .span2 { grid-column: span 2; }
+  .span3 { grid-column: span 3; }
+  .span4 { grid-column: span 4; }
+
+  @media print {
+    body { font-size: 11px; }
+    .grid { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-area">
+    <div class="logo-icon">RA</div>
+    <div class="title-block">
+      <h1>REST Assured <span>Cheat Sheet</span></h1>
+      <p>API TESTING WITH JAVA · QUICK REFERENCE GUIDE</p>
+    </div>
+  </div>
+  <div class="coaching-info">
+    <div class="name">🎓 Next Gen QA IT Coaching Classes</div>
+    <div class="phone">📞 Mr. Khan Sir &nbsp;|&nbsp; 8700350994</div>
+    <div class="tags" style="margin-top:5px;">
+      <span class="tag blue">CBSE/ICSE</span>
+      <span class="tag amber">B.Tech / BCA / MCA</span>
+      <span class="tag">Polytechnic</span>
+      <span class="tag blue">Online &amp; Offline</span>
+      <span class="tag green">API Testing</span>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 1 – Setup -->
+<div class="section-label">Maven / Gradle Setup · Base URI Config · Static Imports · Request &amp; Response Specifications</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Maven Dependency (pom.xml)</div>
+      <div class="item"><div class="item-desc">REST Assured + TestNG + Jackson + JSON Schema Validator</div><code><span class="str">&lt;dependency&gt;</span>
+  <span class="str">&lt;groupId&gt;</span>io.rest-assured<span class="str">&lt;/groupId&gt;</span>
+  <span class="str">&lt;artifactId&gt;</span>rest-assured<span class="str">&lt;/artifactId&gt;</span>
+  <span class="str">&lt;version&gt;</span>5.4.0<span class="str">&lt;/version&gt;</span>
+<span class="str">&lt;/dependency&gt;</span>
+<span class="str">&lt;dependency&gt;</span>
+  <span class="str">&lt;groupId&gt;</span>io.rest-assured<span class="str">&lt;/groupId&gt;</span>
+  <span class="str">&lt;artifactId&gt;</span>json-schema-validator<span class="str">&lt;/artifactId&gt;</span>
+  <span class="str">&lt;version&gt;</span>5.4.0<span class="str">&lt;/version&gt;</span>
+<span class="str">&lt;/dependency&gt;</span>
+<span class="str">&lt;dependency&gt;</span>
+  <span class="str">&lt;groupId&gt;</span>org.testng<span class="str">&lt;/groupId&gt;</span>
+  <span class="str">&lt;artifactId&gt;</span>testng<span class="str">&lt;/artifactId&gt;</span>
+  <span class="str">&lt;version&gt;</span>7.9.0<span class="str">&lt;/version&gt;</span>
+<span class="str">&lt;/dependency&gt;</span>
+<span class="str">&lt;dependency&gt;</span>
+  <span class="str">&lt;groupId&gt;</span>com.fasterxml.jackson.core<span class="str">&lt;/groupId&gt;</span>
+  <span class="str">&lt;artifactId&gt;</span>jackson-databind<span class="str">&lt;/artifactId&gt;</span>
+  <span class="str">&lt;version&gt;</span>2.17.1<span class="str">&lt;/version&gt;</span>
+<span class="str">&lt;/dependency&gt;</span></code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>Static Imports (Required)</div>
+      <div class="item"><div class="item-desc">Add at the top of every test class</div><code><span class="kw">import static</span> io.restassured.<span class="cls">RestAssured</span>.*;
+<span class="kw">import static</span> io.restassured.matcher
+  .<span class="cls">RestAssuredMatchers</span>.*;
+<span class="kw">import static</span> org.hamcrest.<span class="cls">Matchers</span>.*;
+<span class="kw">import</span> io.restassured.<span class="cls">RestAssured</span>;
+<span class="kw">import</span> io.restassured.response.<span class="cls">Response</span>;
+<span class="kw">import</span> io.restassured.http.<span class="cls">ContentType</span>;
+<span class="kw">import</span> io.restassured.specification
+  .<span class="cls">RequestSpecification</span>;
+<span class="kw">import</span> io.restassured.specification
+  .<span class="cls">ResponseSpecification</span>;</code></div>
+    </div>
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>Base URI / Global Config</div>
+      <div class="item"><div class="item-desc">Set once in @BeforeClass or @BeforeSuite</div><code><span class="cls">RestAssured</span>.baseURI  = <span class="str">"https://api.example.com"</span>;
+<span class="cls">RestAssured</span>.basePath = <span class="str">"/v1"</span>;
+<span class="cls">RestAssured</span>.port     = <span class="num">8080</span>;
+<span class="cm">// Skip SSL certificate validation</span>
+<span class="cls">RestAssured</span>.<span class="fn">useRelaxedHTTPSValidation</span>();
+<span class="cm">// Reset all global config</span>
+<span class="cls">RestAssured</span>.<span class="fn">reset</span>();</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>Request Specification (Reusable)</div>
+      <div class="item"><div class="item-desc">Build once, reuse across all tests</div><code><span class="kw">import</span> io.restassured.builder
+  .<span class="cls">RequestSpecBuilder</span>;
+
+<span class="cls">RequestSpecification</span> spec =
+  <span class="kw">new</span> <span class="cls">RequestSpecBuilder</span>()
+  .<span class="fn">setBaseUri</span>(<span class="str">"https://api.example.com"</span>)
+  .<span class="fn">setBasePath</span>(<span class="str">"/v1"</span>)
+  .<span class="fn">addHeader</span>(<span class="str">"Content-Type"</span>,
+             <span class="str">"application/json"</span>)
+  .<span class="fn">addHeader</span>(<span class="str">"Authorization"</span>,
+             <span class="str">"Bearer "</span> + token)
+  .<span class="fn">setRelaxedHTTPSValidation</span>()
+  .<span class="fn">build</span>();
+
+<span class="cm">// Use in test:</span>
+<span class="fn">given</span>().<span class="fn">spec</span>(spec)
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title red"><div class="dot"></div>Response Specification (Reusable)</div>
+      <div class="item"><div class="item-desc">Define expected response shape once</div><code><span class="kw">import</span> io.restassured.builder
+  .<span class="cls">ResponseSpecBuilder</span>;
+
+<span class="cls">ResponseSpecification</span> resSpec =
+  <span class="kw">new</span> <span class="cls">ResponseSpecBuilder</span>()
+  .<span class="fn">expectStatusCode</span>(<span class="num">200</span>)
+  .<span class="fn">expectContentType</span>(<span class="cls">ContentType</span>.JSON)
+  .<span class="fn">expectResponseTime</span>(
+    <span class="fn">lessThan</span>(<span class="num">2000L</span>),
+    <span class="cls">TimeUnit</span>.MILLISECONDS)
+  .<span class="fn">build</span>();
+
+<span class="cm">// Use in test:</span>
+<span class="fn">given</span>().<span class="fn">spec</span>(spec)
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users"</span>)
+  .<span class="fn">then</span>().<span class="fn">spec</span>(resSpec);</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROW 2 – HTTP Methods -->
+<div class="section-label">HTTP Methods · GET · POST · PUT · PATCH · DELETE · Headers · Query &amp; Path Params · Form / Multipart</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>GET Request</div>
+      <div class="item"><div class="item-desc">Simple GET / query param / path param</div><code><span class="cm">// Simple GET</span>
+<span class="fn">given</span>()
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"https://api.example.com/users"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);
+
+<span class="cm">// Query params: /users?page=1&amp;size=10</span>
+<span class="fn">given</span>()
+  .<span class="fn">queryParam</span>(<span class="str">"page"</span>, <span class="num">1</span>)
+  .<span class="fn">queryParam</span>(<span class="str">"size"</span>, <span class="num">10</span>)
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);
+
+<span class="cm">// Path param: /users/42</span>
+<span class="fn">given</span>()
+  .<span class="fn">pathParam</span>(<span class="str">"id"</span>, <span class="num">42</span>)
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users/{id}"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);</code></div>
+    </div>
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>Headers &amp; Cookies</div>
+      <div class="item"><div class="item-desc">Single / multiple headers / cookie</div><code><span class="fn">given</span>()
+  .<span class="fn">header</span>(<span class="str">"Authorization"</span>,<span class="str">"Bearer abc"</span>)
+  .<span class="fn">header</span>(<span class="str">"Accept"</span>,<span class="str">"application/json"</span>)
+  .<span class="fn">headers</span>(<span class="str">"X-Custom"</span>,<span class="str">"v1"</span>,<span class="str">"X-Req"</span>,<span class="str">"id"</span>)
+  .<span class="fn">cookie</span>(<span class="str">"session"</span>, <span class="str">"xyz123"</span>)
+  .<span class="fn">contentType</span>(<span class="cls">ContentType</span>.JSON)
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/profile"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>POST Request</div>
+      <div class="item"><div class="item-desc">POST with JSON String body</div><code><span class="cls">String</span> body =
+  <span class="str">"{ \"name\": \"Alice\","</span>
++ <span class="str">"  \"email\": \"a@b.com\" }"</span>;
+
+<span class="fn">given</span>()
+  .<span class="fn">contentType</span>(<span class="cls">ContentType</span>.JSON)
+  .<span class="fn">body</span>(body)
+  .<span class="fn">when</span>().<span class="fn">post</span>(<span class="str">"/users"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">201</span>);</code></div>
+      <div class="item"><div class="item-desc">POST with HashMap / POJO body</div><code><span class="cm">// HashMap (Jackson auto-serializes)</span>
+<span class="cls">Map</span>&lt;<span class="cls">String</span>,<span class="cls">Object</span>&gt; map = <span class="kw">new</span> <span class="cls">HashMap</span>&lt;&gt;();
+map.<span class="fn">put</span>(<span class="str">"name"</span>, <span class="str">"Alice"</span>);
+map.<span class="fn">put</span>(<span class="str">"age"</span>,  <span class="num">30</span>);
+
+<span class="cm">// POJO (needs getters/setters)</span>
+<span class="cls">User</span> user = <span class="kw">new</span> <span class="cls">User</span>(<span class="str">"Alice"</span>, <span class="num">30</span>);
+
+<span class="fn">given</span>().<span class="fn">contentType</span>(<span class="cls">ContentType</span>.JSON)
+  .<span class="fn">body</span>(user)
+  .<span class="fn">when</span>().<span class="fn">post</span>(<span class="str">"/users"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">201</span>);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>PUT &amp; PATCH Request</div>
+      <div class="item"><div class="item-desc">PUT (full update) / PATCH (partial update)</div><code><span class="cm">// PUT – replace entire resource</span>
+<span class="fn">given</span>()
+  .<span class="fn">contentType</span>(<span class="cls">ContentType</span>.JSON)
+  .<span class="fn">pathParam</span>(<span class="str">"id"</span>, <span class="num">42</span>)
+  .<span class="fn">body</span>(<span class="str">"{ \"name\": \"Bob\","</span>
+     + <span class="str">"  \"email\": \"b@c.com\" }"</span>)
+  .<span class="fn">when</span>().<span class="fn">put</span>(<span class="str">"/users/{id}"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);
+
+<span class="cm">// PATCH – update only given fields</span>
+<span class="fn">given</span>()
+  .<span class="fn">contentType</span>(<span class="cls">ContentType</span>.JSON)
+  .<span class="fn">pathParam</span>(<span class="str">"id"</span>, <span class="num">42</span>)
+  .<span class="fn">body</span>(<span class="str">"{ \"name\": \"Bob\" }"</span>)
+  .<span class="fn">when</span>().<span class="fn">patch</span>(<span class="str">"/users/{id}"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);</code></div>
+    </div>
+    <div class="card">
+      <div class="card-title red"><div class="dot"></div>DELETE &amp; HEAD Request</div>
+      <div class="item"><div class="item-desc">DELETE by id / HEAD for headers only</div><code><span class="cm">// DELETE</span>
+<span class="fn">given</span>()
+  .<span class="fn">pathParam</span>(<span class="str">"id"</span>, <span class="num">42</span>)
+  .<span class="fn">when</span>().<span class="fn">delete</span>(<span class="str">"/users/{id}"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">204</span>);
+
+<span class="cm">// HEAD – headers only, no body</span>
+<span class="fn">given</span>()
+  .<span class="fn">when</span>().<span class="fn">head</span>(<span class="str">"/users"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>)
+  .<span class="fn">header</span>(<span class="str">"Content-Type"</span>,
+    <span class="fn">containsString</span>(<span class="str">"json"</span>));</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>Form Data &amp; Multipart Upload</div>
+      <div class="item"><div class="item-desc">Form URL-encoded (login forms)</div><code><span class="fn">given</span>()
+  .<span class="fn">contentType</span>(
+    <span class="str">"application/x-www-form-urlencoded"</span>)
+  .<span class="fn">formParam</span>(<span class="str">"username"</span>, <span class="str">"admin"</span>)
+  .<span class="fn">formParam</span>(<span class="str">"password"</span>, <span class="str">"pass123"</span>)
+  .<span class="fn">when</span>().<span class="fn">post</span>(<span class="str">"/login"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);</code></div>
+      <div class="item"><div class="item-desc">Multipart file upload</div><code><span class="fn">given</span>()
+  .<span class="fn">multiPart</span>(<span class="str">"file"</span>, <span class="kw">new</span> <span class="cls">File</span>(
+    <span class="str">"src/test/resources/doc.pdf"</span>))
+  .<span class="fn">multiPart</span>(<span class="str">"description"</span>,
+             <span class="str">"My document"</span>)
+  .<span class="fn">when</span>().<span class="fn">post</span>(<span class="str">"/upload"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">201</span>);</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROW 3 – Assertions -->
+<div class="section-label">Status Code · Hamcrest Body Assertions · Header &amp; Cookie Assertions · JSONPath Extraction · Extract Response</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>Status Code &amp; Time Assertions</div>
+      <div class="item"><div class="item-desc">Exact / multiple codes / status line / time</div><code><span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);
+<span class="fn">then</span>().<span class="fn">statusCode</span>(
+  <span class="fn">anyOf</span>(<span class="fn">is</span>(<span class="num">200</span>), <span class="fn">is</span>(<span class="num">201</span>)));
+<span class="fn">then</span>().<span class="fn">statusLine</span>(<span class="str">"HTTP/1.1 200 OK"</span>);
+<span class="fn">then</span>().<span class="fn">statusLine</span>(
+  <span class="fn">containsString</span>(<span class="str">"OK"</span>));
+
+<span class="cm">// Response time under 2 seconds</span>
+<span class="fn">then</span>().<span class="fn">time</span>(
+  <span class="fn">lessThan</span>(<span class="num">2000L</span>),
+  <span class="cls">TimeUnit</span>.MILLISECONDS);</code></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Header &amp; Cookie Assertions</div>
+      <div class="item"><div class="item-desc">Assert response headers and cookies exist / match</div><code><span class="fn">then</span>()
+  .<span class="fn">header</span>(<span class="str">"Content-Type"</span>,
+    <span class="fn">containsString</span>(<span class="str">"application/json"</span>))
+  .<span class="fn">header</span>(<span class="str">"Cache-Control"</span>,
+    <span class="fn">notNullValue</span>())
+  .<span class="fn">header</span>(<span class="str">"X-Rate-Limit"</span>,
+    <span class="fn">equalTo</span>(<span class="str">"100"</span>))
+  .<span class="fn">cookie</span>(<span class="str">"sessionId"</span>,
+    <span class="fn">notNullValue</span>())
+  .<span class="fn">cookie</span>(<span class="str">"token"</span>, <span class="str">"abc123"</span>);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>Body Assertions – Hamcrest Matchers</div>
+      <div class="item"><div class="item-desc">Fields / types / nested / arrays / numeric</div><code><span class="fn">then</span>().<span class="fn">body</span>(
+  <span class="str">"name"</span>,
+    <span class="fn">equalTo</span>(<span class="str">"Alice"</span>),
+  <span class="str">"age"</span>,
+    <span class="fn">greaterThan</span>(<span class="num">18</span>),
+  <span class="str">"email"</span>,
+    <span class="fn">containsString</span>(<span class="str">"@"</span>),
+  <span class="str">"status"</span>,
+    <span class="fn">not</span>(<span class="fn">emptyString</span>()),
+  <span class="str">"address.city"</span>,
+    <span class="fn">equalTo</span>(<span class="str">"Delhi"</span>),
+  <span class="str">"roles"</span>,
+    <span class="fn">hasItems</span>(<span class="str">"admin"</span>, <span class="str">"user"</span>),
+  <span class="str">"roles.size()"</span>,
+    <span class="fn">greaterThanOrEqualTo</span>(<span class="num">1</span>),
+  <span class="str">"data"</span>,
+    <span class="fn">hasSize</span>(<span class="num">10</span>),
+  <span class="str">"score"</span>,
+    <span class="fn">closeTo</span>(<span class="num">9.5</span>, <span class="num">0.5</span>),
+  <span class="str">"active"</span>,
+    <span class="fn">is</span>(<span class="kw">true</span>)
+);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>JSONPath Extraction</div>
+      <div class="item"><div class="item-desc">Extract single value / nested field / list</div><code><span class="cls">Response</span> res =
+  <span class="fn">given</span>().<span class="fn">get</span>(<span class="str">"/users/1"</span>);
+
+<span class="cm">// Single values</span>
+<span class="cls">String</span>  name = res.<span class="fn">jsonPath</span>()
+  .<span class="fn">getString</span>(<span class="str">"name"</span>);
+<span class="kw">int</span>     age  = res.<span class="fn">jsonPath</span>()
+  .<span class="fn">getInt</span>(<span class="str">"age"</span>);
+<span class="kw">boolean</span> ok   = res.<span class="fn">jsonPath</span>()
+  .<span class="fn">getBoolean</span>(<span class="str">"active"</span>);
+
+<span class="cm">// Nested object field</span>
+<span class="cls">String</span> city = res.<span class="fn">jsonPath</span>()
+  .<span class="fn">getString</span>(<span class="str">"address.city"</span>);
+
+<span class="cm">// List from JSON array</span>
+<span class="cls">List</span>&lt;<span class="cls">String</span>&gt; roles = res.<span class="fn">jsonPath</span>()
+  .<span class="fn">getList</span>(<span class="str">"roles"</span>);</code></div>
+      <div class="item"><div class="item-desc">Filter / find from array of objects</div><code><span class="cm">// All names from array</span>
+<span class="cls">List</span>&lt;<span class="cls">String</span>&gt; names = res.<span class="fn">jsonPath</span>()
+  .<span class="fn">getList</span>(<span class="str">"data.name"</span>);
+
+<span class="cm">// Find object where id == 5</span>
+<span class="cls">String</span> n = res.<span class="fn">jsonPath</span>().<span class="fn">getString</span>(
+  <span class="str">"data.find{it.id==5}.name"</span>);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title red"><div class="dot"></div>Extract &amp; Store Response</div>
+      <div class="item"><div class="item-desc">Store response / extract value from chain</div><code><span class="cm">// Store entire response object</span>
+<span class="cls">Response</span> res =
+  <span class="fn">given</span>().<span class="fn">get</span>(<span class="str">"/users/1"</span>)
+  .<span class="fn">andReturn</span>();
+
+<span class="cm">// Extract from fluent chain</span>
+<span class="cls">String</span> token =
+  <span class="fn">given</span>()
+    .<span class="fn">body</span>(creds)
+    .<span class="fn">post</span>(<span class="str">"/login"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>)
+  .<span class="fn">extract</span>().<span class="fn">path</span>(<span class="str">"data.token"</span>);
+
+<span class="cm">// Body as String / POJO / header</span>
+<span class="cls">String</span> body = res.<span class="fn">getBody</span>()
+  .<span class="fn">asString</span>();
+<span class="cls">User</span>   user = res.<span class="fn">as</span>(<span class="cls">User</span>.<span class="kw">class</span>);
+<span class="cls">String</span> hdr  = res.<span class="fn">getHeader</span>(
+  <span class="str">"X-Token"</span>);</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROW 4 – Auth, Logging, Schema, XML -->
+<div class="section-label">Authentication · Logging · JSON Schema Validation · XML Path · Filters (Request/Response Interceptors)</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Authentication Types</div>
+      <div class="item"><div class="item-desc">Basic / Preemptive / Bearer / OAuth2 / API Key</div><code><span class="cm">// Basic Auth (waits for 401 challenge)</span>
+<span class="fn">given</span>().<span class="fn">auth</span>()
+  .<span class="fn">basic</span>(<span class="str">"user"</span>, <span class="str">"pass"</span>)
+
+<span class="cm">// Preemptive Basic (no challenge wait)</span>
+<span class="fn">given</span>().<span class="fn">auth</span>()
+  .<span class="fn">preemptive</span>()
+  .<span class="fn">basic</span>(<span class="str">"user"</span>, <span class="str">"pass"</span>)
+
+<span class="cm">// Bearer Token via header</span>
+<span class="fn">given</span>().<span class="fn">header</span>(<span class="str">"Authorization"</span>,
+  <span class="str">"Bearer "</span> + accessToken)
+
+<span class="cm">// OAuth 2.0</span>
+<span class="fn">given</span>().<span class="fn">auth</span>()
+  .<span class="fn">oauth2</span>(accessToken)
+
+<span class="cm">// API Key as query param</span>
+<span class="fn">given</span>().<span class="fn">queryParam</span>(<span class="str">"api_key"</span>, key)
+
+<span class="cm">// Digest Auth</span>
+<span class="fn">given</span>().<span class="fn">auth</span>()
+  .<span class="fn">digest</span>(<span class="str">"user"</span>, <span class="str">"pass"</span>)</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>Logging</div>
+      <div class="item"><div class="item-desc">Log request / response / on failure (best practice)</div><code><span class="cm">// Log full request</span>
+<span class="fn">given</span>().<span class="fn">log</span>().<span class="fn">all</span>()
+
+<span class="cm">// Log specific parts of request</span>
+<span class="fn">given</span>().<span class="fn">log</span>().<span class="fn">headers</span>()
+<span class="fn">given</span>().<span class="fn">log</span>().<span class="fn">body</span>()
+<span class="fn">given</span>().<span class="fn">log</span>().<span class="fn">params</span>()
+<span class="fn">given</span>().<span class="fn">log</span>().<span class="fn">uri</span>()
+
+<span class="cm">// Log full response</span>
+.<span class="fn">then</span>().<span class="fn">log</span>().<span class="fn">all</span>()
+.<span class="fn">then</span>().<span class="fn">log</span>().<span class="fn">body</span>()
+.<span class="fn">then</span>().<span class="fn">log</span>().<span class="fn">status</span>()
+.<span class="fn">then</span>().<span class="fn">log</span>().<span class="fn">headers</span>()
+
+<span class="cm">// ✅ Best practice: only log on failure</span>
+<span class="fn">given</span>().<span class="fn">log</span>().<span class="fn">ifValidationFails</span>()
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users"</span>)
+  .<span class="fn">then</span>().<span class="fn">log</span>().<span class="fn">ifValidationFails</span>()
+  .<span class="fn">statusCode</span>(<span class="num">200</span>);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>JSON Schema Validation</div>
+      <div class="item"><div class="item-desc">Validate response against a JSON schema file</div><code><span class="kw">import static</span> io.restassured.module.jsv
+  .<span class="cls">JsonSchemaValidator</span>.*;
+
+<span class="cm">// Schema file:
+// src/test/resources/schemas/user.json</span>
+<span class="fn">given</span>()
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users/1"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>)
+  .<span class="fn">body</span>(<span class="fn">matchesJsonSchemaInClasspath</span>(
+    <span class="str">"schemas/user.json"</span>));</code></div>
+      <div class="item"><div class="item-desc">Sample user.json schema</div><code>{
+  <span class="str">"type"</span>: <span class="str">"object"</span>,
+  <span class="str">"properties"</span>: {
+    <span class="str">"id"</span>:    { <span class="str">"type"</span>: <span class="str">"integer"</span> },
+    <span class="str">"name"</span>:  { <span class="str">"type"</span>: <span class="str">"string"</span> },
+    <span class="str">"email"</span>: { <span class="str">"type"</span>: <span class="str">"string"</span> }
+  },
+  <span class="str">"required"</span>: [<span class="str">"id"</span>,<span class="str">"name"</span>,<span class="str">"email"</span>]
+}</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>Filters (Interceptors)</div>
+      <div class="item"><div class="item-desc">Built-in logging filters / custom filter</div><code><span class="kw">import</span> io.restassured.filter.log
+  .<span class="cls">RequestLoggingFilter</span>;
+<span class="kw">import</span> io.restassured.filter.log
+  .<span class="cls">ResponseLoggingFilter</span>;
+
+<span class="cm">// Add built-in filters</span>
+<span class="fn">given</span>()
+  .<span class="fn">filter</span>(<span class="kw">new</span> <span class="cls">RequestLoggingFilter</span>())
+  .<span class="fn">filter</span>(<span class="kw">new</span> <span class="cls">ResponseLoggingFilter</span>())
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users"</span>);
+
+<span class="cm">// Custom filter (add timestamp header)</span>
+<span class="fn">given</span>().<span class="fn">filter</span>((req, res, ctx) -&gt; {
+  req.<span class="fn">header</span>(<span class="str">"X-Time"</span>,
+    <span class="cls">String</span>.<span class="fn">valueOf</span>(
+      <span class="cls">System</span>.<span class="fn">currentTimeMillis</span>()));
+  <span class="kw">return</span> ctx.<span class="fn">next</span>(req, res);
+}).<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users"</span>);</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROW 5 – TestNG, POJO, Chaining, Data-Driven -->
+<div class="section-label">TestNG Integration · POJO Deserialization · Request Chaining · Data-Driven · Soft Assertions · List Assertions</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title red"><div class="dot"></div>TestNG Integration</div>
+      <div class="item"><div class="item-desc">Full test class structure with lifecycle hooks</div><code><span class="kw">import</span> org.testng.annotations.*;
+<span class="kw">import static</span> io.restassured.<span class="cls">RestAssured</span>.*;
+<span class="kw">import static</span> org.hamcrest.<span class="cls">Matchers</span>.*;
+<span class="kw">import</span> io.restassured.http.<span class="cls">ContentType</span>;
+
+<span class="kw">public class</span> <span class="cls">UserApiTest</span> {
+
+  <span class="ann">@BeforeSuite</span>
+  <span class="kw">public void</span> <span class="fn">globalSetup</span>() {
+    <span class="cls">RestAssured</span>.baseURI =
+      <span class="str">"https://api.example.com"</span>;
+    <span class="cls">RestAssured</span>.basePath = <span class="str">"/v1"</span>;
+  }
+
+  <span class="ann">@BeforeClass</span>
+  <span class="kw">public void</span> <span class="fn">login</span>() {
+    <span class="cm">// extract token here</span>
+  }
+
+  <span class="ann">@Test</span>
+  <span class="kw">public void</span> <span class="fn">getUser</span>() {
+    <span class="fn">given</span>()
+      .<span class="fn">pathParam</span>(<span class="str">"id"</span>, <span class="num">1</span>)
+    .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users/{id}"</span>)
+    .<span class="fn">then</span>()
+      .<span class="fn">statusCode</span>(<span class="num">200</span>)
+      .<span class="fn">body</span>(<span class="str">"name"</span>, <span class="fn">notNullValue</span>());
+  }
+
+  <span class="ann">@AfterSuite</span>
+  <span class="kw">public void</span> <span class="fn">teardown</span>() {
+    <span class="cls">RestAssured</span>.<span class="fn">reset</span>();
+  }
+}</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Request Chaining (Token Flow)</div>
+      <div class="item"><div class="item-desc">Login → extract token → use in next request</div><code><span class="cm">// Step 1: Login, extract token</span>
+<span class="cls">String</span> token =
+  <span class="fn">given</span>()
+    .<span class="fn">contentType</span>(<span class="cls">ContentType</span>.JSON)
+    .<span class="fn">body</span>(<span class="str">"{ \"username\":\"admin\","</span>
+       + <span class="str">"  \"password\":\"pass\" }"</span>)
+  .<span class="fn">when</span>().<span class="fn">post</span>(<span class="str">"/auth/login"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>)
+  .<span class="fn">extract</span>().<span class="fn">path</span>(<span class="str">"data.token"</span>);
+
+<span class="cm">// Step 2: Use token in secured request</span>
+<span class="fn">given</span>()
+  .<span class="fn">header</span>(<span class="str">"Authorization"</span>,
+         <span class="str">"Bearer "</span> + token)
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/dashboard"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);
+
+<span class="cm">// Step 3: Use extracted ID in next call</span>
+<span class="kw">int</span> id =
+  <span class="fn">given</span>().<span class="fn">get</span>(<span class="str">"/users/me"</span>)
+  .<span class="fn">then</span>().<span class="fn">extract</span>().<span class="fn">path</span>(<span class="str">"id"</span>);
+<span class="fn">given</span>()
+  .<span class="fn">pathParam</span>(<span class="str">"id"</span>, id)
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/orders/{id}"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>Data-Driven with @DataProvider</div>
+      <div class="item"><div class="item-desc">Run same test with multiple inputs</div><code><span class="ann">@DataProvider</span>(name = <span class="str">"users"</span>)
+<span class="kw">public</span> <span class="cls">Object</span>[][] <span class="fn">data</span>() {
+  <span class="kw">return new</span> <span class="cls">Object</span>[][] {
+    {<span class="str">"Alice"</span>,<span class="str">"a@x.com"</span>, <span class="num">201</span>},
+    {<span class="str">"Bob"</span>,  <span class="str">"b@x.com"</span>, <span class="num">201</span>},
+    {<span class="str">""</span>,     <span class="str">"bad"</span>,     <span class="num">400</span>}
+  };
+}
+
+<span class="ann">@Test</span>(dataProvider = <span class="str">"users"</span>)
+<span class="kw">public void</span> <span class="fn">testCreate</span>(
+    <span class="cls">String</span> name,
+    <span class="cls">String</span> email,
+    <span class="kw">int</span>    expected) {
+  <span class="fn">given</span>()
+    .<span class="fn">contentType</span>(<span class="cls">ContentType</span>.JSON)
+    .<span class="fn">body</span>(<span class="str">"{ \"name\":\""</span>  + name
+       + <span class="str">"\",\"email\":\""</span>+ email
+       + <span class="str">"\" }"</span>)
+  .<span class="fn">when</span>().<span class="fn">post</span>(<span class="str">"/users"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(expected);
+}</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>Soft Assertions &amp; List Assertions</div>
+      <div class="item"><div class="item-desc">AssertJ soft assertions – collect all failures</div><code><span class="cm">// pom: assertj-core</span>
+<span class="kw">import</span> org.assertj.core.api.<span class="cls">SoftAssertions</span>;
+
+<span class="cls">Response</span> res =
+  <span class="fn">given</span>().<span class="fn">get</span>(<span class="str">"/users/1"</span>);
+
+<span class="cls">SoftAssertions</span> soft =
+  <span class="kw">new</span> <span class="cls">SoftAssertions</span>();
+soft.<span class="fn">assertThat</span>(res.<span class="fn">statusCode</span>())
+    .<span class="fn">isEqualTo</span>(<span class="num">200</span>);
+soft.<span class="fn">assertThat</span>(
+  res.<span class="fn">jsonPath</span>().<span class="fn">getString</span>(<span class="str">"name"</span>))
+  .<span class="fn">isNotBlank</span>();
+soft.<span class="fn">assertThat</span>(
+  res.<span class="fn">jsonPath</span>().<span class="fn">getInt</span>(<span class="str">"age"</span>))
+  .<span class="fn">isGreaterThan</span>(<span class="num">0</span>);
+soft.<span class="fn">assertAll</span>(); <span class="cm">// runs all at once</span></code></div>
+      <div class="item"><div class="item-desc">Assert arrays / every item / nested</div><code><span class="fn">then</span>().<span class="fn">body</span>(
+  <span class="str">"$"</span>,     <span class="fn">hasSize</span>(<span class="num">10</span>),
+  <span class="str">"[0].name"</span>, <span class="fn">equalTo</span>(<span class="str">"Alice"</span>),
+  <span class="str">"name"</span>, <span class="fn">hasItems</span>(<span class="str">"Alice"</span>,<span class="str">"Bob"</span>),
+  <span class="str">"age"</span>,  <span class="fn">everyItem</span>(<span class="fn">greaterThan</span>(<span class="num">0</span>)),
+  <span class="str">"status"</span>,
+    <span class="fn">everyItem</span>(<span class="fn">equalTo</span>(<span class="str">"active"</span>)));</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROW 6 – POJO + Complete Example -->
+<div class="section-label">POJO Serialization / Deserialization · Proxy &amp; SSL · XML Path · Complete CRUD End-to-End Test</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>POJO Serialization &amp; Deserialization</div>
+      <div class="item"><div class="item-desc">Java POJO class (Jackson)</div><code><span class="cm">// Define POJO (Jackson needs
+// no-arg constructor + getters/setters)</span>
+<span class="kw">public class</span> <span class="cls">User</span> {
+  <span class="kw">private</span> <span class="cls">String</span> name;
+  <span class="kw">private int</span>    age;
+  <span class="kw">private</span> <span class="cls">String</span> email;
+
+  <span class="kw">public</span> <span class="cls">User</span>() {}
+  <span class="kw">public</span> <span class="cls">User</span>(<span class="cls">String</span> name, <span class="kw">int</span> age) {
+    <span class="kw">this</span>.name = name;
+    <span class="kw">this</span>.age  = age;
+  }
+  <span class="cm">// + getters and setters</span>
+}</code></div>
+      <div class="item"><div class="item-desc">Serialize (POST) / Deserialize (GET)</div><code><span class="cm">// Serialize: POJO → JSON → POST</span>
+<span class="cls">User</span> newUser = <span class="kw">new</span> <span class="cls">User</span>(<span class="str">"Alice"</span>, <span class="num">30</span>);
+<span class="fn">given</span>()
+  .<span class="fn">contentType</span>(<span class="cls">ContentType</span>.JSON)
+  .<span class="fn">body</span>(newUser)
+  .<span class="fn">when</span>().<span class="fn">post</span>(<span class="str">"/users"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">201</span>);
+
+<span class="cm">// Deserialize: GET → JSON → POJO</span>
+<span class="cls">User</span> user =
+  <span class="fn">given</span>().<span class="fn">get</span>(<span class="str">"/users/1"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>)
+  .<span class="fn">extract</span>().<span class="fn">as</span>(<span class="cls">User</span>.<span class="kw">class</span>);
+<span class="cls">System</span>.out.<span class="fn">println</span>(user.<span class="fn">getName</span>());</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>XML Path (For XML APIs)</div>
+      <div class="item"><div class="item-desc">Parse and assert XML response body</div><code><span class="cm">// Request XML response</span>
+<span class="cls">Response</span> res =
+  <span class="fn">given</span>()
+    .<span class="fn">accept</span>(<span class="cls">ContentType</span>.XML)
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users/1"</span>);
+
+<span class="cm">// Assert via XPath in then()</span>
+res.<span class="fn">then</span>().<span class="fn">body</span>(
+  <span class="str">"user.name"</span>,
+    <span class="fn">equalTo</span>(<span class="str">"Alice"</span>),
+  <span class="str">"user.address.city"</span>,
+    <span class="fn">equalTo</span>(<span class="str">"Delhi"</span>)
+);
+
+<span class="cm">// Extract via XmlPath</span>
+<span class="cls">String</span> city = res.<span class="fn">xmlPath</span>()
+  .<span class="fn">getString</span>(<span class="str">"user.address.city"</span>);</code></div>
+    </div>
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>Proxy &amp; SSL Config</div>
+      <div class="item"><div class="item-desc">Route via proxy / disable SSL</div><code><span class="cm">// Route all requests via proxy</span>
+<span class="fn">given</span>()
+  .<span class="fn">proxy</span>(<span class="str">"localhost"</span>, <span class="num">8888</span>)
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);
+
+<span class="cm">// Globally skip SSL (e.g. staging)</span>
+<span class="cls">RestAssured</span>
+  .<span class="fn">useRelaxedHTTPSValidation</span>();
+
+<span class="cm">// Per-request SSL skip</span>
+<span class="fn">given</span>()
+  .<span class="fn">relaxedHTTPSValidation</span>()
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"https://staging.api.com"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">200</span>);</code></div>
+    </div>
+  </div>
+
+  <div class="col span2">
+    <div class="card">
+      <div class="card-title red"><div class="dot"></div>Complete End-to-End CRUD Test</div>
+      <div class="item"><div class="item-desc">Create → Read → Update → Delete – full lifecycle in one @Test</div><code><span class="ann">@Test</span>
+<span class="kw">public void</span> <span class="fn">crudFlowTest</span>() {
+
+  <span class="cm">// ── CREATE ────────────────────────────────</span>
+  <span class="kw">int</span> userId =
+    <span class="fn">given</span>()
+      .<span class="fn">contentType</span>(<span class="cls">ContentType</span>.JSON)
+      .<span class="fn">body</span>(<span class="str">"{ \"name\":\"Alice\", \"email\":\"a@x.com\" }"</span>)
+    .<span class="fn">when</span>().<span class="fn">post</span>(<span class="str">"/users"</span>)
+    .<span class="fn">then</span>()
+      .<span class="fn">statusCode</span>(<span class="num">201</span>)
+      .<span class="fn">body</span>(<span class="str">"name"</span>, <span class="fn">equalTo</span>(<span class="str">"Alice"</span>))
+    .<span class="fn">extract</span>().<span class="fn">path</span>(<span class="str">"id"</span>);
+
+  <span class="cm">// ── READ ──────────────────────────────────</span>
+  <span class="fn">given</span>()
+    .<span class="fn">pathParam</span>(<span class="str">"id"</span>, userId)
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users/{id}"</span>)
+  .<span class="fn">then</span>()
+    .<span class="fn">statusCode</span>(<span class="num">200</span>)
+    .<span class="fn">body</span>(<span class="str">"name"</span>, <span class="fn">equalTo</span>(<span class="str">"Alice"</span>))
+    .<span class="fn">body</span>(<span class="str">"email"</span>, <span class="fn">equalTo</span>(<span class="str">"a@x.com"</span>));
+
+  <span class="cm">// ── UPDATE (PUT) ───────────────────────────</span>
+  <span class="fn">given</span>()
+    .<span class="fn">contentType</span>(<span class="cls">ContentType</span>.JSON)
+    .<span class="fn">pathParam</span>(<span class="str">"id"</span>, userId)
+    .<span class="fn">body</span>(<span class="str">"{ \"name\":\"Bob\", \"email\":\"b@x.com\" }"</span>)
+  .<span class="fn">when</span>().<span class="fn">put</span>(<span class="str">"/users/{id}"</span>)
+  .<span class="fn">then</span>()
+    .<span class="fn">statusCode</span>(<span class="num">200</span>)
+    .<span class="fn">body</span>(<span class="str">"name"</span>, <span class="fn">equalTo</span>(<span class="str">"Bob"</span>));
+
+  <span class="cm">// ── DELETE ────────────────────────────────</span>
+  <span class="fn">given</span>()
+    .<span class="fn">pathParam</span>(<span class="str">"id"</span>, userId)
+  .<span class="fn">when</span>().<span class="fn">delete</span>(<span class="str">"/users/{id}"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">204</span>);
+
+  <span class="cm">// ── VERIFY DELETED (404) ──────────────────</span>
+  <span class="fn">given</span>()
+    .<span class="fn">pathParam</span>(<span class="str">"id"</span>, userId)
+  .<span class="fn">when</span>().<span class="fn">get</span>(<span class="str">"/users/{id}"</span>)
+  .<span class="fn">then</span>().<span class="fn">statusCode</span>(<span class="num">404</span>);
+}</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="left">
+    <span>REST Assured</span> Quick Reference · Java · Given / When / Then BDD syntax
+    &nbsp;|&nbsp; Requires: <span>import static io.restassured.RestAssured.*</span>
+    &nbsp;&amp;&nbsp; <span>import static org.hamcrest.Matchers.*</span>
+  </div>
+  <div class="right">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp;
+    CBSE · ICSE · B.Tech · BCA · MCA · Polytechnic · CS &nbsp;|&nbsp;
+    Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>

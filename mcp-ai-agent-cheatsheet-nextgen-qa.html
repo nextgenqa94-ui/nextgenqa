@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP &amp; AI Agent Cheat Sheet – Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #161d2e;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --code-bg: #0d1117;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #0d1b35 0%, #111827 50%, #0a1628 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 20px 32px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0,212,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .logo-area { display: flex; align-items: center; gap: 16px; }
+  .logo-icon {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800;
+    color: #fff; letter-spacing: -1px;
+    box-shadow: 0 0 20px rgba(0,212,255,0.3);
+    flex-shrink: 0;
+  }
+  .title-block h1 {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #fff 0%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .title-block h1 span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+  .title-block p { color: var(--muted); font-size: 11px; margin-top: 2px; letter-spacing: 0.5px; }
+  .coaching-info {
+    text-align: right; font-size: 11.5px;
+  }
+  .coaching-info .name { font-size: 14px; font-weight: 700; color: var(--accent3); }
+  .coaching-info .phone {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 3px; color: var(--green); font-weight: 600; font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .coaching-info .tags { margin-top: 5px; display: flex; gap: 5px; justify-content: flex-end; flex-wrap: wrap; }
+  .tag {
+    background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4);
+    color: #a78bfa; padding: 1px 7px; border-radius: 20px; font-size: 9.5px; font-weight: 600;
+  }
+  .tag.blue { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); color: var(--accent); }
+  .tag.amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: var(--accent3); }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 9px; letter-spacing: 2px; font-weight: 700;
+    text-transform: uppercase; color: var(--muted);
+    padding: 8px 32px 4px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-left: 1px solid var(--border);
+  }
+
+  .col { border-right: 1px solid var(--border); }
+
+  /* ── CARD ── */
+  .card {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 12px;
+  }
+  .card-title {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.4px;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 7px; padding-bottom: 5px;
+    border-bottom: 1px solid rgba(0,212,255,0.15);
+  }
+  .card-title .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+    box-shadow: 0 0 6px var(--accent);
+  }
+  .card-title.purple .dot { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; }
+  .card-title.purple { color: #a78bfa; border-bottom-color: rgba(167,139,250,0.15); }
+  .card-title.green .dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .card-title.green { color: var(--green); border-bottom-color: rgba(16,185,129,0.15); }
+  .card-title.amber .dot { background: var(--accent3); box-shadow: 0 0 6px var(--accent3); }
+  .card-title.amber { color: var(--accent3); border-bottom-color: rgba(245,158,11,0.15); }
+  .card-title.red .dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .card-title.red { color: #fb7185; border-bottom-color: rgba(239,68,68,0.15); }
+
+  .item { margin-bottom: 6px; }
+  .item:last-child { margin-bottom: 0; }
+  .item-desc {
+    font-size: 10.5px; color: #94a3b8; margin-bottom: 3px; font-weight: 400;
+  }
+  code {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 2px solid rgba(0,212,255,0.4);
+    color: #7dd3fc;
+    padding: 4px 7px;
+    border-radius: 4px;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.6;
+  }
+  code .kw { color: #c792ea; }
+  code .fn { color: #82aaff; }
+  code .str { color: #c3e88d; }
+  code .cm { color: #546e7a; font-style: italic; }
+  code .num { color: #f78c6c; }
+  code .op { color: #89ddff; }
+  code .key { color: #f07178; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: linear-gradient(90deg, #0d1b35, #111827);
+    border-top: 2px solid var(--accent2);
+    padding: 10px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer .left { font-size: 10px; color: var(--muted); }
+  .footer .left span { color: var(--accent); font-weight: 700; }
+  .footer .right { font-size: 10px; color: var(--muted); text-align: right; }
+  .footer .right strong { color: var(--accent3); }
+
+  /* Spanning cols */
+  .span2 { grid-column: span 2; }
+  .span3 { grid-column: span 3; }
+  .span4 { grid-column: span 4; }
+
+  @media print {
+    body { font-size: 11px; }
+    .grid { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ HEADER ═══════════════════════ -->
+<div class="header">
+  <div class="logo-area">
+    <div class="logo-icon">MCP</div>
+    <div class="title-block">
+      <h1>MCP &amp; AI Agent <span>Cheat Sheet</span></h1>
+      <p>MODEL CONTEXT PROTOCOL · AGENTIC AI · QUICK REFERENCE GUIDE</p>
+    </div>
+  </div>
+  <div class="coaching-info">
+    <div class="name">🎓 Next Gen QA IT Coaching Classes</div>
+    <div class="phone">📞 Mr. Khan Sir &nbsp;|&nbsp; 8700350994</div>
+    <div class="tags" style="margin-top:5px;">
+      <span class="tag blue">MCP Servers</span>
+      <span class="tag amber">Agentic AI</span>
+      <span class="tag">OpenAI Agents SDK</span>
+      <span class="tag blue">LangGraph</span>
+      <span class="tag amber">AutoGen</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ ROW 1 – MCP Core, Server Setup, Tools, Resources ════════ -->
+<div class="section-label">MCP Architecture · Server Setup (TypeScript SDK) · Tools · Resources &amp; Prompts</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>MCP Core Architecture</div>
+      <div class="item"><div class="item-desc">3 core pieces: Host, Client, Server</div><code><span class="cm">// Host = app using AI (Claude Desktop, IDE)</span>
+<span class="cm">// Client = lives inside Host, 1 per Server</span>
+<span class="cm">// Server = exposes Tools/Resources/Prompts</span>
+<span class="cm">// Transport = JSON-RPC 2.0 over stdio or HTTP</span></code></div>
+      <div class="item"><div class="item-desc">3 building blocks a server exposes</div><code><span class="kw">Tools</span>     <span class="cm">// actions model can call (functions)</span>
+<span class="kw">Resources</span> <span class="cm">// data model can read (files/URIs)</span>
+<span class="kw">Prompts</span>   <span class="cm">// reusable prompt templates</span></code></div>
+    </div>
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>Install SDK</div>
+      <div class="item"><div class="item-desc">Node.js / TypeScript SDK</div><code>npm install @modelcontextprotocol/sdk zod</code></div>
+      <div class="item"><div class="item-desc">Python SDK</div><code>pip install mcp</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>Server Boilerplate (TS)</div>
+      <div class="item"><div class="item-desc">Create server instance</div><code><span class="kw">import</span> { McpServer } <span class="kw">from</span> <span class="str">"@modelcontextprotocol/sdk/server/mcp.js"</span>;
+<span class="kw">const</span> server = <span class="kw">new</span> <span class="fn">McpServer</span>({
+  name: <span class="str">"jira-mcp-server"</span>,
+  version: <span class="str">"1.0.0"</span>
+});</code></div>
+      <div class="item"><div class="item-desc">Connect via stdio transport</div><code><span class="kw">import</span> { StdioServerTransport } <span class="kw">from</span>
+  <span class="str">"@modelcontextprotocol/sdk/server/stdio.js"</span>;
+<span class="kw">const</span> transport = <span class="kw">new</span> <span class="fn">StdioServerTransport</span>();
+<span class="op">await</span> server.<span class="fn">connect</span>(transport);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>Defining Tools</div>
+      <div class="item"><div class="item-desc">Register a tool with zod schema</div><code>server.<span class="fn">registerTool</span>(
+  <span class="str">"create_jira_issue"</span>,
+  {
+    title: <span class="str">"Create Jira Issue"</span>,
+    description: <span class="str">"Creates a new issue"</span>,
+    inputSchema: { project: z.<span class="fn">string</span>(),
+                   summary: z.<span class="fn">string</span>() }
+  },
+  <span class="kw">async</span> ({ project, summary }) =&gt; ({
+    content: [{ type: <span class="str">"text"</span>,
+                text: <span class="str">`Created in ${project}`</span> }]
+  })
+);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title red"><div class="dot"></div>Resources &amp; Prompts</div>
+      <div class="item"><div class="item-desc">Register a resource (URI-based data)</div><code>server.<span class="fn">registerResource</span>(
+  <span class="str">"config"</span>, <span class="str">"config://app"</span>,
+  { title: <span class="str">"App Config"</span> },
+  <span class="kw">async</span> (uri) =&gt; ({
+    contents: [{ uri: uri.href, text: <span class="str">"..."</span> }]
+  })
+);</code></div>
+      <div class="item"><div class="item-desc">Register a reusable prompt template</div><code>server.<span class="fn">registerPrompt</span>(<span class="str">"review-code"</span>, {
+  title: <span class="str">"Review Code"</span>,
+  argsSchema: { code: z.<span class="fn">string</span>() }
+}, ({ code }) =&gt; ({
+  messages: [{ role: <span class="str">"user"</span>,
+    content: { type: <span class="str">"text"</span>, text: <span class="str">`Review:\n${code}`</span> } }]
+}));</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 2 – Transports, Client, Claude Desktop Config, Debugging ════════ -->
+<div class="section-label">Transports (stdio / HTTP) · Client Connection · Claude Desktop Config · Testing &amp; Debugging</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Transport Options</div>
+      <div class="item"><div class="item-desc">stdio – local process (most common)</div><code><span class="cm">// Host spawns server as child process</span>
+<span class="cm">// communicates via stdin/stdout</span>
+<span class="cm">// best for local tools (Jira, DB, files)</span></code></div>
+      <div class="item"><div class="item-desc">Streamable HTTP – remote server</div><code><span class="kw">import</span> { StreamableHTTPServerTransport }
+  <span class="kw">from</span> <span class="str">"@modelcontextprotocol/sdk/server/streamableHttp.js"</span>;
+<span class="cm">// exposes server over HTTP(S) endpoint</span>
+<span class="cm">// needed for cloud/remote agent access</span></code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>MCP Client (TS)</div>
+      <div class="item"><div class="item-desc">Connect to a server from client code</div><code><span class="kw">import</span> { Client } <span class="kw">from</span>
+  <span class="str">"@modelcontextprotocol/sdk/client/index.js"</span>;
+<span class="kw">const</span> client = <span class="kw">new</span> <span class="fn">Client</span>({ name: <span class="str">"my-client"</span>, version: <span class="str">"1.0"</span> });
+<span class="op">await</span> client.<span class="fn">connect</span>(transport);
+<span class="kw">const</span> tools = <span class="op">await</span> client.<span class="fn">listTools</span>();
+<span class="kw">const</span> result = <span class="op">await</span> client.<span class="fn">callTool</span>({
+  name: <span class="str">"create_jira_issue"</span>, arguments: {...}
+});</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>Claude Desktop Config</div>
+      <div class="item"><div class="item-desc">claude_desktop_config.json</div><code>{
+  <span class="key">"mcpServers"</span>: {
+    <span class="key">"jira"</span>: {
+      <span class="key">"command"</span>: <span class="str">"node"</span>,
+      <span class="key">"args"</span>: [<span class="str">"/path/build/index.js"</span>],
+      <span class="key">"env"</span>: { <span class="key">"JIRA_TOKEN"</span>: <span class="str">"xxx"</span> }
+    }
+  }
+}</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>Testing &amp; Debugging</div>
+      <div class="item"><div class="item-desc">MCP Inspector – visual test tool</div><code>npx @modelcontextprotocol/inspector node build/index.js</code></div>
+      <div class="item"><div class="item-desc">Common pitfalls</div><code><span class="cm">// stdout must stay clean (no console.log!)</span>
+<span class="cm">// use console.error() for server-side logs</span>
+<span class="cm">// tool names: lowercase_snake_case</span>
+<span class="cm">// always return content[] array shape</span></code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 3 – Agent Concepts, OpenAI Agents SDK ════════ -->
+<div class="section-label">AI Agent Core Concepts · OpenAI Agents SDK (JS/TS) · Tools, Handoffs &amp; Guardrails</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Agent Core Concepts</div>
+      <div class="item"><div class="item-desc">What makes an "agent" (vs simple LLM call)</div><code><span class="kw">Loop</span>: think &rarr; act (tool call) &rarr; observe &rarr; repeat
+<span class="kw">Autonomy</span>: decides next step itself
+<span class="kw">Tools</span>: functions/MCP servers it can call
+<span class="kw">Memory</span>: conversation + long-term state</code></div>
+      <div class="item"><div class="item-desc">ReAct pattern (Reason + Act)</div><code><span class="cm">// Thought: I need the ticket status</span>
+<span class="cm">// Action: call get_jira_ticket(id)</span>
+<span class="cm">// Observation: status = "In Progress"</span>
+<span class="cm">// Thought: now I can answer the user</span></code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>OpenAI Agents SDK – Basics</div>
+      <div class="item"><div class="item-desc">Install (JS/TS)</div><code>npm install @openai/agents zod</code></div>
+      <div class="item"><div class="item-desc">Create &amp; run an Agent</div><code><span class="kw">import</span> { Agent, run } <span class="kw">from</span> <span class="str">"@openai/agents"</span>;
+<span class="kw">const</span> agent = <span class="kw">new</span> <span class="fn">Agent</span>({
+  name: <span class="str">"QA Assistant"</span>,
+  instructions: <span class="str">"Help with test automation"</span>,
+  model: <span class="str">"gpt-4.1"</span>
+});
+<span class="kw">const</span> result = <span class="op">await</span> <span class="fn">run</span>(agent, <span class="str">"Write a login test"</span>);
+console.<span class="fn">log</span>(result.finalOutput);</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>Tools in Agents SDK</div>
+      <div class="item"><div class="item-desc">Define a function tool</div><code><span class="kw">import</span> { tool } <span class="kw">from</span> <span class="str">"@openai/agents"</span>;
+<span class="kw">const</span> getTicket = <span class="fn">tool</span>({
+  name: <span class="str">"get_jira_ticket"</span>,
+  description: <span class="str">"Fetch ticket by ID"</span>,
+  parameters: z.<span class="fn">object</span>({ id: z.<span class="fn">string</span>() }),
+  execute: <span class="kw">async</span> ({ id }) =&gt; <span class="fn">fetchTicket</span>(id)
+});
+<span class="kw">const</span> agent = <span class="kw">new</span> <span class="fn">Agent</span>({ ..., tools: [getTicket] });</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title red"><div class="dot"></div>Handoffs &amp; Guardrails</div>
+      <div class="item"><div class="item-desc">Agent-to-agent handoff</div><code><span class="kw">const</span> billingAgent = <span class="kw">new</span> <span class="fn">Agent</span>({ name: <span class="str">"Billing"</span> });
+<span class="kw">const</span> triage = <span class="kw">new</span> <span class="fn">Agent</span>({
+  name: <span class="str">"Triage"</span>,
+  handoffs: [billingAgent, techAgent]
+});</code></div>
+      <div class="item"><div class="item-desc">Input guardrail (validate before running)</div><code><span class="kw">const</span> guardrail = {
+  name: <span class="str">"no-pii"</span>,
+  execute: <span class="kw">async</span> ({ input }) =&gt; ({
+    tripwireTriggered: <span class="fn">containsPII</span>(input)
+  })
+};</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ ROW 4 – LangGraph, AutoGen, Multi-Agent Patterns, Best Practices ════════ -->
+<div class="section-label">LangGraph · AutoGen · Multi-Agent Patterns · Best Practices</div>
+<div class="grid">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title amber"><div class="dot"></div>LangGraph Basics</div>
+      <div class="item"><div class="item-desc">Define state graph with nodes/edges</div><code><span class="kw">from</span> langgraph.graph <span class="kw">import</span> StateGraph, END
+
+graph = <span class="fn">StateGraph</span>(AgentState)
+graph.<span class="fn">add_node</span>(<span class="str">"chatbot"</span>, chatbot_node)
+graph.<span class="fn">add_node</span>(<span class="str">"tools"</span>, tool_node)
+graph.<span class="fn">add_conditional_edges</span>(
+  <span class="str">"chatbot"</span>, route_fn, {<span class="str">"tools"</span>: <span class="str">"tools"</span>, END: END})
+graph.<span class="fn">set_entry_point</span>(<span class="str">"chatbot"</span>)
+app = graph.<span class="fn">compile</span>()</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>AutoGen Basics</div>
+      <div class="item"><div class="item-desc">RoundRobinGroupChat (turn-based agents)</div><code><span class="kw">from</span> autogen_agentchat.teams <span class="kw">import</span> RoundRobinGroupChat
+
+team = <span class="fn">RoundRobinGroupChat</span>(
+  [writer_agent, reviewer_agent],
+  max_turns=<span class="num">6</span>
+)
+result = <span class="op">await</span> team.<span class="fn">run</span>(task=<span class="str">"Draft a test plan"</span>)</code></div>
+      <div class="item"><div class="item-desc">SelectorGroupChat (model picks next speaker)</div><code><span class="kw">from</span> autogen_agentchat.teams <span class="kw">import</span> SelectorGroupChat
+team = <span class="fn">SelectorGroupChat</span>(agents, model_client=model)</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title purple"><div class="dot"></div>Multi-Agent Patterns</div>
+      <div class="item"><div class="item-desc">Common architectures</div><code><span class="kw">Orchestrator-Worker</span>: 1 planner, N executors
+<span class="kw">Sequential</span>: agent A output &rarr; agent B input
+<span class="kw">Handoff</span>: triage agent routes to specialist
+<span class="kw">Parallel</span>: fan-out tasks, aggregate results
+<span class="kw">Human-in-loop</span>: approval step before action</code></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-title green"><div class="dot"></div>Best Practices</div>
+      <div class="item"><div class="item-desc">MCP + Agent build checklist</div><code>✔ Keep tool names/descriptions crystal clear
+✔ Validate inputs with zod/pydantic schemas
+✔ Never console.log() in stdio MCP servers
+✔ Add guardrails for cost/PII/scope control
+✔ Log every tool call for traceability
+✔ Version-pin SDKs (breaking changes are common)</code></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ FOOTER ════════ -->
+<div class="footer">
+  <div class="left">
+    <span>MCP + AI Agents</span> Quick Reference · TypeScript / Python · Model Context Protocol SDK
+    &nbsp;|&nbsp; Frameworks: OpenAI Agents SDK · LangGraph · AutoGen
+  </div>
+  <div class="right">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp;
+    CBSE · ICSE · B.Tech · BCA · MCA · Polytechnic · CS &nbsp;|&nbsp;
+    Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>

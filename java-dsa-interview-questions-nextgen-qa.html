@@ -1,0 +1,3646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java DSA Interview Questions Cheat Sheet – Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --card: #161d2e;
+  --border: #1e2d45;
+  --accent: #00d4ff;
+  --accent2: #7c3aed;
+  --accent3: #f59e0b;
+  --green: #10b981;
+  --red: #ef4444;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --code-bg: #0d1117;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.header {
+  background: linear-gradient(135deg, #0d1b35 0%, #111827 50%, #0a1628 100%);
+  border-bottom: 2px solid var(--accent);
+  padding: 20px 32px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; overflow: hidden;
+}
+.header::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0,212,255,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.logo-area { display: flex; align-items: center; gap: 16px; }
+.logo-icon {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -1px;
+  box-shadow: 0 0 20px rgba(0,212,255,0.3); flex-shrink: 0;
+}
+.title-block h1 {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #fff 0%, var(--accent) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.title-block h1 span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+.title-block p { color: var(--muted); font-size: 11px; margin-top: 2px; letter-spacing: 0.5px; }
+.coaching-info { text-align: right; font-size: 11.5px; }
+.coaching-info .name { font-size: 14px; font-weight: 700; color: var(--accent3); }
+.coaching-info .phone {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 3px;
+  color: var(--green); font-weight: 600; font-size: 13px; font-family: 'JetBrains Mono', monospace;
+}
+.coaching-info .tags { margin-top: 5px; display: flex; gap: 5px; justify-content: flex-end; flex-wrap: wrap; }
+.tag {
+  background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4);
+  color: #a78bfa; padding: 1px 7px; border-radius: 20px; font-size: 9.5px; font-weight: 600;
+}
+.tag.blue { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); color: var(--accent); }
+.tag.amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: var(--accent3); }
+
+.section-label {
+  font-size: 9px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase;
+  color: var(--muted); padding: 10px 32px 6px; border-bottom: 1px solid var(--border);
+  background: rgba(0,0,0,0.2); position: sticky; top: 0;
+}
+.section-label .count { color: var(--accent); }
+
+.intro {
+  padding: 18px 32px; border-bottom: 1px solid var(--border); background: var(--surface);
+}
+.intro h2 { font-size: 15px; color: #fff; margin-bottom: 8px; }
+.intro p { color: var(--muted); font-size: 12px; line-height: 1.7; margin-bottom: 6px; }
+.intro p strong { color: var(--text); }
+
+.priority-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11.5px; }
+.priority-table th {
+  text-align: left; color: var(--accent); font-size: 9.5px; letter-spacing: 1px;
+  text-transform: uppercase; padding: 6px 10px; border-bottom: 1px solid var(--border);
+}
+.priority-table td { padding: 5px 10px; border-bottom: 1px solid rgba(30,45,69,0.5); color: var(--text); }
+.priority-table td.p3 { color: var(--red); font-weight: 700; }
+.priority-table td.p2 { color: var(--accent3); font-weight: 700; }
+.priority-table td.p1 { color: var(--muted); font-weight: 700; }
+
+.trick-box {
+  margin-top: 12px; padding: 12px 14px; background: rgba(0,212,255,0.05);
+  border: 1px solid rgba(0,212,255,0.25); border-radius: 8px; font-size: 11.5px; color: var(--text);
+}
+.trick-box .t-title { color: var(--accent); font-weight: 700; font-size: 11px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.trick-box ol { padding-left: 18px; color: var(--muted); }
+.trick-box ol li { margin-bottom: 3px; }
+.trick-box ol li strong { color: var(--text); }
+
+.qgrid {
+  column-count: 2; column-gap: 0; padding: 0 32px 8px;
+}
+.qcard {
+  break-inside: avoid; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--card); padding: 12px 14px; margin: 12px 0; display: inline-block; width: 100%;
+}
+.qhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.qnum {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent);
+  background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.25);
+  border-radius: 5px; padding: 1px 6px; flex-shrink: 0;
+}
+.qtitle { font-size: 13px; font-weight: 700; color: #fff; flex: 1; }
+.diff { font-size: 9px; font-weight: 700; padding: 1px 7px; border-radius: 20px; flex-shrink: 0; letter-spacing: 0.3px; text-transform: uppercase; }
+.diff-easy { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.35); }
+.diff-medium { background: rgba(245,158,11,0.15); color: var(--accent3); border: 1px solid rgba(245,158,11,0.35); }
+.diff-hard { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.35); }
+.qproblem { color: var(--text); font-size: 12px; margin-bottom: 6px; line-height: 1.5; }
+.qexample {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent3);
+  background: rgba(245,158,11,0.06); border-left: 2px solid var(--accent3);
+  padding: 4px 8px; margin-bottom: 8px; border-radius: 3px;
+}
+.qcode {
+  background: var(--code-bg); border: 1px solid var(--border); border-radius: 6px;
+  padding: 10px 12px; overflow-x: auto; margin-bottom: 6px;
+}
+.qcode pre {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #d1dceb;
+  white-space: pre; line-height: 1.55;
+}
+.qcomplexity {
+  font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--green);
+  display: flex; align-items: center; gap: 5px;
+}
+.qcomplexity::before { content: '⏱'; font-size: 10px; }
+
+.footer {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  padding: 14px 32px; border-top: 2px solid var(--accent); background: var(--surface);
+  font-size: 11px; color: var(--muted);
+}
+.footer .left span { color: var(--accent); font-weight: 700; }
+.footer .right { text-align: right; }
+.footer .right strong { color: #fff; }
+
+@media (max-width: 900px) {
+  .qgrid { column-count: 1; }
+  .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .coaching-info { text-align: left; }
+  .coaching-info .tags { justify-content: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-area">
+    <div class="logo-icon">JD</div>
+    <div class="title-block">
+      <h1>Java <span>DSA</span> Interview Questions</h1>
+      <p>103+ SDET / LEAD SDET INTERVIEW-READY QUESTIONS · JAVA · 2026 EDITION</p>
+    </div>
+  </div>
+  <div class="coaching-info">
+    <div class="name">Next Gen QA IT Coaching Classes</div>
+    <div class="phone">📞 8700350994</div>
+    <div class="tags">
+      <span class="tag blue">Manual Testing</span>
+      <span class="tag">Selenium</span>
+      <span class="tag">Playwright</span>
+      <span class="tag amber">API Testing</span>
+    </div>
+  </div>
+</div>
+
+<div class="intro">
+  <h2>How to Use This Sheet for Your SDET / Lead SDET Interview</h2>
+  <p><strong>Priority order:</strong> Recent 2026 interview reports show SDET rounds lean heavily on Strings, Arrays, HashMap/HashSet, Two Pointer and Sliding Window — spend most of your practice time here before moving to Trees, Graphs and hard DP.</p>
+  <table class="priority-table">
+    <tr><th>Priority</th><th>Topic</th><th>SDET Importance</th></tr>
+    <tr><td class="p3">🔥🔥🔥</td><td>Strings</td><td>Very High</td></tr><tr><td class="p3">🔥🔥🔥</td><td>Arrays</td><td>Very High</td></tr><tr><td class="p3">🔥🔥🔥</td><td>HashMap / HashSet</td><td>Very High</td></tr><tr><td class="p3">🔥🔥🔥</td><td>Two Pointer</td><td>High</td></tr><tr><td class="p3">🔥🔥🔥</td><td>Sliding Window</td><td>High</td></tr><tr><td class="p2">🔥🔥</td><td>Sorting</td><td>High</td></tr><tr><td class="p2">🔥🔥</td><td>Binary Search</td><td>High</td></tr><tr><td class="p2">🔥🔥</td><td>Linked List</td><td>Medium-High</td></tr><tr><td class="p1">🔥</td><td>Stack / Queue</td><td>Medium</td></tr><tr><td class="p1">🔥</td><td>Recursion</td><td>Medium</td></tr><tr><td class="p1">🔥</td><td>Trees</td><td>Medium</td></tr><tr><td class="p1">🔥</td><td>Graph / DP</td><td>Lower priority for typical SDET</td></tr>
+  </table>
+  <div class="trick-box">
+    <div class="t-title">⭐ The SDET Interview Trick — Don't Just Write the Code</div>
+    <ol>
+      <li><strong>Clarify</strong> — e.g. "Should I return unique duplicates or every duplicate occurrence?"</li>
+      <li><strong>Explain the approach</strong> — e.g. "I'll use a HashSet; if add() returns false, it's already been seen."</li>
+      <li><strong>Write the code</strong></li>
+      <li><strong>Give the output</strong></li>
+      <li><strong>Give time &amp; space complexity</strong></li>
+      <li><strong>Discuss edge cases</strong> — empty input, single element, all duplicates, nulls. This is the step interviewers weigh most for an SDET, since it shows how you think about testability.</li>
+    </ol>
+  </div>
+</div>
+
+
+<div class="section-label">Strings <span class="count">(Q001–Q025 · 25 Questions)</span></div>
+<div class="qgrid">
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q001</span>
+        <span class="qtitle">Reverse a String</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Reverse a string without using StringBuilder.reverse().</div>
+      <div class="qexample">Input: SDET  →  Output: TEDS</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static String reverse(String str) {
+        char[] arr = str.toCharArray();
+        int left = 0, right = arr.length - 1;
+        while (left &lt; right) {
+            char t = arr[left];
+            arr[left] = arr[right];
+            arr[right] = t;
+            left++;
+            right--;
+        }
+        return new String(arr);
+    }
+
+    public static void main(String[] args) {
+        String input = "SDET";
+        System.out.println(reverse(input));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q002</span>
+        <span class="qtitle">Check Palindrome</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Check whether a string reads the same forwards and backwards.</div>
+      <div class="qexample">Input: madam  →  Output: Palindrome</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static boolean isPalindrome(String str) {
+        int left = 0, right = str.length() - 1;
+        while (left &lt; right) {
+            if (str.charAt(left) != str.charAt(right)) return false;
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        String str = "madam";
+        System.out.println(isPalindrome(str) ? "Palindrome" : "Not Palindrome");
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q003</span>
+        <span class="qtitle">Find Duplicate Characters in a String</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Print every character that appears more than once in a string.</div>
+      <div class="qexample">Input: programming  →  Output: r g m</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void duplicateChars(String str) {
+        Map&lt;Character, Integer&gt; map = new HashMap&lt;&gt;();
+        for (char ch : str.toCharArray())
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+
+        for (Map.Entry&lt;Character, Integer&gt; entry : map.entrySet())
+            if (entry.getValue() &gt; 1) System.out.println(entry.getKey());
+    }
+
+    public static void main(String[] args) {
+        duplicateChars("programming");
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q004</span>
+        <span class="qtitle">Count Character Occurrences</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the frequency of every character in a string.</div>
+      <div class="qexample">Input: automation  →  Output: a=2, u=1, t=2, o=2, m=1, i=1, n=1</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static Map&lt;Character, Integer&gt; charFrequency(String str) {
+        Map&lt;Character, Integer&gt; map = new HashMap&lt;&gt;();
+        for (char ch : str.toCharArray())
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        return map;
+    }
+
+    public static void main(String[] args) {
+        Map&lt;Character, Integer&gt; result = charFrequency("automation");
+        for (Map.Entry&lt;Character, Integer&gt; entry : result.entrySet())
+            System.out.println(entry.getKey() + " = " + entry.getValue());
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q005</span>
+        <span class="qtitle">Find First Non-Repeated Character</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the first character in a string that does not repeat.</div>
+      <div class="qexample">Input: aabbcde  →  Output: c</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static char firstNonRepeated(String str) {
+        Map&lt;Character, Integer&gt; map = new LinkedHashMap&lt;&gt;();
+        for (char ch : str.toCharArray())
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+
+        for (Map.Entry&lt;Character, Integer&gt; entry : map.entrySet())
+            if (entry.getValue() == 1) return entry.getKey();
+
+        return '-';
+    }
+
+    public static void main(String[] args) {
+        System.out.println(firstNonRepeated("aabbcde"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q006</span>
+        <span class="qtitle">Check Two Strings Are Anagrams</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Check whether two strings are anagrams of each other.</div>
+      <div class="qexample">Input: listen, silent  →  Output: true</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static boolean isAnagram(String s1, String s2) {
+        if (s1.length() != s2.length()) return false;
+
+        Map&lt;Character, Integer&gt; map = new HashMap&lt;&gt;();
+        for (char ch : s1.toCharArray()) map.put(ch, map.getOrDefault(ch, 0) + 1);
+
+        for (char ch : s2.toCharArray()) {
+            if (!map.containsKey(ch)) return false;
+            map.put(ch, map.get(ch) - 1);
+        }
+
+        for (int count : map.values())
+            if (count != 0) return false;
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isAnagram("listen", "silent"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q007</span>
+        <span class="qtitle">String Compression</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Compress a string using run-length counts of repeated characters.</div>
+      <div class="qexample">Input: aaaabbbbbcc  →  Output: a4b5c2</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static String compress(String str) {
+        StringBuilder sb = new StringBuilder();
+        int count = 1;
+
+        for (int i = 1; i &lt;= str.length(); i++) {
+            if (i &lt; str.length() &amp;&amp; str.charAt(i) == str.charAt(i - 1)) {
+                count++;
+            } else {
+                sb.append(str.charAt(i - 1)).append(count);
+                count = 1;
+            }
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(compress("aaaabbbbbcc"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q008</span>
+        <span class="qtitle">Reverse Words in a Sentence</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Reverse the order of words in a sentence (letters inside each word stay the same).</div>
+      <div class="qexample">Input: I am SDET  →  Output: SDET am I</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static String reverseWords(String str) {
+        String[] words = str.split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (int i = words.length - 1; i &gt;= 0; i--)
+            sb.append(words[i]).append(" ");
+        return sb.toString().trim();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverseWords("I am SDET"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q009</span>
+        <span class="qtitle">Reverse Each Word (Keep Word Order)</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Reverse each individual word but keep the word order unchanged.</div>
+      <div class="qexample">Input: I love Java  →  Output: I evol avaJ</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static String reverseEachWord(String str) {
+        String[] words = str.split(" ");
+        StringBuilder result = new StringBuilder();
+        for (String w : words)
+            result.append(new StringBuilder(w).reverse()).append(" ");
+        return result.toString().trim();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverseEachWord("I love Java"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q010</span>
+        <span class="qtitle">Find the Longest Word in a Sentence</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Return the longest word from a sentence.</div>
+      <div class="qexample">Input: I am automation engineer  →  Output: automation</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static String longestWord(String str) {
+        String longest = "";
+        for (String w : str.split(" "))
+            if (w.length() &gt; longest.length()) longest = w;
+        return longest;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(longestWord("I am automation engineer"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q011</span>
+        <span class="qtitle">Count Words in a String</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Count the number of words in a sentence.</div>
+      <div class="qexample">Input: Java Selenium API Testing  →  Output: 4</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int wordCount(String str) {
+        return str.trim().split("\\s+").length;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(wordCount("Java Selenium API Testing"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q012</span>
+        <span class="qtitle">Remove Duplicate Characters from a String</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Remove duplicate characters while keeping the first occurrence order.</div>
+      <div class="qexample">Input: programming  →  Output: progamin</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static String removeDuplicateChars(String str) {
+        Set&lt;Character&gt; seen = new LinkedHashSet&lt;&gt;();
+        for (char ch : str.toCharArray()) seen.add(ch);
+
+        StringBuilder sb = new StringBuilder();
+        for (char ch : seen) sb.append(ch);
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(removeDuplicateChars("programming"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q013</span>
+        <span class="qtitle">Check String Contains Only Digits</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Validate that a string is made up entirely of digits.</div>
+      <div class="qexample">Input: 123456  →  Output: true</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static boolean onlyDigits(String str) {
+        for (char ch : str.toCharArray())
+            if (!Character.isDigit(ch)) return false;
+        return true;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(onlyDigits("123456"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q014</span>
+        <span class="qtitle">Remove Spaces from a String</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Remove all whitespace from a string.</div>
+      <div class="qexample">Input: Java Automation Testing  →  Output: JavaAutomationTesting</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static String removeSpaces(String str) {
+        return str.replaceAll("\\s", "");
+    }
+
+    public static void main(String[] args) {
+        System.out.println(removeSpaces("Java Automation Testing"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q015</span>
+        <span class="qtitle">Count Vowels and Consonants</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Count vowels and consonants in a string.</div>
+      <div class="qexample">Input: automation  →  Output: Vowels=6, Consonants=4</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static void countVowelsConsonants(String str) {
+        int vowels = 0, consonants = 0;
+        for (char ch : str.toLowerCase().toCharArray()) {
+            if (Character.isLetter(ch)) {
+                if ("aeiou".indexOf(ch) != -1) vowels++;
+                else consonants++;
+            }
+        }
+        System.out.println("Vowels = " + vowels);
+        System.out.println("Consonants = " + consonants);
+    }
+
+    public static void main(String[] args) {
+        countVowelsConsonants("automation");
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q016</span>
+        <span class="qtitle">Longest Palindromic Substring</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the longest substring that is itself a palindrome.</div>
+      <div class="qexample">Input: babad  →  Output: bab (or aba)</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static String longestPalindrome(String s) {
+        if (s == null || s.length() &lt; 1) return "";
+        int start = 0, end = 0;
+
+        for (int i = 0; i &lt; s.length(); i++) {
+            int len1 = expand(s, i, i);
+            int len2 = expand(s, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len &gt; end - start + 1) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+        return s.substring(start, end + 1);
+    }
+
+    private static int expand(String s, int l, int r) {
+        while (l &gt;= 0 &amp;&amp; r &lt; s.length() &amp;&amp; s.charAt(l) == s.charAt(r)) {
+            l--;
+            r++;
+        }
+        return r - l - 1;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(longestPalindrome("babad"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n^2) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q017</span>
+        <span class="qtitle">Check if a String is a Rotation of Another</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Check whether string B is a rotation of string A.</div>
+      <div class="qexample">Input: A=waterbottle, B=erbottlewat  →  Output: true</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static boolean isRotation(String a, String b) {
+        if (a.length() != b.length()) return false;
+        return (a + a).contains(b);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isRotation("waterbottle", "erbottlewat"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q018</span>
+        <span class="qtitle">String to Integer (atoi)</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Convert a string to an integer, handling optional sign and leading spaces, without using Integer.parseInt().</div>
+      <div class="qexample">Input: "   -42"  →  Output: -42</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int myAtoi(String s) {
+        s = s.trim();
+        if (s.isEmpty()) return 0;
+
+        int i = 0, sign = 1;
+        long result = 0;
+
+        if (s.charAt(0) == '+' || s.charAt(0) == '-') {
+            sign = s.charAt(0) == '-' ? -1 : 1;
+            i++;
+        }
+
+        while (i &lt; s.length() &amp;&amp; Character.isDigit(s.charAt(i))) {
+            result = result * 10 + (s.charAt(i) - '0');
+            if (result * sign &gt; Integer.MAX_VALUE) return Integer.MAX_VALUE;
+            if (result * sign &lt; Integer.MIN_VALUE) return Integer.MIN_VALUE;
+            i++;
+        }
+        return (int) (result * sign);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(myAtoi("   -42"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q019</span>
+        <span class="qtitle">Group Anagrams</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Group a list of strings so that all anagrams end up in the same group.</div>
+      <div class="qexample">Input: [eat,tea,tan,ate,nat,bat]  →  Output: [[eat,tea,ate],[tan,nat],[bat]]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] strs) {
+        Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+
+        for (String str : strs) {
+            char[] chars = str.toCharArray();
+            Arrays.sort(chars);
+            String key = new String(chars);
+            map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(str);
+        }
+        return new ArrayList&lt;&gt;(map.values());
+    }
+
+    public static void main(String[] args) {
+        String[] input = {"eat", "tea", "tan", "ate", "nat", "bat"};
+        System.out.println(groupAnagrams(input));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n * k log k) | Space: O(n * k)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q020</span>
+        <span class="qtitle">Find All Permutations of a String</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Print every permutation of a given string.</div>
+      <div class="qexample">Input: abc  →  Output: abc, acb, bac, bca, cab, cba</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static void permute(String str, String current) {
+        if (str.isEmpty()) {
+            System.out.println(current);
+            return;
+        }
+        for (int i = 0; i &lt; str.length(); i++) {
+            String rest = str.substring(0, i) + str.substring(i + 1);
+            permute(rest, current + str.charAt(i));
+        }
+    }
+
+    public static void main(String[] args) {
+        permute("abc", "");
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n * n!) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q021</span>
+        <span class="qtitle">Check Isomorphic Strings</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Check whether characters of string A can be mapped one-to-one to characters of string B.</div>
+      <div class="qexample">Input: egg, add  →  Output: true</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static boolean isIsomorphic(String s, String t) {
+        if (s.length() != t.length()) return false;
+
+        Map&lt;Character, Character&gt; map = new HashMap&lt;&gt;();
+        Set&lt;Character&gt; mapped = new HashSet&lt;&gt;();
+
+        for (int i = 0; i &lt; s.length(); i++) {
+            char a = s.charAt(i), b = t.charAt(i);
+            if (map.containsKey(a)) {
+                if (map.get(a) != b) return false;
+            } else {
+                if (mapped.contains(b)) return false;
+                map.put(a, b);
+                mapped.add(b);
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isIsomorphic("egg", "add"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q022</span>
+        <span class="qtitle">Longest Common Prefix</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the longest common prefix string amongst an array of strings.</div>
+      <div class="qexample">Input: [flower,flow,flight]  →  Output: fl</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static String longestCommonPrefix(String[] strs) {
+        if (strs.length == 0) return "";
+        String prefix = strs[0];
+
+        for (int i = 1; i &lt; strs.length; i++) {
+            while (!strs[i].startsWith(prefix)) {
+                prefix = prefix.substring(0, prefix.length() - 1);
+                if (prefix.isEmpty()) return "";
+            }
+        }
+        return prefix;
+    }
+
+    public static void main(String[] args) {
+        String[] input = {"flower", "flow", "flight"};
+        System.out.println(longestCommonPrefix(input));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n * m) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q023</span>
+        <span class="qtitle">Remove Adjacent Duplicates</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Repeatedly remove adjacent duplicate characters using a stack.</div>
+      <div class="qexample">Input: abbaca  →  Output: ca</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static String removeDuplicates(String s) {
+        Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
+
+        for (char ch : s.toCharArray()) {
+            if (!stack.isEmpty() &amp;&amp; stack.peek() == ch) stack.pop();
+            else stack.push(ch);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        while (!stack.isEmpty()) sb.append(stack.removeLast());
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(removeDuplicates("abbaca"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q024</span>
+        <span class="qtitle">Count Palindromic Substrings</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Count how many substrings of a string are palindromes.</div>
+      <div class="qexample">Input: aaa  →  Output: 6  (a,a,a,aa,aa,aaa)</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int countSubstrings(String s) {
+        int count = 0;
+        for (int center = 0; center &lt; s.length(); center++) {
+            count += expandCount(s, center, center);
+            count += expandCount(s, center, center + 1);
+        }
+        return count;
+    }
+
+    private static int expandCount(String s, int l, int r) {
+        int count = 0;
+        while (l &gt;= 0 &amp;&amp; r &lt; s.length() &amp;&amp; s.charAt(l) == s.charAt(r)) {
+            count++;
+            l--;
+            r++;
+        }
+        return count;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(countSubstrings("aaa"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n^2) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q025</span>
+        <span class="qtitle">Minimum Window Substring</span>
+        <span class="diff diff-hard">Hard</span>
+      </div>
+      <div class="qproblem">Find the smallest substring of S that contains every character of T (with frequency).</div>
+      <div class="qexample">Input: S=ADOBECODEBANC, T=ABC  →  Output: BANC</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static String minWindow(String s, String t) {
+        Map&lt;Character, Integer&gt; need = new HashMap&lt;&gt;();
+        for (char c : t.toCharArray()) need.merge(c, 1, Integer::sum);
+
+        int required = need.size(), formed = 0, left = 0;
+        Map&lt;Character, Integer&gt; window = new HashMap&lt;&gt;();
+        int[] best = {-1, 0, 0};
+
+        for (int right = 0; right &lt; s.length(); right++) {
+            char c = s.charAt(right);
+            window.merge(c, 1, Integer::sum);
+
+            if (need.containsKey(c) &amp;&amp; window.get(c).intValue() == need.get(c).intValue())
+                formed++;
+
+            while (formed == required) {
+                if (best[0] == -1 || right - left + 1 &lt; best[0]) {
+                    best[0] = right - left + 1;
+                    best[1] = left;
+                    best[2] = right;
+                }
+                char lc = s.charAt(left);
+                window.put(lc, window.get(lc) - 1);
+                if (need.containsKey(lc) &amp;&amp; window.get(lc) &lt; need.get(lc)) formed--;
+                left++;
+            }
+        }
+        return best[0] == -1 ? "" : s.substring(best[1], best[2] + 1);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(minWindow("ADOBECODEBANC", "ABC"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(k)</div>
+    </div>
+</div>
+
+<div class="section-label">Arrays <span class="count">(Q026–Q051 · 26 Questions)</span></div>
+<div class="qgrid">
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q026</span>
+        <span class="qtitle">Find Duplicate Elements in an Array</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Print every element that occurs more than once, using a HashSet.</div>
+      <div class="qexample">Input: [10,20,30,20,40,10,50]  →  Output: 20 10</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void findDuplicates(int[] arr) {
+        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+        for (int num : arr)
+            if (!set.add(num)) System.out.println(num);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 20, 30, 20, 40, 10, 50};
+        findDuplicates(arr);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q027</span>
+        <span class="qtitle">Find the Second Largest Element</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the second largest element in an array without sorting.</div>
+      <div class="qexample">Input: [10,50,20,80,30]  →  Output: 50</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int secondLargest(int[] arr) {
+        int largest = Integer.MIN_VALUE, second = Integer.MIN_VALUE;
+        for (int num : arr) {
+            if (num &gt; largest) {
+                second = largest;
+                largest = num;
+            } else if (num &gt; second &amp;&amp; num != largest) {
+                second = num;
+            }
+        }
+        return second;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 50, 20, 80, 30};
+        System.out.println(secondLargest(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q028</span>
+        <span class="qtitle">Find the Missing Number</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Given numbers from 1 to N with one missing, find the missing number.</div>
+      <div class="qexample">Input: [1,2,3,5], N=5  →  Output: 4</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int findMissing(int[] arr, int n) {
+        int expected = n * (n + 1) / 2;
+        int actual = 0;
+        for (int num : arr) actual += num;
+        return expected - actual;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 5};
+        System.out.println(findMissing(arr, 5));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q029</span>
+        <span class="qtitle">Move All Zeros to the End</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Move all zeros to the end while keeping the relative order of non-zero elements.</div>
+      <div class="qexample">Input: [0,1,0,3,12]  →  Output: [1,3,12,0,0]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void moveZeros(int[] arr) {
+        int index = 0;
+        for (int num : arr) if (num != 0) arr[index++] = num;
+        while (index &lt; arr.length) arr[index++] = 0;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {0, 1, 0, 3, 12};
+        moveZeros(arr);
+        System.out.println(Arrays.toString(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q030</span>
+        <span class="qtitle">Reverse an Array</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Reverse the elements of an array in place.</div>
+      <div class="qexample">Input: [1,2,3,4,5]  →  Output: [5,4,3,2,1]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void reverseArray(int[] arr) {
+        int left = 0, right = arr.length - 1;
+        while (left &lt; right) {
+            int t = arr[left];
+            arr[left] = arr[right];
+            arr[right] = t;
+            left++;
+            right--;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+        reverseArray(arr);
+        System.out.println(Arrays.toString(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q031</span>
+        <span class="qtitle">Merge Two Sorted Arrays</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Merge two sorted arrays into a single sorted array.</div>
+      <div class="qexample">Input: A=[1,3,5], B=[2,4,6]  →  Output: [1,2,3,4,5,6]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int[] merge(int[] a, int[] b) {
+        int[] result = new int[a.length + b.length];
+        int i = 0, j = 0, k = 0;
+
+        while (i &lt; a.length &amp;&amp; j &lt; b.length)
+            result[k++] = (a[i] &lt;= b[j]) ? a[i++] : b[j++];
+
+        while (i &lt; a.length) result[k++] = a[i++];
+        while (j &lt; b.length) result[k++] = b[j++];
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] a = {1, 3, 5};
+        int[] b = {2, 4, 6};
+        System.out.println(Arrays.toString(merge(a, b)));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n+m) | Space: O(n+m)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q032</span>
+        <span class="qtitle">Maximum Subarray Sum (Kadane's Algorithm)</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the maximum sum of a contiguous subarray.</div>
+      <div class="qexample">Input: [-2,1,-3,4,-1,2,1,-5,4]  →  Output: 6</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int maxSubArray(int[] arr) {
+        int current = arr[0], maximum = arr[0];
+        for (int i = 1; i &lt; arr.length; i++) {
+            current = Math.max(arr[i], current + arr[i]);
+            maximum = Math.max(maximum, current);
+        }
+        return maximum;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        System.out.println(maxSubArray(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q033</span>
+        <span class="qtitle">Find Intersection of Two Arrays</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the common elements between two arrays.</div>
+      <div class="qexample">Input: A=[1,2,3,4], B=[3,4,5,6]  →  Output: 3 4</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void intersection(int[] a, int[] b) {
+        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+        for (int num : a) set.add(num);
+        for (int num : b) if (set.contains(num)) System.out.println(num);
+    }
+
+    public static void main(String[] args) {
+        int[] a = {1, 2, 3, 4};
+        int[] b = {3, 4, 5, 6};
+        intersection(a, b);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n+m) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q034</span>
+        <span class="qtitle">Find Majority Element (Boyer-Moore Voting)</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the element that appears more than n/2 times in an array.</div>
+      <div class="qexample">Input: [2,2,1,1,1,2,2]  →  Output: 2</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int majorityElement(int[] arr) {
+        int candidate = 0, count = 0;
+        for (int num : arr) {
+            if (count == 0) candidate = num;
+            count += (num == candidate) ? 1 : -1;
+        }
+        return candidate;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {2, 2, 1, 1, 1, 2, 2};
+        System.out.println(majorityElement(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q035</span>
+        <span class="qtitle">Find the Largest and Smallest Element</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find both the largest and smallest elements in a single pass.</div>
+      <div class="qexample">Input: [10,5,30,2,50,8]  →  Output: Smallest=2, Largest=50</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static void minMax(int[] arr) {
+        int min = arr[0], max = arr[0];
+        for (int num : arr) {
+            if (num &lt; min) min = num;
+            if (num &gt; max) max = num;
+        }
+        System.out.println("Smallest = " + min);
+        System.out.println("Largest = " + max);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 5, 30, 2, 50, 8};
+        minMax(arr);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q036</span>
+        <span class="qtitle">Find the Third Largest Element</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the third largest distinct element in an array.</div>
+      <div class="qexample">Input: [10,50,20,80,30,70]  →  Output: 50</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int thirdLargest(int[] arr) {
+        int first = Integer.MIN_VALUE, second = Integer.MIN_VALUE, third = Integer.MIN_VALUE;
+        for (int num : arr) {
+            if (num &gt; first) {
+                third = second;
+                second = first;
+                first = num;
+            } else if (num &gt; second &amp;&amp; num != first) {
+                third = second;
+                second = num;
+            } else if (num &gt; third &amp;&amp; num != second &amp;&amp; num != first) {
+                third = num;
+            }
+        }
+        return third;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 50, 20, 80, 30, 70};
+        System.out.println(thirdLargest(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q037</span>
+        <span class="qtitle">Remove Duplicates from a Sorted Array</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Remove duplicates in place from a sorted array and return the new length.</div>
+      <div class="qexample">Input: [1,1,2,2,3,4,4,5]  →  Output: [1,2,3,4,5]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int removeDuplicates(int[] arr) {
+        int index = 1;
+        for (int i = 1; i &lt; arr.length; i++)
+            if (arr[i] != arr[i - 1]) arr[index++] = arr[i];
+        return index;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 1, 2, 2, 3, 4, 4, 5};
+        int newLength = removeDuplicates(arr);
+        System.out.println(Arrays.toString(Arrays.copyOf(arr, newLength)));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q038</span>
+        <span class="qtitle">Find a Pair with a Given Difference</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find a pair of elements whose absolute difference equals a target value.</div>
+      <div class="qexample">Input: [5,20,3,2,50,80], diff=78  →  Output: 2, 80</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void pairWithDifference(int[] arr, int diff) {
+        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+        for (int num : arr) {
+            if (set.contains(num - diff)) System.out.println((num - diff) + ", " + num);
+            if (set.contains(num + diff)) System.out.println((num + diff) + ", " + num);
+            set.add(num);
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {5, 20, 3, 2, 50, 80};
+        pairWithDifference(arr, 78);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q039</span>
+        <span class="qtitle">Find All Pairs Whose Sum Equals a Target</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Print all pairs from an array whose sum equals a given target.</div>
+      <div class="qexample">Input: [1,5,7,-1,5], target=6  →  Output: 1+5, 7+-1</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void pairsWithSum(int[] arr, int target) {
+        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+        for (int num : arr) {
+            int required = target - num;
+            if (set.contains(required)) System.out.println(required + " + " + num);
+            set.add(num);
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 5, 7, -1, 5};
+        pairsWithSum(arr, 6);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q040</span>
+        <span class="qtitle">Rotate an Array Right by K Positions</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Rotate the array to the right by K positions in place.</div>
+      <div class="qexample">Input: [1,2,3,4,5], K=2  →  Output: [4,5,1,2,3]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void rotate(int[] arr, int k) {
+        k %= arr.length;
+        reverse(arr, 0, arr.length - 1);
+        reverse(arr, 0, k - 1);
+        reverse(arr, k, arr.length - 1);
+    }
+
+    private static void reverse(int[] arr, int left, int right) {
+        while (left &lt; right) {
+            int t = arr[left];
+            arr[left] = arr[right];
+            arr[right] = t;
+            left++;
+            right--;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+        rotate(arr, 2);
+        System.out.println(Arrays.toString(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q041</span>
+        <span class="qtitle">Find Leaders in an Array</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">An element is a leader if no element to its right is greater than it.</div>
+      <div class="qexample">Input: [16,17,4,3,5,2]  →  Output: 17 5 2</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static void arrayLeaders(int[] arr) {
+        int max = arr[arr.length - 1];
+        System.out.print(max + " ");
+        for (int i = arr.length - 2; i &gt;= 0; i--) {
+            if (arr[i] &gt; max) {
+                max = arr[i];
+                System.out.print(max + " ");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {16, 17, 4, 3, 5, 2};
+        arrayLeaders(arr);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q042</span>
+        <span class="qtitle">Find the Equilibrium Index</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find an index where the sum of elements on the left equals the sum on the right.</div>
+      <div class="qexample">Input: [-7,1,5,2,-4,3,0]  →  Output: 3</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int equilibriumIndex(int[] arr) {
+        int total = 0;
+        for (int num : arr) total += num;
+
+        int leftSum = 0;
+        for (int i = 0; i &lt; arr.length; i++) {
+            total -= arr[i];
+            if (leftSum == total) return i;
+            leftSum += arr[i];
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {-7, 1, 5, 2, -4, 3, 0};
+        System.out.println(equilibriumIndex(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q043</span>
+        <span class="qtitle">Product of Array Except Self</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Return an array where each element is the product of all other elements, without using division.</div>
+      <div class="qexample">Input: [1,2,3,4]  →  Output: [24,12,8,6]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int[] productExceptSelf(int[] nums) {
+        int n = nums.length;
+        int[] result = new int[n];
+        result[0] = 1;
+
+        for (int i = 1; i &lt; n; i++) result[i] = result[i - 1] * nums[i - 1];
+
+        int right = 1;
+        for (int i = n - 1; i &gt;= 0; i--) {
+            result[i] *= right;
+            right *= nums[i];
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4};
+        System.out.println(Arrays.toString(productExceptSelf(arr)));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1) extra (excluding output)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q044</span>
+        <span class="qtitle">Find a Peak Element</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find an element that is greater than both its neighbours (binary search approach).</div>
+      <div class="qexample">Input: [1,2,3,1]  →  Output: index 2 (value 3)</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int findPeakElement(int[] nums) {
+        int left = 0, right = nums.length - 1;
+        while (left &lt; right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] &gt; nums[mid + 1]) right = mid;
+            else left = mid + 1;
+        }
+        return left;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 1};
+        System.out.println("Peak index = " + findPeakElement(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(log n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q045</span>
+        <span class="qtitle">Sort an Array of 0s, 1s and 2s (Dutch National Flag)</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Sort an array containing only 0s, 1s and 2s in a single pass.</div>
+      <div class="qexample">Input: [0,1,2,0,1,2]  →  Output: [0,0,1,1,2,2]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void sortColors(int[] arr) {
+        int low = 0, mid = 0, high = arr.length - 1;
+        while (mid &lt;= high) {
+            if (arr[mid] == 0) swap(arr, low++, mid++);
+            else if (arr[mid] == 1) mid++;
+            else swap(arr, mid, high--);
+        }
+    }
+
+    private static void swap(int[] arr, int i, int j) {
+        int t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {0, 1, 2, 0, 1, 2};
+        sortColors(arr);
+        System.out.println(Arrays.toString(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q046</span>
+        <span class="qtitle">Merge Overlapping Intervals</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Merge all overlapping intervals into non-overlapping ones.</div>
+      <div class="qexample">Input: [[1,3],[2,6],[8,10],[15,18]]  →  Output: [[1,6],[8,10],[15,18]]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -&gt; a[0] - b[0]);
+        List&lt;int[]&gt; result = new ArrayList&lt;&gt;();
+
+        for (int[] interval : intervals) {
+            if (result.isEmpty() || result.get(result.size() - 1)[1] &lt; interval[0]) {
+                result.add(interval);
+            } else {
+                result.get(result.size() - 1)[1] =
+                    Math.max(result.get(result.size() - 1)[1], interval[1]);
+            }
+        }
+        return result.toArray(new int[0][]);
+    }
+
+    public static void main(String[] args) {
+        int[][] intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+        for (int[] interval : merge(intervals))
+            System.out.println(Arrays.toString(interval));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n log n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q047</span>
+        <span class="qtitle">Find the Missing and Repeating Number</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">An array of 1..N has one number missing and one repeated — find both.</div>
+      <div class="qexample">Input: [1,2,2,4]  →  Output: Missing=3, Repeating=2</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static void findMissingAndRepeating(int[] arr) {
+        int n = arr.length;
+        int[] freq = new int[n + 1];
+        int repeating = -1;
+
+        for (int num : arr) {
+            freq[num]++;
+            if (freq[num] &gt; 1) repeating = num;
+        }
+
+        int missing = -1;
+        for (int i = 1; i &lt;= n; i++) if (freq[i] == 0) missing = i;
+
+        System.out.println("Missing = " + missing);
+        System.out.println("Repeating = " + repeating);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 4};
+        findMissingAndRepeating(arr);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q048</span>
+        <span class="qtitle">Best Time to Buy and Sell Stock</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Given daily prices, find the maximum profit from one buy and one sell.</div>
+      <div class="qexample">Input: [7,1,5,3,6,4]  →  Output: 5</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int maxProfit(int[] prices) {
+        int minPrice = Integer.MAX_VALUE, maxProfit = 0;
+        for (int price : prices) {
+            minPrice = Math.min(minPrice, price);
+            maxProfit = Math.max(maxProfit, price - minPrice);
+        }
+        return maxProfit;
+    }
+
+    public static void main(String[] args) {
+        int[] prices = {7, 1, 5, 3, 6, 4};
+        System.out.println(maxProfit(prices));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q049</span>
+        <span class="qtitle">Trapping Rain Water</span>
+        <span class="diff diff-hard">Hard</span>
+      </div>
+      <div class="qproblem">Given elevation heights, compute how much rainwater can be trapped between bars.</div>
+      <div class="qexample">Input: [0,1,0,2,1,0,1,3,2,1,2,1]  →  Output: 6</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int trap(int[] height) {
+        int left = 0, right = height.length - 1;
+        int leftMax = 0, rightMax = 0, water = 0;
+
+        while (left &lt; right) {
+            if (height[left] &lt;= height[right]) {
+                leftMax = Math.max(leftMax, height[left]);
+                water += leftMax - height[left];
+                left++;
+            } else {
+                rightMax = Math.max(rightMax, height[right]);
+                water += rightMax - height[right];
+                right--;
+            }
+        }
+        return water;
+    }
+
+    public static void main(String[] args) {
+        int[] height = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
+        System.out.println(trap(height));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q050</span>
+        <span class="qtitle">Subarray With a Given Sum (Positive Numbers)</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find a contiguous subarray (of positive numbers) that sums to a target value.</div>
+      <div class="qexample">Input: [1,4,20,3,10,5], target=33  →  Output: indices 2 to 4</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static void subarraySum(int[] arr, int target) {
+        int start = 0, sum = 0;
+        for (int end = 0; end &lt; arr.length; end++) {
+            sum += arr[end];
+            while (sum &gt; target &amp;&amp; start &lt; end) {
+                sum -= arr[start];
+                start++;
+            }
+            if (sum == target) {
+                System.out.println("Indices " + start + " to " + end);
+                return;
+            }
+        }
+        System.out.println("No subarray found");
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 4, 20, 3, 10, 5};
+        subarraySum(arr, 33);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q051</span>
+        <span class="qtitle">Maximum Product Subarray</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the contiguous subarray that has the largest product.</div>
+      <div class="qexample">Input: [2,3,-2,4]  →  Output: 6</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int maxProduct(int[] nums) {
+        int maxProd = nums[0], minProd = nums[0], result = nums[0];
+
+        for (int i = 1; i &lt; nums.length; i++) {
+            int num = nums[i];
+            if (num &lt; 0) {
+                int t = maxProd;
+                maxProd = minProd;
+                minProd = t;
+            }
+            maxProd = Math.max(num, maxProd * num);
+            minProd = Math.min(num, minProd * num);
+            result = Math.max(result, maxProd);
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {2, 3, -2, 4};
+        System.out.println(maxProduct(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+</div>
+
+<div class="section-label">Sorting <span class="count">(Q052–Q054 · 3 Questions)</span></div>
+<div class="qgrid">
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q052</span>
+        <span class="qtitle">Sort an Array Without Arrays.sort() (Bubble Sort)</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Sort an array manually using bubble sort, without built-in sort methods.</div>
+      <div class="qexample">Input: [5,2,8,1,3]  →  Output: [1,2,3,5,8]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void bubbleSort(int[] arr) {
+        for (int i = 0; i &lt; arr.length - 1; i++) {
+            for (int j = 0; j &lt; arr.length - i - 1; j++) {
+                if (arr[j] &gt; arr[j + 1]) {
+                    int t = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = t;
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {5, 2, 8, 1, 3};
+        bubbleSort(arr);
+        System.out.println(Arrays.toString(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n^2) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q053</span>
+        <span class="qtitle">Selection Sort</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Sort an array by repeatedly selecting the minimum element from the unsorted part.</div>
+      <div class="qexample">Input: [29,10,14,37,13]  →  Output: [10,13,14,29,37]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void selectionSort(int[] arr) {
+        for (int i = 0; i &lt; arr.length - 1; i++) {
+            int minIdx = i;
+            for (int j = i + 1; j &lt; arr.length; j++)
+                if (arr[j] &lt; arr[minIdx]) minIdx = j;
+            int t = arr[minIdx];
+            arr[minIdx] = arr[i];
+            arr[i] = t;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {29, 10, 14, 37, 13};
+        selectionSort(arr);
+        System.out.println(Arrays.toString(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n^2) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q054</span>
+        <span class="qtitle">Insertion Sort</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Sort an array by inserting each element into its correct position in the sorted part.</div>
+      <div class="qexample">Input: [12,11,13,5,6]  →  Output: [5,6,11,12,13]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void insertionSort(int[] arr) {
+        for (int i = 1; i &lt; arr.length; i++) {
+            int key = arr[i], j = i - 1;
+            while (j &gt;= 0 &amp;&amp; arr[j] &gt; key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {12, 11, 13, 5, 6};
+        insertionSort(arr);
+        System.out.println(Arrays.toString(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n^2) | Space: O(1)</div>
+    </div>
+</div>
+
+<div class="section-label">Binary Search <span class="count">(Q055–Q056 · 2 Questions)</span></div>
+<div class="qgrid">
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q055</span>
+        <span class="qtitle">Binary Search</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Search for a target value in a sorted array.</div>
+      <div class="qexample">Input: [10,20,30,40,50], target=30  →  Output: index 2</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int search(int[] arr, int target) {
+        int left = 0, right = arr.length - 1;
+        while (left &lt;= right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] == target) return mid;
+            if (arr[mid] &lt; target) left = mid + 1;
+            else right = mid - 1;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 20, 30, 40, 50};
+        System.out.println(search(arr, 30));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(log n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q056</span>
+        <span class="qtitle">Find First and Last Occurrence of an Element</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the first and last position of a target value in a sorted array.</div>
+      <div class="qexample">Input: [1,2,2,2,3,4], target=2  →  Output: First=1, Last=3</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int firstOccurrence(int[] arr, int target) {
+        int left = 0, right = arr.length - 1, result = -1;
+        while (left &lt;= right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] == target) {
+                result = mid;
+                right = mid - 1;
+            } else if (arr[mid] &lt; target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return result;
+    }
+
+    public static int lastOccurrence(int[] arr, int target) {
+        int left = 0, right = arr.length - 1, result = -1;
+        while (left &lt;= right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] == target) {
+                result = mid;
+                left = mid + 1;
+            } else if (arr[mid] &lt; target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 2, 3, 4};
+        System.out.println("First = " + firstOccurrence(arr, 2));
+        System.out.println("Last = " + lastOccurrence(arr, 2));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(log n) | Space: O(1)</div>
+    </div>
+</div>
+
+<div class="section-label">HashMap / HashSet <span class="count">(Q057–Q066 · 10 Questions)</span></div>
+<div class="qgrid">
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q057</span>
+        <span class="qtitle">Two Sum</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the indices of two numbers whose sum equals a target value.</div>
+      <div class="qexample">Input: [2,7,11,15], target=9  →  Output: [0,1]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int[] twoSum(int[] arr, int target) {
+        Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt; arr.length; i++) {
+            int complement = target - arr[i];
+            if (map.containsKey(complement)) return new int[]{map.get(complement), i};
+            map.put(arr[i], i);
+        }
+        return new int[]{};
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {2, 7, 11, 15};
+        System.out.println(Arrays.toString(twoSum(arr, 9)));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q058</span>
+        <span class="qtitle">Find Common Elements in Three Arrays</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find elements that are common to all three arrays.</div>
+      <div class="qexample">Input: A,B,C  →  Output: 20 80</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void commonInThree(int[] a, int[] b, int[] c) {
+        Set&lt;Integer&gt; setA = new HashSet&lt;&gt;();
+        for (int n : a) setA.add(n);
+
+        Set&lt;Integer&gt; setAB = new HashSet&lt;&gt;();
+        for (int n : b) if (setA.contains(n)) setAB.add(n);
+
+        for (int n : c) if (setAB.contains(n)) System.out.println(n);
+    }
+
+    public static void main(String[] args) {
+        int[] a = {1, 5, 10, 20, 40, 80};
+        int[] b = {6, 7, 20, 80, 100};
+        int[] c = {3, 4, 15, 20, 30, 70, 80, 120};
+        commonInThree(a, b, c);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n+m+k) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q059</span>
+        <span class="qtitle">Find Frequency of Numbers in an Array</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Build a map of number-to-frequency for an array.</div>
+      <div class="qexample">Input: [1,2,2,3,3,3,4]  →  Output: {1=1, 2=2, 3=3, 4=1}</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static Map&lt;Integer, Integer&gt; frequency(int[] arr) {
+        Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+        for (int num : arr) map.put(num, map.getOrDefault(num, 0) + 1);
+        return map;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 3, 3, 3, 4};
+        System.out.println(frequency(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q060</span>
+        <span class="qtitle">Find the First Repeated Element</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the first element that repeats while scanning left to right.</div>
+      <div class="qexample">Input: [10,5,3,4,3,5,6]  →  Output: 3</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int firstRepeated(int[] arr) {
+        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+        for (int num : arr)
+            if (!set.add(num)) return num;
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 5, 3, 4, 3, 5, 6};
+        System.out.println(firstRepeated(arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q061</span>
+        <span class="qtitle">Find Elements Appearing More Than Once</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Print all elements that occur more than once in an array.</div>
+      <div class="qexample">Input: [1,2,3,2,4,5,1,6,2]  →  Output: 1 2</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void repeatedElements(int[] arr) {
+        Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+        for (int num : arr) map.put(num, map.getOrDefault(num, 0) + 1);
+
+        for (Map.Entry&lt;Integer, Integer&gt; entry : map.entrySet())
+            if (entry.getValue() &gt; 1) System.out.println(entry.getKey());
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 2, 4, 5, 1, 6, 2};
+        repeatedElements(arr);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q062</span>
+        <span class="qtitle">Three Sum</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find all unique triplets in an array that sum to zero.</div>
+      <div class="qexample">Input: [-1,0,1,2,-1,-4]  →  Output: [-1,-1,2], [-1,0,1]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+
+        for (int i = 0; i &lt; nums.length - 2; i++) {
+            if (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1]) continue;
+            int left = i + 1, right = nums.length - 1;
+
+            while (left &lt; right) {
+                int sum = nums[i] + nums[left] + nums[right];
+                if (sum == 0) {
+                    result.add(Arrays.asList(nums[i], nums[left], nums[right]));
+                    while (left &lt; right &amp;&amp; nums[left] == nums[left + 1]) left++;
+                    while (left &lt; right &amp;&amp; nums[right] == nums[right - 1]) right--;
+                    left++;
+                    right--;
+                } else if (sum &lt; 0) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {-1, 0, 1, 2, -1, -4};
+        System.out.println(threeSum(nums));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n^2) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q063</span>
+        <span class="qtitle">Four Sum</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find all unique quadruplets in an array that sum to a target value.</div>
+      <div class="qexample">Input: [1,0,-1,0,-2,2], target=0  →  Output: [-2,-1,1,2], [-2,0,0,2], [-1,0,0,1]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static List&lt;List&lt;Integer&gt;&gt; fourSum(int[] nums, int target) {
+        Arrays.sort(nums);
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+        int n = nums.length;
+
+        for (int i = 0; i &lt; n - 3; i++) {
+            if (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1]) continue;
+            for (int j = i + 1; j &lt; n - 2; j++) {
+                if (j &gt; i + 1 &amp;&amp; nums[j] == nums[j - 1]) continue;
+                int left = j + 1, right = n - 1;
+
+                while (left &lt; right) {
+                    long sum = (long) nums[i] + nums[j] + nums[left] + nums[right];
+                    if (sum == target) {
+                        result.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
+                        while (left &lt; right &amp;&amp; nums[left] == nums[left + 1]) left++;
+                        while (left &lt; right &amp;&amp; nums[right] == nums[right - 1]) right--;
+                        left++;
+                        right--;
+                    } else if (sum &lt; target) {
+                        left++;
+                    } else {
+                        right--;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {1, 0, -1, 0, -2, 2};
+        System.out.println(fourSum(nums, 0));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n^3) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q064</span>
+        <span class="qtitle">Top K Frequent Elements</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Return the K most frequently occurring elements in an array.</div>
+      <div class="qexample">Input: [1,1,1,2,2,3], k=2  →  Output: [1,2]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int[] topKFrequent(int[] nums, int k) {
+        Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();
+        for (int num : nums) freq.put(num, freq.getOrDefault(num, 0) + 1);
+
+        PriorityQueue&lt;Integer&gt; heap = new PriorityQueue&lt;&gt;((a, b) -&gt; freq.get(a) - freq.get(b));
+        for (int key : freq.keySet()) {
+            heap.offer(key);
+            if (heap.size() &gt; k) heap.poll();
+        }
+
+        int[] result = new int[k];
+        for (int i = k - 1; i &gt;= 0; i--) result[i] = heap.poll();
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {1, 1, 1, 2, 2, 3};
+        System.out.println(Arrays.toString(topKFrequent(nums, 2)));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n log k) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q065</span>
+        <span class="qtitle">Longest Consecutive Sequence</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the length of the longest run of consecutive integers in an unsorted array.</div>
+      <div class="qexample">Input: [100,4,200,1,3,2]  →  Output: 4  ([1,2,3,4])</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int longestConsecutive(int[] nums) {
+        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+        for (int num : nums) set.add(num);
+
+        int longest = 0;
+        for (int num : set) {
+            if (!set.contains(num - 1)) {
+                int length = 1;
+                while (set.contains(num + length)) length++;
+                longest = Math.max(longest, length);
+            }
+        }
+        return longest;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {100, 4, 200, 1, 3, 2};
+        System.out.println(longestConsecutive(nums));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q066</span>
+        <span class="qtitle">Subarray Sum Equals K</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Count the number of contiguous subarrays whose sum equals K.</div>
+      <div class="qexample">Input: [1,1,1], k=2  →  Output: 2</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int subarraySum(int[] nums, int k) {
+        Map&lt;Integer, Integer&gt; prefixCount = new HashMap&lt;&gt;();
+        prefixCount.put(0, 1);
+        int sum = 0, count = 0;
+
+        for (int num : nums) {
+            sum += num;
+            count += prefixCount.getOrDefault(sum - k, 0);
+            prefixCount.put(sum, prefixCount.getOrDefault(sum, 0) + 1);
+        }
+        return count;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {1, 1, 1};
+        System.out.println(subarraySum(nums, 2));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+</div>
+
+<div class="section-label">Two Pointer / Sliding Window <span class="count">(Q067–Q070 · 4 Questions)</span></div>
+<div class="qgrid">
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q067</span>
+        <span class="qtitle">Longest Substring Without Repeating Characters</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the length of the longest substring without any repeating characters.</div>
+      <div class="qexample">Input: abcabcbb  →  Output: 3  (abc)</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int lengthOfLongestSubstring(String s) {
+        Set&lt;Character&gt; set = new HashSet&lt;&gt;();
+        int left = 0, maxLength = 0;
+
+        for (int right = 0; right &lt; s.length(); right++) {
+            while (set.contains(s.charAt(right))) {
+                set.remove(s.charAt(left));
+                left++;
+            }
+            set.add(s.charAt(right));
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        return maxLength;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(lengthOfLongestSubstring("abcabcbb"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q068</span>
+        <span class="qtitle">Maximum Sum of K Consecutive Elements</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the maximum sum of any K consecutive elements in an array.</div>
+      <div class="qexample">Input: [2,1,5,1,3,2], k=3  →  Output: 9</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int maxKSum(int[] arr, int k) {
+        int windowSum = 0;
+        for (int i = 0; i &lt; k; i++) windowSum += arr[i];
+
+        int maxSum = windowSum;
+        for (int i = k; i &lt; arr.length; i++) {
+            windowSum += arr[i] - arr[i - k];
+            maxSum = Math.max(maxSum, windowSum);
+        }
+        return maxSum;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {2, 1, 5, 1, 3, 2};
+        System.out.println(maxKSum(arr, 3));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q069</span>
+        <span class="qtitle">Smallest Subarray With a Given Sum</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the length of the smallest contiguous subarray whose sum is &gt;= target.</div>
+      <div class="qexample">Input: [2,1,5,2,3,2], target=7  →  Output: 2  (5+2)</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static int minSubArrayLen(int target, int[] arr) {
+        int left = 0, sum = 0, minLength = Integer.MAX_VALUE;
+
+        for (int right = 0; right &lt; arr.length; right++) {
+            sum += arr[right];
+            while (sum &gt;= target) {
+                minLength = Math.min(minLength, right - left + 1);
+                sum -= arr[left++];
+            }
+        }
+        return minLength == Integer.MAX_VALUE ? 0 : minLength;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {2, 1, 5, 2, 3, 2};
+        System.out.println(minSubArrayLen(7, arr));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q070</span>
+        <span class="qtitle">Longest Substring With K Distinct Characters</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the length of the longest substring containing at most K distinct characters.</div>
+      <div class="qexample">Input: araaci, k=2  →  Output: 4  (araa)</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int longestKDistinct(String s, int k) {
+        Map&lt;Character, Integer&gt; freq = new HashMap&lt;&gt;();
+        int left = 0, maxLength = 0;
+
+        for (int right = 0; right &lt; s.length(); right++) {
+            freq.merge(s.charAt(right), 1, Integer::sum);
+
+            while (freq.size() &gt; k) {
+                char lc = s.charAt(left);
+                freq.put(lc, freq.get(lc) - 1);
+                if (freq.get(lc) == 0) freq.remove(lc);
+                left++;
+            }
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        return maxLength;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(longestKDistinct("araaci", 2));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(k)</div>
+    </div>
+</div>
+
+<div class="section-label">Stack / Queue <span class="count">(Q071–Q078 · 8 Questions)</span></div>
+<div class="qgrid">
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q071</span>
+        <span class="qtitle">Check Balanced Parentheses (Valid Parentheses)</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Check whether brackets in a string are balanced and correctly nested.</div>
+      <div class="qexample">Input: {[()]}  →  Output: Balanced</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static boolean isBalanced(String str) {
+        Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
+
+        for (char ch : str.toCharArray()) {
+            if (ch == '(' || ch == '{' || ch == '[') {
+                stack.push(ch);
+            } else {
+                if (stack.isEmpty()) return false;
+                char top = stack.pop();
+                if ((ch == ')' &amp;&amp; top != '(') || (ch == '}' &amp;&amp; top != '{') || (ch == ']' &amp;&amp; top != '['))
+                    return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isBalanced("{[()]}"));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q072</span>
+        <span class="qtitle">Reverse a Stack (Without Extra Stack)</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Reverse the elements of a stack using recursion, without an auxiliary stack.</div>
+      <div class="qexample">Input: [1,2,3,4] (top=4)  →  Output: [4,3,2,1] (top=1)</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static void reverseStack(Deque&lt;Integer&gt; stack) {
+        if (stack.isEmpty()) return;
+        int top = stack.pop();
+        reverseStack(stack);
+        insertAtBottom(stack, top);
+    }
+
+    private static void insertAtBottom(Deque&lt;Integer&gt; stack, int value) {
+        if (stack.isEmpty()) {
+            stack.push(value);
+            return;
+        }
+        int top = stack.pop();
+        insertAtBottom(stack, value);
+        stack.push(top);
+    }
+
+    public static void main(String[] args) {
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        stack.push(4);
+        reverseStack(stack);
+        System.out.println(stack);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n^2) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q073</span>
+        <span class="qtitle">Implement a Stack Using a Queue</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Implement push, pop, peek and isEmpty for a Stack using only a Queue.</div>
+      <div class="qexample">push(1); push(2); pop() → 2</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    static class MyStack {
+        Queue&lt;Integer&gt; queue = new LinkedList&lt;&gt;();
+
+        public void push(int x) {
+            queue.add(x);
+            for (int i = 1; i &lt; queue.size(); i++) queue.add(queue.poll());
+        }
+
+        public int pop() { return queue.poll(); }
+        public int peek() { return queue.peek(); }
+        public boolean isEmpty() { return queue.isEmpty(); }
+    }
+
+    public static void main(String[] args) {
+        MyStack stack = new MyStack();
+        stack.push(1);
+        stack.push(2);
+        System.out.println(stack.pop());
+    }
+}</pre></div>
+      <div class="qcomplexity">push: O(n) | pop/peek: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q074</span>
+        <span class="qtitle">Implement a Queue Using Two Stacks</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Implement enqueue, dequeue and peek for a Queue using two Stacks.</div>
+      <div class="qexample">enqueue(1); enqueue(2); dequeue() → 1</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    static class MyQueue {
+        Deque&lt;Integer&gt; in = new ArrayDeque&lt;&gt;();
+        Deque&lt;Integer&gt; out = new ArrayDeque&lt;&gt;();
+
+        public void enqueue(int x) { in.push(x); }
+
+        public int dequeue() {
+            if (out.isEmpty())
+                while (!in.isEmpty()) out.push(in.pop());
+            return out.pop();
+        }
+    }
+
+    public static void main(String[] args) {
+        MyQueue queue = new MyQueue();
+        queue.enqueue(1);
+        queue.enqueue(2);
+        System.out.println(queue.dequeue());
+    }
+}</pre></div>
+      <div class="qcomplexity">Amortized: O(1) per operation</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q075</span>
+        <span class="qtitle">Next Greater Element</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">For each element, find the next element to its right that is greater; use -1 if none exists.</div>
+      <div class="qexample">Input: [4,5,2,10]  →  Output: [5,10,10,-1]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int[] nextGreaterElement(int[] arr) {
+        int n = arr.length;
+        int[] result = new int[n];
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+
+        for (int i = n - 1; i &gt;= 0; i--) {
+            while (!stack.isEmpty() &amp;&amp; stack.peek() &lt;= arr[i]) stack.pop();
+            result[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.push(arr[i]);
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {4, 5, 2, 10};
+        System.out.println(Arrays.toString(nextGreaterElement(arr)));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q076</span>
+        <span class="qtitle">Min Stack</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Design a stack that supports push, pop, top and retrieving the minimum element, all in O(1).</div>
+      <div class="qexample">push(-2); push(0); push(-3); getMin() → -3</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    static class MinStack {
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+        Deque&lt;Integer&gt; minStack = new ArrayDeque&lt;&gt;();
+
+        public void push(int val) {
+            stack.push(val);
+            minStack.push(minStack.isEmpty() ? val : Math.min(val, minStack.peek()));
+        }
+
+        public void pop() { stack.pop(); minStack.pop(); }
+        public int top() { return stack.peek(); }
+        public int getMin() { return minStack.peek(); }
+    }
+
+    public static void main(String[] args) {
+        MinStack minStack = new MinStack();
+        minStack.push(-2);
+        minStack.push(0);
+        minStack.push(-3);
+        System.out.println(minStack.getMin());
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(1) for all operations | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q077</span>
+        <span class="qtitle">Largest Rectangle in Histogram</span>
+        <span class="diff diff-hard">Hard</span>
+      </div>
+      <div class="qproblem">Given bar heights, find the area of the largest rectangle in the histogram.</div>
+      <div class="qexample">Input: [2,1,5,6,2,3]  →  Output: 10</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int largestRectangleArea(int[] heights) {
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+        int maxArea = 0, n = heights.length;
+
+        for (int i = 0; i &lt;= n; i++) {
+            int h = (i == n) ? 0 : heights[i];
+            while (!stack.isEmpty() &amp;&amp; heights[stack.peek()] &gt;= h) {
+                int height = heights[stack.pop()];
+                int width = stack.isEmpty() ? i : i - stack.peek() - 1;
+                maxArea = Math.max(maxArea, height * width);
+            }
+            stack.push(i);
+        }
+        return maxArea;
+    }
+
+    public static void main(String[] args) {
+        int[] heights = {2, 1, 5, 6, 2, 3};
+        System.out.println(largestRectangleArea(heights));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q078</span>
+        <span class="qtitle">Sliding Window Maximum</span>
+        <span class="diff diff-hard">Hard</span>
+      </div>
+      <div class="qproblem">Find the maximum element in every sliding window of size K.</div>
+      <div class="qexample">Input: [1,3,-1,-3,5,3,6,7], k=3  →  Output: [3,3,5,5,6,7]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    public static int[] maxSlidingWindow(int[] nums, int k) {
+        Deque&lt;Integer&gt; deque = new ArrayDeque&lt;&gt;();
+        int[] result = new int[nums.length - k + 1];
+
+        for (int i = 0; i &lt; nums.length; i++) {
+            while (!deque.isEmpty() &amp;&amp; deque.peekFirst() &lt;= i - k) deque.pollFirst();
+            while (!deque.isEmpty() &amp;&amp; nums[deque.peekLast()] &lt; nums[i]) deque.pollLast();
+            deque.offerLast(i);
+            if (i &gt;= k - 1) result[i - k + 1] = nums[deque.peekFirst()];
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
+        System.out.println(Arrays.toString(maxSlidingWindow(nums, 3)));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(k)</div>
+    </div>
+</div>
+
+<div class="section-label">Linked List <span class="count">(Q079–Q088 · 10 Questions)</span></div>
+<div class="qgrid">
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q079</span>
+        <span class="qtitle">Reverse a Linked List</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Reverse a singly linked list in place.</div>
+      <div class="qexample">Input: 1-&gt;2-&gt;3-&gt;4  →  Output: 4-&gt;3-&gt;2-&gt;1</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class Node {
+        int data;
+        Node next;
+        Node(int data) { this.data = data; }
+    }
+
+    public static Node reverse(Node head) {
+        Node previous = null, current = head;
+        while (current != null) {
+            Node next = current.next;
+            current.next = previous;
+            previous = current;
+            current = next;
+        }
+        return previous;
+    }
+
+    public static void print(Node head) {
+        while (head != null) {
+            System.out.print(head.data);
+            if (head.next != null) System.out.print(" -&gt; ");
+            head = head.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = new Node(3);
+        head.next.next.next = new Node(4);
+
+        head = reverse(head);
+        print(head);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q080</span>
+        <span class="qtitle">Find the Middle of a Linked List</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the middle node of a linked list using slow/fast pointers.</div>
+      <div class="qexample">Input: 1-&gt;2-&gt;3-&gt;4-&gt;5  →  Output: 3</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class Node {
+        int data;
+        Node next;
+        Node(int data) { this.data = data; }
+    }
+
+    public static Node findMiddle(Node head) {
+        Node slow = head, fast = head;
+        while (fast != null &amp;&amp; fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    public static void main(String[] args) {
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = new Node(3);
+        head.next.next.next = new Node(4);
+        head.next.next.next.next = new Node(5);
+
+        System.out.println(findMiddle(head).data);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q081</span>
+        <span class="qtitle">Detect a Loop in a Linked List (Floyd's Cycle Detection)</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Detect whether a linked list has a cycle.</div>
+      <div class="qexample">Input: 1-&gt;2-&gt;3-&gt;4-&gt;2 (cycle)  →  Output: true</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class Node {
+        int data;
+        Node next;
+        Node(int data) { this.data = data; }
+    }
+
+    public static boolean hasCycle(Node head) {
+        Node slow = head, fast = head;
+        while (fast != null &amp;&amp; fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) return true;
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = new Node(3);
+        head.next.next.next = head; // creates a cycle
+
+        System.out.println(hasCycle(head));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q082</span>
+        <span class="qtitle">Remove Duplicate Nodes from a Linked List</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Remove duplicate values from a sorted linked list.</div>
+      <div class="qexample">Input: 1-&gt;2-&gt;2-&gt;3-&gt;3-&gt;4  →  Output: 1-&gt;2-&gt;3-&gt;4</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class Node {
+        int data;
+        Node next;
+        Node(int data) { this.data = data; }
+    }
+
+    public static Node removeDuplicates(Node head) {
+        Node current = head;
+        while (current != null &amp;&amp; current.next != null) {
+            if (current.data == current.next.data)
+                current.next = current.next.next;
+            else
+                current = current.next;
+        }
+        return head;
+    }
+
+    public static void print(Node head) {
+        while (head != null) {
+            System.out.print(head.data);
+            if (head.next != null) System.out.print(" -&gt; ");
+            head = head.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = new Node(2);
+        head.next.next.next = new Node(3);
+        head.next.next.next.next = new Node(3);
+        head.next.next.next.next.next = new Node(4);
+
+        head = removeDuplicates(head);
+        print(head);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q083</span>
+        <span class="qtitle">Find the Nth Node From the End</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the Nth node from the end of a linked list using two pointers.</div>
+      <div class="qexample">Input: 1-&gt;2-&gt;3-&gt;4-&gt;5, N=2  →  Output: 4</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class Node {
+        int data;
+        Node next;
+        Node(int data) { this.data = data; }
+    }
+
+    public static Node nthFromEnd(Node head, int n) {
+        Node fast = head, slow = head;
+        for (int i = 0; i &lt; n; i++) fast = fast.next;
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+    public static void main(String[] args) {
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = new Node(3);
+        head.next.next.next = new Node(4);
+        head.next.next.next.next = new Node(5);
+
+        System.out.println(nthFromEnd(head, 2).data);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q084</span>
+        <span class="qtitle">Remove a Cycle from a Linked List</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Detect a cycle and remove it so the list becomes a normal singly linked list.</div>
+      <div class="qexample">Input: 1-&gt;2-&gt;3-&gt;4-&gt;2 (cycle)  →  Output: 1-&gt;2-&gt;3-&gt;4-&gt;null</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class Node {
+        int data;
+        Node next;
+        Node(int data) { this.data = data; }
+    }
+
+    public static void removeCycle(Node head) {
+        Node slow = head, fast = head;
+        boolean cycleFound = false;
+
+        while (fast != null &amp;&amp; fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                cycleFound = true;
+                break;
+            }
+        }
+        if (!cycleFound) return;
+
+        slow = head;
+        if (slow == fast) {
+            while (fast.next != slow) fast = fast.next;
+        } else {
+            while (slow.next != fast.next) {
+                slow = slow.next;
+                fast = fast.next;
+            }
+        }
+        fast.next = null;
+    }
+
+    public static void main(String[] args) {
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = new Node(3);
+        head.next.next.next = new Node(4);
+        head.next.next.next.next = head.next; // cycle back to node 2
+
+        removeCycle(head);
+
+        Node cur = head;
+        while (cur != null) {
+            System.out.print(cur.data + " ");
+            cur = cur.next;
+        }
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q085</span>
+        <span class="qtitle">Merge Two Sorted Linked Lists</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Merge two sorted linked lists into one sorted linked list.</div>
+      <div class="qexample">Input: 1-&gt;3-&gt;5, 2-&gt;4-&gt;6  →  Output: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;6</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class Node {
+        int data;
+        Node next;
+        Node(int data) { this.data = data; }
+    }
+
+    public static Node mergeTwoLists(Node l1, Node l2) {
+        Node dummy = new Node(-1);
+        Node tail = dummy;
+
+        while (l1 != null &amp;&amp; l2 != null) {
+            if (l1.data &lt;= l2.data) { tail.next = l1; l1 = l1.next; }
+            else { tail.next = l2; l2 = l2.next; }
+            tail = tail.next;
+        }
+        tail.next = (l1 != null) ? l1 : l2;
+        return dummy.next;
+    }
+
+    public static void print(Node head) {
+        while (head != null) {
+            System.out.print(head.data + " ");
+            head = head.next;
+        }
+    }
+
+    public static void main(String[] args) {
+        Node l1 = new Node(1);
+        l1.next = new Node(3);
+        l1.next.next = new Node(5);
+
+        Node l2 = new Node(2);
+        l2.next = new Node(4);
+        l2.next.next = new Node(6);
+
+        print(mergeTwoLists(l1, l2));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n+m) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q086</span>
+        <span class="qtitle">Find the Intersection Point of Two Linked Lists</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the node at which two singly linked lists intersect.</div>
+      <div class="qexample">Input: two lists merging at a common node  →  Output: the intersection node</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class Node {
+        int data;
+        Node next;
+        Node(int data) { this.data = data; }
+    }
+
+    public static Node getIntersectionNode(Node headA, Node headB) {
+        Node a = headA, b = headB;
+        while (a != b) {
+            a = (a == null) ? headB : a.next;
+            b = (b == null) ? headA : b.next;
+        }
+        return a;
+    }
+
+    public static void main(String[] args) {
+        Node common = new Node(8);
+        common.next = new Node(10);
+
+        Node headA = new Node(3);
+        headA.next = new Node(6);
+        headA.next.next = common;
+
+        Node headB = new Node(9);
+        headB.next = common;
+
+        Node result = getIntersectionNode(headA, headB);
+        System.out.println(result != null ? result.data : "No Intersection");
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n+m) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q087</span>
+        <span class="qtitle">Check if a Linked List is a Palindrome</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Check whether a singly linked list reads the same forwards and backwards.</div>
+      <div class="qexample">Input: 1-&gt;2-&gt;3-&gt;2-&gt;1  →  Output: true</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    static class Node {
+        int data;
+        Node next;
+        Node(int data) { this.data = data; }
+    }
+
+    public static boolean isPalindrome(Node head) {
+        List&lt;Integer&gt; values = new ArrayList&lt;&gt;();
+        for (Node cur = head; cur != null; cur = cur.next) values.add(cur.data);
+
+        int left = 0, right = values.size() - 1;
+        while (left &lt; right) {
+            if (!values.get(left).equals(values.get(right))) return false;
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = new Node(3);
+        head.next.next.next = new Node(2);
+        head.next.next.next.next = new Node(1);
+
+        System.out.println(isPalindrome(head));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q088</span>
+        <span class="qtitle">Add Two Numbers Represented by Linked Lists</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Add two numbers where each digit is stored as a node, in reverse order.</div>
+      <div class="qexample">Input: 2-&gt;4-&gt;3 (342), 5-&gt;6-&gt;4 (465)  →  Output: 7-&gt;0-&gt;8 (807)</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class Node {
+        int data;
+        Node next;
+        Node(int data) { this.data = data; }
+    }
+
+    public static Node addTwoNumbers(Node l1, Node l2) {
+        Node dummy = new Node(-1);
+        Node current = dummy;
+        int carry = 0;
+
+        while (l1 != null || l2 != null || carry != 0) {
+            int sum = carry;
+            if (l1 != null) { sum += l1.data; l1 = l1.next; }
+            if (l2 != null) { sum += l2.data; l2 = l2.next; }
+            carry = sum / 10;
+            current.next = new Node(sum % 10);
+            current = current.next;
+        }
+        return dummy.next;
+    }
+
+    public static void print(Node head) {
+        while (head != null) {
+            System.out.print(head.data);
+            head = head.next;
+        }
+    }
+
+    public static void main(String[] args) {
+        Node l1 = new Node(2);
+        l1.next = new Node(4);
+        l1.next.next = new Node(3); // represents 342
+
+        Node l2 = new Node(5);
+        l2.next = new Node(6);
+        l2.next.next = new Node(4); // represents 465
+
+        print(addTwoNumbers(l1, l2)); // 807
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(max(n,m)) | Space: O(max(n,m))</div>
+    </div>
+</div>
+
+<div class="section-label">Recursion <span class="count">(Q089–Q092 · 4 Questions)</span></div>
+<div class="qgrid">
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q089</span>
+        <span class="qtitle">Factorial of a Number</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Compute the factorial of a number using recursion.</div>
+      <div class="qexample">Input: 5  →  Output: 120</div>
+      <div class="qcode"><pre>public class Main {
+
+    static int factorial(int n) {
+        if (n == 0 || n == 1) return 1;
+        return n * factorial(n - 1);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(factorial(5));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n) (call stack)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q090</span>
+        <span class="qtitle">Fibonacci Series</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Print the first N terms of the Fibonacci series (know recursive and iterative both).</div>
+      <div class="qexample">Input: 7  →  Output: 0 1 1 2 3 5 8</div>
+      <div class="qcode"><pre>public class Main {
+
+    static int fibonacci(int n) {
+        if (n &lt;= 1) return n;
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+
+    static void fibonacciIterative(int n) {
+        int a = 0, b = 1;
+        for (int i = 0; i &lt; n; i++) {
+            System.out.print(a + " ");
+            int next = a + b;
+            a = b;
+            b = next;
+        }
+    }
+
+    public static void main(String[] args) {
+        fibonacciIterative(7);
+    }
+}</pre></div>
+      <div class="qcomplexity">Recursive: O(2^n) | Iterative: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q091</span>
+        <span class="qtitle">Sum of Digits</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the sum of digits of a number using recursion.</div>
+      <div class="qexample">Input: 12345  →  Output: 15</div>
+      <div class="qcode"><pre>public class Main {
+
+    static int sum(int n) {
+        if (n == 0) return 0;
+        return n % 10 + sum(n / 10);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(sum(12345));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(log n) | Space: O(log n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q092</span>
+        <span class="qtitle">Reverse a Number</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Reverse the digits of an integer.</div>
+      <div class="qexample">Input: 12345  →  Output: 54321</div>
+      <div class="qcode"><pre>public class Main {
+
+    static int reverseNumber(int n) {
+        int reverse = 0;
+        while (n != 0) {
+            int digit = n % 10;
+            reverse = reverse * 10 + digit;
+            n /= 10;
+        }
+        return reverse;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverseNumber(12345));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(log n) | Space: O(1)</div>
+    </div>
+</div>
+
+<div class="section-label">Trees <span class="count">(Q093–Q102 · 10 Questions)</span></div>
+<div class="qgrid">
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q093</span>
+        <span class="qtitle">Inorder Traversal (Left, Root, Right)</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Traverse a binary tree in inorder sequence.</div>
+      <div class="qexample">Input: [1,null,2,3]  →  Output: [1,3,2]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static void inorder(TreeNode node, List&lt;Integer&gt; result) {
+        if (node == null) return;
+        inorder(node.left, result);
+        result.add(node.val);
+        inorder(node.right, result);
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.right = new TreeNode(2);
+        root.right.left = new TreeNode(3);
+
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        inorder(root, result);
+        System.out.println(result);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(h)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q094</span>
+        <span class="qtitle">Preorder Traversal (Root, Left, Right)</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Traverse a binary tree in preorder sequence.</div>
+      <div class="qexample">Input: [1,null,2,3]  →  Output: [1,2,3]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static void preorder(TreeNode node, List&lt;Integer&gt; result) {
+        if (node == null) return;
+        result.add(node.val);
+        preorder(node.left, result);
+        preorder(node.right, result);
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.right = new TreeNode(2);
+        root.right.left = new TreeNode(3);
+
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        preorder(root, result);
+        System.out.println(result);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(h)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q095</span>
+        <span class="qtitle">Postorder Traversal (Left, Right, Root)</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Traverse a binary tree in postorder sequence.</div>
+      <div class="qexample">Input: [1,null,2,3]  →  Output: [3,2,1]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static void postorder(TreeNode node, List&lt;Integer&gt; result) {
+        if (node == null) return;
+        postorder(node.left, result);
+        postorder(node.right, result);
+        result.add(node.val);
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.right = new TreeNode(2);
+        root.right.left = new TreeNode(3);
+
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        postorder(root, result);
+        System.out.println(result);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(h)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q096</span>
+        <span class="qtitle">Level Order Traversal (BFS)</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Traverse a binary tree level by level using a queue.</div>
+      <div class="qexample">Input: [3,9,20,null,null,15,7]  →  Output: [[3],[9,20],[15,7]]</div>
+      <div class="qcode"><pre>import java.util.*;
+
+public class Main {
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+        if (root == null) return result;
+
+        Queue&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            List&lt;Integer&gt; level = new ArrayList&lt;&gt;();
+            for (int i = 0; i &lt; size; i++) {
+                TreeNode node = queue.poll();
+                level.add(node.val);
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+            result.add(level);
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(3);
+        root.left = new TreeNode(9);
+        root.right = new TreeNode(20);
+        root.right.left = new TreeNode(15);
+        root.right.right = new TreeNode(7);
+
+        System.out.println(levelOrder(root));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(n)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q097</span>
+        <span class="qtitle">Maximum Depth of a Binary Tree</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Find the maximum depth (height) of a binary tree.</div>
+      <div class="qexample">Input: [3,9,20,null,null,15,7]  →  Output: 3</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static int maxDepth(TreeNode root) {
+        if (root == null) return 0;
+        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(3);
+        root.left = new TreeNode(9);
+        root.right = new TreeNode(20);
+        root.right.left = new TreeNode(15);
+        root.right.right = new TreeNode(7);
+
+        System.out.println(maxDepth(root));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(h)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q098</span>
+        <span class="qtitle">Check if Two Trees Are Identical</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Check whether two binary trees are structurally identical with the same values.</div>
+      <div class="qexample">Input: Tree A, Tree B  →  Output: true / false</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null &amp;&amp; q == null) return true;
+        if (p == null || q == null || p.val != q.val) return false;
+        return isSameTree(p.left, q.left) &amp;&amp; isSameTree(p.right, q.right);
+    }
+
+    public static void main(String[] args) {
+        TreeNode p = new TreeNode(1);
+        p.left = new TreeNode(2);
+        p.right = new TreeNode(3);
+
+        TreeNode q = new TreeNode(1);
+        q.left = new TreeNode(2);
+        q.right = new TreeNode(3);
+
+        System.out.println(isSameTree(p, q));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(h)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q099</span>
+        <span class="qtitle">Validate a Binary Search Tree</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Check whether a binary tree satisfies the binary search tree property.</div>
+      <div class="qexample">Input: [2,1,3]  →  Output: true</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static boolean isValidBST(TreeNode node, Long min, Long max) {
+        if (node == null) return true;
+        if ((min != null &amp;&amp; node.val &lt;= min) || (max != null &amp;&amp; node.val &gt;= max)) return false;
+        return isValidBST(node.left, min, (long) node.val)
+            &amp;&amp; isValidBST(node.right, (long) node.val, max);
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(2);
+        root.left = new TreeNode(1);
+        root.right = new TreeNode(3);
+
+        System.out.println(isValidBST(root, null, null));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(h)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q100</span>
+        <span class="qtitle">Lowest Common Ancestor in a BST</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the lowest common ancestor of two nodes in a binary search tree.</div>
+      <div class="qexample">Input: root, p=2, q=8  →  Output: 6</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        TreeNode current = root;
+        while (current != null) {
+            if (p.val &lt; current.val &amp;&amp; q.val &lt; current.val) current = current.left;
+            else if (p.val &gt; current.val &amp;&amp; q.val &gt; current.val) current = current.right;
+            else return current;
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(6);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(8);
+        root.left.left = new TreeNode(0);
+        root.left.right = new TreeNode(4);
+
+        TreeNode p = root.left;
+        TreeNode q = root.left.right;
+
+        System.out.println(lowestCommonAncestor(root, p, q).val);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(h) | Space: O(1)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q101</span>
+        <span class="qtitle">Diameter of a Binary Tree</span>
+        <span class="diff diff-medium">Medium</span>
+      </div>
+      <div class="qproblem">Find the length of the longest path between any two nodes in a binary tree.</div>
+      <div class="qexample">Input: [1,2,3,4,5]  →  Output: 3</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    static int diameter = 0;
+
+    public static int diameterOfBinaryTree(TreeNode root) {
+        depth(root);
+        return diameter;
+    }
+
+    private static int depth(TreeNode node) {
+        if (node == null) return 0;
+        int left = depth(node.left);
+        int right = depth(node.right);
+        diameter = Math.max(diameter, left + right);
+        return 1 + Math.max(left, right);
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+
+        System.out.println(diameterOfBinaryTree(root));
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(h)</div>
+    </div>
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q102</span>
+        <span class="qtitle">Search in a Binary Search Tree</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Search for a value in a binary search tree and return the subtree rooted at it.</div>
+      <div class="qexample">Input: root, target=2  →  Output: node with value 2</div>
+      <div class="qcode"><pre>public class Main {
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static TreeNode searchBST(TreeNode root, int val) {
+        if (root == null || root.val == val) return root;
+        return (val &lt; root.val) ? searchBST(root.left, val) : searchBST(root.right, val);
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(4);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(7);
+        root.left.left = new TreeNode(1);
+        root.left.right = new TreeNode(3);
+
+        TreeNode result = searchBST(root, 2);
+        System.out.println(result != null ? result.val : "Not Found");
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(h) | Space: O(h)</div>
+    </div>
+</div>
+
+<div class="section-label">Warm-Up Basics <span class="count">(Q103–Q103 · 1 Questions)</span></div>
+<div class="qgrid">
+    <div class="qcard">
+      <div class="qhead">
+        <span class="qnum">Q103</span>
+        <span class="qtitle">FizzBuzz</span>
+        <span class="diff diff-easy">Easy</span>
+      </div>
+      <div class="qproblem">Print numbers 1 to N; multiples of 3 print Fizz, multiples of 5 print Buzz, multiples of both print FizzBuzz.</div>
+      <div class="qexample">Input: 1 to 15  →  Output: 1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz</div>
+      <div class="qcode"><pre>public class Main {
+
+    public static void fizzBuzz(int n) {
+        for (int i = 1; i &lt;= n; i++) {
+            if (i % 15 == 0) System.out.println("FizzBuzz");
+            else if (i % 3 == 0) System.out.println("Fizz");
+            else if (i % 5 == 0) System.out.println("Buzz");
+            else System.out.println(i);
+        }
+    }
+
+    public static void main(String[] args) {
+        fizzBuzz(15);
+    }
+}</pre></div>
+      <div class="qcomplexity">Time: O(n) | Space: O(1)</div>
+    </div>
+</div>
+
+
+<div class="footer">
+  <div class="left">
+    <span>Java DSA</span> Interview Cheat Sheet · 103+ Questions · Strings → Arrays → HashMap → Sliding Window → Sorting → Binary Search → Stack/Queue → Linked List → Recursion → Trees
+  </div>
+  <div class="right">
+    <strong>Next Gen QA IT Coaching Classes</strong> &nbsp;|&nbsp;
+    Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp;
+    CBSE · ICSE · B.Tech · BCA · MCA · Polytechnic · CS &nbsp;|&nbsp;
+    Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>

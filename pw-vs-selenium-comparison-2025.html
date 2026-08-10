@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playwright vs Selenium 2025 — Next Gen QA IT Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#030407;
+  --pw:#00f0a0;--pw2:#80ffd0;--pwg:rgba(0,240,160,0.09);--pwb:rgba(0,240,160,0.22);
+  --se:#ff4d1a;--se2:#ff9060;--seg:rgba(255,77,26,0.09);--seb:rgba(255,77,26,0.22);
+  --gold:#f0c040;--goldb:rgba(240,192,64,0.2);
+  --card:#080b12;--border:#131825;--dim:#1e2a3a;
+  --txt:#d8e8f0;--muted:#3a5060;--soft:#7090a0;
+  --code:#020306;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);font-size:11px;line-height:1.55;overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-thumb{background:var(--pw);border-radius:3px;}
+
+/* ══ HEADER ══ */
+.hdr{
+  background:var(--bg);border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+/* diagonal glow strips */
+.hdr::before{content:'';position:absolute;top:0;left:0;right:50%;bottom:0;
+  background:linear-gradient(135deg,rgba(0,240,160,0.06) 0%,transparent 70%);pointer-events:none;}
+.hdr::after{content:'';position:absolute;top:0;left:50%;right:0;bottom:0;
+  background:linear-gradient(225deg,rgba(255,77,26,0.06) 0%,transparent 70%);pointer-events:none;}
+
+/* giant watermark */
+.hdr-wm{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-family:'Anton',sans-serif;font-size:110px;letter-spacing:-6px;
+  color:rgba(255,255,255,0.013);white-space:nowrap;pointer-events:none;user-select:none;}
+
+.hdr-main{position:relative;z-index:2;display:grid;grid-template-columns:auto 1fr auto;gap:0;align-items:center;}
+
+/* Tool end-caps */
+.hdr-tool{padding:14px 20px;display:flex;align-items:center;gap:12px;}
+.hdr-tool.pw{border-right:1px solid var(--border);}
+.hdr-tool.se{border-left:1px solid var(--border);flex-direction:row-reverse;}
+
+.tool-logo{
+  width:52px;height:52px;border-radius:12px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;flex-shrink:0;
+  font-family:'Anton',sans-serif;font-size:10.5px;letter-spacing:0.5px;line-height:1.3;text-align:center;
+}
+.tool-logo.pw{
+  background:linear-gradient(145deg,#003d28,#006b44);
+  color:var(--pw);border:1px solid var(--pwb);
+  box-shadow:0 0 28px rgba(0,240,160,0.2),inset 0 1px 0 rgba(0,240,160,0.15);}
+.tool-logo.se{
+  background:linear-gradient(145deg,#3d1200,#6b2000);
+  color:var(--se2);border:1px solid var(--seb);
+  box-shadow:0 0 28px rgba(255,77,26,0.2),inset 0 1px 0 rgba(255,77,26,0.15);}
+
+.tool-copy{}
+.tool-name{font-family:'Anton',sans-serif;font-size:22px;letter-spacing:0.5px;line-height:1;}
+.tool-name.pw{color:var(--pw);text-shadow:0 0 24px rgba(0,240,160,0.45);}
+.tool-name.se{color:var(--se2);text-shadow:0 0 24px rgba(255,77,26,0.4);}
+.tool-meta{font-size:9.5px;color:var(--soft);margin-top:3px;font-weight:500;}
+.tool-pill{
+  display:inline-block;margin-top:4px;padding:2px 9px;border-radius:20px;
+  font-size:8.5px;font-weight:700;letter-spacing:0.3px;
+}
+.tool-pill.pw{background:var(--pwg);border:1px solid var(--pwb);color:var(--pw);}
+.tool-pill.se{background:var(--seg);border:1px solid var(--seb);color:var(--se2);}
+
+/* Center block */
+.hdr-center{padding:14px 24px;text-align:center;}
+.vs-ring{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,#18110a,#2a1e05);
+  border:2px solid var(--gold);
+  font-family:'Anton',sans-serif;font-size:15px;color:var(--gold);
+  box-shadow:0 0 20px rgba(240,192,64,0.3);
+  margin-bottom:7px;
+}
+.hdr-h1{font-family:'Anton',sans-serif;font-size:17px;letter-spacing:0.5px;color:#fff;line-height:1.15;}
+.hdr-h1 em{color:var(--gold);font-style:normal;}
+.hdr-sub{font-size:9px;color:var(--soft);margin-top:4px;font-weight:500;letter-spacing:0.3px;}
+.year-badge{
+  display:inline-block;margin-top:6px;padding:2px 12px;border-radius:4px;
+  background:rgba(240,192,64,0.08);border:1px solid rgba(240,192,64,0.3);
+  font-size:8.5px;font-weight:800;color:var(--gold);letter-spacing:1.5px;
+}
+
+/* Coach strip */
+.hdr-coach{
+  position:relative;z-index:2;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 20px;border-top:1px solid var(--border);
+  background:rgba(0,0,0,0.35);
+}
+.coach-left{display:flex;align-items:center;gap:14px;}
+.cn{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.5px;color:var(--gold);}
+.cphone{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;color:var(--pw);}
+.ctags{display:flex;gap:4px;flex-wrap:wrap;}
+.ctag{padding:2px 8px;border-radius:20px;font-size:8.5px;font-weight:700;}
+.ctag.g{background:var(--pwg);border:1px solid var(--pwb);color:var(--pw);}
+.ctag.o{background:var(--seg);border:1px solid var(--seb);color:var(--se2);}
+.ctag.y{background:rgba(240,192,64,0.07);border:1px solid rgba(240,192,64,0.25);color:var(--gold);}
+.social-row{display:flex;gap:9px;}
+.sl{font-size:8.5px;color:var(--muted);text-decoration:none;}
+.sl:hover{color:var(--pw);}
+
+/* ══ SECTION DIVIDERS ══ */
+.sec{
+  padding:4px 16px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  font-size:8.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  display:flex;align-items:center;gap:9px;
+}
+.sec::before{content:'◆';font-size:7px;}
+.sec.g{background:linear-gradient(90deg,rgba(240,192,64,0.07),transparent);color:var(--gold);}
+.sec.p{background:linear-gradient(90deg,rgba(0,240,160,0.07),transparent);color:var(--pw);}
+.sec.s{background:linear-gradient(90deg,rgba(255,77,26,0.07),transparent);color:var(--se2);}
+
+/* ══ VERDICT RIBBON ══ */
+.vr{display:grid;grid-template-columns:1fr 2px 1fr;border-bottom:1px solid var(--border);}
+.vr-div{background:linear-gradient(180deg,transparent,var(--gold),transparent);}
+.vr-side{padding:9px 18px;display:flex;align-items:center;gap:12px;}
+.vr-side.pw{background:linear-gradient(90deg,rgba(0,240,160,0.07),rgba(0,240,160,0.02));}
+.vr-side.se{background:linear-gradient(90deg,rgba(255,77,26,0.02),rgba(255,77,26,0.07));flex-direction:row-reverse;}
+.vr-ico{font-size:28px;flex-shrink:0;}
+.vr-h{font-family:'Anton',sans-serif;font-size:14px;letter-spacing:0.5px;}
+.vr-h.pw{color:var(--pw);}
+.vr-h.se{color:var(--se2);}
+.vr-p{font-size:9.5px;color:var(--soft);margin-top:3px;max-width:430px;line-height:1.5;}
+.vr-p b{color:var(--txt);}
+.vr-tag{
+  display:inline-block;margin-top:5px;padding:2px 10px;border-radius:4px;
+  font-size:8.5px;font-weight:800;letter-spacing:0.5px;
+}
+.vr-tag.pw{background:rgba(0,240,160,0.1);border:1px solid rgba(0,240,160,0.35);color:var(--pw);}
+.vr-tag.se{background:rgba(255,77,26,0.1);border:1px solid rgba(255,77,26,0.35);color:var(--se2);}
+
+/* ══ SCOREBOARD ══ */
+.scores{display:grid;grid-template-columns:repeat(8,1fr);border-bottom:1px solid var(--border);}
+.sc{border-right:1px solid var(--border);}
+.sc:last-child{border-right:none;}
+.sc-lbl{
+  padding:4px 6px;text-align:center;font-size:8px;font-weight:800;
+  text-transform:uppercase;letter-spacing:0.5px;color:var(--soft);
+  background:var(--card);border-bottom:1px solid var(--border);
+}
+.sc-row{padding:5px 6px;text-align:center;}
+.sc-row.pw{background:rgba(0,240,160,0.03);}
+.sc-row.se{background:rgba(255,77,26,0.03);}
+.sc-n{font-family:'Anton',sans-serif;font-size:21px;display:block;line-height:1;}
+.sc-n.pw{color:var(--pw);text-shadow:0 0 10px rgba(0,240,160,0.4);}
+.sc-n.se{color:var(--se2);text-shadow:0 0 10px rgba(255,77,26,0.35);}
+.sc-n.gld{color:var(--gold);text-shadow:0 0 10px rgba(240,192,64,0.4);}
+.sc-bar{height:3px;background:var(--border);margin:3px 5px;border-radius:2px;overflow:hidden;}
+.sc-fill{height:100%;border-radius:2px;}
+.sc-fill.pw{background:var(--pw);}
+.sc-fill.se{background:var(--se2);}
+.sc-fill.gld{background:var(--gold);}
+.sc-who{font-size:7.5px;color:var(--muted);display:block;padding-bottom:3px;line-height:1;}
+
+/* ══ OVERVIEW GRID ══ */
+.ov{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
+.ov-col{border-right:1px solid var(--border);}
+.ov-col:last-child{border-right:none;}
+.ov-hdr{
+  display:flex;align-items:center;gap:8px;padding:6px 12px;
+  border-bottom:1px solid var(--border);
+  font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.5px;
+}
+.ov-hdr.pw{background:linear-gradient(90deg,rgba(0,240,160,0.09),transparent);color:var(--pw);border-bottom-color:rgba(0,240,160,0.12);}
+.ov-hdr.se{background:linear-gradient(90deg,rgba(255,77,26,0.09),transparent);color:var(--se2);border-bottom-color:rgba(255,77,26,0.12);}
+.ov-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ov-dot.pw{background:var(--pw);box-shadow:0 0 8px var(--pw);}
+.ov-dot.se{background:var(--se2);box-shadow:0 0 8px var(--se2);}
+.ov-body{padding:9px 11px;display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+
+.fi{padding:5px 8px;border-radius:5px;display:flex;align-items:flex-start;gap:7px;}
+.fi.pw{background:rgba(0,240,160,0.04);border:1px solid rgba(0,240,160,0.1);}
+.fi.se{background:rgba(255,77,26,0.04);border:1px solid rgba(255,77,26,0.1);}
+.fi-ico{font-size:15px;flex-shrink:0;line-height:1.3;}
+.fi-t{font-size:9.5px;font-weight:800;line-height:1.2;}
+.fi-t.pw{color:var(--pw);}
+.fi-t.se{color:var(--se2);}
+.fi-d{font-size:9px;color:var(--soft);margin-top:2px;line-height:1.4;}
+
+/* ══ TABLE ══ */
+.cmp{width:100%;border-collapse:collapse;font-size:10px;}
+.cmp th{
+  padding:5px 11px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);
+  font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:1px;text-align:left;
+}
+.cmp th:nth-child(1){color:var(--soft);background:var(--card);width:155px;}
+.cmp th:nth-child(2){color:var(--pw);background:rgba(0,240,160,0.04);}
+.cmp th:nth-child(3){color:var(--se2);background:rgba(255,77,26,0.04);}
+.cmp th:nth-child(4){color:var(--gold);background:rgba(240,192,64,0.04);border-right:none;}
+.cmp td{
+  padding:5px 11px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:top;
+}
+.cmp td:nth-child(1){color:var(--txt);font-weight:700;background:var(--card);}
+.cmp td:nth-child(2){color:#80c8a8;}
+.cmp td:nth-child(3){color:#c89868;}
+.cmp td:nth-child(4){border-right:none;}
+.cmp tr:nth-child(even) td{background:rgba(255,255,255,0.013);}
+.cmp tr:nth-child(even) td:nth-child(1){background:var(--card);}
+.wpw{color:var(--pw);font-weight:800;}
+.wse{color:var(--se2);font-weight:800;}
+.wtie{color:var(--gold);font-weight:800;}
+
+/* ══ CODE SPLIT ══ */
+.codes{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
+.cp{border-right:1px solid var(--border);}
+.cp:last-child{border-right:none;}
+.cp-hdr{
+  display:flex;align-items:center;gap:7px;padding:5px 12px;
+  border-bottom:1px solid var(--border);
+  font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px;
+}
+.cp-hdr.pw{background:rgba(0,240,160,0.06);color:var(--pw);}
+.cp-hdr.se{background:rgba(255,77,26,0.06);color:var(--se2);}
+.cp-body{padding:8px 10px;}
+.clbl{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--soft);margin-bottom:4px;}
+
+pre{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  background:var(--code);border:1px solid var(--border);border-radius:4px;
+  padding:6px 9px;line-height:1.7;overflow-x:auto;margin-bottom:5px;white-space:pre;display:block;
+}
+pre.pw{border-left:2px solid var(--pw);}
+pre.se{border-left:2px solid var(--se2);}
+
+/* syntax */
+.kp{color:#60c8a0;} .fp{color:#00f0a0;} .sp{color:#a0d8b0;} .cp2{color:#1a4030;font-style:italic;}
+.ks{color:#d09060;} .fs{color:#ff6030;} .ss{color:#d4b880;} .cs{color:#3a1e0a;font-style:italic;}
+.an{color:#e0a050;} .nu{color:#b0a0d0;}
+
+/* ══ ADVANCED ══ */
+.adv{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
+.adv-col{border-right:1px solid var(--border);}
+.adv-col:last-child{border-right:none;}
+.adv-body{padding:8px 10px;display:flex;flex-direction:column;gap:5px;}
+.clbl-pw{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--pw);margin-bottom:3px;}
+.clbl-se{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--se2);margin-bottom:3px;}
+
+/* ══ WHO SECTION ══ */
+.who{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--border);}
+.wcard{border-right:1px solid var(--border);padding:10px 13px;}
+.wcard:last-child{border-right:none;}
+.wcard-t{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.5px;margin-bottom:7px;}
+.wcard-t.pw{color:var(--pw);}
+.wcard-t.se{color:var(--se2);}
+.wcard-t.gld{color:var(--gold);}
+.wlist{display:flex;flex-direction:column;gap:4px;}
+.wi{display:flex;align-items:flex-start;gap:7px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:10px;color:var(--soft);}
+.wi:last-child{border-bottom:none;}
+.wi-ico{font-size:13px;flex-shrink:0;}
+.wi b{color:var(--txt);font-weight:700;}
+
+/* ══ MINI-ROADMAP ══ */
+.road{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--border);}
+.rnode{border-right:1px solid var(--border);padding:8px 10px;text-align:center;}
+.rnode:last-child{border-right:none;}
+.rn-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:50%;
+  font-family:'Anton',sans-serif;font-size:13px;margin-bottom:5px;
+}
+.rn-num.pw{background:var(--pwg);border:1px solid var(--pwb);color:var(--pw);box-shadow:0 0 8px rgba(0,240,160,0.2);}
+.rn-num.se{background:var(--seg);border:1px solid var(--seb);color:var(--se2);box-shadow:0 0 8px rgba(255,77,26,0.2);}
+.rn-num.gld{background:rgba(240,192,64,0.08);border:1px solid rgba(240,192,64,0.25);color:var(--gold);}
+.rn-t{font-size:9.5px;font-weight:800;color:var(--txt);margin-bottom:3px;}
+.rn-d{font-size:8.5px;color:var(--soft);line-height:1.4;}
+
+/* ══ FOOTER ══ */
+.footer{
+  background:linear-gradient(90deg,#020305,#040609);
+  border-top:1px solid var(--border);padding:7px 20px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px;
+}
+.footer .fl{font-size:9px;color:var(--muted);}
+.footer .fl b{color:var(--gold);}
+.footer .fr{font-size:9px;color:var(--muted);text-align:right;}
+.footer .fr b{color:var(--pw);}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="hdr">
+  <div class="hdr-wm">PW&nbsp;&nbsp;VS&nbsp;&nbsp;SE</div>
+  <div class="hdr-main">
+
+    <!-- Playwright side -->
+    <div class="hdr-tool pw">
+      <div class="tool-logo pw">🎭<br>PW</div>
+      <div class="tool-copy">
+        <div class="tool-name pw">Playwright</div>
+        <div class="tool-meta">By Microsoft · Launched 2020 · JS / TS / Python / Java / C#</div>
+        <div class="tool-pill pw">⚡ Auto-Wait · Parallel · Built-in Reports · Network Mock</div>
+      </div>
+    </div>
+
+    <!-- Center -->
+    <div class="hdr-center">
+      <div class="vs-ring">VS</div>
+      <div class="hdr-h1">Which is <em>Better</em><br>in 2025?</div>
+      <div class="hdr-sub">Speed · Features · Code · Job Market · Who Should Learn What</div>
+      <div class="year-badge">★ COMPLETE 2025 GUIDE ★</div>
+    </div>
+
+    <!-- Selenium side -->
+    <div class="hdr-tool se">
+      <div class="tool-copy" style="text-align:right;">
+        <div class="tool-name se">Selenium</div>
+        <div class="tool-meta">Open Source · Since 2004 · Java / Python / C# / JS / Ruby / Kotlin</div>
+        <div class="tool-pill se">🏆 Industry Standard · 90%+ Jobs · Largest Community</div>
+      </div>
+      <div class="tool-logo se">🌐<br>SE</div>
+    </div>
+
+  </div>
+
+  <!-- Coach strip -->
+  <div class="hdr-coach">
+    <div class="coach-left">
+      <div class="cn">🎓 Next Gen QA IT Coaching Classes</div>
+      <div class="cphone">📞 Mr. Khan Sir · 8700350994</div>
+      <div class="ctags">
+        <span class="ctag g">Selenium Training</span>
+        <span class="ctag o">Playwright Training</span>
+        <span class="ctag y">Online &amp; Offline</span>
+        <span class="ctag g">B.Tech · BCA · MCA</span>
+        <span class="ctag o">CBSE · ICSE · Polytechnic</span>
+      </div>
+    </div>
+    <div class="social-row">
+      <a class="sl" href="https://nextgenqa94-ui.github.io/nextgenqa">🌍 Website</a>
+      <a class="sl" href="https://wa.me/918700350994">💬 WhatsApp</a>
+      <a class="sl" href="https://www.linkedin.com/posts/next-gen-qa-8a48ba336_playwright-softwaretesting-qa-activity-7433836972202221568-4vf8">💼 LinkedIn</a>
+      <a class="sl" href="https://www.facebook.com/share/p/187KVCpEhw/">📘 Facebook</a>
+      <a class="sl" href="https://www.instagram.com/p/DVV2F-rCUZG/">📸 Instagram</a>
+      <a class="sl" href="http://youtube.com/post/UgkxQqIpyhpPA2My0o4Vdb20kxVBv4REJw3S">▶ YouTube</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ VERDICT RIBBON ══════════ -->
+<div class="vr">
+  <div class="vr-side pw">
+    <div class="vr-ico">🎭</div>
+    <div>
+      <div class="vr-h pw">Playwright — The 2025 Champion</div>
+      <div class="vr-p">Microsoft's powerhouse built for the modern web. <b>Auto-wait, parallel execution, built-in HTML reports, network interception, trace viewer</b> — everything included out of the box. Up to 3× faster than Selenium. Dramatically fewer flaky tests. The future of automation.</div>
+      <div class="vr-tag pw">⭐ BEST FOR NEW LEARNERS IN 2025 — MODERN &amp; FAST</div>
+    </div>
+  </div>
+  <div class="vr-div"></div>
+  <div class="vr-side se">
+    <div>
+      <div class="vr-h se" style="text-align:right;">Selenium — The Unbeatable Giant</div>
+      <div class="vr-p" style="text-align:right;margin-left:auto;"><b>90%+ of Indian QA jobs require Selenium.</b> 20 years of battle-tested reliability. TCS, Infosys, Wipro, Amazon, Google — everyone uses it. Massive community. Gateway to Appium mobile testing. Highest job count.</div>
+      <div class="vr-tag se" style="float:right;">🏆 MOST JOBS IN MARKET — HIGHEST DEMAND IN INDIA</div>
+    </div>
+    <div class="vr-ico">🌐</div>
+  </div>
+</div>
+
+<!-- ══════════ SCORECARD ══════════ -->
+<div class="sec g">📊 Score Card — Both Rated Out of 10 Across Key Dimensions</div>
+<div class="scores">
+
+  <div class="sc">
+    <div class="sc-lbl">⚡ Speed</div>
+    <div class="sc-row pw"><span class="sc-n pw">9.5</span><div class="sc-bar"><div class="sc-fill pw" style="width:95%"></div></div><span class="sc-who">🎭 Playwright</span></div>
+    <div class="sc-row se"><span class="sc-n se">7.0</span><div class="sc-bar"><div class="sc-fill se" style="width:70%"></div></div><span class="sc-who">🌐 Selenium</span></div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-lbl">😊 Ease of Use</div>
+    <div class="sc-row pw"><span class="sc-n pw">9.0</span><div class="sc-bar"><div class="sc-fill pw" style="width:90%"></div></div><span class="sc-who">🎭 Playwright</span></div>
+    <div class="sc-row se"><span class="sc-n se">7.5</span><div class="sc-bar"><div class="sc-fill se" style="width:75%"></div></div><span class="sc-who">🌐 Selenium</span></div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-lbl">💼 Jobs India</div>
+    <div class="sc-row pw"><span class="sc-n pw">7.5</span><div class="sc-bar"><div class="sc-fill pw" style="width:75%"></div></div><span class="sc-who">🎭 Playwright</span></div>
+    <div class="sc-row se"><span class="sc-n se">9.5</span><div class="sc-bar"><div class="sc-fill se" style="width:95%"></div></div><span class="sc-who">🌐 Selenium</span></div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-lbl">🔧 Features</div>
+    <div class="sc-row pw"><span class="sc-n pw">9.5</span><div class="sc-bar"><div class="sc-fill pw" style="width:95%"></div></div><span class="sc-who">🎭 Playwright</span></div>
+    <div class="sc-row se"><span class="sc-n se">8.0</span><div class="sc-bar"><div class="sc-fill se" style="width:80%"></div></div><span class="sc-who">🌐 Selenium</span></div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-lbl">🛡️ Reliability</div>
+    <div class="sc-row pw"><span class="sc-n pw">9.5</span><div class="sc-bar"><div class="sc-fill pw" style="width:95%"></div></div><span class="sc-who">🎭 Playwright</span></div>
+    <div class="sc-row se"><span class="sc-n se">7.5</span><div class="sc-bar"><div class="sc-fill se" style="width:75%"></div></div><span class="sc-who">🌐 Selenium</span></div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-lbl">👥 Community</div>
+    <div class="sc-row pw"><span class="sc-n pw">8.0</span><div class="sc-bar"><div class="sc-fill pw" style="width:80%"></div></div><span class="sc-who">🎭 Playwright</span></div>
+    <div class="sc-row se"><span class="sc-n se">9.5</span><div class="sc-bar"><div class="sc-fill se" style="width:95%"></div></div><span class="sc-who">🌐 Selenium</span></div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-lbl">📱 Mobile</div>
+    <div class="sc-row pw"><span class="sc-n pw">6.0</span><div class="sc-bar"><div class="sc-fill pw" style="width:60%"></div></div><span class="sc-who">🎭 Playwright</span></div>
+    <div class="sc-row se"><span class="sc-n se">9.0</span><div class="sc-bar"><div class="sc-fill se" style="width:90%"></div></div><span class="sc-who">🌐 Selenium</span></div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-lbl" style="color:var(--gold);">⭐ Overall</div>
+    <div class="sc-row pw"><span class="sc-n gld">8.8</span><div class="sc-bar"><div class="sc-fill gld" style="width:88%"></div></div><span class="sc-who" style="color:var(--gold);">🎭 Playwright</span></div>
+    <div class="sc-row se"><span class="sc-n se" style="color:#f0a060;">8.4</span><div class="sc-bar"><div class="sc-fill se" style="width:84%"></div></div><span class="sc-who">🌐 Selenium</span></div>
+  </div>
+
+</div>
+
+<!-- ══════════ OVERVIEW FEATURES ══════════ -->
+<div class="sec g">🔍 Overview — What Makes Each Framework Unique</div>
+<div class="ov">
+  <div class="ov-col">
+    <div class="ov-hdr pw"><div class="ov-dot pw"></div>🎭 Playwright — 8 Key Strengths</div>
+    <div class="ov-body">
+      <div class="fi pw"><div class="fi-ico">🏢</div><div><div class="fi-t pw">Built by Microsoft</div><div class="fi-d">Launched 2020. Made by ex-Puppeteer engineers. World-class tech behind it. Constantly improved.</div></div></div>
+      <div class="fi pw"><div class="fi-ico">⏳</div><div><div class="fi-t pw">Auto-Wait — Always ON</div><div class="fi-d">Automatically waits for element to be visible, stable, clickable. No Thread.sleep() ever needed!</div></div></div>
+      <div class="fi pw"><div class="fi-ico">🚀</div><div><div class="fi-t pw">Parallel by Default</div><div class="fi-d">Tests run in parallel automatically. Multiple browsers in one run. Up to 3× faster than Selenium!</div></div></div>
+      <div class="fi pw"><div class="fi-ico">🌐</div><div><div class="fi-t pw">3 Browser Engines</div><div class="fi-d">Chromium + Firefox + WebKit (Safari) — true cross-browser from a single framework config.</div></div></div>
+      <div class="fi pw"><div class="fi-ico">🔗</div><div><div class="fi-t pw">Network Interception</div><div class="fi-d">Mock API responses, block requests, test offline mode. Selenium cannot do this natively!</div></div></div>
+      <div class="fi pw"><div class="fi-ico">📊</div><div><div class="fi-t pw">Built-in HTML Reports</div><div class="fi-d">Beautiful reports + screenshots on failure + video recording + trace viewer. Zero extra setup.</div></div></div>
+      <div class="fi pw"><div class="fi-ico">🎬</div><div><div class="fi-t pw">Trace Viewer — Debug Hero</div><div class="fi-d">Step-by-step visual replay of every test action with DOM snapshots. Find bugs in seconds!</div></div></div>
+      <div class="fi pw"><div class="fi-ico">🎙️</div><div><div class="fi-t pw">Codegen — Auto Record</div><div class="fi-d">Click in browser → Playwright writes your test code. Perfect for beginners to start in minutes!</div></div></div>
+    </div>
+  </div>
+  <div class="ov-col">
+    <div class="ov-hdr se"><div class="ov-dot se"></div>🌐 Selenium — 8 Key Strengths</div>
+    <div class="ov-body">
+      <div class="fi se"><div class="fi-ico">🏛️</div><div><div class="fi-t se">20+ Years Battle-Tested</div><div class="fi-d">Created 2004. Used and trusted by millions of engineers worldwide across every major industry.</div></div></div>
+      <div class="fi se"><div class="fi-ico">💼</div><div><div class="fi-t se">Dominates Job Market</div><div class="fi-d">90%+ Indian QA job posts require Selenium. TCS, Infosys, Wipro, HCL — it is the standard.</div></div></div>
+      <div class="fi se"><div class="fi-ico">🌍</div><div><div class="fi-t se">Every Language Supported</div><div class="fi-d">Java, Python, C#, JavaScript, Ruby, Kotlin. Whatever stack your company uses — Selenium works.</div></div></div>
+      <div class="fi se"><div class="fi-ico">📱</div><div><div class="fi-t se">Mobile via Appium</div><div class="fi-d">Appium uses WebDriver protocol. Selenium knowledge → easy transition to Android and iOS automation.</div></div></div>
+      <div class="fi se"><div class="fi-ico">🔧</div><div><div class="fi-t se">Selenium Grid</div><div class="fi-d">Distribute tests across hundreds of machines and browsers simultaneously. True enterprise scale.</div></div></div>
+      <div class="fi se"><div class="fi-ico">👥</div><div><div class="fi-t se">Largest QA Community</div><div class="fi-d">Millions of developers worldwide. Infinite Stack Overflow answers, YouTube tutorials, books.</div></div></div>
+      <div class="fi se"><div class="fi-ico">🔄</div><div><div class="fi-t se">Selenium 4 is Modern</div><div class="fi-d">W3C standard, Chrome DevTools integration, BiDi protocol, relative locators, improved Grid 4.</div></div></div>
+      <div class="fi se"><div class="fi-ico">🏢</div><div><div class="fi-t se">Fortune 500 Standard</div><div class="fi-d">Amazon, Google, Flipkart, Swiggy — existing automation suites worldwide run on Selenium.</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ COMPARISON TABLE ══════════ -->
+<div class="sec g">📋 Head-to-Head — 24 Feature Comparison</div>
+<table class="cmp">
+  <thead>
+    <tr>
+      <th>Feature / Criteria</th>
+      <th>🎭 Playwright</th>
+      <th>🌐 Selenium</th>
+      <th>🏆 Winner</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Created By</td><td>Microsoft (2020)</td><td>Thoughtworks / SeleniumHQ (2004)</td><td><span class="wse">Selenium</span> — 20 yrs of history</td></tr>
+    <tr><td>Languages</td><td>JS, TypeScript, Python, Java, C#</td><td>Java, Python, C#, JS, Ruby, Kotlin</td><td><span class="wse">Selenium</span> — more languages</td></tr>
+    <tr><td>Browsers</td><td>Chromium, Firefox, WebKit</td><td>Chrome, Firefox, Edge, Safari, IE</td><td><span class="wse">Selenium</span> — IE support</td></tr>
+    <tr><td>Test Speed</td><td>⚡ Very fast — parallel by default</td><td>Moderate — sequential by default</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>Auto-Wait</td><td>✅ Always ON — zero setup</td><td>❌ Manual implicit / explicit waits</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>Flaky Tests</td><td>Very Low — timing handled automatically</td><td>Higher — manual timing causes failures</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>Setup &amp; Install</td><td>One command: npm init playwright@latest</td><td>Multiple steps: Maven + WebDriverManager</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>Test Runner</td><td>✅ Built-in Playwright Test</td><td>❌ Need TestNG / JUnit / Pytest</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>Parallel Tests</td><td>✅ Automatic out of the box</td><td>❌ Manual config via TestNG / Grid</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>Screenshots / Videos</td><td>✅ Built-in, auto on failure</td><td>❌ Need custom code to implement</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>HTML Reports</td><td>✅ Beautiful reports — built-in</td><td>❌ Need Allure or ExtentReports</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>Network Mocking</td><td>✅ page.route() — intercept any API</td><td>❌ Not built-in — need extra tools</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>Code Generation</td><td>✅ npx playwright codegen — records clicks</td><td>Limited — only basic Selenium IDE</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>Trace / Debug Viewer</td><td>✅ Full step + DOM snapshot replay</td><td>❌ Not available at all</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>iFrame Handling</td><td>Simple: frameLocator('selector')</td><td>Manual: driver.switchTo().frame()</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>Multiple Windows/Tabs</td><td>context.waitForEvent('page')</td><td>getWindowHandles() loop required</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>API Testing Built-in</td><td>✅ APIRequestContext included</td><td>❌ Need RestAssured separately</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+    <tr><td>Mobile Testing</td><td>Device emulation only — no real device</td><td>✅ Appium — real Android &amp; iOS devices</td><td><span class="wse">Selenium</span> + Appium</td></tr>
+    <tr><td>Grid / Distributed</td><td>Built-in parallelism — no Grid needed</td><td>✅ Selenium Grid — 100s of machines</td><td><span class="wse">Selenium</span> (enterprise)</td></tr>
+    <tr><td>Community Size</td><td>Growing fast — 4 years old</td><td>Massive — 20 years, millions of users</td><td><span class="wse">Selenium</span> — larger base</td></tr>
+    <tr><td>Job Postings (India)</td><td>Growing — ~30–40% posts mention it</td><td>Dominant — 90%+ posts require it</td><td><span class="wse">Selenium</span> — more jobs NOW</td></tr>
+    <tr><td>Cloud Testing</td><td>✅ BrowserStack / Sauce / LambdaTest</td><td>✅ BrowserStack / Sauce / LambdaTest</td><td><span class="wtie">Both Equal</span> 🤝</td></tr>
+    <tr><td>CI/CD Integration</td><td>✅ Jenkins / GitHub Actions / GitLab</td><td>✅ Jenkins / GitHub Actions / GitLab</td><td><span class="wtie">Both Equal</span> 🤝</td></tr>
+    <tr><td>Beginner Friendliness</td><td>High — less boilerplate, auto-wait</td><td>Moderate — more config, manual waits</td><td><span class="wpw">Playwright</span> ⚡</td></tr>
+  </tbody>
+</table>
+
+<!-- ══════════ CODE COMPARISON ══════════ -->
+<div class="sec g">💻 Same Login Test — Written in BOTH Frameworks Side by Side</div>
+<div class="codes">
+  <div class="cp">
+    <div class="cp-hdr pw">🎭 Playwright — JavaScript / TypeScript</div>
+    <div class="cp-body">
+      <div class="clbl">✅ Clean · Auto-wait · No boilerplate · Built-in assertions</div>
+<pre class="pw">
+<span class="cp2">// ✅ Install: npm init playwright@latest  (one command!)</span>
+<span class="cp2">// ✅ No WebDriverManager, no chromedriver downloads needed!</span>
+<span class="kp">import</span> { test, expect } <span class="kp">from</span> <span class="sp">'@playwright/test'</span>;
+
+test(<span class="sp">'Login with valid credentials'</span>, <span class="kp">async</span> ({ page }) => {
+
+  <span class="cp2">// Navigate — auto-waits for page load</span>
+  <span class="kp">await</span> page.<span class="fp">goto</span>(<span class="sp">'https://app.example.com/login'</span>);
+
+  <span class="cp2">// Fill fields — auto-waits for visibility!</span>
+  <span class="kp">await</span> page.<span class="fp">fill</span>(<span class="sp">'#username'</span>, <span class="sp">'admin@test.com'</span>);
+  <span class="kp">await</span> page.<span class="fp">fill</span>(<span class="sp">'#password'</span>, <span class="sp">'Admin@123'</span>);
+
+  <span class="cp2">// Click button — auto-waits until clickable!</span>
+  <span class="kp">await</span> page.<span class="fp">click</span>(<span class="sp">'button[type="submit"]'</span>);
+
+  <span class="cp2">// Assertion — built-in, no extra imports!</span>
+  <span class="kp">await</span> expect(page).<span class="fp">toHaveURL</span>(<span class="sp">/dashboard/</span>);
+  <span class="kp">await</span> expect(page.<span class="fp">getByText</span>(<span class="sp">'Welcome Back'</span>))
+                   .<span class="fp">toBeVisible</span>();
+});
+
+<span class="cp2">// Run: npx playwright test</span>
+<span class="cp2">// HTML Report auto-generated → open in browser ✨</span>
+<span class="cp2">// Screenshots + Videos auto-recorded on failure 🎬</span>
+</pre>
+      <div class="clbl">🔗 Network Mock — Playwright's Superpower</div>
+<pre class="pw">
+<span class="cp2">// Mock API — Selenium simply CANNOT do this!</span>
+<span class="kp">await</span> page.<span class="fp">route</span>(<span class="sp">'**/api/users'</span>, route => {
+  route.<span class="fp">fulfill</span>({
+    status: <span class="nu">200</span>,
+    body: JSON.<span class="fp">stringify</span>([{ id:<span class="nu">1</span>, name:<span class="sp">'Test User'</span> }])
+  });
+});
+<span class="cp2">// Test runs WITHOUT a real backend! 🚀</span>
+<span class="cp2">// Simulate errors: status: 500, 401, 404</span>
+</pre>
+    </div>
+  </div>
+
+  <div class="cp">
+    <div class="cp-hdr se">🌐 Selenium — Java + TestNG</div>
+    <div class="cp-body">
+      <div class="clbl">⚠️ More setup · Manual waits required · Separate libraries needed</div>
+<pre class="se">
+<span class="cs">// ⚠️ Need Maven pom.xml + Selenium + TestNG dependencies</span>
+<span class="cs">// ⚠️ Need ExtentReports/Allure for HTML reports (extra work!)</span>
+<span class="ks">import</span> org.openqa.selenium.*;
+<span class="ks">import</span> org.openqa.selenium.chrome.*;
+<span class="ks">import</span> org.openqa.selenium.support.ui.*;
+<span class="ks">import</span> org.testng.Assert;
+<span class="ks">import</span> org.testng.annotations.*;
+
+<span class="ks">public class</span> LoginTest {
+  WebDriver driver;
+  WebDriverWait wait;
+
+  <span class="an">@BeforeMethod</span>
+  <span class="ks">public void</span> setup() {
+    driver = <span class="ks">new</span> ChromeDriver(<span class="ks">new</span> ChromeOptions());
+    driver.manage().window().maximize();
+    wait = <span class="ks">new</span> WebDriverWait(driver,
+                Duration.ofSeconds(<span class="nu">15</span>));
+  }
+
+  <span class="an">@Test</span>
+  <span class="ks">public void</span> loginTest() {
+    driver.get(<span class="ss">"https://app.example.com/login"</span>);
+
+    <span class="cs">// Find elements manually every time</span>
+    driver.findElement(By.id(<span class="ss">"username"</span>))
+          .sendKeys(<span class="ss">"admin@test.com"</span>);
+    driver.findElement(By.id(<span class="ss">"password"</span>))
+          .sendKeys(<span class="ss">"Admin@123"</span>);
+
+    <span class="cs">// Must explicitly wait — or it may fail!</span>
+    wait.until(ExpectedConditions
+      .elementToBeClickable(
+        By.cssSelector(<span class="ss">"button[type='submit']"</span>)))
+      .click();
+
+    wait.until(ExpectedConditions
+      .urlContains(<span class="ss">"dashboard"</span>));
+    Assert.assertTrue(
+      driver.getCurrentUrl().contains(<span class="ss">"dashboard"</span>));
+  }
+
+  <span class="an">@AfterMethod</span>
+  <span class="ks">public void</span> teardown() { driver.quit(); }
+}
+<span class="cs">// HTML Report → set up Allure/Extent separately</span>
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ADVANCED FEATURES ══════════ -->
+<div class="sec g">🌟 Advanced Features — Unique Superpowers of Each Tool</div>
+<div class="adv">
+  <div class="adv-col">
+    <div class="ov-hdr pw" style="padding:6px 12px;"><div class="ov-dot pw"></div>🎭 Playwright — Exclusive Advantages</div>
+    <div class="adv-body">
+
+      <div>
+        <div class="clbl-pw">Multi-Browser + Mobile in ONE Config File</div>
+<pre class="pw">
+<span class="cp2">// playwright.config.ts — all browsers at once!</span>
+projects: [
+  { name:<span class="sp">'Chrome'</span>,  use:{...devices[<span class="sp">'Desktop Chrome'</span>]}  },
+  { name:<span class="sp">'Firefox'</span>, use:{...devices[<span class="sp">'Desktop Firefox'</span>]} },
+  { name:<span class="sp">'Safari'</span>,  use:{...devices[<span class="sp">'Desktop Safari'</span>]}  },
+  { name:<span class="sp">'iPhone14'</span>,use:{...devices[<span class="sp">'iPhone 14'</span>]}         },
+  { name:<span class="sp">'Pixel7'</span>,  use:{...devices[<span class="sp">'Pixel 7'</span>]}          },
+]
+<span class="cp2">// ONE command runs all: npx playwright test ✅</span>
+</pre>
+      </div>
+
+      <div>
+        <div class="clbl-pw">Codegen — Record &amp; Auto-Generate Test Code</div>
+<pre class="pw">
+<span class="cp2"># Opens browser — click around to record!</span>
+npx playwright codegen https://example.com
+
+<span class="cp2"># Test code is written automatically as you click</span>
+<span class="cp2"># Save → Run → Done! Perfect for beginners 🎯</span>
+<span class="cp2"># Works with any website. Generates locators too!</span>
+</pre>
+      </div>
+
+      <div>
+        <div class="clbl-pw">Smart Locators — More Stable Than XPath</div>
+<pre class="pw">
+<span class="cp2">// Playwright smart locator methods</span>
+page.<span class="fp">getByRole</span>(<span class="sp">'button'</span>, { name: <span class="sp">'Login'</span> })
+page.<span class="fp">getByLabel</span>(<span class="sp">'Email address'</span>)
+page.<span class="fp">getByPlaceholder</span>(<span class="sp">'Enter your email'</span>)
+page.<span class="fp">getByTestId</span>(<span class="sp">'submit-btn'</span>)
+page.<span class="fp">getByText</span>(<span class="sp">'Welcome Back'</span>)
+<span class="cp2">// More resilient than fragile XPath! 💪</span>
+</pre>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="adv-col">
+    <div class="ov-hdr se" style="padding:6px 12px;"><div class="ov-dot se"></div>🌐 Selenium — Exclusive Advantages</div>
+    <div class="adv-body">
+
+      <div>
+        <div class="clbl-se">Selenium Grid — Enterprise Scale Parallel Testing</div>
+<pre class="se">
+<span class="cs">// Connect tests to Selenium Grid Hub</span>
+ChromeOptions options = <span class="ks">new</span> ChromeOptions();
+WebDriver driver = <span class="ks">new</span> RemoteWebDriver(
+    <span class="ks">new</span> URL(<span class="ss">"http://hub-host:4444/wd/hub"</span>),
+    options
+);
+<span class="cs">// Runs across hundreds of machines! 🏭</span>
+<span class="cs">// Different OS + browser combinations at once!</span>
+</pre>
+      </div>
+
+      <div>
+        <div class="clbl-se">Mobile Automation via Appium (Real Devices)</div>
+<pre class="se">
+<span class="cs">// Same WebDriver protocol → works with Appium!</span>
+DesiredCapabilities caps = <span class="ks">new</span> DesiredCapabilities();
+caps.setCapability(<span class="ss">"platformName"</span>,   <span class="ss">"Android"</span>);
+caps.setCapability(<span class="ss">"deviceName"</span>,     <span class="ss">"Pixel 7"</span>);
+caps.setCapability(<span class="ss">"app"</span>, <span class="ss">"/path/to/app.apk"</span>);
+caps.setCapability(<span class="ss">"automationName"</span>, <span class="ss">"UiAutomator2"</span>);
+<span class="cs">// Real device — Android &amp; iOS 📱</span>
+<span class="cs">// Learn Selenium → easy move to Appium!</span>
+</pre>
+      </div>
+
+      <div>
+        <div class="clbl-se">Page Object Model — Industry-Wide Standard</div>
+<pre class="se">
+<span class="cs">// POM pattern — every company uses this!</span>
+<span class="ks">public class</span> LoginPage {
+  <span class="an">@FindBy</span>(id=<span class="ss">"username"</span>) WebElement usernameField;
+  <span class="an">@FindBy</span>(id=<span class="ss">"password"</span>) WebElement passwordField;
+  <span class="an">@FindBy</span>(id=<span class="ss">"loginBtn"</span>)  WebElement loginButton;
+
+  <span class="ks">public void</span> login(String u, String p) {
+    usernameField.sendKeys(u);
+    passwordField.sendKeys(p);
+    loginButton.click();    <span class="cs">// Reusable ♻️</span>
+  }
+}
+</pre>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ WHO SHOULD LEARN WHAT ══════════ -->
+<div class="sec g">🎯 Who Should Learn What? — Personalised Decision Guide</div>
+<div class="who">
+
+  <div class="wcard">
+    <div class="wcard-t pw">🎭 Learn Playwright First If...</div>
+    <div class="wlist">
+      <div class="wi"><div class="wi-ico">🆕</div><div><b>You are a complete beginner</b> — Auto-wait removes timing frustrations that make beginners give up</div></div>
+      <div class="wi"><div class="wi-ico">💻</div><div><b>You prefer JavaScript / TypeScript</b> — Playwright + TypeScript is the #1 modern web automation stack</div></div>
+      <div class="wi"><div class="wi-ico">🏢</div><div><b>You want a product company job</b> — Swiggy, Zomato, Razorpay, CRED, PhonePe use modern tools</div></div>
+      <div class="wi"><div class="wi-ico">💰</div><div><b>You want higher salary</b> — Playwright is a premium niche skill. Product companies pay more</div></div>
+      <div class="wi"><div class="wi-ico">🚀</div><div><b>You want fast results</b> — Codegen records clicks and writes your test code automatically!</div></div>
+      <div class="wi"><div class="wi-ico">🔮</div><div><b>You are future-focused</b> — Playwright adoption is growing 40% year-on-year. It is the future</div></div>
+    </div>
+  </div>
+
+  <div class="wcard">
+    <div class="wcard-t se">🌐 Learn Selenium First If...</div>
+    <div class="wlist">
+      <div class="wi"><div class="wi-ico">💼</div><div><b>You need a job fast</b> — 90%+ Indian QA jobs require Selenium. Highest immediate career ROI</div></div>
+      <div class="wi"><div class="wi-ico">☕</div><div><b>You prefer Java</b> — Selenium + Java + TestNG is the most common stack in Indian IT companies</div></div>
+      <div class="wi"><div class="wi-ico">🏭</div><div><b>You want TCS / Infosys / Wipro</b> — All major Indian service companies use Selenium exclusively</div></div>
+      <div class="wi"><div class="wi-ico">📱</div><div><b>You want mobile testing too</b> — Selenium → Appium is a natural, smooth progression</div></div>
+      <div class="wi"><div class="wi-ico">📚</div><div><b>You want maximum resources</b> — 20 years of books, courses, blogs, and YouTube tutorials</div></div>
+      <div class="wi"><div class="wi-ico">🔧</div><div><b>You will join existing projects</b> — Most corporate automation suites worldwide are in Selenium</div></div>
+    </div>
+  </div>
+
+  <div class="wcard">
+    <div class="wcard-t gld">🏆 Khan Sir's Final Verdict</div>
+    <div class="wlist">
+      <div class="wi"><div class="wi-ico">⭐</div><div><b>Learn BOTH — that is the real answer!</b> Top QA engineers in 2025 know Selenium AND Playwright. Double your value!</div></div>
+      <div class="wi"><div class="wi-ico">📅</div><div><b>Month 1–3 → Start Selenium</b> — Build strong WebDriver fundamentals. Land your first QA job confidently</div></div>
+      <div class="wi"><div class="wi-ico">📅</div><div><b>Month 4–6 → Add Playwright</b> — After Selenium, Playwright feels easy. Core concepts transfer directly!</div></div>
+      <div class="wi"><div class="wi-ico">💡</div><div><b>Key insight:</b> Selenium gives you FOUNDATIONS. Playwright makes you FASTER. Together = unstoppable QA!</div></div>
+      <div class="wi"><div class="wi-ico">🎓</div><div><b>At Next Gen QA Coaching</b> — We teach BOTH tools with live projects. Full hands-on training available!</div></div>
+      <div class="wi"><div class="wi-ico">📞</div><div><b>Call 8700350994</b> — Free demo class. We guide you to the right path for your career goals!</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ LEARNING ROADMAP ══════════ -->
+<div class="sec g">🗺️ Recommended Learning Roadmap — From Zero to QA Engineer</div>
+<div class="road">
+  <div class="rnode">
+    <div class="rn-num se">1</div>
+    <div class="rn-t">Manual Testing</div>
+    <div class="rn-d">SDLC, STLC, Bug Life Cycle, Test Cases, Agile/Scrum. Foundation for everything.</div>
+  </div>
+  <div class="rnode">
+    <div class="rn-num se">2</div>
+    <div class="rn-t">Core Java</div>
+    <div class="rn-d">OOPs, Collections, Exception Handling, Loops, Strings. Java powers Selenium.</div>
+  </div>
+  <div class="rnode">
+    <div class="rn-num se">3</div>
+    <div class="rn-t">Selenium + TestNG</div>
+    <div class="rn-d">WebDriver, Locators, Waits, POM, Data-Driven, Grid. Get your first job!</div>
+  </div>
+  <div class="rnode">
+    <div class="rn-num pw">4</div>
+    <div class="rn-t">API Testing</div>
+    <div class="rn-d">Postman, RestAssured, HTTP Methods, Status Codes. High demand skill in 2025.</div>
+  </div>
+  <div class="rnode">
+    <div class="rn-num pw">5</div>
+    <div class="rn-t">Playwright</div>
+    <div class="rn-d">Auto-wait, Parallel, Reports, Codegen, Network Mock. Add to your Selenium skill.</div>
+  </div>
+  <div class="rnode">
+    <div class="rn-num gld">6</div>
+    <div class="rn-t">Appium + CI/CD</div>
+    <div class="rn-d">Mobile Android/iOS + Jenkins/GitHub Actions. Senior QA Engineer level skills!</div>
+  </div>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="footer">
+  <div class="fl">
+    <b>Playwright vs Selenium 2025</b> — Speed · Features · Job Market · Code Examples · Learning Roadmap · Next Gen QA IT Coaching
+  </div>
+  <div class="fr">
+    <b>Next Gen QA IT Coaching Classes</b> &nbsp;|&nbsp; Mr. Khan Sir · 📞 8700350994 &nbsp;|&nbsp; 🌍 nextgenqa94-ui.github.io/nextgenqa &nbsp;|&nbsp; B.Tech · BCA · MCA · CBSE · ICSE · Online &amp; Offline
+  </div>
+</div>
+
+</body>
+</html>
